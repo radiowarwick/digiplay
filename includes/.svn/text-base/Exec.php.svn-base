@@ -1,0 +1,38 @@
+<?php
+class Exec {
+	public static function isExec($username){
+		$result = RawDB::query("SELECT COUNT(1) FROM web_members_exec WHERE username = '".$username."'");
+		return pg_fetch_result($result,0)>0;
+	}
+	public static function getUsername($username){
+		$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username WHERE web_members_exec.username ='".$username."'");
+		return pg_fetch_object($result, NULL, 'ExecMember');
+	}
+	public static function getFromDepartment($department){
+		$department = Departments::getIDFromName($department);
+		$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username WHERE department_id = ".$department);
+		return pg_fetch_object($result, NULL, 'ExecMember');
+	}
+	public static function getFromID($id){
+		if(is_numeric($exec)){
+			$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username WHERE exec_id = ".$id);
+			return pg_fetch_object($result, NULL, 'ExecMember');
+		} return
+			false;
+	}
+	public static function getFromEmailAddress($address){
+		$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username WHERE web_members_exec.email = '".pg_escape_string($address)."'");
+		return pg_fetch_object($result, NULL, 'ExecMember');
+	}
+	public static function getFromPosition($position){
+		$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username WHERE web_members_exec.email = '".pg_escape_string($position)."'");
+		return pg_fetch_object($result, NULL, 'ExecMember');
+	}
+	
+	public static function getAll(){
+		$result = RawDB::query("SELECT *, web_members_exec.email AS exec_email FROM web_members_exec INNER JOIN web_members ON web_members_exec.username = web_members.username ORDER BY exec_id");
+		while($object = pg_fetch_object($result, NULL, 'ExecMember'))
+			$return[] = $object;
+		return $return;
+	}
+}

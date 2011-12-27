@@ -1,0 +1,148 @@
+<?php
+class NewsArticle{
+	protected $news_id;
+	protected $date;
+	protected $headline;
+	protected $story;
+	protected $summary;
+	protected $categoryid;
+	protected $published;
+
+	// Retrieval Functions
+	public function get_news_id(){
+		return $this->news_id;
+	}
+	public function get_date(){
+		return $this->date;
+	}
+	public function get_headline(){
+		return $this->headline;
+	}
+	public function get_story(){
+		return $this->story;
+	}
+	public function get_summary(){
+		return $this->summary;
+	}
+	public function get_categoryid(){
+		return $this->categoryid;
+	}
+	public function get_published(){
+		return $this->published;
+	}
+	public function get_link(){
+		//Google News requires articles to have at least three digits. Raw Articles have seven.
+		return str_pad($this->get_news_id(),7,"0",STR_PAD_LEFT);	
+	}
+	public function get_authors(){
+		$sql = "select * from web_news_authors INNER JOIN web_members USING (username) where news_id = ". $this->news_id;
+		$result = RawDB::query($sql);
+		$return = array();
+       	while($object = pg_fetch_object($result,null,'NewsAuthor'))
+        		$return[] = $object;
+        	return $return;
+	}
+	
+	public function get_xml($full_story = FALSE){
+		$return = "	<item>\n";
+		$return .= "		<title>".$this->headline."</title>\n";
+        if($full_story){ $description = "<![CDATA[". $this->story ."]]>"; } else { $description =
+            $this->summary; }
+		$return .= "		<description>".$description."</description>\n";
+		$return .= "		<link>".SITE_LINK_ABS_HTTP ."news/articles/".self::get_link()."/</link>\n";
+		$return .= "		<pubDate>".date("r", $this->date)."</pubDate>\n";
+		$return .= "	</item>\n";
+		return $return;
+	}
+	
+	public function __construct(){
+		if(is_null($this->news_id))
+			$this->date = time();
+		$this->published = ($this->published == "t");
+	}
+
+	// Set Functions
+	public function set_date($date){
+		if(is_null($date)){				throw new UserError("Date is required"); return false; }
+		if(!is_numeric($date)){				throw new UserError("Date not valid"); return false; }
+		if($date == 0){					throw new UserError("Dates this old are too old"); return false; }
+		if($date > time()){				throw new UserError("Futuristic dates are not permitted"); return false; }
+		
+		$this->date = $date;
+		return true;
+	}
+	public function set_headline($headline){
+		if(is_null($headline)){			throw new UserError("Headline required"); return false; }
+		
+		$headline = trim($headline);
+		
+		if(strlen($headline) < 5){		throw new UserError("Headline is too short"); return false; }
+		if(strlen($headline) > 100){		throw new UserError("Headline is too long"); return false; }
+		
+		$this->headline = $headline;
+		return true;
+	}
+	public function set_story($story){
+		if(is_null($story)){			throw new UserError("Story is required"); return false; }
+		
+		$story = trim($story);
+		
+		if(strlen($story) < 50){		throw new UserError("Story is too short"); return false; }
+		if(strlen($story) > 10000){		throw new UserError("Story is too long"); return false; }
+		
+		$this->story = $story;
+		return true;
+	}
+	public function set_summary($summary){
+		if(is_null($summary)){			throw new UserError("Summary is required"); return false; }
+		
+		$summary = trim($summary);
+		
+		if(strlen($summary) < 50){		throw new UserError("Summary is too short"); return false; }
+		if(strlen($summary) > 10000){		throw new UserError("Summary is too long"); return false; }
+		
+		$this->summary = $summary;
+		return true;
+	}
+	public function set_categoryid($categoryid){
+		if(is_null($categoryid)){		throw new Userrror("Category must be selected"); return false; }
+		if(!is_numeric($categoryid)){		throw new UserError("Category is not valid"); return false; }
+		
+		$result = RawDB::query("SELECT COUNT(1) FROM web_news_categories WHERE categoryid = '".$categoryid."'");
+		if(pg_fetch_result($result,0,0) == 0){	throw new UserError("Invalid category selected"); return false; }
+		
+		$this->categoryid = $categoryid;
+		return true;
+	}
+	public function set_published($published){
+		if(is_null($published)){		throw new UserError("Required"); return false; }
+		if(!is_bool($published)){		throw new UserError(); return false; }
+		
+		$this->published = $published;
+		return true;
+	}
+	public function is_complete(){
+		return (isset($this->date) && isset($this->headline) && isset($this->story) && isset($this->summary) && isset($this->categoryid) && isset($this->published));
+	}
+	public function save(){
+		if(is_null($this->news_id))
+			News::add($this);
+		else
+			News::edit($this);
+	}
+	
+	public function get_comments(){
+		$result = RawDB::query("SELECT web_comments.* FROM web_comments INNER JOIN web_news_comments USING(comment_id) WHERE news_id = '".$this->get_news_id()."' AND moderated ORDER BY web_comments.date_added DESC");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Comment'))
+			$array[] = $object;
+		return $array;	
+	}
+	public function add_comment($comment_object){
+		$comment_object->save();
+		
+		RawDB::query("INSERT INTO web_news_comments (comment_id,news_id) VALUES ('".$comment_object->get_comment_id()."','".$this->get_news_id()."')");
+	}
+}
+?>

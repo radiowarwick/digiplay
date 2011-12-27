@@ -1,0 +1,31 @@
+<?php
+class Departments {
+	public static function get($department){
+		if (is_numeric($department)){
+			$result = RawDB::query("SELECT * FROM web_departments WHERE department_id = ".$department);
+		}else if(is_string($department)){
+			if(preg_match("/[\r\n]/",$department))
+				return false;
+			else
+				$result = RawDB::query("SELECT * FROM web_departments WHERE name = '".$department."'");
+		}
+		return pg_fetch_object($result, NULL, "Department");
+	}
+
+	public static function getAll(){
+		$result = RawDB::query("SELECT * FROM web_departments");
+		while($object = pg_fetch_object($result, NULL, "Department"))
+			$return[] = $object;
+		return $return;
+	}
+	
+	public static function getIDFromName($input){
+		if(preg_match("/[\r\n]/",$department))
+			return false;
+		else
+			$result = RawDB::query("SELECT department_id FROM web_departments WHERE name = '".$input."'");
+		$row = pg_fetch_row($result);
+		return $row[0];
+	}
+}
+?>

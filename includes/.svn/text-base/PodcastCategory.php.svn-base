@@ -1,0 +1,31 @@
+<?php
+class PodcastCategory{
+	private $category_id;
+	private $name;
+	public function get_id(){
+		trigger_error("Depreciated Function: get_id()");
+		return $this->category_id;
+	}
+	public function get_category_id(){
+		return $this->category_id;
+	}
+	public function get_name(){
+		return $this->name;
+	}
+	public function get_podcasts(){
+		$return = array();
+		$sql = "SELECT *, (SELECT publish_time FROM web_podcast_entry WHERE web_podcast_entry.podcast_id = web_podcast.podcast_id AND publish_time < NOW() ORDER BY publish_time DESC LIMIT 1) AS updated FROM web_podcast WHERE category_id = '".$this->get_category_id()."' AND (SELECT COUNT(*) FROM web_podcast_entry WHERE web_podcast_entry.podcast_id = web_podcast.podcast_id) >= 1 AND web_podcast.active = TRUE AND web_podcast.moderated = TRUE ORDER BY updated DESC;";
+		$result = RawDB::query($sql);
+		while ($object = pg_fetch_object($result,null,'Podcast'))
+			$return[] = $object;
+		return $return;
+	}
+	public function get_last_entries($max_results = 0,$offset = 0,$distinct = FALSE){
+		return PodcastEntries::get_last_list($max_results, $offset, $this->category_id, NULL, 'DESC', $distinct);
+	}
+	public function get_last_entry(){
+		$last = self::get_last_entries(1);
+		return $last[0];
+	}
+}
+?>

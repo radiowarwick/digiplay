@@ -1,0 +1,132 @@
+<?php
+class Gallery{
+	protected $gallery_id;
+	protected $username;
+	protected $name;
+	protected $location;
+	protected $description;
+	protected $date_added;
+	protected $thumbnail;
+	
+	public function get_image_from_filename($filename){
+		return $this->get_image(hexdec($filename));
+	}
+	public function get_image($image_id){
+		$result = RawDB::query("SELECT web_photos_images.* FROM web_photos_images
+		INNER JOIN web_photos_images_in_galleries ON(web_photos_images.image_id = web_photos_images_in_galleries.child_image_id)
+		WHERE web_photos_images_in_galleries.parent_gallery_id = '".$this->get_gallery_id()."' AND web_photos_images.image_id = '".$image_id."'");
+		
+		if(!pg_num_rows($result)) throw new UserError("Image doesn't exist!");
+		
+		return pg_fetch_object($result,null,'Image');
+	}
+	public function get_images(){
+		$result = RawDB::query("SELECT web_photos_images.* FROM web_photos_images
+		INNER JOIN web_photos_images_in_galleries ON(web_photos_images.image_id = web_photos_images_in_galleries.child_image_id)
+		WHERE web_photos_images_in_galleries.parent_gallery_id = '".$this->get_gallery_id()."' ORDER BY date_added DESC");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Image'))
+			$array[] = $object;
+		return $array;
+	}
+	public function get_galleries(){
+		$result = RawDB::query("SELECT web_photos_galleries.* FROM web_photos_galleries
+		INNER JOIN web_photos_galleries_in_galleries ON(web_photos_galleries.gallery_id = web_photos_galleries_in_galleries.child_gallery_id)
+		WHERE web_photos_galleries_in_galleries.parent_gallery_id = '".$this->get_gallery_id()."' ORDER BY date_added DESC");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Gallery'))
+			$array[] = $object;
+		return $array;
+	}
+	public function get_parents(){
+		$result = RawDB::query("SELECT web_photos_galleries.* FROM web_photos_galleries
+		INNER JOIN web_photos_galleries_in_galleries ON(web_photos_galleries.gallery_id = web_photos_galleries_in_galleries.parent_gallery_id)
+		WHERE web_photos_galleries_in_galleries.child_gallery_id = '".$this->get_gallery_id()."'");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Gallery'))
+			$array[] = $object;
+		return $array;
+	}
+	
+	public function add_image($image_object){
+		RawDB::query("INSERT INTO web_photos_images_in_galleries (child_image_id, parent_gallery_id) VALUES('".$image_object->get_image_id()."','".$this->get_gallery_id()."')");
+	}
+	
+	public function delete_image($image_object){
+		RawDB::query("DELETE FROM web_photos_images_in_galleries WHERE parent_gallery_id = '".$this->get_gallery_id()."' AND child_image_id = '".$image_object->get_image_id()."'");
+		if(!pg_fetch_result(RawDB::query("SELECT COUNT(1) FROM web_photos_images_in_galleries WHERE child_image_id = '".$image_object->get_image_id()."'"),1,1))
+			$image_object->delete();
+	}
+	public function delete_gallery($gallery_object){
+		RawDB::query("DELETE FROM web_photos_galleries_in_galleries WHERE parent_gallery_id = '".$this->get_gallery_id()."' AND child_gallery_id = '".$gallery_object->get_gallery_id()."'");
+		if(!pg_fetch_result(RawDB::query("SELECT COUNT(1) FROM web_photos_galleries_in_galleries WHERE child_gallery_id = '".$gallery_object->get_gallery_id()."'"),1,1))
+			$gallery_object->delete();
+	}
+	
+	public function delete(){
+		foreach($this->get_images() AS $object)
+			$this->delete_image($image_object);
+		foreach($this->get_galleries() AS $object)
+			$this->delete_gallery($object);
+			
+		RawDB::query("DELETE FROM web_photos_galleries WHERE gallery_id = '".$this->get_gallery_id()."'");
+	}
+	public function save(){
+			if(is_null($this->gallery_id)){
+			$time = time();
+			
+			RawDB::query("INSERT INTO web_photos_galleries (name,location,description,date_added,username) VALUES ('".pg_escape_string($this->get_name())."','".pg_escape_string($this->get_location())."','".pg_escape_string($this->get_description())."','".date("r",$time)."','".pg_escape_string(Session::get_username())."')");
+			
+			$result = RawDB::query("SELECT gallery_id FROM web_photos_galleries WHERE date_added = '".date("r",$time)."' AND username = '".pg_escape_string(Session::get_username())."'");
+		
+			$this->gallery_id = pg_fetch_result($result,1,1);
+			
+		}else{
+			RawDB::query("UPDATE web_photo_images SET name = '".pg_escape_string($this->get_name())."', location = '".pg_escape_string($this->get_location())."', description = '".pg_escape_string($this->get_description())."' AND gallery_id = '".$this->get_gallery_id()."'");
+		}
+	}
+	
+	
+	public function get_gallery_id(){
+		return $this->gallery_id;
+	}
+	public function get_username(){
+		return $this->username;
+	}
+	public function get_owner(){
+		return Members::get($this->username);
+	}
+	public function get_name(){
+		return $this->name;
+	}
+	public function get_location(){
+		return $this->location;
+	}
+	public function get_description(){
+		return $this->description;
+	}
+	public function get_date_added(){
+		return $this->date_added;
+	}
+	public function get_thumbnail(){
+		return $this->thumbnail;
+	}
+	
+	
+	public function set_name($name){
+		$this->name = $name;
+	}
+	public function set_location($location){
+		$this->location = $location;
+	}
+	public function set_description($description){
+		$this->description = $description;
+	}
+	public function set_thumbnail($image_object){
+		$this->thumbnail = $thumbnail;
+	}
+}
+?>

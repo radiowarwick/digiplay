@@ -1,0 +1,88 @@
+<?php
+
+class BOTBBandMember
+{
+	private $id = false;
+	private $band_id = false;
+	private $name;
+	private $role;
+	private $bio;
+		
+	public function getID()
+	{
+		return $this->id;
+	}
+		
+	public function getName()
+	{
+		return $this->name;
+	}
+	
+	public function getRole()
+	{
+		return $this->role;
+	}
+	
+	public function getBio()
+	{
+		return $this->bio;
+	}
+	
+	public function setBand($band)
+	{
+		if(is_a($band, "BOTBBand"))
+		{
+			$this->band_id = $band->getID();
+			return 0;
+		}
+		else
+			return "Not a band";
+	}
+
+	public function setName($name)
+	{
+		$error = 0;
+		if(preg_match("/[\r\n]/",$name) || empty($name) || strlen($name) > 100)
+			$error = "Please enter a name";
+		else
+			$this->name = $name;
+		return $error;
+	}
+	
+	public function setRole($role)
+	{
+		$error = 0;
+		if(preg_match("/[\r\n]/",$role) || empty($role) || strlen($role) > 200)
+			$error = "Please enter a role";
+		else
+			$this->role = $role;
+		return $error;
+	}
+	
+	public function setBio($bio)
+	{
+		$error = 0;
+		if( strlen($bio) > 2000 )
+			$error = "Bio too long";
+		else
+			$this->bio = $bio;
+		return $error;
+	}
+	
+	public function save()
+	{
+		if(!$this->band)
+			return "No band set";
+		if($this->id)
+			$query = "UPDATE web_botb_band_members SET band_id='".pg_escape_string($this->band_id)."', name='".pg_escape_string($this->name)."', role='".pg_escape_String($this->role)."', bio='".pg_escape_string($this->bio)."' WHERE id='".$this->id."'";
+		else
+			$query = "INSERT INTO web_botb_members (band_id, name, role, bio) VALUES '".pg_escape_string($this->band_id)."', '".pg_escape_string($this->name)."', '".pg_escape_String($this->role)."', '".pg_escape_string($this->bio)."' RETURNING id";
+		if( $result = RawDB::query($query) )
+		{
+			$row = pg_fetch_row($result);
+			$this->id = $row[0];
+			return 0;
+		} else
+			return "Database failed";
+	}
+}

@@ -1,0 +1,78 @@
+<?php
+class ScheduledShow extends Show{
+	protected $scheduleid;
+	protected $starttime;
+	protected $endtime;
+
+	public function __construct($scheduleid = null,$starttime = null,$endtime = null){
+		if(!is_null($scheduleid)){
+			$this->scheduleid	= $scheduleid;
+			$this->starttime	= $starttime;
+			$this->endtime		= $endtime;		
+		}
+	}
+	public function get_showid(){
+		return $this->showid;
+	}
+	public function get_scheduleid(){
+		return $this->scheduleid;
+	}
+	public function get_start(){
+		return $this->starttime;
+	}
+	public function get_end(){
+		return $this->endtime;
+	}
+	public function is_now(){
+		return ($this->starttime < time() && $this->endtime > time());
+	}
+	public function get_tracklist(){
+		$result = DigiplayDB::query("SELECT track_title AS title, track_artist AS artist FROM log where datetime BETWEEN ".$this->starttime." AND ".$this->endtime." AND location != 0 ORDER BY datetime ASC");
+		if(pg_num_rows($result)) {
+			$return = array();
+			while ($object = pg_fetch_object($result,null,'Track')) {
+				$return[] = $object;
+			}
+			return $return;
+		} else  {
+			return false;
+		}
+	}
+	public function get_messagecount(){
+		$sql = "SELECT count(*) FROM email WHERE datetime BETWEEN ".$this->starttime." AND ".$this->endtime ;
+		$result = DigiplayDB::query($sql);
+		return pg_fetch_result($result, 0, 0);
+	}
+	public function get_messages($sort = 'ASC', $limit = NULL, $offset = NULL){
+		return Digiplay::get_emails($this->starttime, $this->endtime, $sort, $limit, $offset);
+	}
+	public function get_listeners(){
+		return Listeners::get_listeners($this->starttime, $this->endtime);
+	}
+	public function get_listeners_max(){
+		return Listeners::get_max($this->starttime, $this->endtime);
+	}
+	public function get_listeners_average(){
+		return Listeners::get_average($this->starttime, $this->endtime);
+	}
+	
+	
+	//If you have to use these, your doing it wrong.
+	public function get_show_before(){
+		$result = RawDB::query("SELECT * FROM web_schedule INNER JOIN web_shows USING (showid) WHERE endtime <= ".$this->start." ORDER BY starttime DESC LIMIT 1;");
+		if(pg_num_rows($result))
+			return pg_fetch_object($result,null,self);
+		else 
+			return false;
+		
+	}
+	public function get_show_after(){
+		$result = RawDB::query("SELECT * FROM web_schedule INNER JOIN web_shows USING (showid) WHERE starttime >= ".$this->end." ORDER BY starttime ASC LIMIT 1;");
+		if(pg_num_rows($result))
+			return pg_fetch_object($result,null,self);
+		else 
+			return false;
+	}
+	
+}
+?>

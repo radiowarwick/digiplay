@@ -1,0 +1,24 @@
+<?php
+class Listeners {
+	public static function get_listeners($starttime, $endtime) {
+		$sql = "SELECT date AS datetime, listeners_high, listeners_low FROM web_listenerlog WHERE date BETWEEN '".date("Y-m-d H:i:00O", $starttime)."' AND '".date("Y-m-d H:i:00O", $endtime + 60)."'";
+		$result = RawDB::query($sql);
+		$return = array();
+		while ($stat = pg_fetch_object($result, NULL, 'ListenersStat')) {
+			$return[] = $stat;
+		}
+		return $return;
+	}
+	public static function get_max($starttime, $endtime){
+		$sql = "SELECT MAX(listeners_high + listeners_low) as listeners FROM web_listenerlog WHERE date BETWEEN '".date("Y-m-d H:i:00O", $starttime)."' AND '".date("Y-m-d H:i:00O", $endtime + 60)."'";
+		$result = RawDB::query($sql);
+		return pg_fetch_result($result, 0, 0);
+	}
+	public static function get_average($starttime, $endtime){
+		$sql = "SELECT AVG(listeners_high + listeners_low) FROM web_listenerlog WHERE date BETWEEN '".date("Y-m-d H:i:00O", $starttime)."' AND '".date("Y-m-d H:i:00O", $endtime + 60)."'";
+		$result = RawDB::query($sql);
+		return ceil(pg_fetch_result($result, 0, 0));
+	}
+
+}
+?>

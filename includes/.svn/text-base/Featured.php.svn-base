@@ -1,0 +1,152 @@
+<?php
+/**
+ * Featured Images Class
+ * 
+ * Retrieves front page banner images from the database.
+ * @package RaWWebsite
+ * @author James Deane
+ */
+class Featured{
+
+	protected $featureid;
+	protected $title;
+	protected $link;
+	protected $image;
+	protected $code;
+	protected $active;
+	protected $weighting;
+    
+	public function __construct(){
+		$this->active		= ($this->active == 't');
+	}
+
+	/**
+	 * Retrieve banner ID
+	 * @return int The id of the banner in the database.
+	 */
+	public function get_featureid(){
+		return $this->featureid;
+	}
+
+	/**
+	 * Return banner title
+	 * @return string The title of the banner
+	 */
+	public function get_title(){
+		return $this->title;
+	}
+
+	/**
+	 * Return banner link
+	 *
+	 * @return string The url to which the banner should link to.
+	 * Urls are relative to the installation directory of the website.
+	 */
+	public function get_link(){
+		return $this->link;
+	}
+
+	/**
+	 * Return banner image filename
+	 *
+	 * @return string The file name of the banner image.
+	 */
+	public function get_image(){
+		return $this->image;
+	}
+
+	public function get_code(){
+		return $this->code;
+	}
+
+	public function get_content() {
+		if (is_null($this->code) || ($this->code == '')) {
+			$return = "<img src=\"".SITE_LINK_MEDIA."features/". $this->image ."\" alt=\"". $this->title ."\" class=\"featured_image\" />";
+		} else {
+			$return = eval( $this->code );
+		}
+		return $return;
+	}
+
+	public function get_active(){
+		return $this->active;
+	}
+
+	public function get_weighting(){
+		return $this->weighting;
+	}	
+
+	public function set_title($title) {
+		$this->title = $title;
+	}
+	
+	public function set_link($link) {
+		$link = trim($link);
+		if(empty($link)) { $link = '#'; }
+		$this->link = $link;
+	}
+	
+	public function set_code($code) {
+		$code = trim($code);
+		if(empty($code)) { $code = NULL; }
+		$this->code = $code;
+	}
+	
+	public function set_image($FILE) {
+    		$this->image = date("Ymd")."-".str_replace(' ','_',$FILE["name"]);
+    		
+    		$upload = new Upload($FILE);
+    		$upload->check_mime(array("image/jpeg"));
+    		$upload->check_extension(array("jpg"));
+    		$upload->move(SITE_MEDIA_PATH."features/" . $this->image);	
+	}
+	
+	public function set_active($active) {
+		if(is_bool($active))
+			$this->active = $active;
+	}
+	public function set_weighting($weighting) {
+		if (is_numeric($weighting))
+			$this->weighting = $weighting;
+	}
+
+	protected function insert(){
+		$sql = "INSERT INTO web_features (title, link, weighting, active, image, code) VALUES (".
+			"'".pg_escape_string($this->get_title())."', ".
+			"'".pg_escape_string($this->get_link())."', ".
+			"'".pg_escape_string($this->get_weighting())."', ".
+			"'".($this->get_active()?'true':'false')."', ". 
+			"'".pg_escape_string($this->get_image())."',".
+			"'".pg_escape_string($this->get_code())."')";
+		
+		RawDB::query($sql);
+	}
+	protected function update(){
+		if(is_null($this->code)) {
+			$code = 'NULL';
+		} else {
+			$code = "'".pg_escape_string($this->get_code())."'";
+		}
+		$sql = "UPDATE web_features SET ".
+			"title = '".pg_escape_string($this->get_title())."', ".
+			"link = '".pg_escape_string($this->get_link())."', ".
+			"weighting = '".pg_escape_string($this->get_weighting())."', ".
+			"active = ".($this->get_active()?"true":"false").", ".
+			"image = '".pg_escape_string($this->get_image())."', ".
+			"code = ".$code." ".
+			" WHERE featureid = ".pg_escape_string($this->get_featureid());
+		RawDB::query($sql);
+	}
+	public function save(){
+		if(is_null($this->get_featureid()))
+			$this->insert();
+		else
+			$this->update();
+	}
+	public function delete(){
+		$sql = "DELETE FROM web_features WHERE featureid = ".$this->get_featureid();
+		RawDB::query($sql);
+	}
+
+}
+?>

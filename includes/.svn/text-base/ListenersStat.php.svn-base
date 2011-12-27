@@ -1,0 +1,25 @@
+<?php
+class ListenersStat {
+	protected $datetime;
+	protected $listeners_high;
+	protected $listeners_low;
+	protected $listeners;
+
+	public function __construct(){
+		//if ($this->listeners = '') {$this->listeners = $this->listeners_high + $this->listeners_low; }
+		$this->datetime = strtotime($this->datetime);
+	}
+	public function get_listeners($type='ALL') {
+		if ($type == 'HIGH') {
+			return $this->listeners_high;
+		} elseif ($type == 'LOW') {
+			return $this->listeners_low;
+		} else {
+			return $this->listeners;
+		}
+	}
+	public function get_datetime(){
+		return $this->datetime;
+	}
+}
+?>

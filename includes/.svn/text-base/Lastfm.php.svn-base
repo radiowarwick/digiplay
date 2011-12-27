@@ -1,0 +1,49 @@
+<?php
+
+class Lastfm {
+
+    public static function get_artist($artist) {
+        $request = "method=artist.getInfo&artist=".utf8_encode(str_replace(' ', '+', $artist));
+        $url = "http://ws.audioscrobbler.com/2.0/?".$request."&api_key=e72f5e5eecceffa65784e10d18cfc5a5 ";
+        $handle = fopen($url, "rb");
+        $feed = stream_get_contents($handle);
+        fclose($handle);
+        //parse XML into object
+        $xml = simplexml_load_string($feed);
+        $artist = new LastfmArtist();
+        $artist->set_name( (string)$xml->artist->name );
+        $artist->set_thumb( str_replace('/126/','/126s/',(string)$xml->artist->image[2]) );
+        $artist->set_image( (string)$xml->artist->image[3] );
+        $artist->set_mbid( (string)$xml->artist->mbid );
+        $artist->set_summary( strip_tags( (string)$xml->artist->bio->summary ) );
+        $artist->set_description( (string)$xml->artist->bio->content  );
+        $artist->set_url( (string)$xml->artist->url );
+        return $artist;
+    }
+
+    public static function cache_image($artist) {
+	if (strpos($artist,'feat.') !== FALSE) {
+		$artist = substr($artist,0,strpos($artist,' feat.'));
+	}
+	if (strpos($artist,'vs.') !== FALSE) {
+		$artist = substr($artist,0,strpos($artist,' vs.'));
+	}
+
+        $artist = self::get_artist($artist);
+        $imageurl = $artist->get_thumb();
+
+        if(substr($imageurl,-4) == '.png') {
+            $image = imagecreatefrompng($imageurl);
+        } else if (substr($imageurl,-4) == '.jpg') {
+            $image = imagecreatefromjpeg($imageurl);
+        } else {
+            return FALSE;
+            exit();
+        }
+	$filename = str_replace(' ', '+', strtolower($artist->get_name())).'.jpg';
+        imagejpeg($image,SITE_MEDIA_PATH."lastfm/cache/".$filename);
+        return urlencode($filename);
+
+    }
+}
+?>

@@ -1,0 +1,14 @@
+<?php
+/************************************************
+	Config for DPS Website installation.
+************************************************/
+
+define("DATABASE_DPS_HOST", '');
+define("DATABASE_DPS_PORT", '');
+define("DATABASE_DPS_NAME", '');
+define("DATABASE_DPS_USER", '');
+
+define("LDAP_HOST", '');
+
+DEFINE("SITE_LINK_MEDIA", 'http://media.radio.warwick.ac.uk/');
+DEFINE("SITE_MEDIA_PATH", '/mnt/www/media.radio.warwick.ac.uk/');

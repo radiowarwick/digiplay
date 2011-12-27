@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * Truncates text to requirements
+ * 
+ * Class to truncate text to a maximum length, number of words and number of sentences
+ * This methods of this class are designed to be chained.
+ * For example, Truncation::factory('Hello this is text. Another sentence')->sentence(1)->get()
+ * 
+ * @author William Dangerfield
+ * @version 1.1a
+ *
+ */
+class Truncation{
+	static protected $sentenceBoundaries = array('.','?','!');
+	protected $body;
+	protected $wordComplete = true;
+	protected $sentenceComplete = true;
+	
+	/**
+	 * Factory method
+	 * @param string $body Raw string for truncating
+	 * @return Truncation object, ready for truncating as desired
+	 */
+	public static function factory($body) {
+		return new self($body);
+	}
+	/**
+	 * Constructor
+	 * @param string $body Raw string for truncating
+	 */
+	public function __construct($body) {
+		$this->body = trim($body);
+		return $this;
+	}
+	/**
+	 * Truncate text to a character limit
+	 * @param int $maxLength Hard limit for character length
+	 * @return Truncation Reference to self for method chaining
+	 */
+	public function chars($maxLength) {
+		if (strlen($this->body) > $maxLength) {
+			if (preg_match('/\w/',substr($this->body,$maxLength-1,1))==1)
+				$this->wordComplete = false;
+			if(!in_array(substr($this->body,$maxLength-2,1),self::$sentenceBoundaries))
+				$this->sentenceComplete = false;
+			
+			$this->body = rtrim(substr($this->body,0,$maxLength));	
+		}
+		return $this;
+	}
+	
+	/**
+	 * Truncate text to a number of sentences
+	 * @param int $count Number of sentences
+	 * @return Truncation Reference to self for method chaining
+	 */
+	public function sentences($count = 0) {
+		$b = preg_quote(implode('',self::$sentenceBoundaries));
+		if($count > 0) {
+			preg_match('/^([^'.$b.']+['.$b.']*\s*){0,'.$count.'}/', $this->body, $regs);
+			$this->body = rtrim($regs[0]);
+		} else if($count == 0) {
+			if(!$this->sentenceComplete || !$this->wordComplete)
+				return $this->sentences(-1);
+			preg_match('/^([^'.$b.']+['.$b.']*\s*)*/', $this->body, $regs);
+			$this->body = rtrim($regs[0]);
+		} else {
+			preg_match('/^([^'.$b.']+['.$b.']*\s*)*/', $this->body, $regs, PREG_OFFSET_CAPTURE);
+			$this->body = rtrim(substr($this->body, 0, $regs[count($regs)+$count][1]));
+		}
+		$this->sentenceComplete = true;
+		$this->wordComplete = true;
+		return $this;
+	}
+	/**
+	* Truncate text to a number of words
+	* @param int $count Number of words
+	* @return Truncation Reference to self for method chaining
+	*/
+	public function words($count = 0) {
+		if($count > 0) {
+			preg_match('/^(\S+\s*){0,'.$count.'}/', $this->body, $regs);
+			$this->body = rtrim($regs[0]);
+		} else if($count == 0) {
+			if(!$this->wordComplete)
+				return $this->words(-1);
+			preg_match('/^(\S+\s*)*/', $this->body, $regs);
+			$this->body = rtrim($regs[0]);
+		} else {
+			preg_match('/^(\S+\s*)*/', $this->body, $regs, PREG_OFFSET_CAPTURE);
+			$this->body = rtrim(substr($this->body, 0, $regs[count($regs)+$count][1]));
+		}
+		$this->wordComplete = true;
+		return $this;
+	}
+	/**
+	 * Fixes HTML broken during truncation. Strips unclosed tags at end of string, and closes unclosed tags
+	 * @throws RuntimeException If markup is invalid before truncation, a runtime exception will occur if this remains
+	 * @return Truncation Reference to self for method chaining
+	 */
+	public function fixHTML() {
+		// Remove half complete HTML from end of string
+		$this->body = rtrim(preg_replace('/(?:&\w*|<[^>]*)$/', '', $this->body));
+		// Check for unclosed tags
+		if(preg_match_all("/<(\/?([a-z]+)(?:\s[^>]+)?)>/i", $this->body, $matches)) {
+			$tags = new SplStack();
+			foreach($matches[1] as $id => $tag) {
+				if(substr($tag,-1,1) == '/') {
+					//self closing. ignored.
+					continue;
+				} else if(substr($tag,0,1) == '/') {
+					//tag close. remove from stack
+					if($tags->top() != $matches[2][$id])
+						throw new RuntimeException('Screwed xhtml is screwed.');
+					$tags->pop();
+				} else {
+					//tag open. add to stack
+					$tags->push($matches[2][$id]);
+				}
+			}
+			if($tags->count()>0){
+				foreach($tags AS $tag) {
+					$this->body .= '</' . $tag . '>';
+				}
+			}
+		}
+		return $this;
+	}
+	/**
+	 * Return truncated text
+	 * @return string Truncated text
+	 */
+	public function __toString(){
+		return $this->body;
+	}
+	/**
+	* Return truncated text
+	* @return string Truncated text
+	*/
+	public function get(){
+		return $this->body;
+	}
+}

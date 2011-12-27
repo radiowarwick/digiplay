@@ -1,0 +1,90 @@
+<?php
+class Terms{
+	static public function is_before_jan($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		return date("W",$timestamp)>39;
+	}
+	static public function year($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		return (self::is_before_jan($timestamp)&&(date("n",$timestamp)!=1)?date("Y",$timestamp):date("Y",$timestamp)-1);
+	}
+	static public function week($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		if(self::is_before_jan($timestamp))
+			return date("W",$timestamp) - 39;
+		else
+			return date("W",$timestamp) + 13;
+	}
+	static public function term($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		$week = self::week($timestamp);
+		if($week > 29)
+			return 3;
+		else if($week > 14)
+			return 2;
+		else
+			return 1;
+	}
+	static public function termweek($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		$week = self::week($timestamp);
+		if($week > 29)
+			return $week - 29;
+		else if($week > 14)
+			return $week - 14;
+		else
+			return $week;
+	}
+
+	static private function timestamp_of_monday($timestamp){
+
+		$shift = 1 - date("w",$timestamp);
+		return $timestamp + ($shift * 24* 60 * 60);
+	}
+	
+	static public function start($year = null,$term = null,$termweek = null){
+		if(is_null($year))		$year = self::year();
+		if(is_null($term))		$term = self::term();
+		if(is_null($termweek))	$termweek = self::termweek();
+	
+		$week = $termweek + 43;
+				
+		switch($term){
+			case 3:	$week += 29;
+				break;
+			case 2:	$week += 14;
+				break;
+			case 1:	$week += 0;
+				break;
+		}			
+
+		return self::timestamp_of_monday(mktime(0,0,0,0,$week * 7,$year));
+	}
+	static public function week_start($week = null){
+		if(is_null($week)) $week = self::week();
+		return self::timestamp_of_monday(mktime(0,0,0,0,(($week + 43) * 7), self::year()));
+	}
+	
+	
+	static public function termid($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		return ((self::year($timestamp)-1970)*3) + self::term($timestamp) - 1;
+	}
+	static public function nexttermid($timestamp = null){
+		if(is_null($timestamp)) $timestamp = time();
+		$termid = self::termid($timestamp);
+		if(self::termweek($timestamp)>10) return $termid+1; else return $termid;
+	}
+	static public function termid_start($termid = null){
+		if(is_null($termid))	$termid = self::termid();
+		return self::start(1970 + floor($termid/3),($termid%3) + 1,1);
+	}	
+	static public function is_show_applications_open(){
+		return (bool) pg_fetch_result(
+			RawDB::query("
+			SELECT COUNT(1) FROM web_schedule_periods WHERE now() BETWEEN 
+			application_start AND application_end"),0,0);
+	}
+
+}
+?>

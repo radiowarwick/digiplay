@@ -1,0 +1,126 @@
+<?php
+class Comment {
+	
+	protected $comment_id;
+	protected $name;
+	protected $username;
+	protected $email;
+	protected $comment;
+	protected $date_added;
+	protected $moderated;
+	protected $ip;
+
+	public function __construct() {
+		if(!is_null($this->comment_id)){
+			$this->moderated = ($this->moderated == 't');
+			$this->date_added	= (strtotime($this->date_added));
+		}else
+			$this->moderated = Session::is_member();
+	}
+
+// Retrival Functions
+	public function get_comment_id(){
+		return $this->comment_id;
+	}
+	public function get_name() {
+		return $this->name;
+	}
+	public function get_comment() {
+		return $this->comment;
+	}
+	public function get_date_added() {
+		return $this->date_added;
+	}
+	public function get_email() {
+		return $this->email;
+	}
+    public function get_username() {
+		return $this->username;
+	}
+	public function get_moderated() {
+		return $this->moderated;
+	}
+	public function get_ip() {
+		return $this->ip;
+	}
+
+// Set Functions
+
+	public function set_name($name) {
+		$name = trim($name);
+		if(is_null($name))			throw new UserError("Please enter your name.");
+		if(strlen($name) == 0)		throw new UserError("Please enter your name.");
+		if(strlen($name) > 100)		throw new UserError("Your name is too long.");
+		
+		$this->name = $name;
+		return true;
+	}
+
+	public function set_comment($comment) {
+		$comment = trim(strip_tags($comment));
+		if(is_null($comment))			throw new UserError("Please enter a comment");
+		if (empty($comment))			throw new UserError("Please enter a comment");
+		if (strlen($comment) > 500)		throw new UserError("Your comment is too long.");
+
+		$this->comment = $comment;
+		return true;
+	}
+
+	public function set_email($email) {
+		$email = trim($email);
+		if(is_null($email))				throw new UserError("Please enter your e-mail address.");
+		if (empty($email))				throw new UserError("Please enter your e-mail address.");
+		if ($email != filter_var($email, FILTER_VALIDATE_EMAIL))	throw new UserError("Please use a valid e-mail address.");
+		if (strlen($email) > 200)		throw new UserError("Please use a shorter e-mail address.");
+
+		$this->email = $email;
+		return true;
+	}
+
+	public function set_moderated($mod = null) {
+		if (Session::is_member() && is_null($mod))		$this->moderated = (bool) true;
+		else							$this->moderated = (bool) $mod;
+	}
+
+	public function save(){
+		if(is_null($this->get_comment_id()))
+			$this->insert();
+		else
+			$this->update();
+	}
+	
+	protected function insert(){
+		$time = time();
+		
+		$sql = "INSERT INTO web_comments (name,username,email,comment,date_added,moderated,ip) VALUES (";
+		$sql .= "'".pg_escape_string($this->get_name())."', ";
+		if(Session::is_member())
+			$sql .= "'".pg_escape_string(Session::get_username())."', ";
+		else
+			$sql.= "NULL, ";
+		$sql .= "'".pg_escape_string($this->get_email())."', ";
+		$sql .= "'".pg_escape_string($this->get_comment())."', ";
+		$sql .= "'".date("r",$time)."', ";
+		$sql .= "'".($this->get_moderated()?'t':'f')."', ";
+		$sql .= "'".pg_escape_string($_SERVER["REMOTE_ADDR"])."')";
+		
+		RawDB::query($sql);
+		
+		$result = RawDB::query("SELECT comment_id FROM web_comments WHERE date_added = '".date("r",$time)."' AND ip = '".pg_escape_string($_SERVER["REMOTE_ADDR"])."'");
+	
+		$this->comment_id = pg_fetch_result($result,0,0);
+			
+			
+	}
+	protected function update(){
+		$sql = "UPDATE web_comments SET ";
+		$sql .= "name='".pg_escape_string($this->get_name())."', ";
+		$sql .= "email='".pg_escape_string($this->get_email())."', ";
+		$sql .= "comment='".pg_escape_string($this->get_comment())."', ";
+		$sql .= "moderated='".pg_escape_string(($this->get_moderated()?'t':'f'))."' ";
+		$sql .= "WHERE comment_id = '".$this->get_comment_id()."'";
+		echo $sql;
+		RawDB::query($sql);
+	}
+}
+?>

@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @deprecated
+ * @author William Dangerfield
+ *
+ */
+class Truncate{
+	/*
+	 * @Deprecated
+	 */
+	public static function words($body,$maxLength){
+		$i = new Truncation($body);
+		return $i->chars($maxLength)->words(0)->get();
+	}
+	/*
+	* @Deprecated
+	*/
+	public static function sentence($body,$maxLength){
+		$i = new Truncation($body);
+		return $i->chars($maxLength)->sentences(0)->get();
+	}
+}

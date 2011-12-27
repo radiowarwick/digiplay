@@ -1,0 +1,8 @@
+<?php
+class Calendar{
+
+	public static function get_month($year,$month){
+		return new Month($year,$month);	
+	}
+}
+?>

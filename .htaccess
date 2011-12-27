@@ -1,0 +1,8 @@
+php_value include_path /home/jsewell/public_html/dps-www/includes
+RewriteEngine  on
+RewriteBase /
+
+RewriteCond %{DOCUMENT_ROOT}$1.php -f
+RewriteRule ^(.*)/?$ $1.php [L]
+
+ErrorDocument 404 /errors/404

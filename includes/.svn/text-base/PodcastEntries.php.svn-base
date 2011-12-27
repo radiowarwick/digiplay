@@ -1,0 +1,61 @@
+<?php
+class PodcastEntries{
+
+	public static function get_last_list($max_results = 0,$offset = 0,$category = NULL,$podcast = NULL,$order = 'DESC',$distinct = FALSE){
+		
+		
+		if ($distinct) {
+			$sql = "SELECT * FROM (SELECT DISTINCT ON (web_podcast_entry.podcast_id)";
+		} else {
+			$sql = "SELECT ";
+		}
+		
+		$sql .= " 	web_podcast_entry.* FROM web_podcast_entry
+				INNER JOIN web_podcast USING (podcast_id)
+				WHERE web_podcast_entry.publish_time < now()
+				AND web_podcast_entry.active = TRUE
+				AND web_podcast.active = TRUE
+				AND web_podcast.moderated = TRUE";
+		
+		if (is_numeric($category))
+			$sql .= " AND web_podcast.category_id = ".$category;
+
+		if (is_numeric($podcast))
+			$sql .= " AND web_podcast.podcast_id = ".$podcast;
+
+		if ($distinct)
+			$sql .= " ORDER BY web_podcast_entry.podcast_id, web_podcast_entry.publish_time ".$order.") AS web_podcast_entry";
+		
+		$sql .= " ORDER BY web_podcast_entry.publish_time ".$order;
+
+		if (is_numeric($max_results) && $max_results > 0) {
+			$sql .= " LIMIT ".$max_results;
+			if (is_numeric($offset) && $offset > 0)
+				$sql .= "  OFFSET ".$offset;
+		}
+
+		$result = RawDB::query($sql);
+		
+        	$return = array();
+        	while($object = pg_fetch_object($result,null,'PodcastEntry'))
+        		$return[] = $object;
+        		
+        	return $return;
+	}
+
+	public static function get_last(){
+		$last = self::get_last_list(1);
+		return $last[0];
+	}
+
+	public static function get($id){
+		if(!is_numeric($id))	throw new UserError();
+		$sql = "SELECT * FROM web_podcast_entry WHERE entry_id = ".$id;
+		
+		$result = RawDB::query($sql);
+      
+		return pg_fetch_object($result,null,'PodcastEntry');
+	}
+   
+}
+?>

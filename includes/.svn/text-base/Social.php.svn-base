@@ -1,0 +1,207 @@
+<?php
+class Social {
+
+	protected static $fbjs_inc;
+	protected static $twitterjs_inc;
+	protected static $gplusjs_inc;
+		
+	public static function facebook($plugin,$args=array()) {
+                if(!isset(self::$fbjs_inc)) {
+                        Output::add_script('http://connect.facebook.net/en_GB/all.js#xfbml=1');
+                        self::$fbjs_inc = true;
+                }
+		switch ($plugin) {
+			case 'like':
+				$defaults = array(
+					'href' => '',
+					'send' => 'false',
+					'layout' => 'standard',
+					'show_faces' => 'true',
+					'width' => '450',
+					'action' => 'like',
+					'font' => '',
+					'colorscheme' => 'light',
+					'ref' => ''
+				);
+				break;
+			case 'send':
+				$defaults = array(
+		                        'href' => '',
+                		        'font' => '',
+		                        'colorscheme' => 'light',
+                		        'ref' => ''
+		                );
+                                break;
+			case 'comments':
+		                $defaults = array(
+                		        'href' => 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'],
+		                        'width' => '500',
+                		        'num_posts' => '10',
+		                        'colorscheme' => 'light'
+                		);
+                                break;
+			case 'activity':
+	        	        $defaults = array(
+                        		'site' => '',
+	        	                'width' => '300',
+        		                'height' => '300',
+                        		'header' => 'true',
+		                        'colorscheme' => 'light',
+                		        'font' => '',
+		                        'border_color' => '',
+                		        'recommendations' => 'false',
+		                        'filter' => '',
+                		        'ref' => '',
+		                        'max_age' => ''
+		                );
+                                break;
+			case 'recommendations':
+				$defaults = array(
+		                        'site' => '',
+                		        'width' => '300',
+		                        'height' => '300',
+                		        'header' => 'true',
+		                        'colorscheme' => 'light',
+		                        'font' => '',
+                		        'border_color' => '',
+                		        'ref' => '',
+		                        'max_age' => ''
+                		);
+                                break;
+			case 'like-box':
+				$defaults = array(
+                                        'href' => 'https://www.facebook.com/raw1251am',
+                                        'width' => '300',
+                                        'height' => '300',
+                                        'colorscheme' => 'light',
+                                        'show_faces' => 'true',
+					'stream' => 'true',
+                                        'header' => 'true',
+                                        'border_color' => '',
+                                        'force_wall' => 'false'
+                                );
+				break;
+			case 'login':
+				trigger_error("$plugin not currently implemented");
+				exit;
+			case 'registration':
+				trigger_error("$plugin not currently implemented");
+				exit;
+			case 'facepile':
+                                $defaults = array(
+                                        'href' => '',
+					'max_rows' => '1',
+                                        'width' => '300',
+					'size' => 'small',
+                                        'colorscheme' => 'light'
+                                );
+				break;
+			case 'live-stream':
+				$defaults = array(
+					'event_app_id' => '',
+					'width' => '400',
+					'height' => '500',
+					'xid' => '',
+					'via_url' => '',
+					'always_post_to_friends' => 'false'
+				);
+				break;
+		}
+                $args = array_merge($defaults,$args);
+                $args_str = '';
+                foreach($args as $arg => $key) $args_str .= $arg.'="'.$key.'" ';
+                return '<div id="fb-root"></div><fb:'.$plugin.' '.$args_str.'></fb:'.$plugin.'>';
+	}
+
+	public static function twitter($plugin,$args=array()) {
+		$widgets = array('tweet-button','follow-button');
+
+		switch($plugin) {
+			case in_array($plugin,$widgets):
+		                if(!isset(self::$twitterjs_inc)) {
+        		                Output::add_script('http://platform.twitter.com/widgets.js');
+                		        self::$twitterjs_inc = true;
+	                	}
+
+				switch($plugin) {
+					case 'tweet-button':
+						$defaults = array(
+							'data-url' => '',
+							'data-via' => '',
+							'data-text' => '',
+							'data-related' => '',
+							'data-count' => 'horizontal',
+							'data-lang' => 'en',
+							'data-counturl' => ''
+						);
+						$class = 'twitter-share-button';
+						$url = 'share';
+						break;
+					case 'follow-button':
+						$defaults = array(
+                		                        'data-show-count' => 'true',
+                        		                'data-button' => 'blue',
+                                		        'data-text-color' => '',
+                                        		'data-link-color' => '',
+		                                        'data-lang' => 'en',
+        		                                'data-width' => '',
+							'data-align' => ''
+                        		        );
+						$class="twitter-follow-button";
+	                                	$url = $args['username'];
+	        	                        break;
+				}
+	        	        $args = array_merge($defaults,$args);
+        	        	$args_str = '';
+	                	foreach($args as $arg => $key) $args_str .= $arg.'="'.$key.'" ';
+		                return '<a href="http://twitter.com/'.$url.'" class="'.$class.'" '.$args_str.'>Tweet</a>';
+			case 'feed':
+				$username = $args['username'];
+				$num = isset($args['num']) ? $args['num'] : 1;
+				$url = 'http://twitter.com/statuses/user_timeline/'.$username.'.rss';
+ 				$feed = simplexml_load_file($url);
+				
+				$key = 0;
+				foreach($feed->channel->item as $tweet) {
+					if($key == $num) break;
+					$tweet = $tweet->description;
+					$tweet = preg_replace("/(^|[\n ])([\w]*?)((ht|f)tp(s)?:\/\/[\w]+[^ \,\"\n\r\t<]*)/is", "$1$2<a href=\"$3\" >$3</a>", $tweet);
+					$tweet = preg_replace("/(^|[\n ])([\w]*?)((www|ftp)\.[^ \,\"\t\n\r<]*)/is", "$1$2<a href=\"http://$3\" >$3</a>", $tweet);
+					$tweet = preg_replace("/(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+)+)/i", "$1<a href=\"mailto:$2@$3\">$2@$3</a>", $tweet);
+					$tweet = preg_replace("/@(\w+)/", '<a href="http://www.twitter.com/$1" target="_blank">@$1</a>', $tweet);
+					$tweet = preg_replace("/\#(\w+)/", '<a href="http://search.twitter.com/search?q=$1" target="_blank">#$1</a>',$tweet);
+					$tweet = substr($tweet,strpos($tweet,":")+2);
+					$tweets[] = $tweet;
+					$key++;
+				}
+				return $tweets;
+		}		
+	}
+	
+	public static function googleplus($plugin, $args=array()) {
+		switch($plugin) {
+			case '+1button':
+		                if(!isset(self::$gplusjs_inc)) {
+		                        Output::add_script('https://apis.google.com/js/plusone.js');
+        	                	self::$gplusjs_inc = true;
+                		}
+
+				$defaults = array(
+					'href' => '',
+					'size' => 'standard',
+					'annotation' => 'bubble',
+					'width' => '',
+					'callback' => '',
+					'onstartinteraction' => '',
+					'onendinteraction' => ''
+				);
+
+                                $args = array_merge($defaults,$args);
+                                $args_str = '';
+                                foreach($args as $arg => $key) $args_str .= $arg.'="'.$key.'" ';
+                                return '<div class="g-plusone" '.$args_str.'></div>';
+		}
+	}
+}
+?>
+

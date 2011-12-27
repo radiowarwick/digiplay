@@ -1,0 +1,40 @@
+<?php
+class Soty {
+	public static function get_tracks() {
+		$sql = "SELECT track_id,artist,title FROM web_soty_tracks ORDER BY artist ASC, title ASC";
+		$result = RawDB::query($sql);
+		$return = array();
+		while ($track = pg_fetch_object($result,null,"SotyTrack"))
+			$return[] = $track;
+		return $return;
+	}
+	public static function add_vote($choice, $trackid, $name, $email) {
+		$sql = "INSERT INTO web_soty_votes (track_id, choice, name, email, ip) VALUES ('".pg_escape_string($trackid)."', '".pg_escape_string($choice)."', '".pg_escape_string($name)."', '".pg_escape_string($email)."', '".pg_escape_string($_SERVER["REMOTE_ADDR"])."');";
+		$result = @RawDB::query($sql);
+		if (!$result) {
+			return FALSE;
+		}
+		else { return $result; }
+	}
+	public static function get_results($all = false) {
+		$sql = "select web_soty_scores.score, web_soty_scores.votes, web_soty_tracks.artist, web_soty_tracks.title, web_soty_tracks.show from web_soty_scores inner join web_soty_tracks on web_soty_tracks.track_id = web_soty_scores.track_id ";
+		if($all) {
+			$sql .= " ";
+		} else {
+			$sql .= "WHERE show = TRUE ";
+		}
+		$sql .= "order by score desc, votes asc, artist asc limit 40;";
+		$result = RawDB::query($sql);
+		$return = array();
+		while ($track = pg_fetch_object($result,null,"SotyTrack"))
+			$return[] = $track;
+		return $return;
+	}
+	public static function get_latest_result() {
+		$tracks = self::get_results();
+		$tracks[0]->set_place(21 - count($tracks));
+		return $tracks[0];
+	}
+
+}
+?>

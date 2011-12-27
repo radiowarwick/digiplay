@@ -1,0 +1,176 @@
+<?php
+
+class BOTBBand
+{
+	private $id = false;
+	private $heat_id = false;
+	private $name;
+	private $description;
+	private $members = false;
+	private $rank = false;
+	private $set = false;
+	private $interview = false;
+
+	public function __construct($heat_id = null)
+	{
+		if(!is_null($heat_id))
+		{
+			if(BOTB::getHeat($heat_id))
+				$this->heat_id = $heat_id;
+		}
+	}
+	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
+	public function getHeatID()
+	{
+		return $this->heat_id;
+	}
+	
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	public function getDescription()
+	{
+		return $this->description;
+	}
+
+	public function getMembers()
+	{
+		if($this->members)
+			$this->retriveMembers();
+		return $this->members;
+	}
+
+	public function getRank()
+	{
+		return $this->rank;
+	}
+	
+	public function getSet()
+	{
+		if(file_exists(SITE_MEDIA_PATH."botb/sets/".$this->heat_id."-".$this->id.".mp3"))
+			return "botb/sets/".$this->heat_id."-".$this->id.".mp3";
+		else
+			return false; 
+	}
+
+	public function getInterview()
+	{
+		if(file_exists(SITE_MEDIA_PATH."botb/interviews/".$this->heat_id."-".$this->id.".mp3"))
+				return "botb/interviews/".$this->heat_id."-".$this->id.".mp3";
+			else
+				return false;
+	}
+
+	public function clearID()
+	{
+		$this->id = false;
+		return $this->id;
+	}
+	
+	public function setName($name)
+	{
+		$error = false;
+		if(preg_match("/[\r\n]/",$name) || empty($name) || strlen($name) > 100)
+			$error = "Please enter a name";
+		else
+			$this->name = $name;
+		return $error;
+	}
+
+	public function setDescription($description)
+	{
+		$error = false;
+		if(empty($description) || strlen($description) > 1000)
+			$error = "Please enter a description";
+		else
+			$this->description = $description;
+		return $error;
+	}
+
+	public function addSet($temp)
+	{
+		$errors = false;
+		try
+		{
+			$file = new Upload($_FILES[$temp]);
+			$file->check_mime(array(audio/mpeg));
+			$file->check_filename();
+			echo(SITE_MEDIA_PATH."botb/sets/");
+			$file->move(SITE_MEDIA_PATH."botb/sets/".$this->heat_id."-".$this->id.".mp3");
+			$this->set = true;
+		}
+		catch(UserError $error)
+		{
+				$errors = (String) $error;
+		}
+		return $errors;
+	}
+
+	public function addInterview($temp)
+	{
+		$errors = false;
+		try
+		{
+			$file = new Upload($_FILES[$temp]);
+			$file->check_mime(array(audio/mpeg));
+			$file->check_filename();
+			$file->move(SITE_MEDIA_PATH."botb/interviews/".$this->heat_id."-".$this->id.".mp3");
+			$this->interview = true;
+		}
+		catch(UserError $error)
+		{
+				$errors = (String) $error;
+		}
+		return $errors;
+	}
+
+	public function save()
+	{
+		if(!$this->id)
+		{
+			$query = "INSERT INTO web_botb_bands (name, description, set, interview, active) VALUES ('".pg_escape_string($this->name)."', '".pg_escape_string($this->description)."', ".(($this->set)?"True":"False").", ".(($this->interview)?"True":"False").", True)";
+			if( $result = RawDB::query($query) )
+			{
+				$row = pg_fetch_row($result);
+				$this->id = $row[0];
+				return false;
+			} else
+				return "Database failed";
+		} else {
+			$query = "UPDATE web_botb_bands SET name='".pg_escape_string($this->name)."', description='".pg_escape_string($this->description)."', set=".(($this->set)?"True":"False").", interview=".(($this->interview)?"True":"False")." WHERE id='".pg_escape_string($this->id)."'";
+			if(RawDB::query($query))
+				return false;
+			else
+				return "Database failed";
+		}
+	}
+	
+	private function retriveMembers()
+	{
+		$query = "SELECT * FROM web_botb_band_members WHERE band_id='".pg_escape_string($this->id)."' ORDER BY name ASC";
+		$result = RawDB::query($query);
+		$return = array();
+		while ($object = pg_fetch_object($result, null, "BOTBBandMember"))
+			$return[] = $object;
+		return $return;
+	}
+	
+	public function delete()
+	{
+		if($this->id)
+		{
+			$query = "DELETE FROM web_botb_bands WHERE id='".pg_escape_string($this->id)."'";
+			RawDB::query($query);
+			return true;
+		} else {
+			return false;
+		}
+	}
+}

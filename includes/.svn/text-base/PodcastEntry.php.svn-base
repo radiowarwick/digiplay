@@ -1,0 +1,179 @@
+<?php
+class PodcastEntry{
+	private $entry_id;
+	private $podcast_id;
+    private $title;
+    private $summary;
+    private $description;
+    private $filename;
+    private $publish_time;
+    private $moderated;
+    private $active;
+    private $moderator_comment;
+    
+    public function __construct(){
+    	$this->moderated	= ($this->moderated	== 't');
+    	$this->active		= ($this->active		== 't');
+    	$this->publish_time	= (strtotime($this->publish_time));
+    }
+    public function get_id(){
+    	trigger_error("Deprecated Function: get_id()");
+    	return $this->entry_id;	
+    }
+    public function get_entry_id(){
+    	return $this->entry_id;
+    }
+    public function get_title(){
+    	return $this->title;
+    }
+    public function get_summary(){
+    	return $this->summary;
+    }
+    public function get_description(){
+    	return $this->description;
+    }
+    public function get_filename(){
+    	return $this->filename;
+    }
+    public function get_filesize(){
+    	return filesize(SITE_MEDIA_PATH."podcasts/".$this->filename);
+    }
+    public function get_publish_time(){
+    	return $this->publish_time;
+    }
+    public function get_moderated(){
+    	return $this->moderated;
+    }
+    public function get_active(){
+    	return $this->active;
+    }
+    public function get_moderator_comment(){
+    	return $this->moderator_comment;
+    }
+    public function get_podcast_id(){
+        return $this->podcast_id;
+    }
+    public function get_podcast(){
+    	return Podcasts::get($this->podcast_id);
+    }
+    public function get_image(){
+		if(file_exists(SITE_MEDIA_PATH."podcasts/images/".$this->get_podcast_id()."-".$this->get_entry_id().".jpg")){
+			return $this->get_podcast_id()."-".$this->get_entry_id().".jpg";
+		} else if(file_exists(SITE_MEDIA_PATH."podcasts/images/".$this->get_podcast_id().".jpg")){
+			return $this->get_podcast_id().".jpg";
+		} else {
+			return "default.jpg";
+		}
+    }
+    public function set_podcast($object){
+ 	$this->podcast_id = $object->get_podcast_id();
+    }
+    public function set_podcast_id($new_podcast_id){
+	$this->podcast_id = $new_podcast_id;
+    }
+    public function set_title($new_title){
+    	$this->title = $new_title;
+    }
+    public function set_summary($new_summary){
+	$this->summary = $new_summary;
+    }
+    public function set_description($new_description){
+    	$this->description = $new_description;
+    }
+    public function set_filesize($new_filesize){
+    	trigger_error("WTF. You Idiot",E_USER_ERROR);
+    }
+    public function set_moderated($new_moderated){
+    	$this->moderated = (bool) $new_moderated;
+    }
+    public function set_active($new_active){
+    	$this->active = (bool) $new_active;
+    }
+    public function set_moderator_comment($new_moderator_comment){
+    	$this->moderator_comment = $new_moderator_comment;
+    }
+    public function set_file($FILE){
+    	//TODO
+    	//drop existing file.
+    	$this->filename = $this->get_podcast_id()."-".date("Ymd")."-".str_replace(' ','_',$FILE["name"]);
+	try{
+	    	$upload = new Upload($FILE);
+
+    		$upload->check_mime(array("audio/mpeg","audio/mpeg3","audio/x-mpeg-3","audio/x-mpeg"));
+	    	$upload->check_extension(array("mp3"));
+	    	$upload->move(SITE_MEDIA_PATH."podcasts/" . $this->filename);	
+	}catch(UserError $e){
+		trigger_error($e);
+	}
+    }
+    
+    public function get_xml(){
+        $link = SITE_LINK_MEDIA."podcasts/".$this->get_filename();
+        $summary = htmlspecialchars(str_replace("\r"," ",str_replace("\n"," ",$this->get_summary())));
+        $description = htmlspecialchars(str_replace("\r"," ",str_replace("\n"," ",$this->get_description())));
+	    $return  = "        <item>\n";
+	    $return .= "            <title>".$this->get_title()."</title>\n";
+	    $return .= "            <link>$link</link>\n";
+	    $return .= "            <guid>$link</guid>\n";
+	    $return .= "            <description>".$description."</description>\n";
+	    $return .= "            <pubDate>".date("r", $this->get_publish_time())."</pubDate>\n";
+	    $return .= "            <enclosure url=\"$link\" length=\"".$this->get_filesize()."\" type=\"audio/mpeg\" />\n";
+        $return .= "            <itunes:author>Radio Warwick</itunes:author>\n";
+        $return .= "            <itunes:subtitle>".$summary."</itunes:subtitle>\n";
+        $return .= "            <itunes:summary>".$description."</itunes:summary>\n";
+	    $return .= "        </item>\n";
+	    
+	    return $return;
+    }
+    public function insert(){
+        $sql = "INSERT INTO web_podcast_entry (podcast_id, title, summary, description, filename, publish_time, moderated, active) VALUES (".
+            $this->get_podcast_id().", ".
+            "'".pg_escape_string($this->get_title())."', ".
+            "'".pg_escape_string($this->get_summary())."', ".
+            "'".pg_escape_string($this->get_description())."', ".
+            "'".pg_escape_string($this->get_filename())."', ". 
+            "now(),".
+            "'".($this->get_moderated()?'true':'false')."',".
+            "'".($this->get_active()?'true':'false')."') RETURNING entry_id";
+        $result = RawDB::query($sql);
+        $id = pg_fetch_result($result,0,'entry_id');
+        return $id;
+    }
+    public function update(){
+		$sql = "UPDATE web_podcast_entry SET ".
+            "title = '".pg_escape_string($this->get_title())."', ".
+	    "summary = '".pg_escape_string($this->get_summary())."', ".
+            "description = '".pg_escape_string($this->get_description())."', ".
+            "moderated = ".($this->get_moderated()?"true":"false").", ".
+	    "filename = '".pg_escape_string($this->get_filename())."', ".
+            "active = ".($this->get_active()?"true":"false").", ".
+            "moderator_comment = '".pg_escape_string($this->get_moderator_comment())."' ".
+            " WHERE entry_id = ".pg_escape_string($this->get_entry_id());
+        RawDB::query($sql);
+    }
+    public function save(){
+    	if(is_null($this->get_entry_id()))
+    		$this->insert();
+    	else
+    		$this->update();
+    }
+    public function delete(){
+        $sql = "DELETE FROM web_podcast_entry WHERE entry_id = ".$this->get_entry_id();
+        RawDB::query($sql);
+    }
+    
+	public function get_comments(){
+		$result = RawDB::query("SELECT web_comments.* FROM web_comments INNER JOIN web_podcast_entry_comments USING(comment_id) WHERE web_podcast_entry_comments.entry_id = '".$this->get_entry_id()."' AND moderated ORDER BY web_comments.date_added DESC");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Comment'))
+			$array[] = $object;
+		return $array;	
+	}
+	public function add_comment($comment_object){
+		$comment_object->save();
+		
+		RawDB::query("INSERT INTO web_podcast_entry_comments (comment_id,entry_id) VALUES ('".$comment_object->get_comment_id()."','".$this->get_entry_id()."')");
+	}
+}
+?>

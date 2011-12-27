@@ -1,0 +1,171 @@
+<?php
+class MainTemplate implements Template{
+	protected static $menu;
+	protected static $subtitle;
+	protected static $class;
+	public static function get_menu(){
+		if(!isset(self::$menu)) self::$menu = new Menu;
+		return self::$menu;
+	}
+	public static function set_subtitle($subtitle){
+		self::$subtitle = $subtitle;
+	}
+	public static function set_class($class){
+		self::$class = $class;
+	}
+	public static function print_page($content){
+		$main_menu = new Menu;
+		$main_menu->add_many(
+			array("index","Home"),
+			array("schedule","Schedule"),
+			array("shows","Shows"),
+			array("about","About"),
+			array("music","Music"),
+			array("contact","Contact"));
+	$site_path_array = explode("/",SITE_PAGE);
+	$main_menu->set_active($site_path_array[0]);
+	
+	$return = "<!DOCTYPE html> 
+<html> 
+	<head> 
+		<title>Radio Warwick (RaW 1251AM)";
+	if(Output::get_title() != 'Untitled Page')
+		$return .= " - ".Output::get_title();
+	$return .= "</title> 
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/style.css\" type=\"text/css\" media=\"screen\" /> 
+		<script src=\"".SITE_LINK_REL."js/jquery/jquery-current.min.js\" type=\"text/javascript\"></script>";
+	if(count(Output::get_stylesheets())>0)
+		foreach(Output::get_stylesheets() AS $src){
+			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>";
+		}
+	if(count(Output::get_scripts())>0)
+		foreach(Output::get_scripts() AS $src){
+			$return .= "\n	<script src=\"".$src."\" type=\"text/javascript\"></script>";
+		}
+	
+	if(count(Output::get_feeds())>0)
+		foreach(Output::get_feeds() AS $feed){
+			$return .= "\n	<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\" />";
+		}
+		
+	$show = Shows::current();
+	$showname = htmlentities(Truncate::words($show->get_name(),60));
+	$last_track		= Tracks::last();
+	if($show->get_showid() == 0) {
+		$lastshow = Shows::last();
+		$nextshow = Shows::next();
+		$showstart = $lastshow->get_end();
+		$showend = $nextshow->get_start();
+	} else {
+		$showstart = $show->get_start();
+		$showend = $show->get_end();
+	}
+	
+	$return .= "
+<script type=\"text/javascript\">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4483020-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head> 
+	<body> 
+		<div id=\"header\"> 
+			<h1>RaW 1251AM - Student Radio from the University of Warwick</h1> 
+			<img src=\"".SITE_LINK_REL."images/template/logo.png\" alt=\"RaW 1251AM\" id=\"logo\" /> 
+			<div id=\"onair\"> 
+				<div id=\"onair_show\"> 
+					<h2>On Air:</h2> 
+					<p><a href=\"".SITE_LINK_REL."shows/".$show->get_url()."\">".ucwords($showname)."</a></p> 
+				</div> 
+				<div id=\"onair_song\">
+					<h2>Just Played:</h2> ";
+				if($last_track == FALSE){
+					$return .= "<p>Great music, news, sport and speech</p>";
+				} else {
+					$return .= "<p><a href=\"".SITE_LINK_REL."music/artist/".urlencode(strtolower($last_track->get_tidy_artist()))."/\">".$last_track->get_tidy_artist()."</a> - ".$last_track->get_tidy_title()."</p> ";
+				}
+				$return .= "
+				</div> 
+				<ul id=\"onair_menu\"> 
+					<li><a href=\"".SITE_LINK_REL."listen\" id=\"onair_listen\"  onclick=\"window.open('http://player.radio.warwick.ac.uk', 'radioplayer', 'height=665,width=380');\">Listen Now</a></li> 
+					<li><a href=\"".SITE_LINK_REL."watch/\">Webcams</a></li> 
+					<li><a href=\"".SITE_LINK_REL."contact/\">Get in Touch</a></li> 
+				</ul> 
+				<a href=\"".SITE_LINK_REL."shows/".$show->get_url()."\">";
+
+if(file_exists(SITE_MEDIA_PATH . "shows/".$show->get_showid().".sillhouette.png")) {
+	$return .= "<img src=\"".SITE_LINK_MEDIA."shows/".$show->get_showid().".silhouette.png\" alt=\"".ucwords($showname)."\" id=\"onair_image\" />";
+} else {
+	$return .= "<img src=\"".SITE_LINK_REL."images/template/default_silhouette.png\" alt=\"".ucwords($showname)."\" id=\"onair_image\" />";
+}
+	$return .= "			</div> 
+		</div>
+		<div id=\"menu\">
+";
+	if(Session::is_member()) {
+		$return .= "				<div id=\"meta\"><a href=\"".SITE_LINK_REL."space/\">Logged in as ".Session::get_username()."</a></div>";
+	} else {
+		$return .= "				<div id=\"meta\"><a href=\"".SITE_LINK_REL."space/login?referal=".$_SERVER['REQUEST_URI']."\">Log In</a></div>";
+	}
+	$return .= "
+			<ul id=\"menu\"> 
+				<li><a href=\"".SITE_LINK_REL."\">Home</a></li> 
+				<li><a href=\"".SITE_LINK_REL."shows/\">Schedule</a></li> 
+				<!--<li><a href=\"".SITE_LINK_REL."listen/more/\">MoreRaW</a></li> -->
+				<li><a href=\"".SITE_LINK_REL."music/\">Music</a></li> 
+				<li><a href=\"".SITE_LINK_REL."about/\">Get Involved</a></li> 
+				<li><a href=\"".SITE_LINK_REL."contact/\">Contact RaW</a></li> 
+			</ul>
+		</div>
+		<div id=\"body\"";
+	if(isset(self::$class)) {
+		$return .= " class=\"".self::$class."\"";
+	}
+	$return .=">";
+		if (isset(self::$menu) && self::$menu->size()>0){
+			$return .= "<div id=\"left_menu\"><h2>".self::$subtitle."</h2>\n";
+			$return .= self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/");
+			$return .= "</div><div id=\"content_withsub\">\n";
+		}
+		$return .= $content."</div> ";
+		if (isset(self::$menu) && self::$menu->size()>0){
+			$return .= "</div>";
+		}
+		$return .= "<div id=\"footer\"> 
+			<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."images/template/footer_logo.png\" src=\"RaW 1251AM\" /></a> 
+			<p id=\"footer_tagline\">Student Radio from the University of Warwick</p> 
+			<p id=\"footer_rawspace\"><a href=\"".SITE_LINK_REL."space/\">RaWSpace - Members Area</a></p>
+			<ul> 
+				<li><a href=\"".SITE_LINK_REL."about/\">About Us</a></li> 
+				<li><a href=\"".SITE_LINK_REL."contact/\">Contact Us</a></li> 
+				<!--<li><a href=\"".SITE_LINK_REL."advertise/\">Advertise with Us</a></li> -->
+				<li>&nbsp;</li>
+				<li class=\"copy\">&copy; Radio Warwick ".date("Y")."</li> 
+			</ul> 
+		</div> 
+
+	</body> 
+</html>";
+	return $return;
+	}
+
+	public static function print_http_error($error){
+		switch($error){
+			case 401: return "<h1>Unauthorized</h1>\n<p>This page requires special permissions</p>"; break;
+			case 404: return "<h1>Page not found</h1>\n<p>This page does not exist</p>"; break;
+			case 410: return "<h1>This page has left us</h1>\n<p>We are sad.</p>"; break;
+		}
+	}
+
+}
+
+?>

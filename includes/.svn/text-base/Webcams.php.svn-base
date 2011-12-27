@@ -1,0 +1,40 @@
+<?php
+DEFINE('WEBCAM_STUDIO_PATH',"/mnt/www/media.radio.warwick.ac.uk/webcams/studio1-1full.jpg");
+DEFINE('WEBCAM_CR1_PATH',"/mnt/www/media.radio.warwick.ac.uk/webcams/studio1-2full.jpg");
+DEFINE('WEBCAM_CR2_PATH',"/mnt/webcam/cr2full.jpg");
+
+class Webcams{
+	private static function data($webcam){
+		switch($webcam){
+			case WEBCAMS_CAM_STUDIO1:
+				return imagecreatefromjpeg(WEBCAM_STUDIO_PATH);
+			case WEBCAMS_CAM_CONTROLROOM1:
+				return imagecreatefromjpeg(WEBCAM_CR1_PATH);
+			case WEBCAMS_CAM_CONTROLROOM2:
+				return imagecreatefromjpeg(WEBCAM_CR2_PATH);
+			default:
+				trigger_error("Invalid Camera",E_USER_ERROR);
+		}
+	}
+
+	private static function resize($image,$size){
+		switch($size){
+			case WEBCAMS_SIZE_FULL:
+				return Images::resize_proportionaly($image,640,480);
+			case WEBCAMS_SIZE_SMALL:
+				return Images::resize_proportionaly($image,320,240);
+			case WEBCAMS_SIZE_THUMB:
+				return Images::resize_proportionaly($image,160,120);
+			default:
+				trigger_error("Invalid Webcam Size",E_USER_ERROR);
+		}
+	}
+	private static function label($image){
+		return $image;
+	}
+	
+	public static function cam($webcam,$size = WEBCAMS_SIZE_THUMB){
+		return imagejpeg(self::label(self::resize(self::data($webcam),$size)));
+	}
+}
+?>

@@ -1,0 +1,76 @@
+<?php
+class Department {
+	private $department_id;
+	private $name;
+	private $email;
+	private $description_core;
+	private $description_editable;
+
+	public function getName(){
+		return $this->name;
+	}
+	
+	public function getEmail(){
+		return $this->email."@radio.warwick.ac.uk";
+	}
+
+        public function getDescription(){
+                return $this->description_core."\n".$this->description_editable;
+        }
+
+        public function getDescriptionCore(){
+                return $this->description_core;
+        }
+
+        public function getDescriptionEditable(){
+                return $this->description_editable;
+        }
+
+	public function getExec(){
+		return Members::getExec($this->department_id);
+	}
+
+	public function getDeputies(){
+		return Members::getDeputies($this->department_id);
+	}
+
+	public function getShows(){
+		$result = RawDB::query("SELECT showid FROM web_departments_shows WHERE department_id = ".$this->department_id);
+		while($row = pg_fetch_row($result))
+			$return[] = Shows::get($row[0]);
+		return $return;
+	}
+
+	public function setName($input){
+		$this->name = $input;
+	}
+
+        public function setDescriptionCore($input){
+                $this->description_core = $input;
+        }
+
+        public function setDescriptionEditable($input){
+                $this->description_editable = $input;
+        }
+
+        public function setEmail($input){
+                $this->email = $input;
+        }
+
+	public function addDeputy($input){
+		//TODO: implement function
+	}
+
+	public function removeDeputy($input){
+		//TODO: implement function
+	}
+
+	public function changeExec($input){
+		//TODO: implement function
+	}
+
+	public function save(){
+		//TODO: implement function
+	}
+}
+?>

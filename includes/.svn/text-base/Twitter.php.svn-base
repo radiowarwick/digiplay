@@ -1,0 +1,172 @@
+<?php
+class Twitter {
+
+	public static function postMessage($status) {
+        //Session::get_username();
+        //check message length
+		$length = strlen($status);
+		if ( ( $length > 0 ) && ($length < 141 ) ) {
+            //send request and get XML Reply
+			$reply = Twitter::makePostRequest("http://twitter.com/statuses/update.xml",
+                    "status=\"".$status."\"");
+            
+            //get twitter ID
+            $xpath = $reply->xpath("/status/id");
+            $twitterid = $xpath[0];
+            
+            //insert record into DB
+            $sql = "INSERT INTO web_twitter_posts (twitterid, username, message, datetime) VALUES (".
+                "'".$twitterid."', '".Session::get_username()."', '".
+                pg_escape_string($status)."', now());";
+            RawDB::query($sql);
+		} else {
+			throw new UserError("Message Too Long");
+		}
+	}
+
+    public static function getPresetMessages()
+    {
+		$result = RawDB::query("SELECT messageid, message FROM web_twitter_messages");
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Tweet'))
+			$array[] = $object;
+		return $array;
+    }
+
+    public static function getPresetMessage($messageid)
+    {
+        if (!is_numeric($messageid))
+            throw new UserError("Invalid Message ID");
+
+		$result = RawDB::query("SELECT messageid, message FROM
+                web_twitter_messages WHERE messageid = " . $messageid);
+		return pg_fetch_object($result,null,'Tweet');
+    }
+
+    public static function get_timeline($username = "raw1251am", $count = 1, $offset = 0)
+    {
+        if (!is_numeric($count))
+            throw new UserError("Invalid Count");
+        if (!is_numeric($offset))
+            throw new UserError("Invalid Offset");
+
+        $count = $count + $offset;
+
+        $tweets = array();
+	$url = 'http://twitter.com/statuses/user_timeline/'.$username.'.rss';
+	$feed = file_get_contents($url); 
+	$feed = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $feed); 
+	$feed = simplexml_load_string($feed); 
+        $key = 0;
+        foreach($feed->channel->item as $entry) {
+            if($key == $count) break;
+	    $tweet = new Tweet;
+	    $tweet->set_username($username);
+	    $tweet->set_title($entry->title);
+	    $tweet->set_description($entry->description);
+	    $tweet->set_guid($entry->guid);
+ 	    $tweet->set_link($entry->link);
+	    $tweet->set_date($entry->pubDate);
+	    $tweet->set_source($entry->twittersource);
+	    $tweet->set_place($entry->twitterplace);
+	    
+	    $tweet->parse_links();
+
+            $tweets[] = $tweet;
+            $key++;
+        }
+        return $tweets;
+    }
+    
+    public static function getMentionsFromTwitter($count = 1, $offset = 0)
+    {
+        if (!is_numeric($count))
+            throw new UserError("Invalid Count");
+        if (!is_numeric($offset))
+            throw new UserError("Invalid Offset");
+
+        $count = $count + $offset;
+
+        //make request and get XML reply
+        $reply = Twitter::makeGetRequest("http://twitter.com/statuses/mentions.xml?count=".$count);
+        
+        //get the statuses
+        $xpath = $reply->xpath("/statuses/status");
+
+        //parse into objects and expand with local info
+        $statuses = array();
+        $i = 0;
+        foreach ($xpath as $x)
+        {
+            $i = $i + 1;
+            if ($i <= $offset) { continue; }
+            $status = new Tweet();
+            $status->set_id(-1);
+            $status->set_username($x[0]->user->name);
+            $status->set_messageid((string)$x[0]->id);
+            $status->set_message((string)$x[0]->text);
+            $status->set_time((string)$x[0]->created_at);
+            $statuses[] = $status;
+        }
+        return $statuses;
+    }
+    
+    public static function getFriendsFromTwitter($count = 1, $offset = 0)
+    {
+        if (!is_numeric($count))
+            throw new UserError("Invalid Count");
+        if (!is_numeric($offset))
+            throw new UserError("Invalid Offset");
+
+        $count = $count + $offset;
+
+        //make request and get XML reply
+        $reply = Twitter::makeGetRequest("http://twitter.com/statuses/friends_timeline.xml?count=".$count);
+        
+        //get the statuses
+        $xpath = $reply->xpath("/statuses/status");
+
+        //parse into objects and expand with local info
+        $statuses = array();
+        $i = 0;
+        foreach ($xpath as $x)
+        {
+            $i = $i + 1;
+            if ($i <= $offset) { continue; }
+            $status = new Tweet();
+            $status->set_id(-1);
+            $status->set_username($x[0]->user->name);
+            $status->set_messageid((string)$x[0]->id);
+            $status->set_message((string)$x[0]->text);
+            $status->set_time((string)$x[0]->created_at);
+            $statuses[] = $status;
+        }
+        return $statuses;
+    }
+
+    private static function makeGetRequest($url)
+    {
+        exec("curl -u ". TWITTER_USER .":". TWITTER_PASS ." ".$url, $reply, $return);
+        return Twitter::parseRequest($reply);
+    }
+
+    private static function makePostRequest($url, $post)
+    {
+        exec("curl -u ". TWITTER_USER .":". TWITTER_PASS ." -d ".$post." ".$url, $reply, $return);
+        return Twitter::parseRequest($reply);
+    }
+
+    private static function parseRequest($reply)
+    {
+        //parse XML
+        $reply = simplexml_load_string(implode($reply));
+        
+        //check for errors
+        $xpath = $reply->xpath("/hash/error");
+        if (count($xpath) != 0) { throw new UserError("Twitter Error: ".$xpath[0]); }
+
+        return $reply;
+    }
+
+}
+?>

@@ -1,0 +1,18 @@
+<?php
+require_once ("recaptchalib.php");
+
+	class Captcha{
+		protected static $public_key	= "6Ld77AIAAAAAAId4bbxkvb0MD86_nfvGyKy4_d9I";
+		protected static $private_key	= "6Ld77AIAAAAAADvNY3iq_L6Em1RwALopCXDVuO56";
+		public static function get(){
+			return recaptcha_get_html(self::$public_key);
+		}
+		public static function check(){
+			if(isset($_POST["recaptcha_challenge_field"],$_POST["recaptcha_response_field"]))
+				if(empty($_POST["recaptcha_challenge_field"]) || empty($_POST["recaptcha_response_field"])) return false;
+				else return recaptcha_check_answer (self::$private_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], 
+	$_POST["recaptcha_response_field"])->is_valid;
+			else return false;
+		}
+	}
+	?>

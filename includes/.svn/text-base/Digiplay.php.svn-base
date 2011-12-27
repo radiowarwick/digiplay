@@ -1,0 +1,98 @@
+<?php
+class Digiplay {
+
+	public static function get_playlists() {
+		$sql = "select * from playlists order by sortorder asc";
+		$result = DigiplayDB::query($sql);
+		$return = array();
+		while ($playlist = pg_fetch_object($result, NULL, 'DigiplayPlaylist')) {
+			$return[] = $playlist;
+		}
+		return $return;
+	}
+
+	public static function get_playlist($playlist) {
+		$playlists = self::get_playlists();
+		foreach($playlists as $currentplaylist) { 
+			if(is_numeric($playlist)) {
+				if($currentplaylist->get_id() == $playlist){
+					$selectedplaylist = $currentplaylist;
+					break;
+				}
+			}else{
+				if(strtolower($currentplaylist->get_name()) == strtolower($playlist)){
+					$selectedplaylist = $currentplaylist;
+					break;
+				}
+			}
+		}
+		$where = " WHERE playlistid = ". $selectedplaylist->get_id();
+
+		$sql = "SELECT artist,title,playlistid AS dps_playlistid, id AS dps_id FROM v_playlists". $where ." ORDER BY artist";
+		$result = DigiplayDB::query($sql);
+		$return = array();
+		while ($track = pg_fetch_object($result, NULL, 'DigiplayTrack')) {
+			$selectedplaylist->add_track($track);
+		}
+		return $selectedplaylist;
+	}
+
+    public static function get_emails($starttime = NULL, $endtime = NULL, $sort
+            = NULL, $limit = NULL, $offset = NULL) {
+        $sql = "SELECT * FROM email";
+        
+        if ( !is_null($starttime) && !is_null($endtime) &&
+                is_numeric($starttime) && is_numeric($endtime) ) {
+           $sql .= " WHERE datetime BETWEEN ". $starttime ." AND ". $endtime;
+        }
+		
+		$sql .= " ORDER BY datetime ";
+        if ( !is_null($sort) ) {
+            $sql .= $sort;
+        } else {
+            $sql .= "DESC";
+        }
+
+        if ( !is_null($limit) && is_numeric($limit) ) {
+            $sql .= " LIMIT ". $limit;
+            if ( !is_null($offset) && is_numeric($offset) ) {
+                $sql .= " OFFSET ". $offset;
+            }
+        }
+
+        $result = DigiplayDB::query($sql);
+        $return = array();
+        while ($email = pg_fetch_object($result, NULL, 'DigiplayEmail')) {
+            $return[] = $email;
+        }
+
+        return $return;
+    }
+
+    public static function get_email($id) {
+        if (is_null($id) || !is_numeric($id) ) {
+            //THROW ERROR
+        } else {
+            $sql = "SELECT * FROM email WHERE id = '". $id ."'";
+            $result = DigiplayDB::query($sql);
+            if ($return = pg_fetch_object($result, NULL, 'DigiplayEmail')) {
+                return $return;
+            } else {
+                //THROW ERROR
+            }
+        }
+    }
+
+    public static function get_recentlyadded($limit = 20) {
+	$sql = "select artist,title,id from v_audio_music order by id DESC limit ".$limit;
+	$result = DigiplayDB::query($sql);
+	$return = array();
+	while ($track = pg_fetch_object($result, NULL, 'DigiplayTrack')) {
+		$return[] = $track;
+	}
+	return $return;
+    }
+
+}
+?>
+

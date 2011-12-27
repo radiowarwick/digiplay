@@ -1,0 +1,32 @@
+<?php
+class Event{
+	protected $event_id;
+	protected $name;
+	protected $information;
+	
+	public function get_event_id(){
+		return $this->event_id;
+	}
+	public function get_name(){
+		return $this->name;
+	}
+	public function get_information(){
+		return $this->information;
+	}
+	public function set_name($name){
+		$this->name = $name;
+	}
+	public function set_information($information){
+		$this->information = $information;
+	}
+	public function insert(){
+	
+	}
+	public function update(){
+	
+	}
+	public function save(){
+	
+	}
+}
+?>

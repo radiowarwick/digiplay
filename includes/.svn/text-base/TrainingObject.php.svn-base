@@ -1,0 +1,42 @@
+<?php
+class TrainingObject{
+	private $training_id;
+	private $module_name;
+	private $date;
+	private $status;
+	private $trainer_name;
+	private $trainer_username;
+	private $rating;
+	private $comment;
+	public function __construct(){
+		$this->status = ($this->status == "t");
+	}
+	public function get_training_id(){
+		return $this->training_id;
+	}
+	public function get_module_name(){
+		return $this->module_name;
+	}
+	public function get_date(){
+		return $this->date;
+	}
+	public function get_status(){
+		return $this->status;
+	}
+	public function get_trainer_name(){
+		return $this->trainer_name;
+	}
+	public function get_trainer_username(){
+		return $this->trainer_username;
+	}
+	public function get_trainer_object(){
+		return Members::get($this->trainer);
+	}
+	public function get_rating(){
+		return $this->rating;
+	}
+	public function get_comment(){
+		return $this->comment;
+	}
+}
+?>

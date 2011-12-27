@@ -1,0 +1,16 @@
+<?php
+class Equipment{
+	public static function get_day_bookings(){
+		
+	}
+	public static function get_current(){
+		
+	}
+	public static function get_equipment_array(){
+		$array = array();
+		while($row = pg_fetch_row(RawDB::query("SELECT name FROM web_equipment ORDER BY equipment_id ASC;")))
+			$array[] = $row[0];
+		return $array;
+	}
+}
+?>

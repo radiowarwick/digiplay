@@ -1,0 +1,32 @@
+<?php
+echo("\n<h3>Search for members</h3>");
+echo("\n<form action=\"?\" method=\"post\">");
+echo("\n<label for=\"id\">Search by raw username, university id or swipe university card</label>");
+echo("\n<input type=\"text\" name=\"id\" value=\"".(isset($_REQUEST['id'])?htmlentities($_REQUEST['id']):"")."\"/>");
+echo("\n<input type=\"submit\" value=\"Search\"/>");
+echo("\n</form>");
+echo("\n<form action=\"?\" method=\"post\">");
+echo("\n<label for=\"id\">Search by name</label>");
+echo("\n<input type=\"text\" name=\"name\" value=\"".(isset($_REQUEST['name'])?htmlentities($_REQUEST['name']):"")."\"/>");
+echo("\n<input type=\"submit\" value=\"Search\"/>");
+echo("\n</form>");
+
+$members = array();
+if(isset($_REQUEST['id']) ^ isset($_REQUEST['name'])){
+	if(isset($_REQUEST['id'])){
+		$id = trim($_REQUEST['id']);
+		if(!empty($id)){
+			if(preg_match("/^([0-9]{7})/",$id,$matches) && $result = Members::search_id($matches[1])){
+				$members[0] = $result;
+			}else if(preg_match("/^[a-z0-9]+$/",$id) && $result = Members::search_username($id))
+				$members[0] = $result;
+		}
+	}else if(isset($_REQUEST['name'])){
+		$name = trim($_REQUEST['name']);
+		if(!empty($name))
+			$members = Members::search_name($name);
+	}
+	echo("\n<h3>Search Results</h3>");
+	if(!count($members)) echo("<p>No results</p>");
+}
+?>

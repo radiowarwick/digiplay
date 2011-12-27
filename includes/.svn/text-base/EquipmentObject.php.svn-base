@@ -1,0 +1,31 @@
+<?php
+class EquipmentObject{
+	private $time;
+	private $equipment_name;
+	private $profile_name;
+	private $profile_username;
+	private $status;
+	
+	public function __construct(){
+		$this->status = ($this->status == "t");
+	}
+	public function get_time(){
+		return $this->time;
+	}
+	public function get_equipment_name(){
+		return $this->equipment_name;
+	}
+	public function get_profile_name(){
+		return $this->profile_name;
+	}
+	public function get_profile_username(){
+		return $this->profile_username;
+	}
+	public function get_profile_object(){
+		return Members::get($this->username);
+	}
+	public function get_status(){
+		return $this->status;
+	}
+}
+?>

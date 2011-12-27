@@ -1,0 +1,83 @@
+<?php
+class Meeting {
+	protected $meeting_time;
+	protected $meeting_id;
+	protected $title;
+	protected $description;
+	protected $agenda;
+	protected $minutes;
+	
+	public function getAgenda(){
+		if(is_null($this->agenda))
+			$this->addAgenda();
+		return $this->agenda;
+	}
+	public function getMinutes(){
+		if($this->getMeetingTime() > date_create()){
+			return false;
+		}
+		if(is_null($this->minutes))
+			$this->addMinutes();
+		return $this->minutes;
+	}
+	public function getMeetingTime(){
+		return new DateTime($this->meeting_time);
+	}
+	public function getMeetingID(){
+		return $this->meeting_id;
+	}
+	public function getTitle(){
+		return $this->title;
+	}
+	public function getDescription(){
+		return $this->description;
+	}
+	
+	public function setMeetingTime($input){
+		if(!($input instanceof DateTime)){
+			trigger_error("Time is not a DateTime", E_USER_ERROR);
+			return false;
+		}
+		if($input < date_create()){
+			return false;
+		}
+		$this->meeting_time = $input->format(DATE_ATOM);
+		return true;
+	}
+	public function setTitle($input){
+		$this->title = $input; 
+	}
+	public function setDescription($input){
+		$this->description = $input;
+	}
+	
+	public function addAgenda(){
+		if(is_null($this->meeting_id))
+			$this->save();
+		$this->agenda = new Agenda($this->meeting_id);
+	}
+	public function addMinutes(){
+		if(is_null($this->meeting_id))
+			$this->save();
+		$this->minutes = new Minutes($this->meeting_id);
+	}
+	
+	public function save(){
+		if(is_null($this->meeting_id))
+			$this->insert();
+		else
+			$this->update();
+	}
+	public function insert(){
+		$result = RawDB::query("INSERT INTO web_meetings (meeting_time, title, description) VALUES ('".$this->meeting_time."', '".pg_escape_string($this->title)."', '".pg_escape_string($this->description)."') RETURNING meeting_id");
+		$row = pg_fetch_row($result);
+		$this->meeting_id = $row[0];
+	}
+	public function update(){
+		RawDB::query("UPDATE web_meetings SET meeting_time='".$this->meeting_time."', title='".pg_escape_string($this->title)."' description='".pg_escape_string($this->description)."' WHERE meeting_id = ".$this->meeting_id);
+		if(!is_null($this->agenda))
+			$this->agenda->save();
+		if(!is_null($this->minutes))
+			$this->minutes->save();
+	}
+}

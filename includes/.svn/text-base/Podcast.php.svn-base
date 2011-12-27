@@ -1,0 +1,222 @@
+<?php
+class Podcast
+{
+    /**
+     * protected variable holding the id of this podcast
+     * @var string Podcast ID
+     */
+    protected $podcast_id;
+
+    /**
+     * protected variable holding the title of this podcast (150 chars)
+     * @var string Podcast Title
+     */
+    protected $title;
+
+    /**
+     * protected variable holding the summary of this podcast (200 chars)
+     * @var string Podcast Summary
+     */
+    protected $summary;
+
+    /**
+     * protected variable holding the description of this podcast
+     * @var string Podcast Description
+     */
+    protected $description;
+
+    /**
+     * protected variable stating wether posts must be moderated before being available
+     * @vat bool Moderated
+     */
+    protected $moderated;
+    protected $category_id;
+    
+    public function __construct(){
+    	$this->moderated == ($this->moderated == 't');
+    }
+
+    public function get_id(){
+    	trigger_error("Depreciated Function: get_id()");
+    	return $this->podcast_id;
+    }
+    public function get_podcast_id(){
+    	return $this->podcast_id;
+    }
+    public function get_title(){
+    	return $this->title;
+    }
+    public function get_summary(){
+    	return $this->summary;
+    }
+    public function get_description(){
+    	return $this->description;
+    }
+    public function get_moderated(){
+    	return $this->moderated;
+    }
+    public function get_category(){
+    	//trigger_error("Depreciated Function: get_id()");
+    	return $this->category_id;
+    }
+    public function get_category_id(){
+    	return $this->category_id;
+    }
+    public function get_category_object(){
+    	return PodcastCategories::get($this->get_category_id());
+    }
+    public function get_image(){
+		if(file_exists(SITE_MEDIA_PATH."podcasts/images/".$this->podcast_id.".jpg")){
+			return $this->podcast_id.".jpg";
+		} else {
+			return "default.jpg";
+		}
+    }
+    
+    public function set_title($new_title){
+	if(strlen($new_title) > 150) {
+		trigger_error("Podcast title must not exceed 150 characters");
+	} else {
+	    	$this->title = $new_title;
+	}
+    }
+    public function set_summary($new_summary){
+	if(strlen($new_summary) > 200) {
+		trigger_error("Podcast summary must not exceed 200 characters");
+	} else {
+		$this->summary = $new_summary;
+	};
+    }
+    public function set_description($new_description){
+    	$this->description = $new_description;
+    }
+    public function set_moderated($new_moderated){
+    	$this->moderated = (bool) $new_moderated;
+    }
+    public function set_category_id($new_category_id){
+	$this->category_id = $new_category_id;
+    }
+    
+    /**
+     * List all entries
+     * @param int $qty The no. of entries to return starting from the latest
+     * @return array[PodcastEntry] Array of PodcastEntry objects
+     */
+	public function get_last_entries($max_results = 0,$offset = 0){
+		return PodcastEntries::get_last_list($max_results, $offset, NULL, $this->podcast_id);
+	}
+	
+    public function get_latest_entry(){
+    	$entries = $this->get_last_entries(1);
+    	return $entries[0];
+    }
+    	
+    public function get_members(){
+    	$return = array();
+	$sql = "SELECT web_members.* FROM web_podcast_members INNER JOIN web_members USING (username) WHERE podcast_id = '".$this->get_podcast_id()."'";
+    	$result = RawDB::query($sql);
+	while($object = pg_fetch_object($result,NULL,"Member"))
+                 $return[] = $object;
+    	return $return;
+    }
+
+    public function add_member($member_object){
+	$sql = "INSERT INTO web_podcast_members (podcast_id, username) VALUES (".$this->get_podcast_id().",'".$member_object->get_username()."')";
+	RawDB::query($sql); 
+    }
+
+    public function remove_member($member_object){
+        $sql = "DELETE FROM web_podcast_members WHERE podcast_id = ".$this->get_podcast_id()." AND username = '".$member_object->get_username()."'";
+        RawDB::query($sql);
+    }
+
+    public function is_owner(){
+	$sql = "SELECT COUNT(1) FROM web_members INNER JOIN web_podcast_members USING(username) WHERE podcast_id = '".$this->get_podcast_id()."' AND username = '".Session::get_username()."'";
+	return pg_fetch_result(RawDB::query($sql),0,0);
+    }
+    
+    /**
+     * Get the RSS/XML code for the podcast
+     * @return string RSS/XML to provide for aggregator
+     */
+    public function get_xml(){
+		putenv("TZ=GB");
+		$objects =  $this->get_last_entries();
+		
+        $link = SITE_LINK_ABS.SITE_PAGE."/".$this->get_podcast_id();
+        $summary = htmlspecialchars(str_replace("\r"," ",str_replace("\n"," ",$this->get_summary())));
+        $description = htmlspecialchars(str_replace("\r"," ",str_replace("\n"," ",$this->get_description())));
+
+		$return  = "<?xml version=\"1.0\"?>\n";
+		$return .= "<rss version=\"2.0\"
+            xmlns:atom=\"http://www.w3.org/2005/Atom\"
+            xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\">\n";
+		$return .= "    <channel>\n";
+		$return .= "        <title>".$this->title."</title>\n";
+		$return .= "        <link>$link</link>\n";
+        $return .= "        <atom:link href=\"$link\" rel=\"self\" type=\"application/rss+xml\" />\n";
+		$return .= "        <description>".$description."</description>\n";
+		$return .= "        <lastBuildDate>".date("r", $objects[0]->get_publish_time()) ."</lastBuildDate>\n";
+		$return .= "        <language>en-gb</language>\n";
+		$return .= "        <copyright>Copyright (C) Radio Warwick 2009</copyright>\n";
+		$return .= "        <generator>RaW Podcast Generator v2.0 by Simon Pain</generator>\n";
+        $return .= "        <itunes:author>Radio Warwick</itunes:author>\n";
+        $return .= "        <itunes:subtitle>".$summary."</itunes:subtitle>\n";
+        $return .= "        <itunes:summary>".$description."</itunes:summary>\n";
+        $return .= "        <itunes:image href=\"".SITE_LINK_MEDIA."podcasts/images/".$this->get_image()."\"/>\n";
+        
+		//insert the items;
+		foreach($objects AS $object)
+        	$return .= $object->get_xml();
+        	
+		$return .= "    </channel>\n";
+        $return .= "</rss>\n";
+
+        return $return;
+    }
+    
+    /**
+     * Save the given podcast to the database
+     */
+    public function add(){
+        $sql = "INSERT INTO web_podcast (title, summary, description, moderated, category_id, active) values (".
+	    "'".pg_escape_string($this->get_title())."', ".
+            "'".pg_escape_string($this->get_summary())."', ".
+            "'".pg_escape_string($this->get_description())."', ".
+            "'".($this->get_moderated()?'true':'false')."', ".
+            "'".($this->get_category_id())."', ".
+	    "'true') RETURNING podcast_id";
+       	$result = RawDB::query($sql);
+	$id = pg_fetch_result($result,0,'podcast_id');
+	return $id;
+    }
+
+    /**
+     * Updates the given podcast on the database
+     */
+    public function update(){
+        $sql = "UPDATE web_podcast SET ".
+            "title = '".pg_escape_string($this->get_title())."', ".
+            "summary = '".pg_escape_string($this->get_summary())."', ".
+            "description = '".pg_escape_string($this->get_description())."', ".
+            "moderated = '".($this->get_moderated()?'true':'false')."', ".
+	    "category_id = '".($this->get_category_id())."'".
+            " WHERE podcast_id = ".pg_escape_string($this->get_podcast_id());
+        RawDB::query($sql);
+    }
+    
+    public function save(){
+    	if(is_null($this->get_podcast_id()))
+    		$this->add();
+    	else
+    		$this->save();
+    }
+
+    
+   
+    public function delete(){
+        $sql = "DELETE FROM web_podcast WHERE id = ".pg_escape_string($this->get_id());
+        RawDB::query($sql);
+    }
+}
+?>

@@ -1,0 +1,87 @@
+<?php
+class Upload{
+	private $FILE;
+	private $mime;
+	private $exif;
+	
+	public function __construct($FILE){
+		$this->FILE = $FILE;
+		
+		switch($FILE['error']){
+			case UPLOAD_ERR_INI_SIZE:
+				throw new UserError("Max upload size exceeded (".self::readable_size(ini_get("upload_max_filesize")).")");
+				break;
+			case UPLOAD_ERR_PARTIAL:
+				throw new UserError("Upload stopped part way through. Try again");
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				throw new UserError("No file was uploaded");
+				break;
+			case UPLOAD_ERR_NO_TMP_DIR:
+				throw new UserError("Unable to store file on server. Try again later");
+				break;
+			case UPLOAD_ERR_CANT_WRITE:
+				throw new UserError("Unable to store file on server. Try again later");
+				break;
+			case UPLOAD_ERR_EXTENSION:
+				throw new UserError("Upload file type not permitted");
+				break;
+		}
+		if(!is_uploaded_file($this->FILE['tmp_name']))
+			throw new UserError("No file was uploaded");
+	}
+	
+    protected static function readable_size($bytes){
+        $s = array('B', 'Kb', 'MB', 'GB', 'TB', 'PB');
+        $e = floor(log($bytes)/log(1024));
+       
+        return sprintf('%.2f '.$s[$e], ($bytes/pow(1024, floor($e))));
+    }
+	protected function get_mime(){
+		if(is_null($this->mime)){
+			$info = new finfo(FILEINFO_MIME);
+			if(!$info) trigger_error("Could not open MIME database",E_USER_ERROR);
+			$this->mime = $info->file($this->FILE['tmp_name']);
+		}
+		return $this->mime;
+	}
+	public function check_mime($array){
+		if(array_search($this->get_mime(),$array) === FALSE){
+			throw new UserError("File type is not allowed");
+			return false;
+		}
+		return true;
+	}
+	public function check_extension($array){
+		$path_parts = pathinfo($this->FILE['name']);
+		if(array_search($path_parts['extension'],$array) === FALSE){
+			throw new UserError("File extension not allowed");
+			return false;
+		}
+		return true;
+	}
+	protected function get_exif(){
+		if(is_null($this->exif)){
+			$this->exif = exif_imagetype($this->FILE['tmp_name']);
+		}
+	}
+	public function check_image($array = array(IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG,IMAGETYPE_WBMP)){
+		if(array_search($this->get_exif(),$array)){
+			throw new UserError("Image type was not recognised. Allowed formats are: gif, jpeg, png and wbmp");
+			return false;
+		}
+		return true;
+	}
+	
+	public function check_filename(){
+		if(!preg_match("\([a-z0-9-_]+)\.[a-z]{2,4}\i",$this->FILE['name'])){
+			throw new UserError("File name may only consist of letters, numbers, dashes and underscores");
+			return false;
+		}
+		return true;
+	}
+	public function move($new_filename){
+		return move_uploaded_file($this->FILE['tmp_name'],$new_filename);
+	}
+}
+?>

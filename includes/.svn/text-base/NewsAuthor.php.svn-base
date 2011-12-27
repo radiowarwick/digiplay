@@ -1,0 +1,9 @@
+<?php
+class NewsAuthor extends Member {
+	protected $position;
+
+	public function get_position(){
+		return $this->position;
+	}
+}
+?>

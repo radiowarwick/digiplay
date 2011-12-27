@@ -1,0 +1,25 @@
+<?php
+class SotyTrack extends Track {
+	protected $track_id;
+	protected $votes;
+	protected $score;
+	protected $place;
+
+	public function get_track_id() {
+		return $this->track_id;
+	}
+	public function get_place() {
+		return $this->place;
+	}
+	public function get_score() {
+		return $this->score;
+	}
+	public function get_votes() {
+		return $this->votes;
+	}
+
+	public function set_place($place) {
+		$this->place = $place;
+	}
+}
+?>

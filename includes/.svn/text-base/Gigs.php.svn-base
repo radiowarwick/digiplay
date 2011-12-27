@@ -1,0 +1,33 @@
+<?php
+class Gigs {
+	public static function get($id){
+		$sql = "SELECT * FROM web_gigs WHERE gig_id = ".$id;
+		$result = RawDB::query($sql);
+		$return = pg_fetch_object($result, NULL, 'Gig');
+		return $return;
+	}
+
+	public static function next($count = null, $offset = null){
+		$limit = '';
+		$offset = '';
+		if (is_null($count)) {
+			$limit = " LIMIT 1";
+		} elseif (is_numeric($count)){
+			$limit = " LIMIT ".$count;
+		}
+		if (is_numeric($offset)){
+			$offset = " OFFSET ".$offset;
+		}
+		$sql = "SELECT * FROM web_gigs".$limit . $offset;
+		$result = RawDB::query($sql);
+		if(is_null($count)) {
+			$return = pg_fetch_object($result, NULL, 'Gig');
+		} else {
+			$return = array();
+			while($gig = pg_fetch_object($result, NULL, 'Gig')) {
+				$return[] = $gig;
+			}
+		}
+		return $return;
+	}
+}

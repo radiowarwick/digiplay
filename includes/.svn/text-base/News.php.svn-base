@@ -1,0 +1,168 @@
+<?php
+class News{
+	private static $years;
+	private static $categories;
+	public static function fetch_group($category,$year,$published = null,$limit_max = null,$limit_min = null){
+		return self::fetch($category,$year,$published,$limit_max,$limit_min);
+	}
+	public static function fetch_category($category,$published = null,$limit_max = null,$limit_min = null){
+		return self::fetch($category,null,$published,$limit_max,$limit_min);
+	}
+	public static function fetch_year($year,$published = null,$limit_max = null,$limit_min = null){
+		return self::fetch(null,$year,$published,$limit_max,$limit_min);
+	}
+	public static function fetch_all($published = null,$limit_max = null,$limit_min = null){
+		return self::fetch(null,null,$published,$limit_max,$limit_min);
+	}
+	public static function fetch($category = null,$year = null,$published = null, $limit_max = null,$limit_min = null){
+
+		$query = "SELECT * FROM web_news" . self::generate_where($category,$year,$published) . " ORDER BY date DESC";
+		
+		if((!is_null($limit_max) & is_numeric($limit_max))&&(!is_null($limit_min) & is_numeric($limit_min))){
+			$query .= " LIMIT " . ($limit_max-$limit_min+1);
+		}elseif(!is_null($limit_max) & is_numeric($limit_max)){
+			$query .= " LIMIT " . $limit_max;
+		}
+		if(!is_null($limit_min) & is_numeric($limit_min)){
+				$query .= " OFFSET ". $limit_min;
+		}
+		
+		$articles = array();
+		$result = RawDB::query($query);
+		if(pg_num_rows($result)>0){
+			while($object = pg_fetch_object($result,null,"NewsArticle")){
+				$articles[] = $object;
+			}
+		}
+		
+		return $articles;
+	}
+	public static function fetch_total($category = null,$year = null,$published = null, $limit_max = null,$limit_min = null){
+		
+		$query = "SELECT COUNT(1) FROM web_news" . self::generate_where($category,$year,$published);
+		$result = RawDB::query($query);
+		
+		return pg_fetch_result($result,0,0);
+	}
+	private static function generate_where($category = null,$year = null,$published = null){
+		$conditions = array();
+		
+		if(!is_null($category)){
+			if(is_numeric($category))
+				$conditions[] = "categoryid = '".$category."'";
+			else if(is_array($category))
+				$conditions[] = "categoryid IN(".implode(",",$category).")";
+			else if(is_string($category))
+				$conditions[] = "categoryid = '".self::category_id($category)."'";
+		}
+		if(!SITE_MEMBERSTATUS){
+			$conditions[] = "categoryid != '5'";
+		}
+		if(!is_null($year) & is_numeric($year)){
+			$conditions[] = "date BETWEEN '".mktime(0,0,0,1,1,$year)."' AND '".mktime(0,0,0,1,1,$year + 1)."'";
+		}
+		if(!is_null($published) & is_bool($published)){
+			$conditions[] = ($published?"":"!")."published";
+		}
+		
+		if(count($conditions)>0)
+			return " WHERE ".implode(" AND ",$conditions);
+		else
+			return null;
+	}
+	public static function years(){
+		if(!isset(self::$years)){
+			$oldest = pg_fetch_result(RawDB::query("SELECT min(date) FROM web_news"),0,0);
+			if($oldest == 0){
+				self::$years = array(date("Y"));
+			}else{
+				self::$years = range(date("Y",$oldest),date("Y"));
+			}
+		}
+		return self::$years;
+	}
+	public static function categories(){
+		if(!isset(self::$categories)){
+			$result = RawDB::query("SELECT * FROM web_news_categories");
+			self::$categories = array();
+			while($row = pg_fetch_assoc($result)){
+				self::$categories[] = $row;
+			}
+		}
+		return self::$categories;
+	}
+	public static function category_id($link){
+		$categories = self::categories();
+		foreach($categories as $category){
+			if($link == $category['link'])
+				return $category['categoryid'];
+		}
+		return false;
+	}
+	
+	public static function get_category($link){
+		$category_id = self::category_id($link);
+		$sql = "select * from web_news_categories where categoryid = ".$category_id;
+		$result = RawDB::query($sql);
+		if(pg_num_rows($result)==1)
+				return pg_fetch_object($result,null,"NewsCategory");
+	}
+
+	public static function get_xml(){
+		putenv("TZ=GB");
+		
+		$return = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+		$return .= "<rss version=\"2.0\" xmlns:media=\"http://search.yahoo.com/mrss\">\n";
+		$return .= "<channel>\n";
+		$return .= "	<title>RaW 1251AM - RaW News</title>\n";
+		$return .= "	<link>".SITE_LINK_ABS_HTTP ."news/</link>\n";
+		$return .= "	<description>All the latest from RaW News, Your News.</description>\n";
+		$return .= "	<language>en-gb</language>\n";
+		$return .= "	<lastBuildDate>".date("D, d M Y G:i:s T", time())."</lastBuildDate>\n";
+		$return .= "	<copyright>Copyright: (C) RaW 1251AM</copyright>\n";
+		$return .= "	<ttl>15</ttl>\n";
+		
+		$articles = self::fetch_all(TRUE, 10, NULL);
+		foreach ($articles AS $article) {
+			$return .= $article->get_xml();
+		}
+		
+		$return .= "	</channel>\n";
+		$return .= "</rss>\n";
+		
+		return $return;
+	}
+
+	
+	public static function get($articleid){
+		if(is_numeric($articleid)){
+			$result = RawDB::query("SELECT * FROM web_news WHERE news_id = '".(int)$articleid."'".(!SITE_MEMBERSTATUS?" AND categoryid != '5'":""));
+			if(pg_num_rows($result)==1)
+				return pg_fetch_object($result,null,"NewsArticle");
+		}
+		return false;
+	}
+	//TODO Move the following to NewsArticle using structure in Gallery, Comments and Podcasts
+	public static function add($object){
+		if($object->is_complete()){
+			RawDB::query("INSERT INTO web_news (date,headline,story,summary,categoryid,published,username)
+							VALUES (".$object->get_date().",'".pg_escape_string($object->get_headline())."','".pg_escape_string($object->get_story())."','".pg_escape_string($object->get_summary())."',".$object->get_categoryid().",'".($object->get_published()?"t":"f")."','".Session::get_username()."')");
+		}
+	}
+	public static function edit($object){
+		if(pg_affected_rows(RawDB::query("UPDATE web_news SET 
+						date = ".$object->get_date().",
+						headline = '".pg_escape_string($object->get_headline())."',
+						story = '".pg_escape_string($object->get_story())."',
+						summary = '".pg_escape_string($object->get_summary())."',
+						categoryid = '".$object->get_categoryid()."',
+						published = '".($object->get_published()?"t":"f")."'
+						WHERE news_id = '".$object->get_news_id()."'")) == 1) return true;
+		return false;
+	}
+	public static function delete($object){
+		if(pg_affected_rows(RawDB::query("DELETE FROM web_news WHERE news_id = '".$object->get_news_id()."'")) == 1) return true;
+		return false;	
+	}
+}
+?>

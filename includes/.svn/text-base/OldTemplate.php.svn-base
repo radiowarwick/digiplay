@@ -1,0 +1,160 @@
+<?php
+class MainTemplate implements Template{
+	protected static $menu;
+	protected static $subtitle;
+	public static function get_menu(){
+		if(!isset(self::$menu)) self::$menu = new Menu;
+		return self::$menu;
+	}
+	public static function set_subtitle($subtitle){
+		self::$subtitle = $subtitle;
+	}
+	public static function print_page($content){
+		$main_menu = new Menu;
+		$main_menu->add_many(
+			array("index","Home"),
+			array("schedule","Schedule"),
+			array("shows","Shows"),
+			array("about","About"),
+			array("music","Music"),
+			array("contact","Contact"));
+	$site_path_array = explode("/",SITE_PAGE);
+	$main_menu->set_active($site_path_array[0]);
+	
+	$return = "
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">
+<head>
+	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />
+	<title>Radio Warwick (RaW 1251AM)";
+	if(Output::get_title() != 'Untitled Page')
+		$return .= " - ".Output::get_title();
+	$return .= "</title>
+	<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/style.css\" type=\"text/css\" media=\"screen\" />";
+	if(count(Output::get_stylesheets())>0)
+		foreach(Output::get_stylesheets() AS $src){
+			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>";
+		}
+	if(count(Output::get_scripts())>0)
+		foreach(Output::get_scripts() AS $src){
+			$return .= "\n	<script src=\"".$src."\" type=\"text/javascript\"></script>";
+		}
+	
+	if(count(Output::get_feeds())>0)
+		foreach(Output::get_feeds() AS $feed){
+			$return .= "\n	<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\" />";
+		}
+		
+	$show = Shows::current();
+	$showname = htmlentities(Truncate::words($show->get_name(),60));
+	
+	if($show->get_showid() == 0) {
+		$lastshow = Shows::last();
+		$nextshow = Shows::next();
+		$showstart = $lastshow->get_end();
+		$showend = $nextshow->get_start();
+	} else {
+		$showstart = $show->get_start();
+		$showend = $show->get_end();
+	}
+	
+	$return .= "
+</head>
+
+<body>
+<!--[if lt IE 7]> 
+<div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href=\"http://www.microsoft.com/windows/internet-explorer/default.aspx\"><img src=\"http://www.ie6countdown.com/images/upgrade.jpg\" border=\"0\" height=\"42\" width=\"820\" alt=\"\" /></a></div>
+<![endif]--> 
+	<div id=\"wrapper\">
+			
+		<div id=\"header\">
+			<a href=\"".SITE_LINK_REL."index\"><img src=\"".SITE_LINK_REL."images/template/header_logo.jpg\" id=\"header_logo\" alt=\"RaW 1251AM\" /></a>
+			".$main_menu->output(SITE_LINK_REL,3,"header_tabs")."
+			<div id=\"header_user\">";
+	if(Session::is_member()){
+		$return .= "Welcome ".ucwords(Session::get_nick())." - <a href=\"".SITE_LINK_REL."space\">RaWspace Home</a> - <a href=\"".SITE_LINK_REL."space/logout.php\">Log Out</a>";
+	}else{
+		$return .= "<a href=\"".SITE_LINK_REL."space\">RaWspace Home</a> - <a href=\"".SITE_LINK_REL."space/login.php?referal=".SITE_PAGE.(count($_GET)>0?"&amp;".http_build_query($_GET):"")."\">Log In</a>";
+	}
+	$return .= "</div>
+			<div id=\"header_bar\">
+			
+				<ul id=\"header_bar_links\">
+					<li><a href=\"".SITE_LINK_REL."listen\" onclick=\"window.open('http://player.radio.warwick.ac.uk', 'radioplayer', 'height=665,width=380');\">Listen Now</a></li>
+					<li><a href=\"".SITE_LINK_REL."watch\">Webcams</a></li>
+					<li><a href=\"".SITE_LINK_REL."listen/moreraw\">MoreRaW</a></li>
+				</ul>
+				
+				<p id=\"header_bar_onair\">On Air: ";
+				//echo( date("ga",$showstart)."-".date("ga",$showend) ." ");
+				$return .= "<a
+                    href=\"".SITE_LINK_REL."shows/".$show->get_showid()."\">".ucwords($showname)."</a></p>
+				
+				<div id=\"header_bar_onair_image\">
+					<a href=\"".SITE_LINK_REL."shows/".$show->get_showid()."\"><img src=\"".SITE_LINK_MEDIA."shows/".$show->get_image()."\" alt=\"".$showname."\" /></a>
+				</div>
+				
+			</div>
+			
+		</div>
+	
+		<div id=\"content\">\n\n";
+
+			if (isset(self::$subtitle))
+				$return .= "<h1>".self::$subtitle."</h1>\n\n";
+			
+			if (isset(self::$menu) && self::$menu->size()>0){
+				$return .= "<div id=\"left_menu\">\n";
+				$return .= self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/");
+				$return .= "</div>\n<div id=\"page_content\">\n";
+			}
+			
+			$return .= $content;
+			
+			if (isset(self::$menu) && self::$menu->size()>0)
+				$return .= "</div>";
+			
+			$return .= "<div class=\"clear\"></div>";
+			
+			if(Errors::occured()){
+				$return .= "\n<div id=\"errors\">";
+				$return .= "\n<h3>Error Occured!</h3>";
+				if(Errors::total())	$return .= "\n<p>An error has occured during the running of this page</p>";
+				else					$return .= "\n<p>".Errors::total()." errors have occured during the running of this page</p>";
+				
+				$return .= "\n<textarea cols=\"100\" rows=\"6\">";
+				$return .= Errors::report();
+				$return .= "\n</textarea>";
+				$return .= "\n</div>";
+			}
+			$return .= "
+			</div>
+		
+		<div id=\"footer\">
+			<!--<p>A Terminator has been Dispatched to your Temporal Location</p>-->
+			<p>Radio Warwick &copy; ".date("Y")."</p>
+		</div>
+		
+	</div>
+	<script type=\"text/javascript\" src=\"http"; if (isset($_SERVER['HTTPS'])) { $return .=  's://ssl'; } else { $return .=  '://www'; } $return .= ".google-analytics.com/ga.js\"></script>
+	<script type=\"text/javascript\">
+		var pageTracker = _gat._getTracker(\"UA-4483020-1\");
+		pageTracker._initData();
+		pageTracker._trackPageview();
+	</script>
+</body>
+
+</html>";
+	return $return;
+	}
+
+	public static function print_http_error($error){
+		switch($error){
+			case 401: return "<h1>Unauthorized</h1>\n<p>This page requires special permissions</p>"; break;
+			case 404: return "<h1>Page not found</h1>\n<p>This page does not exist</p>"; break;
+		}
+	}
+
+}
+
+?>

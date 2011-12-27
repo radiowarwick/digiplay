@@ -1,0 +1,189 @@
+<?php
+class Session{
+	private static $instance;
+	private static $data = array('member' => false);
+	private static $groups;
+	private static $groupNames;
+	private static $adminGroups;
+	private static $adminGroupNames;
+	private static $owned_shows;
+	private static $presented_shows;
+	private static $profile;
+	
+	public static function is_member(){
+		return self::$data['member'];
+	}
+	public static function is_exec(){
+		return self::is_member() && (Exec::isExec(self::$data['username']) || self::is_developer());
+	}
+	public static function is_developer(){
+		return (self::$data['member'] && self::is_group_member('developer'));
+	}
+	public static function is_firstyear(){
+		return false;
+	}
+	public static function is_firstlogin(){
+		return self::$data['lastlogin']==0;
+	}
+	public static function is_group_member($group){
+		$groups = self::get_group_names();
+		return (is_array($groups) ? in_array($group,$groups) : false);
+	}
+	public static function is_group_admin($group){
+		$groups = self::get_admin_group_names();
+                return (is_array($groups) ? in_array($group,$groups) : false);
+	}
+	public static function is_show_owner($show){
+		$shows = self::get_owned_shows();
+		return in_array($show,$shows);
+	}
+	public static function is_show_presenter($show){
+		$shows = self::get_presented_shows();
+		return in_array($show,$shows);
+	}
+	public static function is_tools_user(){
+		$groups = self::get_group_names();
+		if(count($groups) < 1)
+			return false;
+		foreach($groups AS $group)
+			if(substr($group,0,6) == "tools_") return true;
+		return false;
+	}
+	public static function get_username(){		return self::$data['username'];		}
+	public static function get_id(){		return self::$data['id'];		}
+	public static function get_name(){		return self::$data['name'];		}
+	public static function get_nick(){		return self::$data['nick'];		}
+	public static function get_ou(){		return self::$data['ou'];		}
+	public static function get_lastlogin(){		return self::$data['lastlogin'];	}
+	public static function get_contract_time(){	return self::$data['contract_time'];	}
+	public static function get_contract_name(){	return self::$data['contract_name'];	}
+
+	public static function get_groups(){
+		if(!self::$data['member']) return array();
+		if(!isset(self::$groups)){
+			$result = RawDB::query("SELECT web_groups.*,web_members_groups.admin FROM web_groups INNER JOIN web_members_groups USING (groupid) WHERE username = '".self::$data['username']."' ORDER BY web_groups.group");
+			self::$groups = array();
+			if(pg_num_rows($result)>0){
+				while($object = pg_fetch_object($result,null,"Group"))
+				self::$groups[] = $object;
+			}
+		}
+		return self::$groups;
+	}
+	public static function get_group_names(){
+		if(!isset(self::$groupNames)){
+			if (!isset(self::$groups))
+				self::get_groups();
+			if(count(self::$groups) > 0){
+				foreach (self::$groups as $group)
+					self::$groupNames[] = $group->get_name();
+			}
+		}
+		return self::$groupNames;
+	}
+        public static function get_admin_groups(){
+        	if(!isset(self::$adminGroups)){
+        		self::$adminGroups = array_filter(self::get_groups(),array("self","check_admin"));
+        	}
+        	return self::$adminGroups;
+        }
+        public static function get_admin_group_names(){
+        	if(!isset(self::$adminGroups))
+        		self::get_admin_groups();
+        	if(!isset(self::$adminGroupNames)){
+        		foreach (self::$adminGroups as $group)
+        			self::$adminGroupNames[] = $group->get_name();
+        	}
+        	return self::$adminGroupNames;
+        }
+        private static function check_admin($group){
+        	return $group->is_admin();
+        }
+	public static function get_owned_shows(){
+		if(!self::$data['member']) return array(); //
+		if(!isset(self::$owned_shows)){
+			$result = RawDB::query("SELECT showid FROM web_shows WHERE owner = '".self::$data['username']."'");
+			self::$owned_shows = array();
+			if(pg_num_rows($result)>0){
+				while($row = pg_fetch_row($result))
+					self::$owned_shows[] = $row[0];
+			}
+		}
+		return self::$owned_shows;
+	}
+	public static function get_presented_shows(){
+		if(!self::$data['member']) return array();
+		if(!isset(self::$presented_shows)){
+			$result = RawDB::query("SELECT showid FROM web_show_presenters WHERE username = '".self::$data['username']."'");
+			self::$presented_shows = array();
+			if(pg_num_rows($result)>0){
+				while($row = pg_fetch_row($result))
+					self::$presented_shows[] = $row[0];
+			}
+		}
+		return self::$presented_shows;
+	}
+	
+	public static function get_member(){
+		return self::get_profile();
+	}
+
+	public static function get_profile(){
+		if(is_null(self::$profile))
+			self::$profile = Members::get(self::$data['username']);
+		return self::$profile;
+	}
+/*
+	public static function get_profile(){
+		if(is_null(self::$profile))	self::update_profile();
+		return self::$profile;
+	}
+	public static function update_profile(){
+		if(self::$data['member']){	
+			$result = RawDB::query("SELECT * FROM web_members WHERE username = '".self::$data['username']."'");
+			if(pg_num_rows($result))
+				self::$profile		= array_merge(pg_fetch_assoc($result),array('lastlogin' => self::$data['lastlogin']));
+		}
+	}
+*/
+	public static function login($ldap_instance){
+		if(is_object($ldap_instance) && get_class($ldap_instance) == "RawLDAP"){
+			if($ldap_instance->login_status()){
+				
+				self::$data = $ldap_instance->userdetails();
+				self::$data['member'] = true;
+							
+				$result = RawDB::query("SELECT * FROM web_members WHERE username = '".self::$data['username']."'");
+				if(pg_num_rows($result)==1){
+					$pg_data = pg_fetch_assoc($result);
+					self::$data['lastlogin']	= $pg_data['lastlogin'];
+					self::$data['nick']			= $pg_data['nick'];
+					self::$data['contract_time']			= $pg_data['contract_time'];
+					self::$data['contract_name']			= $pg_data['contract_name'];
+					RawDB::query("UPDATE web_members SET lastlogin = '".time()."' WHERE username = '".self::$data['username']."'");				
+				}else{
+					RawDB::query("INSERT INTO web_members (username,id,name,nick,email,uni_email,raw_email,lastlogin) VALUES ('".self::$data['username']."','".self::$data['id']."','".pg_escape_string(ucwords(strtolower(self::$data['name'])))."','".pg_escape_string(self::$data['nick'])."','".pg_escape_string(self::$data['uni_email'])."','".pg_escape_string(self::$data['uni_email'])."','".pg_escape_string(self::$data['raw_email'])."','".time()."')");
+				}
+			}
+		}
+	}
+	public static function logout(){
+		self::$data['member'] = false;
+	}
+    public static function start(){
+		if(isset($_SESSION['user']))
+			self::$data = unserialize($_SESSION['user']);
+        self::$instance = new Session;
+    }
+    public static function stop(){
+		if(self::$data['member'])	$_SESSION['user'] = serialize(self::$data);
+		else						unset($_SESSION['user']);
+    }
+    
+	function __destruct(){
+		self::stop();
+	}
+}
+
+Session::start();
+?>

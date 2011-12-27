@@ -1,0 +1,87 @@
+<?php
+class Image{
+	protected $image_id;
+	protected $caption;
+	protected $date_added;
+	protected $username;
+	
+	public function get_filename(){
+		return dechex($this->image_id);
+	}
+	public function get_filename_thumbnail(){
+		return dechex($this->image_id) . "t" . ".jpg";
+	}
+	public function get_filename_large(){
+		return dechex($this->image_id) . "l" . ".jpg";
+	}
+	public function get_parents(){
+		$result = RawDB::query("SELECT web_photos_galleries.* FROM web_photos_galleries
+		INNER JOIN web_photos_images_in_galleries ON(web_photos_galleries.gallery_id = web_photos_images_in_galleries.parent_gallery_id)
+		WHERE web_photos_images_in_galleries.child_image_id = '".$this->get_image_id()."'");
+		
+		$array = array();
+		while($object = pg_fetch_object($result,null,'Gallery'))
+			$array[] = $object;
+		return $array;
+	}
+	public function delete(){
+		if(unlink($this->get_filepath_thumbnail()) && unlink($this->get_filepath_thumbnail()))
+			RawDB::query("DELETE FROM web_photos_images WHERE image_id = '".$this->image_id."'");
+		else throw new UserError("There was a problem with deleting this photo");
+	}
+	
+	protected function get_filepath_thumbnail(){
+		return SITE_MEDIA_PATH . "gallery/". $this->get_filename_thumbnail();
+	}
+	protected function get_filepath_large(){
+		return SITE_MEDIA_PATH . "gallery/". $this->get_filename_large();
+	}
+	
+	public function get_image_id(){
+		return $this->image_id;
+	}
+	public function get_caption(){
+		return $this->caption;
+	}
+	public function get_date_added(){
+		return $this->date_added;
+	}
+	public function get_username(){
+		return $this->username;
+	}
+	public function get_owner(){
+		return Members::get($this->username);
+	}
+	public function set_caption($caption){
+		$this->caption = $caption;
+	}
+	
+	
+	public function rotate_90_clockwise(){
+		imagejpeg(Images::rotate_90_clockwise(imagecreatefromjpeg($this->get_filepath_thumbnail())),$this->get_filepath_thumbnail());
+		imagejpeg(Images::rotate_90_clockwise(imagecreatefromjpeg($this->get_filepath_large())),$this->get_filepath_large());
+	}
+	public function rotate_90_anticlockwise(){
+		imagejpeg(Images::rotate_90_anticlockwise(imagecreatefromjpeg($this->get_filepath_thumbnail())),$this->get_filepath_thumbnail());
+		imagejpeg(Images::rotate_90_anticlockwise(imagecreatefromjpeg($this->get_filepath_large())),$this->get_filepath_large());
+	}
+	public function save(){
+		if(is_null($this->image_id)){
+			$time = time();
+			
+			RawDB::query("INSERT INTO web_photos_images (caption,date_added,username) VALUES ('".pg_escape_string($this->get_caption())."','".date("r",$time)."','".pg_escape_string(Session::get_username())."')");
+			
+			$result = RawDB::query("SELECT image_id FROM web_photos_images WHERE date_added = '".date("r",$time)."' AND username = '".pg_escape_string(Session::get_username())."'");
+		
+			$this->image_id = pg_fetch_result($result,0,0);
+			
+		}else{
+			RawDB::query("UPDATE web_photo_images SET caption = '".pg_escape_string($this->get_caption())."' WHERE image_id = '".$this->get_image_id()."'");
+		}
+	}
+	public function set_image($filepath){
+		imagejpeg(Images::resize_proportionaly(Images::createfrom($filepath),120,120),$this->get_filepath_thumbnail());
+		imagejpeg(Images::resize_proportionaly(Images::createfrom($filepath),600,600),$this->get_filepath_large());	
+	}
+}
+?>

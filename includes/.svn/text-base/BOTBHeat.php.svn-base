@@ -1,0 +1,128 @@
+<?php
+
+class BOTBHeat {
+	private $bands;
+	private $date;
+	private $name;
+	private $description;
+	private $id = false;
+	
+	public function __construct()
+	{
+		$this->date = new DateTime($this->date);
+	}
+	
+	public function getBands()
+	{
+		if(is_null($this->bands))
+			$this->retriveBands();
+		return $this->bands;
+	}
+
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	public function getDescription()
+	{
+		return $this->description;
+	}
+	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
+	public function setName($input)
+	{
+		$error = 0;
+		if(preg_match("/[\r\n]/",$input) || empty($input) || strlen($input) > 100)
+			$error = "Please enter a name";
+		else
+			$this->name = $input;
+		return $error;
+	}
+	
+	public function setDescription($input)
+	{
+		$error = 0;
+		if(empty($input) || strlen($input) > 100)
+			$error = "Please enter a description";
+		else
+			$this->description = $input;
+		return $error;
+	}
+	
+	public function setDate($date)
+	{
+		if(is_a($date, "DateTime"))
+		{
+			$this->date = $date;
+			return true;
+		} else
+			return false;
+	}
+	
+	public function addBand($band)
+	{
+		if(is_null($this->bands))
+			$this->retriveBands();
+		if($band instanceof BOTBBand)
+		{
+			if($error = $band->save())
+				return $error;
+			$query = "INSERT INTO web_botb_heat_bands (heat_id, band_id) VALUES (".pg_escape_string($this->id).", ".pg_escape_string($band->getID()).")";
+			RawDB::query($query);
+			return 0;
+		} else
+			return "Not a band";
+	}
+
+	public function removeBand($removeBand)
+	{
+		if(is_null($this->bands))
+			$this->retriveBands();
+		if($removeBand instanceof BOTBBand)
+		{
+			foreach($this->getBands() as $band)
+			{
+				if($band->getID() == $removeBand->getID())
+				{
+					$query = "DELETE FROM web_botb_heat_bands WHERE heat_id = ".pg_escape_string($this->id)." AND band_id = ".pg_escape_string($removeBand->getID());
+					RawDB::query($query);
+				}
+			}
+		}
+	}
+
+	public function retriveBands()
+	{
+		$query = "SELECT DISTINCT web_botb_bands.*, web_botb_heat_bands.rank FROM web_botb_heat_bands INNER JOIN web_botb_bands ON web_botb_bands.id = web_botb_heat_bands.band_id WHERE heat_id = '".$this->id."' ORDER BY web_botb_heat_bands.rank, web_botb_bands.name";
+		$result = RawDB::query($query);
+		$this->bands = array();
+		while($object = pg_fetch_object($result, null, "BOTBBand", array($this->id)))
+			$this->bands[] = $object;
+	}
+	
+	public function save()
+	{
+		if($this->id)
+		{
+			$query = "UPDATE web_botb_heats SET name='".pg_escape_string($this->name)."', description='".pg_escape_string($this->description)."', date='".$this->date->format(DATE_ATOM)."' WHERE id=".$this->id;
+			if(RawDB::query($query))
+				return false;
+			else
+				return "Database failed";
+		} else {
+			$query = "INSERT INTO web_botb_heats (name, description, date) VALUES '".pg_escape_string($this->name)."', '".pg_escape_string($this->description)."', ".$this->date->format(DATE_ATOM)." RETURNING id";
+			if( $result = RawDB::query($query) )
+			{
+				$row = pg_fetch_row($result);
+				$this->id = $row[0];
+				return false;
+			} else
+				return "Database failed";
+		}
+	}
+}
