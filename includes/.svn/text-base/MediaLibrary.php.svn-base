@@ -1,8 +1,0 @@
-<?php
-class MediaLibrary{
-	public static function search($query = null,$flags = MEDIA_ALL){
-	}
-	public static function add($object){
-	}
-}
-?>

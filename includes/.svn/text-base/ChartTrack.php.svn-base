@@ -1,9 +1,0 @@
-<?php
-class ChartTrack extends Track {
-	protected $position;
-	
-	public function get_position() {
-		return $this->position;
-	}
-}
-?>
