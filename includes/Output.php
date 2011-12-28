@@ -68,32 +68,32 @@ class Output{
 		exit();
 	}
 	
-	public static function require_non_member(){
-		if(Session::is_member()){
+	public static function require_non_user(){
+		if(Session::is_user()){
 			header("Location: ".SITE_LINK_ABS);
 			exit();
 		}
 	}
-	public static function require_member(){
-		if(!Session::is_member()){
-			header("Location: ".SITE_LINK_ABS."space/login.php?referal=".SITE_PAGE.(count($_GET)>0?"&".http_build_query($_GET):""));
+	public static function require_user(){
+		if(!Session::is_user()){
+			header("Location: ".SITE_LINK_ABS."index.php?refer=".SITE_PAGE.(count($_GET)>0?"&".http_build_query($_GET):""));
 			exit();
 		}
 	}
 	public static function require_developer(){
-		self::require_member();
+		self::require_user();
 		if(!Session::is_developer()){
 			self::http_error(401);
 		}
 	}
 	public static function require_group($group){
-		self::require_member();
-		if(!Session::is_group_member($group)){
+		self::require_user();
+		if(!Session::is_group_user($group)){
 			self::http_error(401);
 		}
 	}
 	public static function require_group_admin($group){
-		self::require_member();
+		self::require_user();
 	        if(!Session::is_group_admin($group)){
 	        	self::http_error(401);
 	        }
