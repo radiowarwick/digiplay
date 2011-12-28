@@ -27,7 +27,6 @@ $(function () {
 			if(data == "success") { 
 				location.reload()
 			} else {
-				alert(data);
 				$('#submit').after('<span class="help-inline">Username or password incorrect.</span>');
 				$('.help-inline').fadeOut(3000);
 				$('#submit').button('reset');
