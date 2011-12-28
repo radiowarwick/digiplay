@@ -23,7 +23,7 @@ $(function () {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		$('#submit').button('loading');
-		$.post('login', $(this).serialize(), function(data) {
+		$.post('ajax/login', $(this).serialize(), function(data) {
 			if(data == "success") { 
 				location.reload()
 			} else {
@@ -66,7 +66,7 @@ $(function () {
 				<a href="sue/schedule" class="btn primary">Schedule Prerecorded Content &raquo;</a>
 			<?php } else { ?>
 				<h2>Log In</h2>
-				<form class="login-form" action="login" method="post">
+				<form class="login-form" action="ajax/login" method="post">
 					<fieldset>
 						<div class="clearfix">
 							<label for="username">Username</label>

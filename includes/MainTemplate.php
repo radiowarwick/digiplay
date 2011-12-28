@@ -66,9 +66,12 @@ class MainTemplate implements Template{
 				<div class=\"container\">
 					<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>
 					".$main_menu->output(SITE_LINK_REL,3,"nav")."
+					";
+					if(Session::is_user()) { $return .= "
 					<form class=\"pull-right\" action=\"\">
             			<input type=\"text\" placeholder=\"Search Tracks\">
-          			</form>
+          			</form>"; }
+          			$return .= "
 				</div>
 			</div>
 		</div>
@@ -98,7 +101,7 @@ class MainTemplate implements Template{
 						You'll lose any unsaved changes on this page.
 					</div>
 					<div class=\"modal-footer\">
-						<a class=\"btn primary\" href=\"".SITE_LINK_REL."logout\">Yes, log out</a>
+						<a class=\"btn primary\" href=\"".SITE_LINK_REL."ajax/logout\">Yes, log out</a>
 					</div>";
 
 	$return .= "
@@ -109,7 +112,7 @@ class MainTemplate implements Template{
 					<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."images/template/footer_logo.png\" src=\"RaW 1251AM\" /></a> 
 				</p>
 				<p>";
-	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"".SITE_LINK_REL."logout\" data-controls-modal=\"logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a><br />";
+	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"".SITE_LINK_REL."ajax/logout\" data-controls-modal=\"logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a><br />";
 	else $return .= "Not logged in<br />";				
 	$return .= "Copyright &copy; 2011 Radio Warwick
 				</p>
