@@ -3,9 +3,6 @@ class Session{
 	private static $instance;
 	private static $data = array('user' => false);
 	private static $groups;
-	private static $groupNames;
-	private static $adminGroups;
-	private static $adminGroupNames;
 	private static $user_object;
 	
 	public static function is_user(){
@@ -18,12 +15,11 @@ class Session{
 		return self::$data['lastlogin']==0;
 	}
 	public static function is_group_user($group){
-		$groups = self::get_group_names();
-		return (is_array($groups) ? in_array($group,$groups) : false);
+		$group = Groups::get_by_name($group);
+		return ($group->is_user(self::get_user()));
 	}
-	public static function is_group_admin($group){
-		$groups = self::get_admin_group_names();
-                return (is_array($groups) ? in_array($group,$groups) : false);
+	public static function is_admin(){
+		return self::is_group_user("admin");
 	}
 	public static function get_username(){		return self::$data['username'];		}
 	public static function get_id(){		return self::$data['id'];		}
@@ -37,7 +33,7 @@ class Session{
 	public static function get_groups(){
 		if(!self::$data['user']) return array();
 		if(!isset(self::$groups)){
-			$result = DigiplayDB::query("SELECT web_groups.*,web_users_groups.admin FROM web_groups INNER JOIN web_users_groups USING (groupid) WHERE username = '".self::$data['username']."' ORDER BY web_groups.group");
+			$result = DigiplayDB::query("SELECT web_groups.*,web_users_groups.* FROM web_groups INNER JOIN web_users_groups USING (groupid) WHERE username = '".self::$data['username']."' ORDER BY web_groups.group");
 			self::$groups = array();
 			if(pg_num_rows($result)>0){
 				while($object = pg_fetch_object($result,null,"Group"))
@@ -57,25 +53,7 @@ class Session{
 		}
 		return self::$groupNames;
 	}
-    public static function get_admin_groups(){
-      	if(!isset(self::$adminGroups)){
-       		self::$adminGroups = array_filter(self::get_groups(),array("self","check_admin"));
-       	}
-       	return self::$adminGroups;
-    }
-    public static function get_admin_group_names(){
-       	if(!isset(self::$adminGroups))
-       		self::get_admin_groups();
-       	if(!isset(self::$adminGroupNames)){
-       		foreach (self::$adminGroups as $group) self::$adminGroupNames[] = $group->get_name();
-       	}
-        return self::$adminGroupNames;
-    }
-    private static function check_admin($group){
-       	return $group->is_admin();
-    }
-		
-	public static function get_user(){
+    public static function get_user(){
 		if(is_null(self::$user_object))
 			self::$user_object = Users::get(self::$data['username']);
 		return self::$user_object;

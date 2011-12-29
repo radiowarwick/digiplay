@@ -19,16 +19,10 @@ class Groups{
 		}
 		return false;
 	}
-	public static function getByName($groupName) {
-		$groupName = pg_escape_string(DigiplayDB::resource(), $groupName);
-		if(Session::is_group_user("group_admin")) {
-			$result = DigiplayDB::query("SELECT web_groups.*,true AS admin FROM web_groups WHERE web_groups.group = '".$groupName."'");
-		} else {
-			$result = DigiplayDB::query("SELECT web_groups.*,web_users_groups.admin AS admin FROM web_groups
-			RIGHT OUTER JOIN web_users_groups ON
-			(web_groups.groupid = web_users_groups.groupid AND username = '".Session::get_username()."')
-			WHERE web_groups.group = '".$groupName."'");
-		}
+	public static function get_by_name($group_name) {
+		$group_name = pg_escape_string(DigiplayDB::resource(), $group_name);
+		$result = DigiplayDB::query("SELECT * FROM web_groups WHERE name = '".$group_name."'");
+
 		if(pg_num_rows($result)==1)
 			return pg_fetch_object($result,null,"Group");
 		return false;

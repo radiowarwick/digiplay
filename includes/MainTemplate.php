@@ -26,6 +26,8 @@ class MainTemplate implements Template{
 			array("audiowalls","Audiowalls"),
 			array("files","File Manager"),
 			array("showplans","Show Planning"));
+	if(Session::is_admin()) $main_menu->add("admin","Admin");
+	
 	$site_path_array = explode("/",SITE_PAGE);
 	$main_menu->set_active($site_path_array[0]);
 	
