@@ -24,7 +24,7 @@ if($tracks) {
 			<th class=\"album\">Album</th>
 			<th class=\"length\">Length</th> 
 			<th class=\"icon\"></th>
-			<th class=\"icon\"></th>
+			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<th class=\"icon\"></th>" : "")."
 		</tr>
 	</thead>");
 	foreach($tracks as $track_id) {
@@ -33,6 +33,8 @@ if($tracks) {
 		$artist_str = "";
 		foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
 		$artist_str = substr($artist_str,0,-2);
+		$album = Albums::get_by_audio_id($track->get_id());
+		$album = $album->get_name();
 		echo("
 		<tr>
 			<td><a href=\"detail/".$track->get_id()."\" class=\"track-info\"><img src=\"".SITE_LINK_REL."images/icons/information.png\"></a></td>
@@ -41,7 +43,7 @@ if($tracks) {
 			<td>".$album."</td>
 			<td>".track_length(Time::seconds_to_dhms($track->get_length()))."</td>
 			<td><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			<td><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>
+			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
