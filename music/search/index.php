@@ -4,7 +4,7 @@ Output::set_title("Music Library");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
-$tracks = Search::tracks("cheese",100,0);
+$tracks = Search::tracks("ellie goulding",100,0);
 
 function track_length($time_arr) {
 	$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";

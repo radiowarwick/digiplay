@@ -1,13 +1,21 @@
 <?php
 class Search {
-    public function title($query,$limit=0,$offset=0) {
-        $type = AudioTypes::get("music");
-        $sql = "SELECT id FROM audio WHERE type = ".$type->get_id()." AND to_tsvector('english', title) @@ plainto_tsquery('".pg_escape_string($query)."') ".(($limit > 0)? "LIMIT ".$limit : "")." OFFSET ".$offset.";";
-        $results = DigiplayDB::query($sql);
-        $return = array();
+    public function tracks($query,$limit=0,$offset=0) {
+        $cl = new SphinxClient();
+        $cl->SetServer(SPHINX_HOST,SPHINX_PORT);
+        $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
+        $cl->SetSortMode(SPH_SORT_RELEVANCE);
+        if($limit) $cl->SetLimits($offset,$limit);
+        $result = $cl->Query($query, 'dps-www');
+        if ($result === false) throw new UserError("Query failed: " . $cl->GetLastError());
+        else if ($cl->GetLastWarning()) throw new UserError("WARNING: " . $cl->GetLastWarning());
 
-        while ($result = pg_fetch_array($results))
-            $return[] = $result[0];
+        $return = array();
+        if (!empty($result["matches"])) {
+            foreach ($result["matches"] as $id => $info) {
+                $return[]= $id;
+            }
+        }
         
         return ((count($return) > 0)? $return : NULL);
     }
