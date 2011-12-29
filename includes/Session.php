@@ -9,14 +9,14 @@ class Session{
 		return self::$data['user'];
 	}
 	public static function is_developer(){
-		return (self::$data['user'] && self::is_group_user('developer'));
+		return self::is_group_user('developer');
 	}
 	public static function is_firstlogin(){
 		return self::$data['lastlogin']==0;
 	}
 	public static function is_group_user($group){
 		$group = Groups::get_by_name($group);
-		return ($group->is_user(self::get_user()));
+		return (Session::is_user() ? $group->is_user(self::get_user()) : false);
 	}
 	public static function is_admin(){
 		return self::is_group_user("admin");
