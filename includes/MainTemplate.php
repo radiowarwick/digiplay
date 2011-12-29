@@ -115,22 +115,25 @@ class MainTemplate implements Template{
 			</div>";
 	}
 
+	$return .= "
+			<div class=\"row\">";
 	if (isset(self::$menu) && self::$menu->size()>0){
 		$return .= "
-			<div class=\"row\">
-				<div class=\"span4\">".
-				self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/")."
+				<div class=\"span4\">
+					<div class=\"well\">".
+					self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/")."
+					</div>
 				</div>
-			</div>
-			<div class=\"span12\">";
+				<div class=\"span12\">";
 	} else {
 		$return .= "
-			<div class=\"span16\">";
+				<div class=\"span16\">";
 	}
 	
 	$return .= $content;
 
 	$return .= "
+				</div>
 			</div>
 		</div>";
 
