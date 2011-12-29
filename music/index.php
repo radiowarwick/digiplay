@@ -1,6 +1,8 @@
 <?php
 require_once('pre.php');
 Output::set_title("Music Library");
+Output::add_stylesheet(SITE_LINK_REL."css/music.css");
+
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
 $tracks = Search::title("run");
 
@@ -16,13 +18,13 @@ if($tracks) {
 	echo("<table class=\"zebra-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
-			<th style=\"width:16px;\"> </th>
-			<th>Artist</th>
-			<th>Title</th>
-			<th>Album</th>
-			<th>Length</th> 
-			<th style=\"width:16px;\"></th>
-			<th style=\"width:16px;\"></th>
+			<th class=\"icon\"> </th>
+			<th class=\"artist\">Artist</th>
+			<th class=\"title\">Title</th>
+			<th class=\"album\">Album</th>
+			<th class=\"length\">Length</th> 
+			<th class=\"icon\"></th>
+			<th class=\"icon\"></th>
 		</tr>
 	</thead>");
 	foreach($tracks as $track_id) {
