@@ -3,6 +3,7 @@ class MainTemplate implements Template{
 	protected static $menu;
 	protected static $subtitle;
 	protected static $masthead;
+	protected static $summary;
 	public static function get_menu(){
 		if(!isset(self::$menu)) self::$menu = new Menu;
 		return self::$menu;
@@ -12,6 +13,9 @@ class MainTemplate implements Template{
 	}
 	public static function set_masthead($masthead) {
 		self::$masthead = $masthead;
+	}
+	public static function set_summary($summary) {
+		self::$summary = $summary;
 	}
 	public static function print_page($content){
 		$main_menu = new Menu;
@@ -88,6 +92,15 @@ class MainTemplate implements Template{
 		</div>";
 	}
 
+	if(isset(self::$summary)) {
+		$return .= "
+		<div class=\"summary\">
+			<div class=\"container\">
+				".self::$summary."
+			</div>
+		</div>";
+	}
+
 	$return .= "
 		<div class=\"container\">";
 
@@ -101,10 +114,24 @@ class MainTemplate implements Template{
 		$return .= "</h1>
 			</div>";
 	}
+
+	if (isset(self::$menu) && self::$menu->size()>0){
+		$return .= "
+			<div class=\"row\">
+				<div class=\"span4\">".
+				self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/")."
+				</div>
+			</div>
+			<div class=\"span12\">";
+	} else {
+		$return .= "
+			<div class=\"span16\">";
+	}
 	
 	$return .= $content;
 
 	$return .= "
+			</div>
 		</div>";
 
 	if(Session::is_user())

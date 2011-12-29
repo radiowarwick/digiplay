@@ -33,69 +33,67 @@ $(function () {
 	});
 });
 </script>
-</div>
-<div class="summary">
-	<div class="container">
-		<div class="row">
-			<div class="span5">
+<?php
+	MainTemplate::set_summary("
+		<div class=\"row\">
+			<div class=\"span5\">
 				<h2>Music Library</h2>
 				<dl>
 					<dt>Tracks Stored</dt>
-					<dd><?php echo(number_format(Tracks::get_total_tracks())); ?></dd>
+					<dd>".number_format(Tracks::get_total_tracks())."</dd>
 					<dt>Length of Tracks</dt>
-					<dd><?php echo(total_track_time(Time::seconds_to_dhms(Tracks::get_total_length()))); ?></dd>
+					<dd>".total_track_time(Time::seconds_to_dhms(Tracks::get_total_length()))."</dd>
 					<dt>Playlisted Tracks</dt>
-					<dd><?php echo(count(Tracks::get_playlisted())); ?></dd>
+					<dd>".count(Tracks::get_playlisted())."</dd>
 				</dl>
 			</div>
-			<div class="span5">
+			<div class=\"span5\">
 				<h2>Sustainer Service</h2>
 				<dl>
 					<dt>Tracks on Sue</dt>
-					<dd><?php echo(Sue::get_total_tracks()); ?></dd>
+					<dd>".Sue::get_total_tracks()."</dd>
 					<dt>Length of Sue Playlist</dt>
-					<dd><?php echo(total_track_time(Time::seconds_to_dhms(Sue::get_total_length()))); ?></dd>
+					<dd>".total_track_time(Time::seconds_to_dhms(Sue::get_total_length()))."</dd>
 				</dl>
 			</div>
-			<div class="span5">
-			<?php if(Session::is_user()) { ?>
+			<div class=\"span5\">
+			".((Session::is_user())? "
 				<h2>Common Tasks</h2>
-				<a href="upload" class="btn primary">Upload Audio &raquo;</a>
-				<a href="playlists" class="btn primary">Edit Playlists &raquo;</a>
-				<a href="sue/schedule" class="btn primary">Schedule Prerecorded Content &raquo;</a>
-			<?php } else { ?>
+				<a href=\"upload\" class=\"btn primary\">Upload Audio &raquo;</a>
+				<a href=\"playlists\" class=\"btn primary\">Edit Playlists &raquo;</a>
+				<a href=\"sue/schedule\" class=\"btn primary\">Schedule Prerecorded Content &raquo;</a>
+			":"
 				<h2>Log In</h2>
-				<form class="login-form" action="ajax/login" method="post">
+				<form class=\"login-form\" action=\"ajax/login\" method=\"post\">
 					<fieldset>
-						<div class="clearfix">
-							<label for="username">Username</label>
-							<div class="input">
-								<input id="username" name="username" type="text" class="required">
+						<div class=\"clearfix\">
+							<label for=\"username\">Username</label>
+							<div class=\"input\">
+								<input id=\"username\" name=\"username\" type=\"text\" class=\"required\">
 							</div>
 						</div>
-						<div class="clearfix">
-							<label for="password">Password</label>
-							<div class="input">
-								<input id="password" name="password" type="password" class="required">
+						<div class=\"clearfix\">
+							<label for=\"password\">Password</label>
+							<div class=\"input\">
+								<input id=\"password\" name=\"password\" type=\"password\" class=\"required\">
 							</div>
 						</div>
-						<div class="clearfix">
-							<div class="input">
-								<input type="submit" class="btn primary" id="submit" name="submit" value="Log In">
+						<div class=\"clearfix\">
+							<div class=\"input\">
+								<input type=\"submit\" class=\"btn primary\" id=\"submit\" name=\"submit\" value=\"Log In\">
 							</div>
 						</div>
 					</fieldset>
 				</form>
-			<?php }; ?>
+			")."
 			</div>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<?php if(Session::is_user()) {?>
-	<h1>Welcome, <?php echo(Session::get_first_name()); ?> <small>Enjoying your day?</small></h1>
-	<?php 
+		</div>");
+
+	if(Session::is_user()) {
+	Output::set_title("Welcome, ".Session::get_first_name());
+	MainTemplate::set_subtitle("Enjoying your day?");
 	$lastlogin = Session::get_lastlogin();
 	if($lastlogin) echo("<h4>You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</h4>");
 	else echo ("<h4>You've never logged in before! Welcome to the Digiplay Web Management System.</h4>");
-	}; ?>
+	}; 
+?>
