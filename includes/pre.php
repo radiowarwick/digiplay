@@ -58,8 +58,10 @@ if (get_magic_quotes_gpc()) {
 
 	unset($root_to_file,$root_to_install,$docroot_to_file,$install_to_file,$request,$domain_to_install);
 }
-session_start();
 
+ini_set("session.cookie_path", SITE_LINK_INSTALL_PATH);
+ini_set("session.name", "RAW" . md5($_SERVER['HTTP_HOST'] . "/" . SITE_LINK_INSTALL_PATH));
+session_start();
 
 
 Output::set_template("MainTemplate");
