@@ -64,7 +64,7 @@ session_start();
 
 Output::set_template("MainTemplate");
 $menu	= MainTemplate::get_menu();
-if(SITE_PAGE != ("index.php" || "ajax/login.php")) { Output::require_user(); }
+if((SITE_PAGE != "index.php") && (SITE_PAGE != "ajax/login.php")) { Output::require_user(); }
 
 						define("SITE_MEMBERSTATUS",	Session::is_user());
 if(SITE_MEMBERSTATUS)	define("SITE_USERNAME",		Session::get_username());
