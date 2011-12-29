@@ -16,10 +16,11 @@ class Session{
 	}
 	public static function is_group_user($group){
 		$group = Groups::get_by_name($group);
-		return (Session::is_user() ? $group->is_user(self::get_user()) : false);
+		if($group) return (Session::is_user() ? $group->is_user(self::get_user()) : false);
+		else return false;
 	}
 	public static function is_admin(){
-		return self::is_group_user("admin");
+		return (self::is_group_user("admin") || self::is_developer());
 	}
 	public static function get_username(){		return self::$data['username'];		}
 	public static function get_id(){		return self::$data['id'];		}
