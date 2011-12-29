@@ -1,6 +1,5 @@
 <?php
 require_once('pre.php');
-Output::add_script(SITE_LINK_REL."js/jquery.validate.js");
 
 $header = "<h1>Digiplay, from Radio Warwick</h1>
 <p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>";
