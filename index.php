@@ -64,16 +64,16 @@ $(function () {
 				<a href=\"playlists\" class=\"btn primary\">Edit Playlists &raquo;</a>
 				<a href=\"sue/schedule\" class=\"btn primary\">Schedule Prerecorded Content &raquo;</a>
 			":"
-				<h2>Log In</h2>
+				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\"> to access restricted content</small>" : "")."</h2>
 				<form class=\"login-form\" action=\"ajax/login\" method=\"post\">
 					<fieldset>
-						<div class=\"clearfix\">
+						<div class=\"clearfix".(isset($_REQUEST['refer'])? " error" : "")."\">
 							<label for=\"username\">Username</label>
 							<div class=\"input\">
 								<input id=\"username\" name=\"username\" type=\"text\" class=\"required\">
 							</div>
 						</div>
-						<div class=\"clearfix\">
+						<div class=\"clearfix".(isset($_REQUEST['refer'])? " error" : "")."\">
 							<label for=\"password\">Password</label>
 							<div class=\"input\">
 								<input id=\"password\" name=\"password\" type=\"password\" class=\"required\">
