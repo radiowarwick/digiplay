@@ -12,7 +12,7 @@ class Artists {
 	}
 
 	public function get_by_name($name) {
-		$result = DigiplayDB::query("SELECT * FROM artists WHERE name = '".$id."'");
+		$result = DigiplayDB::query("SELECT * FROM artists WHERE name = '".$name."'");
 		if(pg_num_rows($result)) {
 			return pg_fetch_object($result,NULL,"Artist");
 		} else return false;
