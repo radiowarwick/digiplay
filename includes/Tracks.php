@@ -1,6 +1,17 @@
 <?php
 class Tracks{
 
+	public function get($id) {
+		return self::get_by_id($id);
+	}
+
+	public function get_by_id($id) {
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE id = ".$id);
+		if(pg_num_rows($result)) {
+			return pg_fetch_object($result,NULL,"Track");
+		} else return false;
+	}
+
 	public function get_total_tracks() {
 		$type = pg_fetch_assoc(DigiplayDB::query("SELECT id FROM audiotypes WHERE name = 'Music';"));
 		$type = $type["id"];
