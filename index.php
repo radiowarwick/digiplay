@@ -12,6 +12,7 @@ function total_track_time($time_arr) {
 	return $time_str;
 }
 
+if(isset($_REQUEST["refer"]) && Session::is_user()) header("Location: ".SITE_LINK_ABS.$_REQUEST["refer"]);
 ?>
 <style>
 .login-form { margin-left: -70px ; margin-top: -20px;}
