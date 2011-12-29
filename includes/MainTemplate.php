@@ -85,14 +85,31 @@ class MainTemplate implements Template{
 					".self::$masthead."
 				</div>
 			</div>
-		</div>
-		";
+		</div>";
 	}
 
+	$return .= "
+		<div class=\"container\">";
+
+	if(Output::get_title() != 'Untitled Page') {
+		$return .= "
+			<div class=\"page-header\">
+				<h1>".Output::get_title();
+				if(isset(self::$subtitle)) {
+					$return .= " <small>".self::$subtitle."</small>";
+				}
+		$return .= "</h1>
+			</div>";
+	}
+	
 	$return .= $content;
 
+	$return .= "
+		</div>";
+
 	if(Session::is_user())
-		$return .= "<div class=\"modal hide fade\" id=\"logout-modal\">
+		$return .= "
+					<div class=\"modal hide fade\" id=\"logout-modal\">
 					<div class=\"modal-header\">
 						<a class=\"close\" href=\"#\">&times;</a>
 						<h3>Log out?</h3>

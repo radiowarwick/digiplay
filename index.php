@@ -1,9 +1,8 @@
 <?php
 require_once('pre.php');
 
-$header = "<h1>Digiplay, from Radio Warwick</h1>
-<p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>";
-MainTemplate::set_masthead($header);
+$masthead = "<h1>Digiplay, from Radio Warwick</h1><p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>";
+MainTemplate::set_masthead($masthead);
 
 function total_track_time($time_arr) {
 	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
@@ -34,6 +33,7 @@ $(function () {
 	});
 });
 </script>
+</div>
 <div class="summary">
 	<div class="container">
 		<div class="row">
@@ -99,4 +99,3 @@ $(function () {
 	if($lastlogin) echo("<h4>You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</h4>");
 	else echo ("<h4>You've never logged in before! Welcome to the Digiplay Web Management System.</h4>");
 	}; ?>
-</div>
