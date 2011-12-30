@@ -1,7 +1,7 @@
 <?php
 class Artists {
 	public function get($id) {
-		return $this->get_by_id($id);
+		return self::get_by_id($id);
 	}
 
 	public function get_by_id($id) {

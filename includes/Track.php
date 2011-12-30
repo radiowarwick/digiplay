@@ -10,11 +10,15 @@ class Track extends Audio{
 
 
 	public function get_artist(){
-		return Artists::get($this->id);
+		return Artists::get_by_audio_id($this->id);
 	}
 
 	public function get_album(){
-		return Albums::get($this->music_album);
+		return Albums::get_by_audio_id($this->id);
+	}
+
+	public function get_year(){
+		return $this->music_released;
 	}
 
 	public function is_sustainer(){
