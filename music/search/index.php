@@ -1,13 +1,13 @@
 <?php
 require_once('pre.php');
-Output::set_title("Music Library");
+Output::set_title("Library Search");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 
 $query = $_REQUEST['q'];
 $limit = (isset($_GET['n']))? $_GET['n'] : 20;
 $page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
 
-MainTemplate::set_subtitle("Add and remove tracks, edit track details");
+MainTemplate::set_subtitle("Find a track in the database, edit track details");
 $search = Search::tracks($query,$limit,(($page-1)*$limit));
 $tracks = $search["results"];
 
