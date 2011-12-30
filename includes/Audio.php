@@ -27,4 +27,8 @@ class Audio {
 	public function get_length() {
 		return $this->length_smpl / 44100;
 	}
+
+	public function get_import_date() {
+		return $this->import_date;
+	}
 }
