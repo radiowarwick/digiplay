@@ -3,6 +3,28 @@ require_once('pre.php');
 Output::set_title("Music Library");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 
+echo("<script>
+	$(function () {
+		$('.track-info').click(function(event) {
+			event.preventDefault();
+			var row = $(this).parent().parent();
+			if(row.next().hasClass('detail')) {
+				row.next().slideToggle();
+			} else {
+    			var id = row.attr('id');
+    			$.ajax({
+	         		type: 'GET',
+         			url: '".SITE_LINK_REL."music/detail/index.php?id='+id+'&ajax=1',
+         			dataType: 'html',
+	         		success: function(data) {
+	    	         	row.after('<tr class=\"detail\"><td colspan=\"7\">'+data+'</td></tr>');
+         			}
+    			});
+    		}
+		});
+	});
+</script>");
+
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
 $tracks = Tracks::get_newest();
 
@@ -34,7 +56,7 @@ if($tracks) {
 		$artist_str = substr($artist_str,0,-2);
 		$import_date = date("d/m/Y H:i",$track->get_import_date());
 		echo("
-		<tr>
+		<tr id=\"".$track->get_id()."\">
 			<td><a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\"><img src=\"".SITE_LINK_REL."images/icons/information.png\"></a></td>
 			<td>".$artist_str."</td>
 			<td>".$track->get_title()."</td>
