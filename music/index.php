@@ -35,7 +35,7 @@ if($tracks) {
 		$import_date = date("d/m/Y H:i",$track->get_import_date());
 		echo("
 		<tr>
-			<td><a href=\"detail/".$track->get_id()."\" class=\"track-info\"><img src=\"".SITE_LINK_REL."images/icons/information.png\"></a></td>
+			<td><a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\"><img src=\"".SITE_LINK_REL."images/icons/information.png\"></a></td>
 			<td>".$artist_str."</td>
 			<td>".$track->get_title()."</td>
 			<td>".$import_date."</td>
