@@ -74,8 +74,8 @@ class MainTemplate implements Template{
 					".$main_menu->output(SITE_LINK_REL,3,"nav")."
 					";
 					if(Session::is_user()) { $return .= "
-					<form class=\"pull-right\" action=\"\">
-            			<input type=\"text\" placeholder=\"Search Tracks\">
+					<form class=\"pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+            			<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
           			</form>"; }
           			$return .= "
 				</div>

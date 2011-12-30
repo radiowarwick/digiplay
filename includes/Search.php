@@ -10,14 +10,17 @@ class Search {
         if ($result === false) throw new UserError("Query failed: " . $cl->GetLastError());
         else if ($cl->GetLastWarning()) throw new UserError("WARNING: " . $cl->GetLastWarning());
 
-        $return = array();
+        $results = array();
         if (!empty($result["matches"])) {
             foreach ($result["matches"] as $id => $info) {
-                $return[]= $id;
+                $results[]= $id;
             }
         }
-        
-        return ((count($return) > 0)? $return : NULL);
+        $return = array(
+            "results" => $results,
+            "total" => $result["total"],
+            "time" => $result["time"]);
+        return ((count($results) > 0)? $return : NULL);
     }
 }
 

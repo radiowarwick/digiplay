@@ -11,8 +11,8 @@ function total_track_time($time_arr) {
 	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
 	return $time_str;
 }
-
-if(isset($_REQUEST["refer"]) && Session::is_user()) header("Location: ".SITE_LINK_ABS.$_REQUEST["refer"]);
+echo($refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1));
+if(isset($_REQUEST["refer"]) && Session::is_user()) header("Location: ".SITE_LINK_ABS.$refer);
 ?>
 <style>
 .login-form { margin-left: -70px ; margin-top: -20px;}
