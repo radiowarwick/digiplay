@@ -6,7 +6,7 @@ class Search {
         $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
         $cl->SetSortMode(SPH_SORT_RELEVANCE);
         if($limit) $cl->SetLimits($offset,$limit);
-        $result = $cl->Query($query, 'dps-www');
+        $result = $cl->Query($query);
         if ($result === false) throw new UserError("Query failed: " . $cl->GetLastError());
         else if ($cl->GetLastWarning()) throw new UserError("WARNING: " . $cl->GetLastWarning());
 
@@ -21,6 +21,11 @@ class Search {
             "total" => $result["total"],
             "time" => $result["time"]);
         return ((count($results) > 0)? $return : NULL);
+    }
+
+    public function update_index() {
+        $return = shell_exec("/usr/bin/indexer --quiet --rotate delta");
+        return ($return)? false:true;
     }
 }
 
