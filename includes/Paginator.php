@@ -30,7 +30,7 @@ class Paginator{
 
 	function paginate()
 	{
-		if(!isset($this->default_n)) $this->default_n=25;
+		if(!isset($this->default_n)) $this->default_n=10;
 		if($_GET['n'] == 'All')
 		{
 			$this->num_pages = 1;

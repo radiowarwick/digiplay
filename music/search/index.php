@@ -4,25 +4,13 @@ Output::set_title("Library Search");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 
 $query = $_REQUEST['q'];
-$limit = (isset($_GET['n']))? $_GET['n'] : 20;
+$limit = (isset($_GET['n']))? $_GET['n'] : 10;
 $page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
 
 MainTemplate::set_subtitle("Find a track in the database, edit track details");
-$search = Search::tracks($query,$limit,(($page-1)*$limit));
+if($query) $search = Search::tracks($query,$limit,(($page-1)*$limit));
 $tracks = $search["results"];
 
-$pages = new Paginator;
-$pages->items_per_page = $limit;
-$pages->querystring = $query;
-$pages->mid_range = 5;
-$pages->items_total = $search["total"];
-$pages->paginate();
-
-$low = (($page-1)*$limit+1);
-$high = (($low + $limit - 1) > $search["total"])? $search["total"] : $low + $limit - 1;
-
-echo("<h2>".$search["total"]." results for ".$query."</h2>");
-echo("<div class=\"row\"><div class=\"span8\"><h4>Showing results ".$low." to ".$high."</h4></div><div class=\"span4\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 function track_length($time_arr) {
 	$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
 	$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
@@ -32,6 +20,18 @@ function track_length($time_arr) {
 }
 
 if($tracks) {
+	$pages = new Paginator;
+	$pages->items_per_page = $limit;
+	$pages->querystring = $query;
+	$pages->mid_range = 5;
+	$pages->items_total = $search["total"];
+	$pages->paginate();
+
+	$low = (($page-1)*$limit+1);
+	$high = (($low + $limit - 1) > $search["total"])? $search["total"] : $low + $limit - 1;
+
+	echo("<h2>".$search["total"]." results for ".$query."</h2>");
+	echo("<div class=\"row\"><div class=\"span8\"><h4>Showing results ".$low." to ".$high."</h4></div><div class=\"span4\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 	echo("<table class=\"zebra-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
@@ -74,6 +74,17 @@ if($tracks) {
 			</ul>
 		</div>");*/
 } else {
-	echo("Sorry, no results");
+	if($query) {
+		echo("<h2>Sorry, no results for ".$query."</h2>");
+		echo("<h3>Try a more generic search term.</h3>");
+	} else {
+		echo("<h3>Enter keywords below to search for tracks:</h3>
+		<form action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+			<div class=\"clearfix\">
+        		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
+        		<input type=\"submit\" class=\"btn primary\" value=\"Search\">
+        	</div>
+        </form>");
+	}
 }
 ?>
