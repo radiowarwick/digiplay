@@ -21,6 +21,10 @@ class Track extends Audio{
 		return $this->music_released;
 	}
 
+	public function get_reclibid() {
+		return $this->reclibid;
+	}
+
 	public function is_sustainer(){
 		return (($sustainer == 't')? TRUE : FALSE);
 	}

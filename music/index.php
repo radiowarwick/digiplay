@@ -7,9 +7,13 @@ Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 echo("<script>
 	$(function () {
-		$('.track-info').popover({'html': true, 'title': function() { return($(this).parent().parent().find('.title').html()) }, 'content': function() { 
-			var text = 'test';
-			return(text);
+		$('.track-info').popover({
+			'html': true, 
+			'title': function() { 
+				return($(this).parent().parent().find('.title').html())
+			},
+			'content': function() {
+				return($(this).parent().find('.hover-info').html());
 			}
 		});
 	});
@@ -47,7 +51,21 @@ if($tracks) {
 		$import_date = date("d/m/Y H:i",$track->get_import_date());
 		echo("
 		<tr id=\"".$track->get_id()."\">
-			<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\"><img src=\"".SITE_LINK_REL."images/icons/information.png\"></a></td>
+			<td class=\"icon\">
+				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
+					<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+				</a>
+				<div class=\"hover-info\">
+					<strong>Artist:</strong> ".$artist_str."<br />
+					<strong>Album:</strong> ".$track->get_album()->get_name()."<br />
+					<strong>Year:</strong> ".$track->get_year()."<br />
+					<strong>Length:</strong> ".track_length(Time::seconds_to_dhms($track->get_length()))."<br />
+					<strong>Origin:</strong> ".$track->get_origin()."<br />
+					".($track->get_reclibid()? "<strong>Reclib ID:</strong> ".$track->get_reclibid()."<br />" : "")."
+					<strong>On Sue:</strong>".($track->is_sustainer()? "Yes" : "No")."<br />
+					<strong>Censored:</strong> ".($track->is_censored()? "Yes" : "No")."<br /> 
+				</div>
+			</td>
 			<td class=\"artist\">".$artist_str."</td>
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$import_date."</td>

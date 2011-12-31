@@ -31,4 +31,12 @@ class Audio {
 	public function get_import_date() {
 		return $this->import_date;
 	}
+
+	public function get_origin() {
+		return $this->origin;
+	}
+
+	public function get_filetype() {
+		return $this->filetype;
+	}
 }
