@@ -22,11 +22,9 @@ class Group{
 	public function is_user($user){
 		if(is_null($user)) $user = Session::get_user();
 		$parent = Groups::get($this->parent_group_id);
-		var_dump($parent);
 		if(!$parent) $parent = 0;
 		else $parent = $parent->get_id();
 		$result = DigiplayDB::query("SELECT * FROM web_users_groups WHERE (group_id = ".$this->group_id." OR group_id = ".$parent.") AND username = '".$user->get_username()."'");
-		echo("SELECT * FROM web_users_groups WHERE (group_id = ".$this->group_id." OR group_id = ".$parent.") AND username = '".$user->get_username()."'");
 		if(pg_num_rows($result) > 0)
 			return true;
 		return false;
