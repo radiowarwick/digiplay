@@ -2,15 +2,16 @@
 class Group{
 	private $group;
 	private $group_id;
+	private $parent_group_id;
 
-	public function get_group_id(){
+	public function get_id(){
 		return $this->group_id;	
-	}
-	public function get_group(){
-		return $this->group;
 	}
 	public function get_name(){
 		return $this->group;
+	}
+	public function get_parent_group_id(){
+		return $this->parent_group_id;
 	}
 	public function get_name_pretty(){
 		$return = $this->group;
@@ -19,9 +20,13 @@ class Group{
 		return $return;
 	}
 	public function is_user($user){
-		if(is_null($user))
-			$user = Session::get_user();
-		$result = DigiplayDB::query("SELECT * FROM web_users_groups WHERE groupid ='".$this->groupid."' AND username = '".$user->get_username()."'");
+		if(is_null($user)) $user = Session::get_user();
+		$parent = Groups::get($this->parent_group_id);
+		var_dump($parent);
+		if(!$parent) $parent = 0;
+		else $parent = $parent->get_id();
+		$result = DigiplayDB::query("SELECT * FROM web_users_groups WHERE (group_id = ".$this->group_id." OR group_id = ".$parent.") AND username = '".$user->get_username()."'");
+		echo("SELECT * FROM web_users_groups WHERE (group_id = ".$this->group_id." OR group_id = ".$parent.") AND username = '".$user->get_username()."'");
 		if(pg_num_rows($result) > 0)
 			return true;
 		return false;

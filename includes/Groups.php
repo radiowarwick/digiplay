@@ -7,13 +7,9 @@ class Groups{
 			$array[] = $object;
 		return $array;
 	}
-	public static function get($groupid){
-		if(is_numeric($groupid)){
-			$result = DigiplayDB::query("SELECT web_groups.*,web_users_groups.admin AS admin FROM web_groups
-			RIGHT OUTER JOIN web_users_groups ON
-			(web_groups.groupid = web_users_groups.groupid AND username = '".Session::get_username()."')
-			WHERE web_groups.groupid = '".$groupid."'
-			ORDER BY groupid ASC");
+	public static function get($group_id){
+		if(is_numeric($group_id)){
+			$result = DigiplayDB::query("SELECT web_groups.* FROM web_groups WHERE group_id = ".$group_id);
 			if(pg_num_rows($result)==1)
 				return pg_fetch_object($result,null,"Group");
 		}
