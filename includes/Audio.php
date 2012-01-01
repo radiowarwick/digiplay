@@ -36,7 +36,7 @@ class Audio {
 
 	public function save() {
 		$sql = "UPDATE audio SET (type,creator,title,origin,notes) = (".pg_escape_string($this->type).",".pg_escape_string($this->creator).",'".pg_escape_string($this->title)."','".pg_escape_string($this->origin)."','".pg_escape_string($this->notes)."') WHERE id = ".$this->id.";";
-		return (DigiplayDB::query($sql))?;
+		return bool(DigiplayDB::query($sql));
 	}
 
 	/* Extended functions */

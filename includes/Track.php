@@ -24,6 +24,11 @@ class Track extends Audio{
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censor($censor) { $this->censor = $censor? "t":"f";}
 
+	public function save() {
+		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,sustainer,flagged,censor) = (".pg_escape_string($this->get_album()->get_id()).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",".pg_escape_string($this->reclibid)."','".$this->sustainer."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
+		return bool(DigiplayDB::query($sql));
+	}
+
 	/* Extended functions */
 	public function get_artists() { return Artists::get_by_audio_id($this->id); }
 	public function get_keywords() { return Keywords::get_by_audio_id($this->id); }
