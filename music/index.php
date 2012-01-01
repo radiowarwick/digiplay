@@ -40,7 +40,7 @@ if($tracks) {
 			<th class=\"album\">Date Added</th>
 			<th class=\"length\">Length</th> 
 			<th class=\"icon\"></th>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<th class=\"icon\"></th>" : "")."
+			".(Session::is_group_user("music_admin")? "<th class=\"icon\"></th>" : "")."
 		</tr>
 	</thead>");
 	foreach($tracks as $track) {
@@ -71,7 +71,7 @@ if($tracks) {
 			<td class=\"album\">".$import_date."</td>
 			<td class=\"length\">".track_length(Time::seconds_to_dhms($track->get_length()))."</td>
 			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
+			".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");

@@ -1,6 +1,7 @@
 <?php
 require_once('pre.php');
 Output::set_title("Track Detail");
+Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 MainTemplate::set_subtitle("View and edit track metadata");
 
 if(!isset($_GET['id'])) {
@@ -14,35 +15,35 @@ if(!$track = Tracks::get($_GET["id"])) {
 echo("
 	<script>
 		$(function () {
-			$('.click-clear').focus(function() {
-				if($(this).attr('data-value') != $(this).val()) {
-					$(this).attr('data-value', $(this).val());
-					$(this).val('');
-				}
-			});
-			$('.click-clear').blur(function() {
-				if($(this).val() == '') {
-					$(this).val($(this).attr('data-value'));
-				}
-			});
 			$('.track-meta-form').submit(function(event) {
 				event.preventDefault();
-				$(this).find('.help-inline').remove();
+				var el = $(this);
+				el.find('.help-inline').remove();
 				submit = $(this).find('input[type=\"submit\"]');
 				submit.button('loading');
 				$.post('".SITE_LINK_REL."ajax/meta-update', $(this).serialize(), function(data) {
 					if(data == \"success\") { 
 						submit.button('reset');
+						location.reload();
 					} else {
 						submit.after('<span class=\"help-inline\">'+data+'</span>');
-
 						submit.button('reset');
 					}
 				})
 			});
+			$('.keyword a').click(function(event) {
+				event.preventDefault();
+				$.get($(this).attr('href'), function(data) {
+					if(data == \"success\") {
+						location.reload();
+					} else {
+						$(this).after('<span class=\"help-inline\">'+data+'</span>');
+					}
+				})
+			})
 		});
 	</script>
-	<h2>Track ID: ".$track->get_id()."</h2>
+	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
 	<div class=\"row\">
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
@@ -55,7 +56,7 @@ echo("
 					</div>
 					<div class=\"clearfix\">
 						<label for=\"artist\">Artists</label>");
-						foreach($track->get_artist() as $artist) {
+						foreach($track->get_artists() as $artist) {
 							echo("
 						<div class=\"input\">
 							<input name=\"artist\" class=\"required".$disabled."\" value=\"".$artist->get_name()."\">
@@ -63,7 +64,7 @@ echo("
 						}
 					echo("
 						<div class=\"input\">
-							<input name=\"new_artist[]\" class=\"click-clear".$disabled."\" value=\"Add new artist...\">
+							<input name=\"new_artist[]\" class=\"click-clear".$disabled."\" placeholder=\"Add new artist...\">
 						</div>
 					</div>
 					<div class=\"clearfix\">
@@ -119,6 +120,7 @@ echo("
 		<div class=\"span5\">
 			<form class=\"track-meta-form form-stacked\" action=\"".SITE_LINK_REL."ajax/meta-update\" method=\"POST\">
 				<fieldset>
+					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"clearfix\">
 						<label for=\"notes\">Notes</label>
 						<div class=\"input\">
@@ -130,12 +132,15 @@ echo("
 						foreach($track->get_keywords() as $keyword) {
 							echo("
 						<div class=\"input\">
-							<input name=\"keyword\" class=\"".$disabled."\" value=\"".$keyword->get_text()."\">
+							<div class=\"keyword\">
+								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword_id=".$keyword->get_id()."\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></a>
+							</div>
+							<span class=\"uneditable-input\">".$keyword->get_text()."</span>
 						</div>");
 						}
 					echo("
 						<div class=\"input\">
-							<input name=\"new_keyword[]\" class=\"click-clear".$disabled."\" value=\"Add new keyword...\">
+							<input name=\"new_keyword[]\" class=\"click-clear".$disabled."\" placeholder=\"Add new keyword...\">
 						</div>
 					</div>
 					<div class=\"clearfix\">

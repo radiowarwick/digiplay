@@ -34,9 +34,9 @@ class Audio {
 	public function set_origin($origin) { $this->origin = $origin; }
 	public function set_notes($notes) { $this->notes = $notes; }
 
-	public function save() {
+	public function save_audio() {
 		$sql = "UPDATE audio SET (type,creator,title,origin,notes) = (".pg_escape_string($this->type).",".pg_escape_string($this->creator).",'".pg_escape_string($this->title)."','".pg_escape_string($this->origin)."','".pg_escape_string($this->notes)."') WHERE id = ".$this->id.";";
-		return bool(DigiplayDB::query($sql));
+		return (bool) DigiplayDB::query($sql);
 	}
 
 	/* Extended functions */

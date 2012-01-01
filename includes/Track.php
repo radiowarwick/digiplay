@@ -25,8 +25,8 @@ class Track extends Audio{
 	public function set_censor($censor) { $this->censor = $censor? "t":"f";}
 
 	public function save() {
-		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,sustainer,flagged,censor) = (".pg_escape_string($this->get_album()->get_id()).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",".pg_escape_string($this->reclibid)."','".$this->sustainer."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
-		return bool(DigiplayDB::query($sql));
+		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,sustainer,flagged,censor) = (".pg_escape_string($this->get_album()->get_id()).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",'".pg_escape_string($this->reclibid)."','".$this->sustainer."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
+		return (bool) DigiplayDB::query($sql);
 	}
 
 	/* Extended functions */
@@ -66,7 +66,13 @@ class Track extends Audio{
 			$keywords = array($tmp);
 		}
 		foreach($keywords as $keyword) {
-			$keyword->add_to_track($this->id);
+			$exists = Keywords::get_by_text($keyword);
+			if($exists) $exists->add_to_track($this->id);
+			else {
+				$object = new Keyword;
+				$object->set_text($keyword);
+				$object->add_to_track($this->id);
+			}
 		}
 	}
 
@@ -76,7 +82,8 @@ class Track extends Audio{
 			$keywords = array($tmp);
 		}
 		foreach($keywords as $keyword) {
-			$keyword->del_from_track($this->id);
+			$object = Keywords::get_by_id($keyword);
+			$object->del_from_track($this->id);
 		}
 	}
 }
