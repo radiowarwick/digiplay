@@ -31,6 +31,22 @@ echo("
 					}
 				})
 			});
+			$('.track-detail-form').submit(function(event) {
+				event.preventDefault();
+				var el = $(this);
+				el.find('.help-inline').remove();
+				submit = $(this).find('input[type=\"submit\"]');
+				submit.button('loading');
+				$.post('".SITE_LINK_REL."ajax/track-detail-update', $(this).serialize(), function(data) {
+					if(data == \"success\") { 
+						submit.button('reset');
+						location.reload();
+					} else {
+						submit.after('<span class=\"help-inline\">'+data+'</span>');
+						submit.button('reset');
+					}
+				})
+			});
 			$('.keyword a').click(function(event) {
 				event.preventDefault();
 				$.get($(this).attr('href'), function(data) {
@@ -48,6 +64,7 @@ echo("
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
 				<fieldset>
+					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"clearfix\">
 						<label for=\"title\">Title</label>
 						<div class=\"input\">
