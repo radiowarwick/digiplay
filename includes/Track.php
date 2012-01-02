@@ -12,9 +12,9 @@ class Track extends Audio{
 	public function get_track() { return $this->music_track; }
 	public function get_year() { return ($this->music_released == 0 )? "(not set)" : $this->music_released; }
 	public function get_reclibid() { return $this->reclibid; }
-	public function is_sustainer(){ return (($sustainer == "t")? TRUE : FALSE); }
-	public function is_flagged() { return (($flagged == "t")? TRUE : FALSE); }
-	public function is_censored(){ return (($censored == "t")? TRUE : FALSE); }
+	public function is_sustainer(){ return (($this->sustainer == "t")? TRUE : FALSE); }
+	public function is_flagged() { return (($this->flagged == "t")? TRUE : FALSE); }
+	public function is_censored(){ return (($this->censored == "t")? TRUE : FALSE); }
 
 	public function set_track($track) { $this->track = $track; }
 	public function set_year($year) { $this->music_released = (is_int($year))? $year : 0; }
