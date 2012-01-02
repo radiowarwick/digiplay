@@ -70,7 +70,7 @@ if($tracks) {
 					<strong>Artist:</strong> ".$artist_str."<br />
 					<strong>Album:</strong> ".$track->get_album()->get_name()."<br />
 					<strong>Year:</strong> ".$track->get_year()."<br />
-					<strong>Length:</strong> ".$track->get_length(TRUE)."<br />
+					<strong>Length:</strong> ".$track->get_length_formatted()."<br />
 					<strong>Origin:</strong> ".$track->get_origin()."<br />
 					".($track->get_reclibid()? "<strong>Reclib ID:</strong> ".$track->get_reclibid()."<br />" : "")."
 					<strong>On Sue:</strong> ".($track->is_sustainer()? "Yes" : "No")."<br />
@@ -80,21 +80,14 @@ if($tracks) {
 			<td class=\"artist\">".$artist_str."</td>
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$album."</td>
-			<td class=\"length\">".$track->get_length(TRUE)."</td>
+			<td class=\"length\">".$track->get_length_formatted()."</td>
 			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
 			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
 	echo($pages->return);
-	/*echo("
-		<div class=\"pagination\">
-			<ul>
-				<li class=\"prev".(($page == 1)? " disabled\"><a href=\"#" : "\"><a href=\"?q=".$query."&p=".($page-1))."\">Previous</a></li>");
-	echo("
-				<li class=\"next".(($page == $pages)? " disabled\"><a href=\"#" : "\"><a href=\"?q=".$query."&p=".($page+1))."\">Next</a></li>
-			</ul>
-		</div>");*/
+	
 } else {
 	if($query) {
 		echo("<h2>Sorry, no results for ".$query."</h2>");

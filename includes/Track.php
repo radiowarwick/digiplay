@@ -18,7 +18,7 @@ class Track extends Audio{
 
 	public function set_album($album) { $this->music_album = $album->get_id(); }
 	public function set_track($track) { $this->track = $track; }
-	public function set_year($year) { $this->music_released = $year; }
+	public function set_year($year) { $this->music_released = (is_int($year))? $year : 0; }
 	public function set_reclibid($reclibid) { $this->reclibid = $reclibid; }
 	public function set_sustainer($sustainer) { $this->sustainer = $sustainer? "t":"f"; }
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
