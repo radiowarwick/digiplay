@@ -10,7 +10,7 @@ class Track extends Audio{
 
 	public function get_album() { return Albums::get_by_audio_id($this->id); }
 	public function get_track() { return $this->music_track; }
-	public function get_year() { return $this->music_released; }
+	public function get_year() { return ($this->music_released == 0 )? "(not set)" : $this->music_released; }
 	public function get_reclibid() { return $this->reclibid; }
 	public function is_sustainer(){ return (($sustainer == "t")? TRUE : FALSE); }
 	public function is_flagged() { return (($flagged == "t")? TRUE : FALSE); }

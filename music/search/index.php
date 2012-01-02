@@ -13,14 +13,6 @@ MainTemplate::set_subtitle("Find a track in the database, edit track details");
 if($query) $search = Search::tracks($query,$limit,(($page-1)*$limit));
 $tracks = $search["results"];
 
-function track_length($time_arr) {
-	$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
-	$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
-	$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]."m " : "0m ";
-	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]."s " : "0s ";
-	return $time_str;
-}
-
 if($tracks) {
 	$pages = new Paginator;
 	$pages->items_per_page = $limit;
@@ -78,7 +70,7 @@ if($tracks) {
 					<strong>Artist:</strong> ".$artist_str."<br />
 					<strong>Album:</strong> ".$track->get_album()->get_name()."<br />
 					<strong>Year:</strong> ".$track->get_year()."<br />
-					<strong>Length:</strong> ".track_length(Time::seconds_to_dhms($track->get_length()))."<br />
+					<strong>Length:</strong> ".$track->get_length(TRUE)."<br />
 					<strong>Origin:</strong> ".$track->get_origin()."<br />
 					".($track->get_reclibid()? "<strong>Reclib ID:</strong> ".$track->get_reclibid()."<br />" : "")."
 					<strong>On Sue:</strong> ".($track->is_sustainer()? "Yes" : "No")."<br />
@@ -88,7 +80,7 @@ if($tracks) {
 			<td class=\"artist\">".$artist_str."</td>
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$album."</td>
-			<td class=\"length\">".track_length(Time::seconds_to_dhms($track->get_length()))."</td>
+			<td class=\"length\">".$track->get_length(TRUE)."</td>
 			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
 			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");

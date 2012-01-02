@@ -17,7 +17,18 @@ class Audio {
 	public function get_id() { return $this->id; }
 	public function get_md5() { return $this->md5; }
 	public function get_archive() { return Archives::get($this->archive); }
-	public function get_length() { return $this->length_smpl / 44100; }
+	public function get_length($str = FALSE) { 
+		if ($str === TRUE) {
+			$time_arr = Time::seconds_to_dhms( $this->length_smpl / 44100 );
+			$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
+			$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
+			$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]."m " : "0m ";
+			$time_str .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
+			return $time_str;
+		} else {
+			return $this->length_smpl / 44100; 
+		}
+	}
 	public function get_type() { return AudioTypes::get_by_id($this->type); }
 	public function get_creator() { return Users::get_by_id($this->creator); }
 	public function get_creation_date() { return $this->creation_date; }
