@@ -9,6 +9,7 @@ if(Session::is_group_user('music_admin')){
 
 	if($_REQUEST["new_artist"]) $track->add_artists($_REQUEST["new_artist"]);
 
+	if(!$_REQUEST["album"]) $_REQUEST["album"] = "(none)";
 	if($_REQUEST["album"] != $track->get_album()->get_name()) $track->set_album($_REQUEST["album"]);
 
 	if($_REQUEST["year"] != $track->get_year()) $track->set_year($_REQUEST["year"]);
