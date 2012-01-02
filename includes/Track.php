@@ -37,7 +37,6 @@ class Track extends Audio{
 			$album = new Album;
 			$album->set_name($album_str);
 			$album->save();
-			var_dump($album);
 		} else {
 			$album = Albums::get_by_name($album_str);
 		}
