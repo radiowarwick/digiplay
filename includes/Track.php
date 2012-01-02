@@ -83,7 +83,7 @@ class Track extends Audio{
 			$keywords = array($tmp);
 		}
 		foreach($keywords as $keyword) {
-			if($artist == "") return false;
+			if($keyword == "") return false;
 			$exists = Keywords::get_by_text($keyword);
 			if($exists) $exists->add_to_track($this->id);
 			else {
