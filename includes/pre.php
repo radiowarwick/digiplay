@@ -63,22 +63,9 @@ session_start();
 
 
 Output::set_template("MainTemplate");
-$menu	= MainTemplate::get_menu();
 if((SITE_PAGE != "index.php") && (SITE_PAGE != "ajax/login.php")) { Output::require_user(); }
 
 						define("SITE_MEMBERSTATUS",	Session::is_user());
 if(SITE_MEMBERSTATUS)	define("SITE_USERNAME",		Session::get_username());
 
-
-if(strlen(SITE_PATH)>0){
-	$sitePathArray = explode("/",SITE_PATH);
-	for($i = 0; $i < count($sitePathArray); $i++){
-		$file = SITE_FILE_PATH.implode("/",array_slice($sitePathArray,0,$i+1))."/menu.php";
-		if(file_exists($file)){
-			$menu = $menu->new_menu($sitePathArray[$i]);		
-			include($file);
-		}
-	}
-	unset($sitePathArray,$i,$file);
-}
 ?>
