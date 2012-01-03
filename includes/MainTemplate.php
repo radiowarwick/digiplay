@@ -77,7 +77,6 @@ class MainTemplate implements Template{
 	$return .= "
 </head> 
 	<body> 
-		<div id=\"topbar\"> 
 		<div class=\"topbar\">
 			<div class=\"topbar-inner\">
 				<div class=\"container\">
@@ -86,7 +85,7 @@ class MainTemplate implements Template{
 					if(Session::is_user()) { $return .= "
 					<form class=\"pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
             			<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
-          			</form>"; }
+	          		</form>"; }
           			$return .= "
 				</div>
 			</div>
