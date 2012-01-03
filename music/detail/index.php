@@ -26,16 +26,10 @@ echo("
 				$.post('".SITE_LINK_REL."ajax/meta-update', $(this).serialize(), function(data) {
 					if(data == \"success\") { 
 						submit.button('reset');
-						$('h2').after('<div class=\"alert-message success\" style=\"display: none;\"><p><strong>Success!</strong> Track details altered. Reloading page...</p></div>');
-						$('.alert-message').show('fast');
-						setTimeout(function() {
-    						$('.alert-message').hide('fast', function(){
-        						$(this).remove(); 
-           					});},4000);
-						setTimeout(\"location.reload();\",4200);
+						location.reload();
 					} else {
-						$('h2').after('<div class=\"alert-message error fade in\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
-						$('.alert-message').alert();
+						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('.alert-message').show('fast').alert();
 						submit.button('reset');
 					}
 				})
@@ -69,7 +63,8 @@ echo("
 					if(data == \"success\") {
 						location.reload();
 					} else {
-						$(this).after('<span class=\"help-inline\">'+data+'</span>');
+						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('.alert-message').show('fast').alert();
 					}
 				})
 			})
@@ -168,7 +163,7 @@ echo("
 							echo("
 						<div class=\"input\">
 							<div class=\"keyword\">
-								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword_id=".$keyword->get_id()."\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></a>
+								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></a>
 							</div>
 							<span class=\"uneditable-input\">".$keyword->get_text()."</span>
 						</div>");

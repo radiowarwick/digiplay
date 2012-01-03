@@ -101,7 +101,7 @@ class Track extends Audio{
 			$keywords = array($tmp);
 		}
 		foreach($keywords as $keyword) {
-			$object = Keywords::get_by_name($keyword);
+			$object = Keywords::get_by_text($keyword);
 			$object->del_from_track($this->id);
 		}
 	}
