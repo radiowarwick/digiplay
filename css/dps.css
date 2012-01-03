@@ -89,6 +89,8 @@ body {
   margin-bottom:10px;
 }
 
+.login-form { margin-left: -70px ; margin-top: -20px; }
+
 .footer {
   background-color: #eee;
   min-width: 940px;
