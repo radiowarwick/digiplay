@@ -61,7 +61,7 @@ class Track extends Audio{
 			if($exists) $exists->add_to_track($this->id);
 			else {
 				$object = new Artist;
-				$object->set_text($artist);
+				$object->set_name($artist);
 				$object->add_to_track($this->id);
 			}
 		}
@@ -73,7 +73,8 @@ class Track extends Audio{
 			$artists = array($tmp);
 		}
 		foreach($artists as $artist) {
-			$artist->del_from_track($this->id);
+			$object = Artists::get_by_name($artist);
+			$object->del_from_track($this->id);
 		}
 	}
 		
@@ -100,7 +101,7 @@ class Track extends Audio{
 			$keywords = array($tmp);
 		}
 		foreach($keywords as $keyword) {
-			$object = Keywords::get_by_id($keyword);
+			$object = Keywords::get_by_name($keyword);
 			$object->del_from_track($this->id);
 		}
 	}

@@ -7,6 +7,12 @@ if(Session::is_group_user('music_admin')){
 	if(!$_REQUEST["title"]) exit("Error: You must specify a title");
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
 
+	$curr_artists_obj = $track->get_artists();
+	$curr_artists_arr = array();
+	foreach($curr_artists_obj as $artist) $curr_artists_arr[] = $artist->get_name();
+	$track->del_artists(array_diff($curr_artists_arr,$_REQUEST["artist"]));
+	$track->add_artists(array_diff($_REQUEST["artist"],$curr_artists_arr));
+	
 	if($_REQUEST["new_artist"]) $track->add_artists($_REQUEST["new_artist"]);
 
 	if(!$_REQUEST["album"]) $_REQUEST["album"] = "(none)";

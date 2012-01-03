@@ -76,7 +76,7 @@ echo("
 						foreach($track->get_artists() as $artist) {
 							echo("
 						<div class=\"input\">
-							<input name=\"artist\" class=\"required".$disabled."\" value=\"".$artist->get_name()."\">
+							<input name=\"artist[]\" class=\"required".$disabled."\" value=\"".$artist->get_name()."\">
 						</div>");
 						}
 					echo("
