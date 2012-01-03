@@ -81,9 +81,8 @@ class MainTemplate implements Template{
 		<div class=\"topbar\">
 			<div class=\"topbar-inner\">
 				<div class=\"container\">
-					<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>
-					".$main_menu->output(SITE_LINK_REL,3,"nav")."
-					";
+					<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>"
+					.$main_menu->output(SITE_LINK_REL,6,"nav");
 					if(Session::is_user()) { $return .= "
 					<form class=\"pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
             			<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
