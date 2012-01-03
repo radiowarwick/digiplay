@@ -2,7 +2,6 @@
 class Search {
     public function tracks($query,$limit=0,$offset=0) {
         $cl = new SphinxClient();
-        $cl->SetServer(SPHINX_HOST,SPHINX_PORT);
         $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
         $cl->SetSortMode(SPH_SORT_RELEVANCE);
         if($limit) $cl->SetLimits($offset,$limit);

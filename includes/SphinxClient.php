@@ -421,8 +421,8 @@ class SphinxClient
 	function SphinxClient ()
 	{
 		// per-client-object settings
-		$this->_host		= "localhost";
-		$this->_port		= 9312;
+		$this->_host		= pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'sphinx_host';"),NULL,0);
+		$this->_port		= pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'sphinx_port';"),NULL,0);;
 		$this->_path		= false;
 		$this->_socket		= false;
 
