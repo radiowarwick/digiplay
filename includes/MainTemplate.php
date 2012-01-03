@@ -49,6 +49,7 @@ class MainTemplate implements Template{
 	if(Output::get_title() != 'Untitled Page')
 		$return .= " - ".Output::get_title();
 	$return .= "</title> 
+		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/jquery-1.7.1.min.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-modal.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-buttons.js\"></script>

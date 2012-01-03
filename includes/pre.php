@@ -3,6 +3,7 @@ function __autoload($class_name) {
 	require_once (SITE_FILE_PATH ."includes/" .$class_name . ".php");
 }
 
+header("Content-Type: text/html; charset=utf-8");
 ini_set("html_errors",false);
 ini_set("session.use_only_cookies",true);
 ini_set("date.timezone","Europe/London");
