@@ -5,6 +5,6 @@ Output::set_template();
 if(Session::login($_POST['username'],$_POST['password'])){
 	echo "success";
 }else{
-	echo "error";
+	echo "Error: Incorrect username or password";
 }
 ?>

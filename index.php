@@ -23,12 +23,12 @@ $(function () {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		$('#submit').button('loading');
+		$('.help-inline').remove();
 		$.post('ajax/login', $(this).serialize(), function(data) {
 			if(data == "success") { 
 				location.reload()
 			} else {
-				$('#submit').after('<span class="help-inline">Username or password incorrect.</span>');
-				$('.help-inline').fadeOut(3000);
+				$('#submit').after('<span class="help-inline">'+data+'</span>');
 				$('#submit').button('reset');
 			}
 		})

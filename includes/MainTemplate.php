@@ -1,13 +1,9 @@
 <?php
 class MainTemplate implements Template{
-	protected static $menu;
+	protected static $sidebar;
 	protected static $subtitle;
 	protected static $masthead;
 	protected static $summary;
-	public static function get_menu(){
-		if(!isset(self::$menu)) self::$menu = new Menu;
-		return self::$menu;
-	}
 	public static function set_subtitle($subtitle){
 		self::$subtitle = $subtitle;
 	}
@@ -17,7 +13,22 @@ class MainTemplate implements Template{
 	public static function set_summary($summary) {
 		self::$summary = $summary;
 	}
+	public static function set_sidebar($sidebar) {
+		self::$sidebar = $sidebar;
+	}
 	public static function print_page($content){
+		if(strlen(SITE_PATH)>0){
+			$sitePathArray = explode("/",SITE_PATH);
+			for($i = 0; $i < count($sitePathArray); $i++){
+				$file = SITE_FILE_PATH.implode("/",array_slice($sitePathArray,0,$i+1))."/sidebar.php";
+				if(file_exists($file)){
+					include($file);
+					MainTemplate::set_sidebar(sidebar());
+				}
+			}
+			unset($sitePathArray,$i,$file);
+		}
+
 		$main_menu = new Menu;
 		$main_menu->add_many(
 			array("index","Overview"),
@@ -119,11 +130,11 @@ class MainTemplate implements Template{
 
 	$return .= "
 			<div class=\"row\">";
-	if (isset(self::$menu) && self::$menu->size()>0){
+	if (isset(self::$sidebar)){
 		$return .= "
 				<div class=\"span4\">
 					<div class=\"well\">".
-					self::$menu->output(SITE_LINK_REL.current(explode("/",SITE_PATH))."/")."
+					self::$sidebar."
 					</div>
 				</div>
 				<div class=\"span12\">";
