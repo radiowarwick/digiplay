@@ -60,46 +60,5 @@ class LDAP{
 		
 		return $this->member;
 	}
-	function changepassword($password){
-		if(!$this->login) trigger_error("Not logged into RaW LDAP", E_USER_ERROR);
-		//return ldap_mod_replace ($this->link_identifier,$this->bind_rdn,array('userpassword' => $password));
-	}
-	
-	function resetpassword($username,$universityid){
-	
-	}
-	function get_members(){
-		$result = ldap_search($this->link_identifier,"ou=People,dc=radio,dc=warwick,dc=ac,dc=uk","(|(rawMemberStatus=Member)(rawMemberStatus=Other))",array("rawUniversityNum","givenName","cn","uid","uidNumber","mail"));
-		$array = array();
-		for ($i = ldap_first_entry($this->link_identifier,$result);	$i!=false; $i = ldap_next_entry($this->link_identifier,$i)){
-			$j = ldap_get_attributes($this->link_identifier,$i);
-			
-			$k = array();
-			$k['username']		= $j['uid'][0];
-			$k['id']			= $j['rawUniversityNum'][0];
-			$k['name'] 			= ucwords(strtolower($j['cn'][0]));
-			$k['nick'] 			= ucwords(strtolower($j['givenName'][0]));
-			$k['email'] 		= $j['mail'];
-			$array[] = $k;
-		}
-		return $array;
-	}
-
-	function get_member($rawUniversityNum){
-		$result = ldap_search($this->link_identifier,"ou=People,dc=radio,dc=warwick,dc=ac,dc=uk","(&(|(rawMemberStatus=Member)(rawMemberStatus=Other))(rawUniversityNum=".$rawUniversityNum."))",array("rawUniversityNum","givenName","uid"));
-		$array = array();
-		for ($i = ldap_first_entry($this->link_identifier,$result);	$i!=false; $i = ldap_next_entry($this->link_identifier,$i)){
-			$j = ldap_get_attributes($this->link_identifier,$i);
-			
-			$k = array();
-			$k['username']		= $j['uid'][0];
-			$k['id']			= $j['rawUniversityNum'][0];
-			$k['nick'] 			= ucwords(strtolower($j['givenName'][0]));
-		}
-		if(isset($k))
-			return $k;
-		else
-			return FALSE;
-	}
 }
 ?>
