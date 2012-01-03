@@ -2,6 +2,8 @@
 require_once('pre.php');
 Output::set_title("Track Detail");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
+Output::add_script(SITE_LINK_REL."js/bootstrap-alerts.js");
+
 MainTemplate::set_subtitle("View and edit track metadata");
 
 if(!isset($_GET['id'])) {
@@ -24,9 +26,16 @@ echo("
 				$.post('".SITE_LINK_REL."ajax/meta-update', $(this).serialize(), function(data) {
 					if(data == \"success\") { 
 						submit.button('reset');
-						location.reload();
+						$('h2').after('<div class=\"alert-message success\" style=\"display: none;\"><p><strong>Success!</strong> Track details altered. Reloading page...</p></div>');
+						$('.alert-message').show('fast');
+						setTimeout(function() {
+    						$('.alert-message').hide('fast', function(){
+        						$(this).remove(); 
+           					});},4000);
+						setTimeout(\"location.reload();\",4200);
 					} else {
-						submit.after('<span class=\"help-inline\">'+data+'</span>');
+						$('h2').after('<div class=\"alert-message error fade in\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('.alert-message').alert();
 						submit.button('reset');
 					}
 				})
@@ -40,9 +49,16 @@ echo("
 				$.post('".SITE_LINK_REL."ajax/track-detail-update', $(this).serialize(), function(data) {
 					if(data == \"success\") { 
 						submit.button('reset');
-						location.reload();
+						$('h2').after('<div class=\"alert-message success\" style=\"display: none;\"><p><strong>Success!</strong> Track details altered. Reloading page...</p></div>');
+						$('.alert-message').show('fast');
+						setTimeout(function() {
+    						$('.alert-message').hide('fast', function(){
+        						$(this).remove(); 
+           					});},4000);
+           				setTimeout(\"location.reload();\",4200);
 					} else {
-						submit.after('<span class=\"help-inline\">'+data+'</span>');
+						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('.alert-message').show('fast').alert();
 						submit.button('reset');
 					}
 				})
@@ -57,9 +73,11 @@ echo("
 					}
 				})
 			})
+			$('.alert-message').alert();
 		});
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
+	".(Session::is_group_user("music_admin")? "":"<div class=\"alert-message info fade in\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Sorry!</strong> You can't edit the details of this track, because you aren't a Music Admin.</p></div>" )."
 	<div class=\"row\">
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
