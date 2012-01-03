@@ -1,5 +1,7 @@
 <?php
-class RawLDAP{
+class LDAP{
+	private $ldap_dn;
+	private $ldap_filter;
 	private $link_identifier;
 	private $result_identifier;
 	private $result_entry_identifier;
@@ -11,8 +13,12 @@ class RawLDAP{
 	private $login = false;
 	
 	function __construct(){
-		$this->link_identifier=@ldap_connect("ldap://". LDAP_HOST);
-		if(!$this->link_identifier) trigger_error("RaW LDAP Connection failure", E_USER_ERROR);
+		$ldap_host = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_host'"),NULL,0);
+		$ldap_port = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_port'"),NULL,0);
+		$this->ldap_filter = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_filter'"),NULL,0);
+		$this->ldap_dn = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_dn'"),NULL,0);
+		$this->link_identifier=@ldap_connect("ldap://".$ldap_host.":".$ldap_port);
+		if(!$this->link_identifier) trigger_error("LDAP Connection failure", E_USER_ERROR);
 		
 		ldap_set_option($this->link_identifier, LDAP_OPT_PROTOCOL_VERSION, 3);
 		$this->connection = true;
@@ -24,7 +30,7 @@ class RawLDAP{
 
 		if(!$this->login||$this->username != $username){
 			$this->username = $username;
-			$this->result_identifier = ldap_search($this->link_identifier,"ou=People,dc=radio,dc=warwick,dc=ac,dc=uk","(&(uid=".$this->username."))",array("rawUniversityNum","givenName","cn","sn","uid","uidNumber","ou","mail","homeDirectory"));
+			$this->result_identifier = ldap_search($this->link_identifier,$this->ldap_dn,"(&(uid=".$this->username.")".$this->ldap_filter.")",array("uid","givenName","sn"));
 			if(!$this->result_identifier) return false;	
 			if (ldap_count_entries($this->link_identifier, $this->result_identifier) != 1) return false;
 

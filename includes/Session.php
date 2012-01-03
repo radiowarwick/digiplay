@@ -66,9 +66,9 @@ class Session{
 			self::$data["user"] = true;
 			self::$data["id"] = $local_user["id"];
 		} else {
-			$ldap_instance = new RawLDAP;
+			$ldap_instance = new LDAP;
 			if(!$ldap_instance->login($username, $password)) return false;
-			if(is_object($ldap_instance) && get_class($ldap_instance) == "RawLDAP"){
+			if(is_object($ldap_instance) && get_class($ldap_instance) == "LDAP"){
 				if($ldap_instance->login_status()){
 					self::$data = $ldap_instance->userdetails();
 					self::$data['user'] = true;
