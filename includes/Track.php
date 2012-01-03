@@ -17,7 +17,7 @@ class Track extends Audio{
 	public function is_censored(){ return (($this->censor == "t")? TRUE : FALSE); }
 
 	public function set_track($track) { $this->track = $track; }
-	public function set_year($year) { $this->music_released = (is_int($year))? $year : 0; }
+	public function set_year($year) { $this->music_released = (is_numeric($year))? $year : 0; }
 	public function set_reclibid($reclibid) { $this->reclibid = $reclibid; }
 	public function set_sustainer($sustainer) { $this->sustainer = $sustainer? "t":"f"; }
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
