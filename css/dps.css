@@ -7,17 +7,17 @@ body {
 
 /* Front Page */
 .masthead {
-  background-color: #049cd9;
+  background-color: #015769;
   background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#004D9F), to(#049cd9));
-  background-image: -webkit-linear-gradient(#004D9F, #049cd9);
-  background-image: -moz-linear-gradient(#004D9F, #049cd9);
-  background-image: -o-linear-gradient(top, #004D9F, #049cd9);
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#004D9F), to(#049cd9));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#004D9F', endColorstr='#049cd9', GradientType=0); /* IE8 and down */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#015769), to(#01A6C9));
+  background-image: -webkit-linear-gradient(#015769, #01A6C9);
+  background-image: -moz-linear-gradient(#015769, #01A6C9);
+  background-image: -o-linear-gradient(top, #015769, #01A6C9);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#015769), to(#01A6C9));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#015769', endColorstr='#01A6C9', GradientType=0); /* IE8 and down */
 }
 .intro {
-  background: transparent url(http://twitter.github.com/bootstrap/assets/img/grid-18px.png) top center;
+  background: transparent url(../images/template/grid-18px.png) top center;
   padding: 45px 0;
   -webkit-box-shadow: inset 0 10px 30px rgba(0,0,0,.3);
   -moz-box-shadow: inset 0 10px 30px rgba(0,0,0,.3);
