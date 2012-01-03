@@ -5,6 +5,14 @@ Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
+function total_track_time($time_arr) {
+	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
+	$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
+	$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]." minutes, " : "";
+	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
+	return $time_str;
+}
+
 echo("<script>
 	$(function () {
 		$('.track-info').popover({
@@ -20,6 +28,36 @@ echo("<script>
 </script>");
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
+
+if($flagged = Tracks::get_flagged()) echo("<a href=\"".SITE_LINK_REL."music/censor\"><div class=\"alert-message warning\"><p><strong>Tracks have been flagged for censorship.</strong> Click here to view them.</p></div></a>" );
+
+echo("
+<div class=\"row\">
+	<div class=\"span6\">
+	<h2>Library Statistics</h2>
+		<dl>
+			<dt>Tracks Stored</dt>
+			<dd>".number_format(Tracks::get_total_tracks())."</dd>
+			<dt>Length of Tracks</dt>
+			<dd>".total_track_time(Time::seconds_to_dhms(Tracks::get_total_length()))."</dd>
+			<dt>Playlisted Tracks</dt>
+			<dd>".count(Tracks::get_playlisted())."</dd>
+		</dl>
+	</div>
+	<div class=\"span6\">
+		<h2>Requested Tracks</h2>
+		".(($requested = Requests::get_all())? "
+		<ul>
+			<li>Test</li>
+			<li>Test</li>
+		</ul>
+		" : "
+		<strong>No new requested tracks.</strong>")."
+	</div>
+</div>
+<hr />
+");
+
 $tracks = Tracks::get_newest();
 
 if($tracks) {

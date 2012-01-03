@@ -43,5 +43,14 @@ class Tracks{
                  $tracks[] = $object;
     	return $tracks;
 	}
+
+	public function get_flagged() {
+		$type = AudioTypes::get("music")->get_id();
+		$tracks = array();
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND flagged = 't';");
+		while($object = pg_fetch_object($result,NULL,"Track"))
+                 $tracks[] = $object;
+    	return $tracks;
+	}
 }
 ?>
