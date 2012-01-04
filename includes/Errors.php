@@ -52,7 +52,7 @@ class Error{
 		$this->file		= $file;
 		$this->line		= $line;
 	}
-	private function __toString(){
+	public function __toString(){
 		return "[".$this->error_type()."] Error on line ".$this->line." in file ".$this->file.":\n".$this->string;
 	}
 	private function error_type(){
