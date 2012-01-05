@@ -50,7 +50,7 @@ echo("
 		");
 		if($requested = Requests::get_latest(3)) {
 			echo("
-		<table class=\"zebra-striped\" cellspacing=\"0\">
+		<table class=\"condensed-table zebra-striped\" cellspacing=\"0\">
 			<thead>
 				<tr>
 					<th class=\"icon\"></th>
