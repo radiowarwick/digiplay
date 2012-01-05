@@ -76,8 +76,8 @@ echo("
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
 				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("music_admin")? "
-				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" data-placement=\"below\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
-				".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" data-placement=\"below\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\" alt=\"Delete this request\"></td>" : "") : "")."
+				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
+				".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\" alt=\"Delete this request\"></td>" : "") : "")."
 			</tr>");
 			}
 			echo("
@@ -142,8 +142,8 @@ if($tracks) {
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$import_date."</td>
 			<td class=\"length\">".$track->get_length_formatted()."</td>
-			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
+			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
+			".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
