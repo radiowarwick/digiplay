@@ -10,9 +10,11 @@ class Request {
 	public function get_name() { return $this->name; }
 	public function get_artist_name() { return $this->artistname; }
 	public function get_date() { return $this->date; }
+	public function get_user() { return Users::get_by_id($this->userid); }
 
 	public function set_name($name) { $this->name = $name; }
 	public function set_artist_name($artist_name) { $this->artistname = $artist_name; }
+	public function set_user($user) { $this->user = $user->get_id(); }
 
 	public function save() {
 		if(!$this->name) return false;

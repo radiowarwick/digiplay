@@ -24,6 +24,7 @@ echo("<script>
 				return($(this).parent().find('.hover-info').html());
 			}
 		});
+		$('a[rel=\"twipsy\"]').twipsy()
 	});
 </script>");
 
@@ -46,13 +47,53 @@ echo("
 	</div>
 	<div class=\"span6\">
 		<h2>Requested Tracks</h2>
-		".(($requested = Requests::get_all())? "
-		<ul>
-			<li>Test</li>
-			<li>Test</li>
-		</ul>
-		" : "
-		<strong>No new requested tracks.</strong>")."
+		");
+		if($requested = Requests::get_latest(3)) {
+			echo("
+		<table class=\"zebra-striped\" cellspacing=\"0\">
+			<thead>
+				<tr>
+					<th class=\"icon\"></th>
+					<th class=\"artist\">Artist</th>
+					<th class=\"title\">Title</th>".(Session::is_group_user("music_admin")? "
+					<th class=\"icon\"></th>
+					<th class=\"icon\"></th>" : "")."
+				</tr>
+			</thead>");
+			foreach($requested as $request) {
+				echo("
+			<tr id=\"".$request->get_id()."\">
+				<td class=\"icon\">
+					<a href=\"#\" class=\"track-info\">
+						<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+					</a>
+					<div class=\"hover-info\">
+						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
+						<strong>Title:</strong> ".$request->get_name()."<br />
+						<strong>Date Requested:</strong> ".date("d/m/Y H:i",$request->get_date())."<br />
+						<strong>Requester:</strong> ".$request->get_user()->get_username()."<br />
+					</div>
+				</td>
+				<td class=\"artist\">".$request->get_artist_name()."</td>
+				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("music_admin")? "
+				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" data-placement=\"below\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
+				".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" data-placement=\"below\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\" alt=\"Delete this request\"></td>" : "") : "")."
+			</tr>");
+			}
+			echo("
+		</table>");
+			$total_requests = Requests::count();
+			if($total_requests < count($requested)) {
+				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; Go to requests</a>");
+			} else {
+				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
+			}
+		} else {
+			echo("
+		<strong>No new requested tracks.</strong><br />
+		<a href=\"".SITE_LINK_REL."music/request\">&raquo; Go to requests</a>");
+		}
+		echo("
 	</div>
 </div>
 <hr />

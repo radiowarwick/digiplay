@@ -26,4 +26,16 @@ class Requests {
                  $requests[] = $object;
     	return ((count($requests) > 0)? $requests : false);
 	}
+
+	public function get_latest($count = 5) {
+		$requests = array();
+		$result = DigiplayDB::query("SELECT * FROM requests ORDER BY date DESC LIMIT ".$count); 
+		while($object = pg_fetch_object($result,NULL,"Request"))
+                 $requests[] = $object;
+    	return ((count($requests) > 0)? $requests : false);
+	}
+
+	public function count() {
+		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(id) FROM requests"),NULL,0);
+	}
 }
