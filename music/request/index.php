@@ -72,7 +72,7 @@ if($requested = Requests::get_all()) {
 		<td class=\"title\">".$request->get_name()."</td>
 		<td class=\"date\">".date("d/m/Y H:i",$request->get_date())."</td>
 		<td class=\"requester\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("music_admin")? "
-		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
+		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
 		".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\" alt=\"Delete this request\"></td>" : "") : "")."
 	</tr>");
 	}

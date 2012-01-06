@@ -14,7 +14,7 @@ class Request {
 
 	public function set_name($name) { $this->name = $name; }
 	public function set_artist_name($artist_name) { $this->artistname = $artist_name; }
-	public function set_user($user) { $this->user = $user->get_id(); }
+	public function set_user($user) { $this->userid = $user->get_id(); }
 
 	public function save() {
 		if(!$this->name) return false;
@@ -27,7 +27,7 @@ class Request {
 	}
 
 	public function delete() {
-		return pg_fetch_result(DigiplayDB::query("DELETE FROM requests WHERE id = ".$this->id()));
+		return pg_fetch_result(DigiplayDB::query("DELETE FROM requests WHERE id = ".$this->id));
 	}
 }
 ?>
