@@ -83,7 +83,7 @@ echo("
 			echo("
 		</table>");
 			$total_requests = Requests::count();
-			if($total_requests < count($requested)) {
+			if($total_requests <= count($requested)) {
 				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; Go to requests</a>");
 			} else {
 				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
