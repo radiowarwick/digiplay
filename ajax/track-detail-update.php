@@ -25,7 +25,7 @@ if(Session::is_group_user('music_admin')){
 
 	if($_REQUEST["reclibid"] != $track->get_reclibid()) $track->set_reclibid($_REQUEST["reclibid"]);
 
-	$track->set_censor($_REQUEST["censored"]);
+	$track->set_censored($_REQUEST["censored"]);
 	$track->set_sustainer($_REQUEST["sustainer"]);
 
 	$result = $track->save();
