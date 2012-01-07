@@ -28,7 +28,7 @@ echo("
 						submit.button('reset');
 						location.reload();
 					} else {
-						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
 						$('.alert-message').show('fast').alert();
 						submit.button('reset');
 					}
@@ -43,16 +43,15 @@ echo("
 				$.post('".SITE_LINK_REL."ajax/track-detail-update', $(this).serialize(), function(data) {
 					if(data == \"success\") { 
 						submit.button('reset');
-						$('h2').after('<div class=\"alert-message success\" style=\"display: none;\"><p><strong>Success!</strong> Track details altered. Reloading page...</p></div>');
-						$('.alert-message').show('fast');
+						$('h2').after('".AlertMessage::basic("success","Track details altered. Reloading page...","Success!",false)."');
 						setTimeout(function() {
     						$('.alert-message').hide('fast', function(){
         						$(this).remove(); 
            					});},4000);
            				setTimeout(\"location.reload();\",4200);
 					} else {
-						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
-						$('.alert-message').show('fast').alert();
+						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
+						$('.alert-message').alert();
 						submit.button('reset');
 					}
 				})
@@ -63,16 +62,15 @@ echo("
 					if(data == \"success\") {
 						location.reload();
 					} else {
-						$('h2').after('<div class=\"alert-message error fade in\" style=\"display: none;\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Error!</strong> '+data+'</p></div>');
+						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
 						$('.alert-message').show('fast').alert();
 					}
 				})
 			})
-			$('.alert-message').alert();
 		});
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
-	".(Session::is_group_user("music_admin")? "":"<div class=\"alert-message info fade in\"><a class=\"close\" href=\"#\">&times;</a><p><strong>Sorry!</strong> You can't edit the details of this track, because you aren't a Music Admin.</p></div>" )."
+	".(Session::is_group_user("music_admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:"))."
 	<div class=\"row\">
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
