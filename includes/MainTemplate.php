@@ -42,6 +42,7 @@ class MainTemplate implements Template{
 	$site_path_array = explode("/",SITE_PAGE);
 	$main_menu->set_active($site_path_array[0]);
 	
+	header("Content-Type: text/html; charset=utf-8");
 	$return = "<!DOCTYPE html> 
 <html> 
 	<head> 
