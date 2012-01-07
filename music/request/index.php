@@ -5,14 +5,6 @@ Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
-function total_track_time($time_arr) {
-	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
-	$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
-	$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]." minutes, " : "";
-	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
-	return $time_str;
-}
-
 echo("<script>
 	$(function () {
 		$('a[rel=\"twipsy\"]').twipsy()
