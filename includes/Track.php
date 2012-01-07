@@ -21,7 +21,7 @@ class Track extends Audio{
 	public function set_reclibid($reclibid) { $this->reclibid = $reclibid; }
 	public function set_sustainer($sustainer) { $this->sustainer = $sustainer? "t":"f"; }
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
-	public function set_censor($censor) { $this->censor = $censor? "t":"f";}
+	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
 
 	public function save() {
 		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,sustainer,flagged,censor) = (".pg_escape_string($this->music_album).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",'".pg_escape_string($this->reclibid)."','".$this->sustainer."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
@@ -44,7 +44,7 @@ class Track extends Audio{
 	}
 	
 	public function get_artists_str() {
-		$artists = $this->get_artist();
+		$artists = $this->get_artists();
 		foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
 		$artist_str = substr($artist_str,0,-2);
 		return $artist_str;
