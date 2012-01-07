@@ -15,9 +15,12 @@ if($_REQUEST["name"] && $_REQUEST["artistname"]) {
 }
 
 if($_REQUEST["delete"]) {
-	if(!Session::is_group_user("music_admin")) echo("<div class=\"alert-message error\"><strong>Error!</strong> You are trying to delete a request, and you do not have the requred privelidges!</div>");
-	$request = Requests::get_by_id($_REQUEST["delete"]);
-	if($request) $request->delete();
+	if(!Session::is_group_user("music_admin")) {
+		echo("<div class=\"alert-message error\"><strong>Error!</strong> You are trying to delete a request, and you do not have the requred privelidges!</div>");
+	} else {
+		$request = Requests::get_by_id($_REQUEST["delete"]);
+		if($request) $request->delete();
+	}
 }
 
 echo("
