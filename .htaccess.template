@@ -1,4 +1,6 @@
-php_value include_path /home/jsewell/public_html/dps-www/includes
+#set this to your DPS website installation path:
+php_value include_path /usr/share/dps/www/includes
+
 RewriteEngine  on
 RewriteBase /
 
