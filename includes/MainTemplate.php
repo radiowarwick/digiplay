@@ -71,6 +71,11 @@ class MainTemplate implements Template{
 		}
 	
 	$return .= "
+	<script type=\"text/javascript\">
+		$(function () {
+			$('a[rel=\"twipsy\"]').twipsy()
+		});
+	</script>
 </head> 
 	<body> 
 		<div class=\"topbar\">

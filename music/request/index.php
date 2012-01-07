@@ -5,12 +5,6 @@ Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
-echo("<script>
-	$(function () {
-		$('a[rel=\"twipsy\"]').twipsy()
-	});
-</script>");
-
 MainTemplate::set_subtitle("Want to play a track, but it's not in the database? Request it here");
 
 if($_REQUEST["name"] && $_REQUEST["artistname"]) {

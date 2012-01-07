@@ -81,8 +81,8 @@ if($tracks) {
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$album."</td>
 			<td class=\"length\">".$track->get_length_formatted()."</td>
-			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
+			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
+			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");

@@ -24,7 +24,6 @@ echo("<script>
 				return($(this).parent().find('.hover-info').html());
 			}
 		});
-		$('a[rel=\"twipsy\"]').twipsy()
 	});
 </script>");
 
