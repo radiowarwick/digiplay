@@ -2,7 +2,6 @@
 require_once('pre.php');
 Output::set_title("Music Library");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 function total_track_time($time_arr) {

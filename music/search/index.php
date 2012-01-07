@@ -2,7 +2,6 @@
 require_once('pre.php');
 Output::set_title("Library Search");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 $query = $_REQUEST['q'];

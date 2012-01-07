@@ -2,7 +2,6 @@
 require_once('pre.php');
 Output::set_title("Requested Tracks");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-twipsy.js");
 Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 MainTemplate::set_subtitle("Want to play a track, but it's not in the database? Request it here");
