@@ -47,7 +47,16 @@ class Tracks{
 	public function get_flagged() {
 		$type = AudioTypes::get("music")->get_id();
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND flagged = 't';");
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND flagged = 't' ORDER BY import_date DESC;");
+		while($object = pg_fetch_object($result,NULL,"Track"))
+                 $tracks[] = $object;
+    	return $tracks;
+	}
+
+	public function get_censored() {
+		$type = AudioTypes::get("music")->get_id();
+		$tracks = array();
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND censor = 't' ORDER BY import_date DESC;");
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;
     	return $tracks;
