@@ -28,7 +28,7 @@ echo("<script>
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
 
-if($flagged = Tracks::get_flagged()) echo("<a href=\"".SITE_LINK_REL."music/censor\">".AlertMessage::basic("warning","Click here to view them.", "Tracks have been flagged for censorship.")."</a>" );
+if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href=\"".SITE_LINK_REL."music/censor\">Click here to view them.</a>", "Tracks have been flagged for censorship."));
 
 echo("
 <div class=\"row\">
