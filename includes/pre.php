@@ -20,10 +20,10 @@ if(file_exists("/etc/digiplay.conf")) {
 	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
 	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
 	define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
-} elseif(file_exists(SITE_PATH."includes/config.php")) {
-	require_once("config.php");
+} elseif(file_exists(SITE_PATH."includes/db_config.php")) {
+	require_once("db_config.php");
 } else {
-	die("Fatal error: Could not open /etc/digiplay.conf or includes/config.php.  Cannot continue.");
+	die("Fatal error: Could not open /etc/digiplay.conf or includes/db_config.php.  Cannot continue.");
 }
 
 if (get_magic_quotes_gpc()) {
