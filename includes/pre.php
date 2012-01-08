@@ -7,8 +7,24 @@ ini_set("html_errors",false);
 ini_set("session.use_only_cookies",true);
 ini_set("date.timezone","Europe/London");
 
+function remove_comments($str) {
+	if(substr($str,0,1) == "#") return false;
+	else return true;
+}
+
 // Include config file
-require_once("config.php");
+if(file_exists("/etc/digiplay.conf")) {
+	$local_config = parse_ini_file("/etc/digiplay.conf");
+	define("DATABASE_DPS_HOST", $local_config["DB_HOST"]);
+	define("DATABASE_DPS_PORT", $local_config["DB_PORT"]);
+	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
+	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
+	define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
+} elseif(file_exists(SITE_PATH."includes/config.php")) {
+	require_once("config.php");
+} else {
+	die("Fatal error: Could not open /etc/digiplay.conf or includes/config.php.  Cannot continue.");
+}
 
 if (get_magic_quotes_gpc()) {
     function stripslashes_deep($value){
