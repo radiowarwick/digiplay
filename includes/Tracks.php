@@ -53,13 +53,20 @@ class Tracks{
     	return $tracks;
 	}
 
-	public function get_censored() {
+	public function get_censored($limit = 0,$offset = 0) {
 		$type = AudioTypes::get("music")->get_id();
+		$limit = ($limit > 0)? " LIMIT ".$limit : "";
+		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND censor = 't' ORDER BY import_date DESC;");
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND censor = 't' ORDER BY import_date DESC".$limit.$offset);
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;
     	return $tracks;
+	}
+
+	public function count_censored() {
+		$type = AudioTypes::get("music")->get_id();
+		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(id) FROM audio WHERE type = ".$type." AND censor = 't';"),NULL,0);
 	}
 }
 ?>
