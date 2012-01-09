@@ -70,7 +70,19 @@ echo("
 		});
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
-	".(Session::is_group_user("music_admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:"))."
+	".(Session::is_group_user("music_admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
+	if($_REQUEST["flag"]) {
+		if($track->is_flagged()) {
+			$track->set_flagged(false);
+			$track->save();
+			echo(AlertMessage::basic("success","This track has been unflagged for censorship.","Track unflagged!"));
+		} else {
+			$track->set_flagged(true);
+			$track->save();
+			echo(AlertMessage::basic("success","This track has been flagged for censorship and will be reviewed in due course.","Track flagged!"));
+		}
+	}
+	echo("
 	<div class=\"row\">
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
@@ -174,6 +186,15 @@ echo("
 					<div class=\"clearfix\">
 						<div class=\"input\">
 							<input type=\"submit\" class=\"btn primary\" value=\"Save\">
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form class=\"flag-track-form form-stacked\" action=\"\" method=\"POST\">
+				<fieldset>
+					<div class=\"clearfix\">
+						<div class=\"input\">
+							<input type=\"submit\" name=\"flag\" class=\"btn danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
 						</div>
 					</div>
 				</fieldset>
