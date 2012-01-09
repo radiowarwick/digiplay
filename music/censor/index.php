@@ -64,6 +64,7 @@ if($_REQUEST["unflag"]) {
 }
 
 echo("<h2>Flagged for Censorship</h2>");
+echo("<strong>To flag a track for censorship, search for it in the music library, click the <img src=\"".SITE_LINK_REL."images/icons/information.png\" style=\"position:relative; top: 3px;\" /> and click the \"Flag Track\" button.</strong>");
 if($flagged = Tracks::get_flagged()) {
 	echo("
 <table class=\"condensed-table zebra-striped\" cellspacing=\"0\">
