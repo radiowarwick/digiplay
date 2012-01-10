@@ -7,25 +7,6 @@ ini_set("html_errors",false);
 ini_set("session.use_only_cookies",true);
 ini_set("date.timezone","Europe/London");
 
-function remove_comments($str) {
-	if(substr($str,0,1) == "#") return false;
-	else return true;
-}
-
-// Include config file
-if(file_exists("/etc/digiplay.conf")) {
-	$local_config = parse_ini_file("/etc/digiplay.conf");
-	define("DATABASE_DPS_HOST", $local_config["DB_HOST"]);
-	define("DATABASE_DPS_PORT", $local_config["DB_PORT"]);
-	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
-	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
-	define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
-} elseif(file_exists(SITE_PATH."includes/db_config.php")) {
-	require_once("db_config.php");
-} else {
-	die("Fatal error: Could not open /etc/digiplay.conf or includes/db_config.php.  Cannot continue.");
-}
-
 if (get_magic_quotes_gpc()) {
     function stripslashes_deep($value){
         $value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
@@ -73,6 +54,21 @@ if (get_magic_quotes_gpc()) {
 	define("SITE_LINK_REL",	str_repeat("../",count($request) - count($domain_to_install) - 2));
 
 	unset($root_to_file,$root_to_install,$docroot_to_file,$install_to_file,$request,$domain_to_install);
+
+	// Include config file
+	if(file_exists(SITE_FILE_PATH."digiplay.conf")) {
+		$local_config = parse_ini_file(SITE_FILE_PATH."digiplay.conf");
+	} elseif(file_exists("/etc/digiplay.conf")) {
+		$local_config = parse_ini_file("/etc/digiplay.conf");
+	} else {
+		die("Fatal error: Could not open ".SITE_FILE_PATH."digiplay.conf or /etc/digiplay.conf.  Cannot continue.");
+	}
+
+	define("DATABASE_DPS_HOST", $local_config["DB_HOST"]);
+	define("DATABASE_DPS_PORT", $local_config["DB_PORT"]);
+	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
+	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
+	define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
 }
 
 session_start();
