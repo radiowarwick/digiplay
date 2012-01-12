@@ -1,0 +1,39 @@
+.jp-progress-wrap { width:620px;  position:absolute; top:5px; left:80px; }
+.jp-progress { width:620px; height:80px; -webkit-background-size: 620px 80px; }
+.jp-seek-bar, .jp-play-bar { height:80px; position: absolute; }
+.jp-play-bar { border-right:2px rgba(255,0,0,0.8) solid; position:relative; }
+.jp-volume-bar { border:1px solid #555; width:200px; height:30px; }
+.jp-volume-bar-value { border-right:2px rgba(255,0,0,0.8) solid; height:30px; }
+
+.jp-controls { width: 52px; height:52px; list-style:none; padding:0px; margin:0px; position:absolute; top:19px; left:14px; z-index:1;}
+.jp-controls li { padding:0px; margin:0px; display:none; }
+.jp-controls li a { width:52px; height:52px; background-image:url(../images/playpause.png); text-indent:-1000px; overflow:hidden; display:block; }
+.jp-controls li.dps-file-loading { display:block; padding: 18px; }
+.jp-play { background-position:0px 0px; }
+.jp-play:hover { background-position:0px -52px; }
+
+.jp-pause { background-position:0px -52px; }
+.jp-pause:hover { background-position:-52px -52px; }
+
+.jp-gui { user-select:none;  width:700px; height:105px; background: #eee; position:relative; border-radius: 4px; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); margin-top:20px; margin-bottom:10px; }
+
+.jp-timestamp, .jp-timestamp-placeholder { font-size:0.8em; text-align:center; height:20px; width:80px; line-height:20px; position:absolute; left:0px; top:85px; z-index:1; }
+.jp-current-time, .jp-duration { display:inline; }
+.jp-timestamp { display:none; }
+.dps-add-marker, .dps-marker-label { width:12px; height:12px; color:#FFF; text-align:center; line-height:10px; position:absolute; bottom:-16px; right:-7px; font-size:0.8em; font-weight:bold; overflow:hidden; cursor:pointer; padding:0px; z-index:20; }
+
+.dps-add-marker { background:#00A2C4; }
+.dps-marker-label { background:#000; }
+
+.dps-markers { position:relative; }
+.dps-marker { border-right:2px rgba(0,0,0,0.9) solid; position:relative; height:80px; position:absolute; }
+
+.dps-marker.in { width:3.8709678621437136%; }
+.dps-marker.out { width: 82.25806200743554%; }
+
+.dps-marker.in .dps-marker-label:before { content:'>'; }
+.dps-marker.out .dps-marker-label:before { content:'<'; }
+
+.dps-waveform { display:none; background:#00A2C4; background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#004B5A), color-stop(50%,#00A2C4), color-stop(100%,#004B5A)); position:absolute; height:80px; }
+.dps-waveform img { width:620px; height:80px; }
+.dps-waveform-loading { position:absolute; left:302px; top:32px; }

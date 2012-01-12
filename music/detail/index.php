@@ -3,6 +3,8 @@ require_once('pre.php');
 Output::set_title("Track Detail");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 Output::add_script(SITE_LINK_REL."js/bootstrap-alerts.js");
+Output::add_script(SITE_LINK_REL."js/jquery.jplayer.min.js");
+Output::add_stylesheet(SITE_LINK_REL."css/jplayer.css");
 
 MainTemplate::set_subtitle("View and edit track metadata");
 
@@ -66,7 +68,27 @@ echo("
 						$('.alert-message').show('fast').alert();
 					}
 				})
-			})
+			});
+
+   			$(\"#jquery_jplayer_1\").jPlayer({
+				ready: function(event) {
+					$(this).jPlayer(\"setMedia\", {
+						mp3: \"../../lib/preview/preview.php?id=".$track->get_id()."\"
+					});
+				},
+				supplied: \"mp3\"
+			});
+			$(\"#jquery_jplayer_1\").bind($.jPlayer.event.loadeddata, function(event) {
+				$('.jp-controls li').show();
+				$('.jp-controls li.dps-file-loading').hide();
+				$('.jp-timestamp-placeholder').hide();
+				$('.jp-timestamp').show();
+			});
+			
+			$('.dps-waveform img').load(function(){
+				$('.dps-waveform-loading').fadeOut('fast', function(){ $('.dps-waveform').fadeIn(); });
+			});
+
 		});
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
@@ -83,6 +105,38 @@ echo("
 		}
 	}
 	echo("
+
+       <div id=\"jquery_jplayer_1\" class=\"jp-jplayer\"></div>
+        
+        <div id=\"jp_container_1\" class=\"jp-audio\">
+            <div class=\"jp-type-single\">
+                <div class=\"jp-gui jp-interface\">
+                    <ul class=\"jp-controls\">
+                        <li class=\"dps-file-loading\"><img src=\"".SITE_LINK_REL."images/ajax-loader.gif\"></li>
+                        <li><a href=\"javascript:;\" class=\"jp-play\" tabindex=\"1\">play</a></li>
+                        <li><a href=\"javascript:;\" class=\"jp-pause\" tabindex=\"1\">pause</a></li>
+                    </ul>
+                    
+                    <div class=\"jp-progress-wrap\">
+                    <div class=\"jp-progress\">
+			   <img class=\"dps-waveform-loading\" src=\"".SITE_LINK_REL."images/ajax-loader.gif\" />
+			   <div class=\"dps-waveform\"><img src=\"".SITE_LINK_REL."lib/waveformgen/waveform.php?id=".$track->get_id()."\" /></div>
+                        <div class=\"jp-seek-bar\">
+                            <div class=\"jp-play-bar\"></div>
+                        </div>
+                    </div>
+			</div>
+			<div class=\"jp-timestamp-placeholder\">
+			Loading Audio
+			</div>
+			<div class=\"jp-timestamp\">
+                    <div class=\"jp-current-time\"></div> /
+                    <div class=\"jp-duration\"></div>    </div>               
+                </div>
+
+            </div>
+        </div>
+
 	<div class=\"row\">
 		<div class=\"span7\">
 			<form class=\"track-detail-form\" action=\"\" method=\"post\">
