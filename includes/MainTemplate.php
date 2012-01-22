@@ -56,8 +56,13 @@ class MainTemplate implements Template{
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-buttons.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-twipsy.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-alerts.js\"></script>
-		<link rel=\"stylesheet/less\" href=\"".SITE_LINK_REL."lib/bootstrap.less\" />
-		<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />
+		<link rel=\"stylesheet/less\" href=\"".SITE_LINK_REL."lib/bootstrap.less\" />";
+	if(count(Output::get_less_stylesheets())>0)
+		foreach(Output::get_less_stylesheets() AS $src){
+			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet/less\"/>";
+		}
+
+	$return .="	<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>";
 	if(count(Output::get_stylesheets())>0)
 		foreach(Output::get_stylesheets() AS $src){

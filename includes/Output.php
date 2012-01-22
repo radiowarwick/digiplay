@@ -1,6 +1,7 @@
 <?php
 class Output{
 	protected static $stylesheets	= array();
+	protected static $less = array();
 	protected static $scripts	= array();
 	protected static $feeds	= array();
 	protected static $title		= "Untitled Page";
@@ -26,6 +27,12 @@ class Output{
 	}
 	public static function get_stylesheets(){
 		return self::$stylesheets;
+	}
+	public static function add_less_stylesheet($stylesheet){
+		self::$less[] = $stylesheet;
+	}
+	public static function get_less_stylesheets(){
+		return self::$less;
 	}
 	public static function add_script($script){
 		self::$scripts[] = $script;
