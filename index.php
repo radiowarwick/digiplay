@@ -49,10 +49,10 @@ $(function () {
 			<div class=\"span5\">
 				<h2>Sustainer Service</h2>
 				<dl>
-					<dt>Tracks on Sue</dt>
-					<dd>".Sue::get_total_tracks()."</dd>
-					<dt>Length of Sue Playlist</dt>
-					<dd>".total_track_time(Time::seconds_to_dhms(Sue::get_total_length()))."</dd>
+					<dt>Tracks on Sustainer</dt>
+					<dd>".Sustainer::get_total_tracks()."</dd>
+					<dt>Length of Sustainer Playlist</dt>
+					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
 			</div>
 			<div class=\"span5\">
