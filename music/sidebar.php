@@ -9,6 +9,12 @@ function sidebar() {
 		array("upload","Upload Tracks")
 	);
 	$return = $menu->output(SITE_LINK_REL."music/",6);
+	$return .= "
+	<h3>Music Library</h3>
+	<dl>
+		<dt>Tracks Stored</dt>
+		<dd>".number_format(Tracks::get_total_tracks())."</dd>
+	</dl>";
 	return $return;
 }
 ?>

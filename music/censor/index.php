@@ -88,7 +88,7 @@ if($flagged = Tracks::get_flagged()) {
 				<strong>Artist:</strong> ".$flag->get_artists_str()."<br />
 				<strong>Album:</strong> ".$flag->get_album()->get_name()."<br />
 				<strong>Year:</strong> ".$flag->get_year()."<br />
-				<strong>Length:</strong> ".$flag->get_length_formatted()."<br />
+				<strong>Length:</strong> ".Time::format_succinct($flag->get_length())."<br />
 				<strong>Origin:</strong> ".$flag->get_origin()."<br />
 				".($flag->get_reclibid()? "<strong>Reclib ID:</strong> ".$flag->get_reclibid()."<br />" : "")."
 				<strong>On Sue:</strong> ".($flag->is_sustainer()? "Yes" : "No")."<br />
@@ -146,7 +146,7 @@ if($censored = Tracks::get_censored($limit,(($page-1)*$limit))) {
 				<strong>Artist:</strong> ".$censor->get_artists_str()."<br />
 				<strong>Album:</strong> ".$censor->get_album()->get_name()."<br />
 				<strong>Year:</strong> ".$censor->get_year()."<br />
-				<strong>Length:</strong> ".$censor->get_length_formatted()."<br />
+				<strong>Length:</strong> ".Time::format_succinct($censor->get_length())."<br />
 				<strong>Origin:</strong> ".$censor->get_origin()."<br />
 				".($censor->get_reclibid()? "<strong>Reclib ID:</strong> ".$censor->get_reclibid()."<br />" : "")."
 				<strong>On Sue:</strong> ".($censor->is_sustainer()? "Yes" : "No")."<br />

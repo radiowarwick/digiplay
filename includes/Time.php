@@ -15,5 +15,23 @@ class Time {
 		$return = array('days' => $days, 'hours' => $hours, 'minutes' => $minutes, 'seconds' => $remaining);
 		return array_filter($return);
 	}
+
+	public function format_pretty($time) {
+		$time_arr = Time::seconds_to_dhms($time);
+		$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
+		$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
+		$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]." minutes, " : "";
+		$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
+		return $time_str;
+	}
+
+	public function format_succinct($time) {
+		$time_arr = Time::seconds_to_dhms($time);
+		$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
+		$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
+		$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]."m " : "0m ";
+		$time_str .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
+		return $time_str;
+	}
 }
 ?>

@@ -176,7 +176,7 @@ echo("
 					<div class=\"clearfix\">
 						<label for=\"length\">Length</label>
 						<div class=\"input\">
-							<span class=\"uneditable-input\">".$track->get_length_formatted()."</span>
+							<span class=\"uneditable-input\">".Time::format_succinct($track->get_length())."</span>
 						</div>
 					</div>
 					<div class=\"clearfix\">
