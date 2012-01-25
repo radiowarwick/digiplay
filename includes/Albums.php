@@ -24,4 +24,9 @@ class Albums {
 			return pg_fetch_object($result,NULL,"Album");
 		} else return false;
 	}
+
+	public function count() {
+		$result = DigiplayDB::query("SELECT count(id) FROM albums;");
+		return pg_fetch_result($result,NULL,0);
+	}
 }

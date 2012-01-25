@@ -25,4 +25,9 @@ class Artists {
                  $artists[] = $object;
     	return ((count($artists) > 0)? $artists : false);
 	}
+
+	public function count() {
+		$result = DigiplayDB::query("SELECT count(id) FROM artists;");
+		return pg_fetch_result($result,NULL,0);
+	}
 }
