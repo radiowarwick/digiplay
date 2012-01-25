@@ -89,6 +89,8 @@ body {
   margin-bottom:10px;
 }
 
+table .icon { width: 16px; }
+
 .login-form { margin-left: -70px ; margin-top: -20px; }
 
 .footer {

@@ -1,25 +1,26 @@
 <?php
 class Playlist {
-	protected $name;
 	protected $id;
-	protected $tracks;
+	protected $name;
+	protected $sortorder;
+
+	public function get_id(){
+		return $this->id;
+	}
 
 	public function get_name(){
 		return $this->name;
 	}
-	public function get_id(){
-		return $this->id;
+
+	public function set_sortorder(){
+		return $this->sortorder;
 	}
 	
 	public function get_tracks(){
-		return $this->tracks;
-	}
-	
-	public function num_tracks(){
-		return count($this->tracks);
+		return Tracks::get_playlisted($this);
 	}
 
 	public function add_track($track){
-		$this->tracks[] = $track;
+		$sql = "";
 	}
 }

@@ -27,9 +27,13 @@ class Tracks{
 		return $length;
 	}
 
-	public function get_playlisted() {
+	public function get_playlisted($playlist = NULL) {
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid);");
+		if($playlist) {
+			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = ".$playlist->get_id());
+		} else {
+			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid);");
+		}
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;
     	return $tracks;
