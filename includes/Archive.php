@@ -20,5 +20,12 @@ class Archive {
 	public function get_remotepath() {
 		return $this->remotepath;
 	}
+
+	public function get_total_space() {
+		return disk_total_space($this->localpath);
+	}
+	public function get_free_space() {
+		return disk_free_space($this->localpath);		
+	}
 }
 ?>
