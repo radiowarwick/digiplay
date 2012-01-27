@@ -16,8 +16,22 @@ $(function() {
 	$('.zebra-striped tbody').sortable({ 
 		axis: 'y',
 		handle: '.move',
-		containment: 'parent',
-		helper: fixHelper
+		helper: fixHelper,
+		update : function () { 
+            $.ajax({
+                type: \"POST\",
+                url: \"/ajax/update-playlist-sortorder.php\",
+                data: $(\".sortorder\").serialize(),
+                success: function(data) {
+                	if(data == \"success\") {
+                		$('.ajax-loader').remove();
+                	} else {
+                		$('.sortorder').before('".AlertMessage::basic("error","'+data+'","Error!")."');
+                		$('.alert-message').alert();
+                	}
+                }
+            });
+        }
 	}).disableSelection();
 });
 </script>");
@@ -25,6 +39,7 @@ $(function() {
 echo("<h2>Current playlists:</h2>");
 
 echo("
+<form class=\"sortorder\">
 <table class=\"zebra-striped\">
 	<thead>
 		<tr>
@@ -45,6 +60,7 @@ foreach (Playlists::get_all() as $playlist) {
 			<td>
 				<a href=\"".SITE_LINK_REL."playlists/edit/".$playlist->get_id()."\">
 					<img src=\"".SITE_LINK_REL."images/icons/information.png\" />
+					<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 				</a>
 			</td>
 			<td>".$playlist->get_name()."</td>
@@ -69,5 +85,6 @@ foreach (Playlists::get_all() as $playlist) {
 echo("
 	</tbody>
 </table>
+</form>
 ");
 ?>
