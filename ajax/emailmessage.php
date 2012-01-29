@@ -1,6 +1,5 @@
 <?php
 require_once("pre.php");
-Output::set_template();
 
 if (is_numeric($_GET['id'])) {
     $email = Emails::get_by_id($_GET['id']);

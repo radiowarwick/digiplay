@@ -1,6 +1,5 @@
 <?php
 require_once("pre.php");
-Output::set_template();
 
 $upload_handler = new UploadHandler();
 

@@ -1,6 +1,5 @@
 <?php
 require_once("pre.php");
-Output::set_template();
 
 if(Session::is_group_user('playlist_admin')){
 	foreach($_POST["id"] as $key => $id) {
