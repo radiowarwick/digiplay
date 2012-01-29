@@ -9,6 +9,6 @@ if(Session::is_group_user('music_admin')){
 	}
 	exit("success");
 } else {
-	exit("Error: You do not have permission to modify this.");
+	exit("You do not have permission to modify this.");
 }
 ?>

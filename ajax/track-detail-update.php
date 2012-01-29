@@ -4,7 +4,7 @@ Output::set_template();
 
 if(Session::is_group_user('music_admin')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);
-	if(!$_REQUEST["title"]) exit("Error: You must specify a title");
+	if(!$_REQUEST["title"]) exit("You must specify a title");
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
 
 	$curr_artists_obj = $track->get_artists();
@@ -20,7 +20,7 @@ if(Session::is_group_user('music_admin')){
 
 	if($_REQUEST["year"] != $track->get_year()) $track->set_year($_REQUEST["year"]);
 
-	if(!$_REQUEST["origin"]) exit("Error: You must specify an origin");
+	if(!$_REQUEST["origin"]) exit("You must specify an origin");
 	if($_REQUEST["origin"] != $track->get_origin()) $track->set_origin($_REQUEST["origin"]);
 
 	if($_REQUEST["reclibid"] != $track->get_reclibid()) $track->set_reclibid($_REQUEST["reclibid"]);
@@ -29,13 +29,13 @@ if(Session::is_group_user('music_admin')){
 	$track->set_sustainer($_REQUEST["sustainer"]);
 
 	$result = $track->save();
-	if(!$result) exit("Error: Something is incorrect.  You may have discovered a bug!");
+	if(!$result) exit("Something is incorrect.  You may have discovered a bug!");
 
 	$result = $track->save_audio();
-	if(!$result) exit("Error: Something is incorrect.  You may have discovered a bug!");
+	if(!$result) exit("Something is incorrect.  You may have discovered a bug!");
 
 	exit("success");
 } else {
-	exit("Error: You do not have permission to modify this.");
+	exit("You do not have permission to modify this.");
 }
 ?>
