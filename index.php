@@ -62,7 +62,7 @@ $(function () {
 				<a href=\"playlists\" class=\"btn-primary btn\">Edit Playlists &raquo;</a>
 				<a href=\"sue/schedule\" class=\"btn-primary btn\">Schedule Prerecorded Content &raquo;</a>
 			":"
-				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\"> to access restricted content</small>" : "")."</h2><br />
+				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h2><br />
 				<form class=\"login-form form-horizontal\" action=\"ajax/login\" method=\"post\">
 					<fieldset>
 						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
