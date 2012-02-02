@@ -141,15 +141,15 @@ class MainTemplate implements Template{
 			<div class=\"row\">";
 	if (isset(self::$sidebar)){
 		$return .= "
-				<div class=\"span4\">
+				<div class=\"span3\">
 					<div class=\"well\">".
 					self::$sidebar."
 					</div>
 				</div>
-				<div class=\"span12\">";
+				<div class=\"span9\">";
 	} else {
 		$return .= "
-				<div class=\"span16\">";
+				<div class=\"span12\">";
 	}
 	
 	$return .= $content;
