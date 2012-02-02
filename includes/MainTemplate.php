@@ -54,7 +54,7 @@ class MainTemplate implements Template{
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/jquery-1.7.1.min.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-modal.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-buttons.js\"></script>
-		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-twipsy.js\"></script>
+		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-tooltip.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-alerts.js\"></script>
 		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />";
 	if(count(Output::get_less_stylesheets())>0) {
@@ -82,7 +82,7 @@ class MainTemplate implements Template{
 	$return .= "
 	<script type=\"text/javascript\">
 		$(function () {
-			$('a[rel=\"twipsy\"]').twipsy();
+			$('a[rel=\"twipsy\"]').tooltip();
 			$('.alert-message').alert();
 		});
 	</script>
