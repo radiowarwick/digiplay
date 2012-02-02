@@ -142,7 +142,7 @@ class MainTemplate implements Template{
 	if (isset(self::$sidebar)){
 		$return .= "
 				<div class=\"span3\">
-					<div class=\"well\">".
+					<div class=\"well\" style=\"padding: 8px 0;\">".
 					self::$sidebar."
 					</div>
 				</div>
