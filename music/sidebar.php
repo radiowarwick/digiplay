@@ -2,14 +2,17 @@
 function sidebar() {
 	$menu = new Menu;
 	$menu->add_many(
-		array("index.php","Library Overview"),
-		array("search", "Search Tracks"),
-		array("request","Request Tracks"),
-		array("censor","Tag for Censorship"),
-		array("upload","Upload Tracks")
+		array("index.php","Library Overview","home"),
+		array("search", "Search Tracks", "search"),
+		array("request","Request Tracks", "question-sign"),
+		array("censor","Tag for Censorship", "exclamation-sign"),
+		array("upload","Upload Tracks", "upload")
 	);
-	$return = $menu->output(SITE_LINK_REL."music/",6);
-	$return .= "
+	$site_path_array = explode("/",SITE_PAGE);
+
+	$menu->set_active($site_path_array[1]);
+	$return = $menu->output(SITE_LINK_REL."music/",6,"nav nav-list");
+	$return .= "<div style=\"padding: 19px\">
 	<h3>Music Library</h3>
 	<dl>
 		<dt>Tracks</dt>
@@ -38,6 +41,8 @@ function sidebar() {
 		<dt>".$archive->get_name()."</dt>
 		<dd>".bytes($archive->get_free_space())." free of ".bytes($archive->get_total_space())."</dd>";
 	}
+	$return .= "</dl>
+	</div>";
 	return $return;
 }
 ?>
