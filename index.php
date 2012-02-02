@@ -35,7 +35,7 @@ $(function () {
 <?php
 	MainTemplate::set_summary("
 		<div class=\"row\">
-			<div class=\"span5\">
+			<div class=\"span4\">
 				<h2>Music Library</h2>
 				<dl>
 					<dt>Tracks Stored</dt>
@@ -46,7 +46,7 @@ $(function () {
 					<dd>".count(Tracks::get_playlisted())."</dd>
 				</dl>
 			</div>
-			<div class=\"span5\">
+			<div class=\"span4\">
 				<h2>Sustainer Service</h2>
 				<dl>
 					<dt>Tracks on Sustainer</dt>
@@ -55,31 +55,31 @@ $(function () {
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
 			</div>
-			<div class=\"span5\">
+			<div class=\"span4\">
 			".((Session::is_user())? "
 				<h2>Common Tasks</h2>
-				<a href=\"upload\" class=\"btn primary\">Upload Audio &raquo;</a>
-				<a href=\"playlists\" class=\"btn primary\">Edit Playlists &raquo;</a>
-				<a href=\"sue/schedule\" class=\"btn primary\">Schedule Prerecorded Content &raquo;</a>
+				<a href=\"upload\" class=\"btn-primary btn\">Upload Audio &raquo;</a>
+				<a href=\"playlists\" class=\"btn-primary btn\">Edit Playlists &raquo;</a>
+				<a href=\"sue/schedule\" class=\"btn-primary btn\">Schedule Prerecorded Content &raquo;</a>
 			":"
-				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\"> to access restricted content</small>" : "")."</h2>
-				<form class=\"login-form\" action=\"ajax/login\" method=\"post\">
+				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\"> to access restricted content</small>" : "")."</h2><br />
+				<form class=\"login-form form-horizontal\" action=\"ajax/login\" method=\"post\">
 					<fieldset>
-						<div class=\"clearfix".(isset($_REQUEST['refer'])? " error" : "")."\">
-							<label for=\"username\">Username</label>
-							<div class=\"input\">
+						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
+							<label for=\"username\" class=\"control-label\">Username</label>
+							<div class=\"controls\">
 								<input id=\"username\" name=\"username\" type=\"text\" class=\"required\">
 							</div>
 						</div>
-						<div class=\"clearfix".(isset($_REQUEST['refer'])? " error" : "")."\">
-							<label for=\"password\">Password</label>
-							<div class=\"input\">
+						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
+							<label for=\"password\" class=\"control-label\">Password</label>
+							<div class=\"controls\">
 								<input id=\"password\" name=\"password\" type=\"password\" class=\"required\">
 							</div>
 						</div>
-						<div class=\"clearfix\">
-							<div class=\"input\">
-								<input type=\"submit\" class=\"btn primary\" id=\"submit\" name=\"submit\" value=\"Log In\">
+						<div class=\"control-group\">
+							<div class=\"controls\">
+								<input type=\"submit\" class=\"btn btn-primary\" id=\"submit\" name=\"submit\" value=\"Log In\">
 							</div>
 						</div>
 					</fieldset>

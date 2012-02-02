@@ -56,14 +56,15 @@ class MainTemplate implements Template{
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-buttons.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-twipsy.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-alerts.js\"></script>
-		<link rel=\"stylesheet/less\" href=\"".SITE_LINK_REL."lib/bootstrap.less\" />";
-	if(count(Output::get_less_stylesheets())>0)
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />";
+	if(count(Output::get_less_stylesheets())>0) {
 		foreach(Output::get_less_stylesheets() AS $src){
 			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet/less\"/>";
 		}
+		$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>";
+	}
 
-	$return .="	<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />
-		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>";
+	$return .="	<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />";
 	if(count(Output::get_stylesheets())>0)
 		foreach(Output::get_stylesheets() AS $src){
 			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>";
@@ -87,14 +88,14 @@ class MainTemplate implements Template{
 	</script>
 </head> 
 	<body> 
-		<div class=\"topbar\">
-			<div class=\"topbar-inner\">
+		<div class=\"navbar navbar-fixed-top\">
+			<div class=\"navbar-inner\">
 				<div class=\"container\">
-					<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>"
+				<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>"
 					.$main_menu->output(SITE_LINK_REL,6,"nav");
 					if(Session::is_user()) { $return .= "
-					<form class=\"pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
-            			<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
+					<form class=\"navbar-search pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+            			<input type=\"text\" class=\"search-query\" placeholder=\"Search Tracks\" name=\"q\">
 	          		</form>"; }
           			$return .= "
 				</div>
