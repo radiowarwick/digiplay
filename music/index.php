@@ -32,7 +32,7 @@ if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href
 
 echo("
 <div class=\"row\">
-	<div class=\"span6\">
+	<div class=\"span4\">
 	<h2>Library Statistics</h2>
 		<dl>
 			<dt>Tracks Stored</dt>
@@ -43,12 +43,12 @@ echo("
 			<dd>".count(Tracks::get_playlisted())."</dd>
 		</dl>
 	</div>
-	<div class=\"span6\">
+	<div class=\"span5\">
 		<h2>Requested Tracks</h2>
 		");
 		if($requested = Requests::get_latest(3)) {
 			echo("
-		<table class=\"condensed-table zebra-striped\" cellspacing=\"0\">
+		<table class=\"table table-striped table-condensed\" cellspacing=\"0\">
 			<thead>
 				<tr>
 					<th class=\"icon\"></th>
@@ -63,7 +63,7 @@ echo("
 			<tr id=\"".$request->get_id()."\">
 				<td class=\"icon\">
 					<a href=\"#\" class=\"track-info\">
-						<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+						<i class=\"icon-info-sign\"></i>
 					</a>
 					<div class=\"hover-info\">
 						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
@@ -74,8 +74,8 @@ echo("
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
 				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("music_admin")? "
-				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/add.png\" alt=\"Upload this track\"></td>
-				".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\" alt=\"Delete this request\"></td>" : "") : "")."
+				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-plus-sign\"></i></td>
+				".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-minus-sign\"></td>" : "") : "")."
 			</tr>");
 			}
 			echo("
@@ -101,7 +101,7 @@ $tracks = Tracks::get_newest();
 
 if($tracks) {
 	echo("<h2>10 newest tracks</h2>");
-	echo("<table class=\"zebra-striped\" cellspacing=\"0\">
+	echo("<table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
 			<th class=\"icon\"> </th>
@@ -123,7 +123,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
-					<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+					<i class=\"icon-info-sign\"></i>
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$artist_str."<br />
@@ -140,8 +140,8 @@ if($tracks) {
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$import_date."</td>
 			<td class=\"length\">".Time::format_succinct($track->get_length())."</td>
-			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
+			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><i class=\"icon-volume-up\"></i></td>
+			".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
