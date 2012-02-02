@@ -2,12 +2,12 @@
 class Menu{
 	private $menu;
 	
-	public function add($url,$label){
-		$this->menu[$url]	= new MenuNode($url,$label);
+	public function add($url,$label,$icon=""){
+		$this->menu[$url]	= new MenuNode($url,$label,$icon);
 	}
 	public function add_many(){
 		foreach(func_get_args() as $subarray)
-			$this->add($subarray[0],$subarray[1]);
+			$this->add($subarray[0],$subarray[1],$subarray[2]);
 	}
 	public function new_menu($id){
 		if(isset($this->menu[$id]))
