@@ -1,6 +1,7 @@
 <?php
 class MainTemplate implements Template{
 	protected static $sidebar;
+	protected static $menu;
 	protected static $subtitle;
 	protected static $masthead;
 	protected static $summary;
@@ -16,6 +17,9 @@ class MainTemplate implements Template{
 	public static function set_sidebar($sidebar) {
 		self::$sidebar = $sidebar;
 	}
+	public static function set_menu($menu) {
+		self::$menu = $menu;
+	}
 	public static function print_page($content){
 		if(strlen(SITE_PATH)>0){
 			$sitePathArray = explode("/",SITE_PATH);
@@ -24,6 +28,7 @@ class MainTemplate implements Template{
 				if(file_exists($file)){
 					include($file);
 					MainTemplate::set_sidebar(sidebar());
+					MainTemplate::set_menu(menu());
 				}
 			}
 			unset($sitePathArray,$i,$file);
@@ -139,14 +144,24 @@ class MainTemplate implements Template{
 
 	$return .= "
 			<div class=\"row\">";
-	if (isset(self::$sidebar)){
+	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
-				<div class=\"span3\">
-					<div class=\"well\" style=\"padding: 8px 0;\">".
+			<div class=\"span3\">";
+		if(isset(self::$menu)) {
+			$return .= "	
+					<div class=\"well\" style=\"padding: 8px 0; margin-bottom: 0;\">".
+					self::$menu."
+					</div>";
+		}
+		if(isset(self::$sidebar)) {
+			$return .= "	
+					<div>".
 					self::$sidebar."
-					</div>
-				</div>
-				<div class=\"span9\">";
+					</div>";
+		}
+		$return .= "
+			</div>
+			<div class=\"span9\">";
 	} else {
 		$return .= "
 				<div class=\"span12\">";

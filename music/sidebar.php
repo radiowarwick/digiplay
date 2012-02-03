@@ -1,5 +1,5 @@
 <?php
-function sidebar() {
+function menu() {
 	$menu = new Menu;
 	$menu->add_many(
 		array("index.php","Library Overview","home"),
@@ -11,7 +11,9 @@ function sidebar() {
 	$site_path_array = explode("/",SITE_PAGE);
 
 	$menu->set_active($site_path_array[1]);
-	$return = $menu->output(SITE_LINK_REL."music/",6,"nav nav-list");
+	return $menu->output(SITE_LINK_REL."music/",6,"nav nav-list");
+}
+function sidebar() {
 	$return .= "<div style=\"padding: 19px\">
 	<h3>Music Library</h3>
 	<dl>
@@ -45,4 +47,6 @@ function sidebar() {
 	</div>";
 	return $return;
 }
+
+
 ?>
