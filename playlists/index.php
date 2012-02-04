@@ -40,7 +40,7 @@ echo("<h2>Current playlists:</h2>");
 
 echo("
 <form class=\"sortorder\">
-<table class=\"zebra-striped\">
+<table class=\"table table-striped\">
 	<thead>
 		<tr>
 			<th class=\"icon\"></th>
