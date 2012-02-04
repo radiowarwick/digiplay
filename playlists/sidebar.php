@@ -1,12 +1,6 @@
 <?php
 function sidebar() {
-	$menu = new Menu;
-	$menu->add_many(
-		array("index.php","Playlists Overview"),
-		array("add/","Add a new playlist"),
-		array("sustainer/","Edit sustainer playlist")
-	);
-	$return = $menu->output(SITE_LINK_REL."playlists/",6);
+
 
 	$tracks = Tracks::get_playlisted();
 	foreach ($tracks as $track) { $total_length += $track->get_length(); }
@@ -34,5 +28,18 @@ function sidebar() {
 	</dl>";
 
 	return $return;
+}
+
+function menu() {
+	$menu = new Menu;
+	$menu->add_many(
+		array("index.php","Playlists Overview", "home"),
+		array("add/","Add a new playlist", "plus-sign"),
+		array("sustainer/","Edit sustainer playlist", "edit")
+	);
+	$site_path_array = explode("/",SITE_PAGE);
+
+	$menu->set_active($site_path_array[1]);
+	return $menu->output(SITE_LINK_REL."playlists/",6,"nav nav-list");
 }
 ?>
