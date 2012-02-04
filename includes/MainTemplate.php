@@ -155,7 +155,7 @@ class MainTemplate implements Template{
 		}
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div>".
+					<div style=\"padding: 19px;\">".
 					self::$sidebar."
 					</div>";
 		}

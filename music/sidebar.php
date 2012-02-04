@@ -14,7 +14,7 @@ function menu() {
 	return $menu->output(SITE_LINK_REL."music/",6,"nav nav-list");
 }
 function sidebar() {
-	$return .= "<div style=\"padding: 19px\">
+	$return .= "
 	<h3>Music Library</h3>
 	<dl>
 		<dt>Tracks</dt>
@@ -43,8 +43,7 @@ function sidebar() {
 		<dt>".$archive->get_name()."</dt>
 		<dd>".bytes($archive->get_free_space())." free of ".bytes($archive->get_total_space())."</dd>";
 	}
-	$return .= "</dl>
-	</div>";
+	$return .= "</dl>";
 	return $return;
 }
 
