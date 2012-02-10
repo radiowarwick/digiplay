@@ -14,7 +14,7 @@ $(function() {
     });
     return ui;
 	};
-	$('.zebra-striped tbody').sortable({ 
+	$('.table-striped tbody').sortable({ 
 		axis: 'y',
 		handle: '.move',
 		helper: fixHelper,
@@ -77,7 +77,7 @@ foreach (Playlists::get_all() as $playlist) {
 		<tr>
 			<td>
 				<a href=\"#\" class=\"info\">
-					<img src=\"".SITE_LINK_REL."images/icons/information.png\" />
+					<i class=\"icon-info-sign\"></i>
 					<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 				</a>
 				<div class=\"hover-info\">
@@ -95,17 +95,17 @@ foreach (Playlists::get_all() as $playlist) {
 		echo("
 			<td>
 				<a href=\"".SITE_LINK_REL."playlists/edit/".$playlist->get_id()."\" title=\"Edit this playlist\" rel=\"twipsy\">
-					<img src=\"".SITE_LINK_REL."images/icons/cd_edit.png\" />
+					<i class=\"icon-pencil\"></i>
 				</a>
 			</td>
 			<td>
 				<a href=\"".SITE_LINK_REL."playlists/edit/?delete=".$playlist->get_id()."\" title=\"Delete this playlist\" rel=\"twipsy\">
-					<img src=\"".SITE_LINK_REL."images/icons/delete.png\" />
+					<i class=\"icon-remove-sign\"></i>
 				</a>
 			</td>
 			<td>
 				<a href=\"#\" class=\"move\">
-					<img src=\"".SITE_LINK_REL."images/icons/move.png\" />
+					<i class=\"icon-move\"></i>
 				</a>
 			</td>
 		");
