@@ -10,6 +10,10 @@ Output::add_script(SITE_LINK_REL."js/jquery.fileupload-ui.js");
 MainTemplate::set_subtitle("Drag and drop music to add to the file importer");
 
 echo("
+<style>
+.name { width: 80%; }
+.size { width: 10%; }
+</style>
 <script>
 $(function () {
     'use strict';
@@ -62,22 +66,21 @@ $(function () {
 </script>
     <form id=\"fileupload\" action=\"".SITE_LINK_REL."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
         <div class=\"row\">
-            <div class=\"span12 fileupload-buttonbar\">
+            <div class=\"span9 fileupload-buttonbar\">
                 <div class=\"progressbar fileupload-progressbar\"><div style=\"width:0%;\"></div></div>
-                <span class=\"btn success fileinput-button\">
+                <span class=\"btn btn-success fileinput-button\">
                     <span>Add files...</span>
                     <input type=\"file\" name=\"files[]\" multiple>
                 </span>
-                <button type=\"submit\" class=\"btn primary start\">Start upload</button>
-                <button type=\"reset\" class=\"btn info cancel\">Cancel upload</button>
-                <button type=\"button\" class=\"btn danger delete\">Delete selected</button>
-                <input type=\"checkbox\" class=\"toggle\">
+                <button type=\"submit\" class=\"btn btn-primary start\">Start upload</button>
+                <button type=\"reset\" class=\"btn btn-info cancel\">Cancel upload</button>
+                <button type=\"button\" class=\"btn btn-danger delete\">Delete selected</button>
             </div>
         </div>
         <br>
         <div class=\"row\">
-            <div class=\"span12\">
-                <table class=\"zebra-striped\"><tbody class=\"files\"></tbody></table>
+            <div class=\"span9\">
+                <table class=\"table table-striped\"><tbody class=\"files\"></tbody></table>
             </div>
         </div>
     </form>
@@ -94,18 +97,17 @@ var fileUploadErrors = {
 <script id=\"template-upload\" type=\"text/html\">
 {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
     <tr class=\"template-upload fade\">
-        <td class=\"preview\"><span class=\"fade\"></span></td>
         <td class=\"name\">{%=file.name%}</td>
         <td class=\"size\">{%=o.formatFileSize(file.size)%}</td>
         {% if (file.error) { %}
             <td class=\"error\" colspan=\"2\"><span class=\"label important\">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
             <td class=\"progress\"><div class=\"progressbar\"><div style=\"width:0%;\"></div></div></td>
-            <td class=\"start\">{% if (!o.options.autoUpload) { %}<button class=\"btn primary\">Start</button>{% } %}</td>
+            <td class=\"start\">{% if (!o.options.autoUpload) { %}<button class=\"btn btn-primary\">Start</button>{% } %}</td>
         {% } else { %}
             <td colspan=\"2\"></td>
         {% } %}
-        <td class=\"cancel\">{% if (!i) { %}<button class=\"btn info\">Cancel</button>{% } %}</td>
+        <td class=\"cancel\">{% if (!i) { %}<button class=\"btn btn-info\">Cancel</button>{% } %}</td>
     </tr>
 {% } %}
 </script>
@@ -113,14 +115,10 @@ var fileUploadErrors = {
 {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
     <tr class=\"template-download fade\">
         {% if (file.error) { %}
-            <td></td>
             <td class=\"name\">{%=file.name%}</td>
             <td class=\"size\">{%=o.formatFileSize(file.size)%}</td>
             <td class=\"error\" colspan=\"2\"><span class=\"label important\">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
         {% } else { %}
-            <td class=\"preview\">{% if (file.thumbnail_url) { %}
-                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" rel=\"gallery\"><img src=\"{%=file.thumbnail_url%}\"></a>
-            {% } %}</td>
             <td class=\"name\">
                 <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" rel=\"{%=file.thumbnail_url&&'gallery'%}\">{%=file.name%}</a>
             </td>
@@ -128,8 +126,7 @@ var fileUploadErrors = {
             <td colspan=\"2\"></td>
         {% } %}
         <td class=\"delete\">
-            <button class=\"btn danger\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\">Delete</button>
-            <input type=\"checkbox\" name=\"delete\" value=\"1\">
+            <button class=\"btn btn-danger\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\">Delete</button>
         </td>
     </tr>
 {% } %}
