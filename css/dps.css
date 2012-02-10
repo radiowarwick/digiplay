@@ -90,6 +90,7 @@ body {
 }
 
 table .icon { width: 16px; }
+.hover-info { display: none; white-space: nowrap;}
 
 .login-form { margin-left: -80px ; margin-top: -20px; }
 
