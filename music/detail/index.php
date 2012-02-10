@@ -138,117 +138,118 @@ echo("
         </div>
 
 	<div class=\"row\">
-		<div class=\"span7\">
-			<form class=\"track-detail-form\" action=\"\" method=\"post\">
+		<div class=\"span6\">
+			<form class=\"track-detail-form form-horizontal\" action=\"\" method=\"post\">
 				<fieldset>
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"title\">Title</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"title\" class=\"required".$disabled."\" value=\"".$track->get_title()."\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"artist\">Artists</label>");
 						foreach($track->get_artists() as $artist) {
 							echo("
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"artist[]\" class=\"required".$disabled."\" value=\"".$artist->get_name()."\">
 						</div>");
 						}
 					echo("
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"new_artist[]\" class=\"click-clear".$disabled."\" placeholder=\"Add new artist...\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"album\">Album</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"album\" class=\"required".$disabled."\" value=\"".$track->get_album()->get_name()."\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"year\">Year</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"year\" class=\"".$disabled."\" value=\"".$track->get_year()."\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"length\">Length</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<span class=\"uneditable-input\">".Time::format_succinct($track->get_length())."</span>
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"origin\">Origin</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"origin\" class=\"required".$disabled."\" value=\"".$track->get_origin()."\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"reclibid\">Reclib ID</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input name=\"reclibid\" class=\"".$disabled."\" value=\"".$track->get_reclibid()."\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"censored\">Censored</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"censored\" class=\"".$disabled."\" ".($track->is_censored()? "checked" : "").">
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"sustainer\">On Sue</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"sustainer\" class=\"".$disabled."\" ".($track->is_sustainer()? "checked" : "").">
 						</div>
 					</div>
-					<div class=\"clearfix\">
-						<div class=\"input\">
-							<input type=\"submit\" class=\"btn primary\" value=\"Save\">
+					<div class=\"control-group\">
+						<div class=\"controls\">
+							<input type=\"submit\" class=\"btn btn-primary\" value=\"Save\">
 						</div>
 					</div>
 				</fieldset>
 			</form>
 		</div>
-		<div class=\"span5\">
+		<div class=\"span3\">
 			<form class=\"track-meta-form form-stacked\" action=\"".SITE_LINK_REL."ajax/meta-update\" method=\"POST\">
 				<fieldset>
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"notes\">Notes</label>
-						<div class=\"input\">
+						<div class=\"controls\">
 							<textarea name=\"notes\" class=\"".$disabled."\">".$track->get_notes()."</textarea>
 						</div>
 					</div>
-					<div class=\"clearfix\">
+					<div class=\"control-group\">
 						<label for=\"keyword\">Keywords</label>");
 						foreach($track->get_keywords() as $keyword) {
 							echo("
-						<div class=\"input\">
+						<div class=\"controls\">
 							<div class=\"keyword\">
-								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></a>
+								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\" rel=\"twipsy\" title=\"Delete this keyword\"><i class=\"icon-remove-sign\"></i></a>
 							</div>
 							<span class=\"uneditable-input\">".$keyword->get_text()."</span>
 						</div>");
 						}
 					echo("
-						<div class=\"input\">
-							<input name=\"new_keyword[]\" class=\"click-clear".$disabled."\" placeholder=\"Add new keyword...\">
+						<div class=\"input-prepend\">
+							<span class=\"add-on\"><i class=\"icon-tag\"></i></span>
+							<input name=\"new_keyword[]\" style=\"width: 183px\" class=\"click-clear".$disabled."\" placeholder=\"Add new keyword...\">
 						</div>
 					</div>
-					<div class=\"clearfix\">
-						<div class=\"input\">
-							<input type=\"submit\" class=\"btn primary\" value=\"Save\">
+					<div class=\"control-group\">
+						<div class=\"controls\">
+							<input type=\"submit\" class=\"btn btn-primary\" value=\"Save\">
 						</div>
 					</div>
 				</fieldset>
 			</form>
 			<form class=\"flag-track-form form-stacked\" action=\"\" method=\"POST\">
 				<fieldset>
-					<div class=\"clearfix\">
-						<div class=\"input\">
-							<input type=\"submit\" name=\"flag\" class=\"btn danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
+					<div class=\"control-group\">
+						<div class=\"controls\">
+							<input type=\"submit\" name=\"flag\" class=\"btn btn-danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
 						</div>
 					</div>
 				</fieldset>
