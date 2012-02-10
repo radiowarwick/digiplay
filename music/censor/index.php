@@ -82,7 +82,7 @@ if($flagged = Tracks::get_flagged()) {
 	<tr id=\"".$flag->get_id()."\">
 		<td class=\"icon\">
 			<a href=\"".SITE_LINK_REL."music/detail/".$flag->get_id()."\" class=\"track-info\">
-				<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+				<i class=\"icon-info-sign\"></i>
 			</a>
 			<div class=\"hover-info\">
 				<strong>Artist:</strong> ".$flag->get_artists_str()."<br />
@@ -97,7 +97,7 @@ if($flagged = Tracks::get_flagged()) {
 		<td class=\"artist\">".$flag->get_artists_str()."</td>
 		<td class=\"title\">".$flag->get_title()."</td>
 		".(Session::is_group_user("music_admin")? "
-		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?censor=".$flag->get_id()."\" class=\"censor\" title=\"Approve censorship\" rel=\"twipsy\"><i class=\"icon-okay-sign\"></i></td>
+		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?censor=".$flag->get_id()."\" class=\"censor\" title=\"Approve censorship\" rel=\"twipsy\"><i class=\"icon-ok-sign\"></i></td>
 		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?unflag=".$flag->get_id()."\" class=\"unflag\" title=\"Remove flag\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
 	</tr>");
 	}
