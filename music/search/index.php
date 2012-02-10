@@ -38,8 +38,8 @@ if($tracks) {
 	</script>");
 
 	echo("<h2>".$search["total"]." results for ".$query."</h2>");
-	echo("<div class=\"row\"><div class=\"span8\"><h4>Showing results ".$low." to ".$high."</h4></div><div class=\"span4\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
-	echo("<table class=\"zebra-striped\" cellspacing=\"0\">
+	echo("<div class=\"row\"><div class=\"span5\"><h4>Showing results ".$low." to ".$high."</h4></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
+	echo("<table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
 			<th class=\"icon\"> </th>
@@ -63,7 +63,7 @@ if($tracks) {
 		<tr>
 			<td class=\"icon\">
 				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
-					<img src=\"".SITE_LINK_REL."images/icons/information.png\">
+					<i class=\"icon-info-sign\"></i>
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$artist_str."<br />
@@ -80,8 +80,8 @@ if($tracks) {
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$album."</td>
 			<td class=\"length\">".Time::format_succinct($track->get_length())."</td>
-			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/sound.png\"></td>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><img src=\"".SITE_LINK_REL."images/icons/delete.png\"></td>" : "")."
+			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><i class=\"icon-volume-up\"></i></td>
+			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
