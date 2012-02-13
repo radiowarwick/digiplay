@@ -198,7 +198,7 @@ class MainTemplate implements Template{
 				<p>";
 	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"".SITE_LINK_REL."ajax/logout\" data-toggle=\"modal\" data-target=\"#logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a><br />";
 	else $return .= "Not logged in<br />";				
-	$return .= "Copyright &copy; 2011 Radio Warwick
+	$return .= "Copyright &copy; 2011-12 Radio Warwick
 				</p>
 			</div>
 		</footer>
