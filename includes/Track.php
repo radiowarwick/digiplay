@@ -78,6 +78,13 @@ class Track extends Audio{
 		}
 	}
 		
+	public function get_keywords_str() {
+		$artists = $this->get_keywords();
+		foreach($keywords as $keyword) $keyword_str .= $keyword->get_text().", ";
+		$keyword_str = substr($keyword_str,0,-2);
+		return $keyword_str;
+	}
+
 	public function add_keywords($keywords) {
 		if(!is_array($keywords)) {
 			$tmp = $keywords;
