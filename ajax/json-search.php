@@ -69,7 +69,6 @@ if($albums) {
 			$album = array(
 				'id' => $album_object->get_id(),
 				'title' => $album_object->get_name(),
-				'by' => $track_object->get_artists_str(),
 				'href' => SITE_LINK_ABS."music/search/?q=".urlencode($album_object->get_name())."&i=album"
 				);
 			array_push($albums_array, $album);
