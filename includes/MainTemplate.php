@@ -89,6 +89,34 @@ class MainTemplate implements Template{
 		$(function () {
 			$('a[rel=\"twipsy\"]').tooltip();
 			$('.alert-message').alert();
+			$(\"input.search-query\").keyup(function(){
+   				if(this.value.length<3){
+     				$(\"ul#quick-search\").slideUp(200,function(){
+        				return false;
+      				});
+    			}else{
+     				$.ajax({
+        				type: \"GET\",
+        				url: \"".SITE_LINK_REL."ajax/json-search.php?q=\"+this.value,
+        				dataType: \"json\",
+        				success: function(data){
+          					if(data.length<1){
+        						$(\"ul#quick-search\").slideUp(200);
+        					}else{
+            					var output_html = '';
+            					$.each(data, function(i, val) {
+              						output_html += '<li class=\"nav-header\">'+val.title+'</li>';
+              						$.each(val.data, function(i, data) {
+              							output_html += '<li><a href=\"'+data.href+'\">'+data.title+'</a></li>'
+              						});
+            					});
+            					$(\"ul#quick-search\").html(output_html);
+            					$(\"ul#quick-search\").slideDown(200);
+          					}
+        				}
+      				});
+    			}
+  			});
 		});
 	</script>
 </head> 
@@ -99,9 +127,12 @@ class MainTemplate implements Template{
 				<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>"
 					.$main_menu->output(SITE_LINK_REL,6,"nav");
 					if(Session::is_user()) { $return .= "
-					<form class=\"navbar-search pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
-            			<input type=\"text\" class=\"search-query\" placeholder=\"Search Tracks\" name=\"q\">
-	          		</form>"; }
+					<ul class=\"nav\">
+						<form class=\"navbar-search pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+            				<input type=\"text\" class=\"search-query\" placeholder=\"Search Tracks\" name=\"q\">
+            				</form>
+	          			<ul id=\"quick-search\" class=\"dropdown-menu\"></ul>
+	          		</ul>"; }
           			$return .= "
 				</div>
 			</div>
