@@ -18,6 +18,7 @@ class Paginator{
 	var $return;
 	var $default_n;
 	var $querystring;
+	var $index;
 	var $n_array;
 
 	function Paginator()
@@ -46,10 +47,11 @@ class Paginator{
 		$next_page = $this->current_page+1;
 
 		$this->querystring = urlencode($this->querystring);
+		$this->index = urlencode($this->index);
 
 		$this->return = "<div class=\"pagination\"><ul>";
 
-		$this->return .= ($this->current_page > 1 And $this->items_total >= 10) ? "<li class=\"prev\"><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&p=$prev_page&n=$this->items_per_page\">&laquo; Previous</a></li> ":"<li class=\"prev disabled\"><a href=\"#\">&laquo; Previous</a></li> ";
+		$this->return .= ($this->current_page > 1 And $this->items_total >= 10) ? "<li class=\"prev\"><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=$prev_page&n=$this->items_per_page\">&laquo; Previous</a></li> ":"<li class=\"prev disabled\"><a href=\"#\">&laquo; Previous</a></li> ";
 
 		if($this->num_pages > 10)
 		{
@@ -74,7 +76,7 @@ class Paginator{
 				// loop through all pages. if first, last, or in range, display
 				if($i==1 Or $i==$this->num_pages Or in_array($i,$this->range))
 				{
-					$this->return .= ($i == $this->current_page And $_GET['page'] != 'All') ? "<li class=\"active\"><a title=\"Go to page $i of $this->num_pages\" class=\"current\" href=\"#\">$i</a></li>":"<li><a class=\"paginate\" title=\"Go to page $i of $this->num_pages\" href=\"$_SERVER[PHP_SELF]?q=$this->querystring&p=$i&n=$this->items_per_page\">$i</a></li>";
+					$this->return .= ($i == $this->current_page And $_GET['page'] != 'All') ? "<li class=\"active\"><a title=\"Go to page $i of $this->num_pages\" class=\"current\" href=\"#\">$i</a></li>":"<li><a class=\"paginate\" title=\"Go to page $i of $this->num_pages\" href=\"$_SERVER[PHP_SELF]?q=$this->querystring&p=$i&i=$this->index&n=$this->items_per_page\">$i</a></li>";
 				}
 				if($this->range[$this->mid_range-1] < $this->num_pages-1 And $i == $this->range[$this->mid_range-1]) $this->return .= "<li class=\"disabled\"><a href=\"#\"> ... </a></li>";
 			}
@@ -83,10 +85,10 @@ class Paginator{
 		{
 			for($i=1;$i<=$this->num_pages;$i++)
 			{
-				$this->return .= ($i == $this->current_page) ? "<li class=\"active\"><a href=\"#\">$i</a></li>":"<li><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&p=$i&n=$this->items_per_page\">$i</a></li>";
+				$this->return .= ($i == $this->current_page) ? "<li class=\"active\"><a href=\"#\">$i</a></li>":"<li><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=$i&n=$this->items_per_page\">$i</a></li>";
 			}
 		}
-		$this->return .= (($this->current_page < $this->num_pages And $this->items_total >= 10) And ($_GET['page'] != 'All') And $this->current_page > 0) ? "<li class=\"next\"><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&p=$next_page&n=$this->items_per_page\">Next &raquo;</a></li>\n":"<li class=\"next disabled\"><a href=\"#\">&raquo; Next</a></li>\n";
+		$this->return .= (($this->current_page < $this->num_pages And $this->items_total >= 10) And ($_GET['page'] != 'All') And $this->current_page > 0) ? "<li class=\"next\"><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=$next_page&n=$this->items_per_page\">Next &raquo;</a></li>\n":"<li class=\"next disabled\"><a href=\"#\">&raquo; Next</a></li>\n";
 		$this->low = ($this->current_page <= 0) ? 0:($this->current_page-1) * $this->items_per_page;
 		if($this->current_page <= 0) $this->items_per_page = 0;
 		$this->limit = ($_GET['n'] == 'All') ? "":" LIMIT $this->low,$this->items_per_page";
@@ -97,7 +99,7 @@ class Paginator{
 		$items = '';
 		if(!isset($_GET['n'])) $this->items_per_page = $this->default_n;
 		foreach($this->n_array as $n_opt) $items .= ($n_opt == $this->items_per_page) ? "<option selected value=\"$n_opt\">$n_opt</option>\n":"<option value=\"$n_opt\">$n_opt</option>\n";
-		return "<span>Items per page </span> <select name=\"items-per-page\" class=\"span1\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&p=1&n='+this[this.selectedIndex].value;return false\">$items</select>\n";
+		return "<span>Items per page </span> <select name=\"items-per-page\" class=\"span1\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=1&n='+this[this.selectedIndex].value;return false\">$items</select>\n";
 	}
 	function display_jump_menu()
 	{
@@ -105,7 +107,7 @@ class Paginator{
 		{
 			$option .= ($i==$this->current_page) ? "<option value=\"$i\" selected>$i</option>\n":"<option value=\"$i\">$i</option>\n";
 		}
-		return "<span>Page </span> <select class=\"span1\" name=\"page-select\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&p='+this[this.selectedIndex].value+'&n=$this->items_per_page';return false\">$option</select>\n";
+		return "<span>Page </span> <select class=\"span1\" name=\"page-select\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p='+this[this.selectedIndex].value+'&n=$this->items_per_page';return false\">$option</select>\n";
 	}
 	function display_pages()
 	{

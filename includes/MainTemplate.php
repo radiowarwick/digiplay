@@ -105,11 +105,13 @@ class MainTemplate implements Template{
         					}else{
             					var output_html = '';
             					$.each(data, function(i, val) {
-              						output_html += '<li class=\"nav-header\">'+val.title+'</li>';
+              						output_html += '<li class=\"nav-header\">'+val.title+((typeof val.by === 'undefined')? '' : '<small>'+val.by+'</small>')+'</li>';
               						$.each(val.data, function(i, data) {
               							output_html += '<li><a href=\"'+data.href+'\">'+data.title+'</a></li>'
               						});
+									output_html += '<li><a href=\"'+val.href+'\">Full Search...</a></li>';
             					});
+								
             					$(\"ul#quick-search\").html(output_html);
             					$(\"ul#quick-search\").slideDown(200);
           					}

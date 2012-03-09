@@ -17,6 +17,7 @@ if($tracks) {
 	$pages = new Paginator;
 	$pages->items_per_page = $limit;
 	$pages->querystring = $query;
+	$pages->index = $index;
 	$pages->mid_range = 5;
 	$pages->items_total = $search["total"];
 	$pages->paginate();
