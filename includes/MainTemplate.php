@@ -61,6 +61,7 @@ class MainTemplate implements Template{
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-buttons.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-tooltip.js\"></script>
 		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-alerts.js\"></script>
+		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap-transition.js\"></script>
 		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />";
 	if(count(Output::get_less_stylesheets())>0) {
 		foreach(Output::get_less_stylesheets() AS $src){
