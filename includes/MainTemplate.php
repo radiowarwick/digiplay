@@ -154,7 +154,7 @@ class MainTemplate implements Template{
 					if(Session::is_user()) { $return .= "
 					<ul class=\"nav\">
 						<form class=\"navbar-search pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
-            				<input type=\"text\" class=\"search-query\" placeholder=\"Search Tracks\" name=\"q\">
+            				<input type=\"text\" class=\"search-query\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
             				</form>
 	          			<ul id=\"quick-search\" class=\"dropdown-menu\"></ul>
 	          		</ul>"; }
