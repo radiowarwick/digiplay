@@ -39,8 +39,17 @@ function sidebar() {
 	<h3>Archive Storage</h3>
 	<dl>";
 	foreach(Archives::get_all() as $archive) {
+		$pc = (int) ( 100 - ( $archive->get_free_space()/$archive->get_total_space() * 100 ) );
+		if ( $archive->get_free_space() > 536870912000 ) {
+			$colour = "progress-success";
+		} else if ( $archive->get_free_space() > 214748364800 ) {
+			$colour = "progress-warning";
+		} else {
+			$colour = "progress-danger";
+		}
 		$return .= "
 		<dt>".$archive->get_name()."</dt>
+		<dd><div class=\"progress ".$colour."\" style=\"margin: 3px 0px;\"><div class=\"bar\" style=\"width: ".$pc."%;\"></div></div></dd>
 		<dd>".bytes($archive->get_free_space())." free of ".bytes($archive->get_total_space())."</dd>";
 	}
 	$return .= "</dl>";
