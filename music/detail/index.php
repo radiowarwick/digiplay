@@ -143,13 +143,13 @@ echo("
 				<fieldset>
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"control-group\">
-						<label for=\"title\">Title</label>
+						<label class=\"control-label\" for=\"title\">Title</label>
 						<div class=\"controls\">
 							<input name=\"title\" class=\"required".$disabled."\" value=\"".$track->get_title()."\">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"artist\">Artists</label>");
+						<label class=\"control-label\" for=\"artist\">Artists</label>");
 						foreach($track->get_artists() as $artist) {
 							echo("
 						<div class=\"controls\">
@@ -162,43 +162,43 @@ echo("
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"album\">Album</label>
+						<label class=\"control-label\" for=\"album\">Album</label>
 						<div class=\"controls\">
 							<input name=\"album\" class=\"required".$disabled."\" value=\"".$track->get_album()->get_name()."\">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"year\">Year</label>
+						<label class=\"control-label\" for=\"year\">Year</label>
 						<div class=\"controls\">
 							<input name=\"year\" class=\"".$disabled."\" value=\"".$track->get_year()."\">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"length\">Length</label>
+						<label class=\"control-label\" for=\"length\">Length</label>
 						<div class=\"controls\">
 							<span class=\"uneditable-input\">".Time::format_succinct($track->get_length())."</span>
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"origin\">Origin</label>
+						<label class=\"control-label\" for=\"origin\">Origin</label>
 						<div class=\"controls\">
 							<input name=\"origin\" class=\"required".$disabled."\" value=\"".$track->get_origin()."\">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"reclibid\">Reclib ID</label>
+						<label class=\"control-label\" for=\"reclibid\">Reclib ID</label>
 						<div class=\"controls\">
 							<input name=\"reclibid\" class=\"".$disabled."\" value=\"".$track->get_reclibid()."\">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"censored\">Censored</label>
+						<label class=\"control-label\" for=\"censored\">Censored</label>
 						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"censored\" class=\"".$disabled."\" ".($track->is_censored()? "checked" : "").">
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"sustainer\">On Sue</label>
+						<label class=\"control-label\" for=\"sustainer\">On Sue</label>
 						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"sustainer\" class=\"".$disabled."\" ".($track->is_sustainer()? "checked" : "").">
 						</div>
@@ -216,13 +216,13 @@ echo("
 				<fieldset>
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"control-group\">
-						<label for=\"notes\">Notes</label>
+						<label class=\"control-label\" for=\"notes\">Notes</label>
 						<div class=\"controls\">
 							<textarea name=\"notes\" class=\"".$disabled."\">".$track->get_notes()."</textarea>
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label for=\"keyword\">Keywords</label>");
+						<label class=\"control-label\" for=\"keyword\">Keywords</label>");
 						foreach($track->get_keywords() as $keyword) {
 							echo("
 						<div class=\"controls\">
