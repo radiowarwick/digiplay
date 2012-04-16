@@ -4,8 +4,7 @@ Output::set_template();
 
 $query = $_REQUEST['q'];
 
-
-if($query) $search = Search::tracks($query,"title",5);
+if($query) $search = Search::tracks(str_replace(" ", " | ", $query),"title",5);
 $tracks = $search["results"];
 $tracks_array = array();
 
@@ -20,10 +19,9 @@ if($tracks) {
 			);
 		array_push($tracks_array, $track);
 	}
-	
 }
 
-if($query) $search = Search::tracks($query,"artist",5);
+if($query) $search = Search::tracks("\"".$query."\"","artist",5,0,"artist");
 $artists = $search["results"];
 $artists_array = array();
 
@@ -32,26 +30,18 @@ if($artists) {
 		$track = Tracks::get($artist_id);
 		$artists = $track->get_artists();
 		foreach ($artists as $artist_object) {
-			$skip = false;
-			foreach($artists_array as $curr) {
-				if(($curr["title"] == $artist_object->get_name())) {
-					$skip = true;
-				}
-			}
-			if(!$skip) {
-				$artist = array(
-						'id' => $artist_object->get_id(),
-						'title' => $artist_object->get_name(),
-						'href' => SITE_LINK_ABS."music/search/?q=".urlencode($artist_object->get_name())."&i=artist"
-						);
-					array_push($artists_array, $artist);
-			}
+			$artist = array(
+					'id' => $artist_object->get_id(),
+					'title' => $artist_object->get_name(),
+					'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
+					);
+			array_push($artists_array, $artist);
 		}
 	}
 }
 
 
-if($query) $search = Search::tracks($query,"album",5);
+if($query) $search = Search::tracks("\"".$query."\"","album",5);
 $albums = $search["results"];
 $albums_array = array();
 
@@ -69,7 +59,7 @@ if($albums) {
 			$album = array(
 				'id' => $album_object->get_id(),
 				'title' => $album_object->get_name(),
-				'href' => SITE_LINK_ABS."music/search/?q=".urlencode($album_object->get_name())."&i=album"
+				'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
 				);
 			array_push($albums_array, $album);
 		}

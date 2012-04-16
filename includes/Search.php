@@ -1,16 +1,16 @@
 <?php
 class Search {
-    public function tracks($query,$indexes="title artist album keyword",$limit=0,$offset=0) {
+    public function tracks($query,$fields="title,artist,album,keyword",$limit=0,$offset=0,$group=NULL) {
         $cl = new SphinxClient();
-        $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
+        $cl->SetMatchMode(SPH_MATCH_EXTENDED);
         $cl->SetSortMode(SPH_SORT_RELEVANCE);
         if($limit) $cl->SetLimits($offset,$limit);
+        if($group) $cl->SetGroupBy("attr_".$group, SPH_GROUPBY_ATTR);
 
-        foreach(explode(" ", $indexes) as $index) {
-            $index_str .= $index." ".$index."-delta ";
-        }
+        $fields = str_replace(" ",",",$fields);
+        $query_str = "@@relaxed @(".$fields.") ".$query;
 
-        $result = $cl->Query($query, $index_str);
+        $result = $cl->Query($query_str);
         if ($result === false) throw new UserError("Query failed: " . $cl->GetLastError());
         else if ($cl->GetLastWarning()) throw new UserError("WARNING: " . $cl->GetLastWarning());
 
