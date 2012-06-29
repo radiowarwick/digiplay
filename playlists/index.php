@@ -44,6 +44,14 @@ $(function() {
 			return($(this).parent().find('.hover-info').html());
 		}
 	});
+	if(window.location.hash == '#add') {
+		$('#add').click();
+	}
+	$('a[href=\"../playlists/index.php#add\"]').click(function() {
+		event.preventDefault();
+		$('#add').click();
+	})
+
 });
 </script>");
 
@@ -94,12 +102,12 @@ foreach (Playlists::get_all() as $playlist) {
 	if(Session::is_group_user("playlist_admin")) {
 		echo("
 			<td>
-				<a href=\"".SITE_LINK_REL."playlists/edit/".$playlist->get_id()."\" title=\"Edit this playlist\" rel=\"twipsy\">
+				<a href=\"".SITE_LINK_REL."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
 					<i class=\"icon-pencil\"></i>
 				</a>
 			</td>
 			<td>
-				<a href=\"".SITE_LINK_REL."playlists/edit/?delete=".$playlist->get_id()."\" title=\"Delete this playlist\" rel=\"twipsy\">
+				<a href=\"#\" title=\"Delete this playlist\" rel=\"twipsy\">
 					<i class=\"icon-remove-sign\"></i>
 				</a>
 			</td>
@@ -121,18 +129,28 @@ echo("
 
 if(Session::is_group_user("playlist_admin")) {
 	echo("
-<a href=\"#\" data-controls-modal=\"addnew-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Add a new playlist &raquo;</a>
-<div class=\"modal hide fade\" id=\"addnew-modal\">
+<a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" data-backdrop=\"true\" data-keyboard=\"true\" id=\"add\">Add a new playlist &raquo;</a>
+<div class=\"modal fade\" id=\"addnew-modal\">
 	<div class=\"modal-header\">
-		<a class=\"close\" href=\"#\">&times;</a>
+		<a class=\"close\" data-dismiss=\"modal\">&times;</a>
 		<h3>Add new playlist</h3>
 	</div>
 	<div class=\"modal-body\">
-		You'll lose any unsaved changes on this page.
+		<form class=\"form-horizontal\" action=\"\" method=\"POST\">
+			<fieldset>
+				<div class=\"control-group\">
+					<label class=\"control-label\" for=\"name\">Name</label>
+					<div class=\"controls\">
+						<input type=\"text\" class=\"input-xlarge\" id=\"name\">
+						<p class=\"help-block\">Enter a name for the new playlist.</p>
+					</div>
+				</div>
+			</fieldset>
+		</form>
 	</div>
 	<div class=\"modal-footer\">
-		<a class=\"btn primary\" href=\"#\">Save</a>
-		<a class=\"btn\" href=\"#\">Cancel</a>
+		<a class=\"btn btn-primary\" href=\"#\">Save</a>
+		<a class=\"btn\" data-dismiss=\"modal\">Cancel</a>
 	</div>
 </div>");
 }

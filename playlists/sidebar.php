@@ -34,7 +34,7 @@ function menu() {
 	$menu = new Menu;
 	$menu->add_many(
 		array("index.php","Playlists Overview", "home"),
-		array("add/","Add a new playlist", "plus-sign"),
+		array("index.php#add","Add a new playlist", "plus-sign"),
 		array("sustainer/","Edit sustainer playlist", "edit")
 	);
 	$site_path_array = explode("/",SITE_PAGE);
