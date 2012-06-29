@@ -13,10 +13,10 @@ class LDAP{
 	private $login = false;
 	
 	function __construct(){
-		$ldap_host = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_host'"),NULL,0);
-		$ldap_port = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_port'"),NULL,0);
-		$this->ldap_filter = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_filter'"),NULL,0);
-		$this->ldap_dn = pg_fetch_result(DigiplayDB::query("SELECT val FROM configuration WHERE parameter = 'ldap_dn'"),NULL,0);
+		$ldap_host = Config::get_param("ldap_host");
+		$ldap_port = Config::get_param("ldap_port");
+		$this->ldap_filter = Config::get_param("ldap_filter");
+		$this->ldap_dn = Config::get_param("ldap_dn");
 		$this->link_identifier=@ldap_connect("ldap://".$ldap_host.":".$ldap_port);
 		if(!$this->link_identifier) trigger_error("LDAP Connection failure", E_USER_ERROR);
 		
