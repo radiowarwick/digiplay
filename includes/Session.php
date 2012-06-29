@@ -61,10 +61,12 @@ class Session{
 	}
 
 	public static function login($username,$password){
-		$local_user = pg_fetch_assoc(DigiplayDB::query("SELECT * FROM users WHERE username = '".$username."' AND password = '".md5($password)."';"));
-		if($local_user) {
-			self::$data["user"] = true;
-			self::$data["id"] = $local_user["id"];
+		if(Config::get_param("auth_method") != "LDAP") {
+			$local_user = pg_fetch_assoc(DigiplayDB::query("SELECT * FROM users WHERE username = '".$username."' AND password = '".md5($password)."';"));
+			if($local_user) {
+				self::$data["user"] = true;
+				self::$data["id"] = $local_user["id"];
+			} else return false;
 		} else {
 			$ldap_instance = new LDAP;
 			if(!$ldap_instance->login($username, $password)) return false;
