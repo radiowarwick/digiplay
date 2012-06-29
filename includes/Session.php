@@ -80,14 +80,12 @@ class Session{
 			}
 		}
 		if(self::$data["id"]) {
-			$result = DigiplayDB::query("SELECT * FROM web_users WHERE id = ".self::$data['id'].";");
+			$result = DigiplayDB::query("SELECT val FROM usersconfigs WHERE userid = ".self::$data['id']." AND configid = 3;");
 			if(pg_num_rows($result)==1){
-				$pg_data = pg_fetch_assoc($result);
-				self::$data['lastlogin']	= $pg_data['lastlogin'];
-				self::$data['nick']			= $pg_data['nick'];
-				DigiplayDB::query("UPDATE web_users SET lastlogin = '".time()."' WHERE id = '".self::$data['id']."'");				
+				self::$data['lastlogin'] = pg_fetch_result($result,0);
+				DigiplayDB::query("UPDATE usersconfigs SET val = '".time()."' WHERE userid = ".self::$data['id']." AND configid = 3;");
 			}else{
-				DigiplayDB::query("INSERT INTO web_users (id,first_name,surname,lastlogin) VALUES (".self::$data['id'].",'".self::$data['first_name']."','".pg_escape_string(self::$data['surname'])."',".time().");");
+				DigiplayDB::query("INSERT INTO usersconfigs (userid,configid,val) VALUES (".self::$data['id'].",3,'".time()."');");
 			}
 			return true;
 		} else {
