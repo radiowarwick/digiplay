@@ -1,9 +1,0 @@
-<?php
-/************************************************
-	Config for DPS Website installation.
-************************************************/
-
-define("DATABASE_DPS_HOST", '');
-define("DATABASE_DPS_PORT", '');
-define("DATABASE_DPS_NAME", '');
-define("DATABASE_DPS_USER", '');
