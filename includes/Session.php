@@ -20,7 +20,6 @@ class Session{
 		else return false;
 	}
 	public static function is_admin(){
-		var_dump($_REQUEST);
 		return (self::is_group_user('Administrators') || self::is_developer());
 	}
 	public static function get_username(){		return self::$data['username'];		}
