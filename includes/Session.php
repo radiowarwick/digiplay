@@ -9,7 +9,7 @@ class Session{
 		return self::$data['user'];
 	}
 	public static function is_developer(){
-		return self::is_group_user('developer');
+		return self::is_group_user('Developers');
 	}
 	public static function is_firstlogin(){
 		return self::$data['lastlogin']==0;
@@ -20,7 +20,8 @@ class Session{
 		else return false;
 	}
 	public static function is_admin(){
-		return (self::is_group_user("admin") || self::is_developer());
+		var_dump($_REQUEST);
+		return (self::is_group_user('Administrators') || self::is_developer());
 	}
 	public static function get_username(){		return self::$data['username'];		}
 	public static function get_id(){		return self::$data['id'];		}
@@ -34,7 +35,7 @@ class Session{
 	public static function get_groups(){
 		if(!self::$data['user']) return array();
 		if(!isset(self::$groups)){
-			$result = DigiplayDB::query("SELECT web_groups.*,web_users_groups.* FROM web_groups INNER JOIN web_users_groups USING (groupid) WHERE username = '".self::$data['username']."' ORDER BY web_groups.group");
+			$result = DigiplayDB::query("SELECT groups.*,usersgroups.* FROM groups INNER JOIN usersgroups USING usersgroups.groupid ON groups.id WHERE usersgroups.userid = '".self::$data['id']."' ORDER BY groups.id");
 			self::$groups = array();
 			if(pg_num_rows($result)>0){
 				while($object = pg_fetch_object($result,null,"Group"))
