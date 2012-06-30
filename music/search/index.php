@@ -51,7 +51,7 @@ if($tracks) {
 			<th class=\"album\">Album</th>
 			<th class=\"length\">Length</th> 
 			<th class=\"icon\"></th>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<th class=\"icon\"></th>" : "")."
+			".((Session::is_admin() || Session::is_group_user("Music Admin"))? "<th class=\"icon\"></th>" : "")."
 		</tr>
 	</thead>");
 	foreach($tracks as $track_id) {
@@ -84,7 +84,7 @@ if($tracks) {
 			<td class=\"album\">".$album."</td>
 			<td class=\"length\">".Time::format_succinct($track->get_length())."</td>
 			<td class=\"icon\"><a href=\"preview/".$track->get_id()."\" class=\"track-preview\" title=\"Preview this track\" rel=\"twipsy\"><i class=\"icon-volume-up\"></i></td>
-			".((Session::is_admin() || Session::is_group_user("music_admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
+			".((Session::is_admin() || Session::is_group_user("Music Admin"))? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");

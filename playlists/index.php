@@ -66,7 +66,7 @@ echo("
 			<th class=\"title\">Title</th>
 			<th class=\"icon\">Items</th>
 			");
-if(Session::is_group_user("playlist_admin")) {
+if(Session::is_group_user("Playlist Admin")) {
 	echo("
 			<th class=\"icon\"></th>
 			<th class=\"icon\"></th>
@@ -99,7 +99,7 @@ foreach (Playlists::get_all() as $playlist) {
 			<td class=\"title\">".$playlist->get_name()."</td>
 			<td>".count($playlist->get_tracks())."</td>
 	");
-	if(Session::is_group_user("playlist_admin")) {
+	if(Session::is_group_user("Playlist Admin")) {
 		echo("
 			<td>
 				<a href=\"".SITE_LINK_REL."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
@@ -127,7 +127,7 @@ echo("
 </form>
 ");
 
-if(Session::is_group_user("playlist_admin")) {
+if(Session::is_group_user("Playlist Admin")) {
 	echo("
 <a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" data-backdrop=\"true\" data-keyboard=\"true\" id=\"add\">Add a new playlist &raquo;</a>
 <div class=\"modal fade\" id=\"addnew-modal\">

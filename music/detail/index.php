@@ -92,7 +92,7 @@ echo("
 		});
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
-	".(Session::is_group_user("music_admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
+	".(Session::is_group_user("Music Admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
 	if($_REQUEST["flag"]) {
 		if($track->is_flagged()) {
 			$track->set_flagged(false);

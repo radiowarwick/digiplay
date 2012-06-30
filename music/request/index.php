@@ -15,7 +15,7 @@ if($_REQUEST["name"] && $_REQUEST["artistname"]) {
 }
 
 if($_REQUEST["delete"]) {
-	if(!Session::is_group_user("music_admin")) {
+	if(!Session::is_group_user("Music Admin")) {
 		echo AlertMessage::basic("error","You are trying to delete a request, but you do not have the requred privelidges!","Error!");
 	} else {
 		$request = Requests::get_by_id($_REQUEST["delete"]);
@@ -46,7 +46,7 @@ if($requested = Requests::get_all()) {
 			<th class=\"title\">Title</th>
 			<th class=\"date\">Date Requested</th>
 			<th class=\"requester\">Requester</th>
-			".(Session::is_group_user("music_admin")? "
+			".(Session::is_group_user("Music Admin")? "
 			<th class=\"icon\"></th>
 			<th class=\"icon\"></th>" : "")."
 		</tr>
@@ -57,9 +57,9 @@ if($requested = Requests::get_all()) {
 		<td class=\"artist\">".$request->get_artist_name()."</td>
 		<td class=\"title\">".$request->get_name()."</td>
 		<td class=\"date\">".date("d/m/Y H:i",$request->get_date())."</td>
-		<td class=\"requester\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("music_admin")? "
+		<td class=\"requester\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("Music Admin")? "
 		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-upload\"></i></td>
-		".(Session::is_group_user("music_admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "") : "")."
+		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "") : "")."
 	</tr>");
 	}
 	echo("

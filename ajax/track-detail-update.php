@@ -1,7 +1,7 @@
 <?php
 require_once("pre.php");
 
-if(Session::is_group_user('music_admin')){
+if(Session::is_group_user('Music Admin')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);
 	if(!$_REQUEST["title"]) exit("You must specify a title");
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
