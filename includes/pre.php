@@ -3,9 +3,7 @@ function __autoload($class_name) {
 	require_once (SITE_FILE_PATH ."includes/" .$class_name . ".php");
 }
 
-ini_set("html_errors",false);
 ini_set("session.use_only_cookies",true);
-ini_set("date.timezone","Europe/London");
 
 if (get_magic_quotes_gpc()) {
     function stripslashes_deep($value){
@@ -57,9 +55,9 @@ if (get_magic_quotes_gpc()) {
 
 	// Include config file
 	if(file_exists(SITE_FILE_PATH."digiplay.conf")) {
-		$local_config = parse_ini_file(SITE_FILE_PATH."digiplay.conf");
+		$local_config = @parse_ini_file(SITE_FILE_PATH."digiplay.conf");
 	} elseif(file_exists("/etc/digiplay.conf")) {
-		$local_config = parse_ini_file("/etc/digiplay.conf");
+		$local_config = @parse_ini_file("/etc/digiplay.conf");
 	} else {
 		die("Fatal error: Could not open ".SITE_FILE_PATH."digiplay.conf or /etc/digiplay.conf.  Cannot continue.");
 	}
@@ -68,7 +66,7 @@ if (get_magic_quotes_gpc()) {
 	define("DATABASE_DPS_PORT", $local_config["DB_PORT"]);
 	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
 	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
-	define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
+	@define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
 }
 
 session_start();
