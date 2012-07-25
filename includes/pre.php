@@ -74,5 +74,14 @@ session_start();
 if((!Session::is_user()) && ((substr(SITE_PAGE,0,4) == "ajax") && (SITE_PAGE != "ajax/login.php"))) { exit("Your session has timed out, or you have logged out in another tab. Please log in again."); }
 if((SITE_PAGE != "index.php") && (SITE_PAGE != "ajax/login.php")) { Output::require_user(); }
 
+if (Session::is_developer()) {
+    ini_set ( "display_errors", "1");
+    ini_set ( "display_startup_errors", "1");
+    ini_set ( "html_errors", "1");
+    ini_set ( "docref_root", "http://www.php.net/");
+    ini_set ( "error_prepend_string", "<div class=\"alert error\">");
+    ini_set ( "error_append_string", "</div>");
+}
+
 if(substr(SITE_PAGE,0,4) != "ajax") Output::set_template("MainTemplate");
 ?>
