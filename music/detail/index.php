@@ -186,12 +186,6 @@ echo("
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label class=\"control-label\" for=\"reclibid\">Reclib ID</label>
-						<div class=\"controls\">
-							<input name=\"reclibid\" class=\"".$disabled."\" value=\"".$track->get_reclibid()."\">
-						</div>
-					</div>
-					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"censored\">Censored</label>
 						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"censored\" class=\"".$disabled."\" ".($track->is_censored()? "checked" : "").">
