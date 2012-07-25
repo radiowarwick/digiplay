@@ -40,9 +40,8 @@ class Tracks{
 	}
 
 	public function get_newest($num=10) {
-		$type = AudioTypes::get("music")->get_id();
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." ORDER BY import_date DESC LIMIT ".$num.";");
+		$result = DigiplayDB::query("SELECT * FROM v_audio_music WHERE dir = 2 ORDER BY id DESC LIMIT ".$num.";");
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;
     	return $tracks;
@@ -58,19 +57,17 @@ class Tracks{
 	}
 
 	public function get_censored($limit = 0,$offset = 0) {
-		$type = AudioTypes::get("music")->get_id();
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND censor = 't' ORDER BY import_date DESC".$limit.$offset);
+		$result = DigiplayDB::query("SELECT * FROM v_audio_music WHERE dir = 2 AND censor = 't' ORDER BY id DESC".$limit.$offset);
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;
     	return $tracks;
 	}
 
 	public function count_censored() {
-		$type = AudioTypes::get("music")->get_id();
-		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(id) FROM audio WHERE type = ".$type." AND censor = 't';"),NULL,0);
+		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(id) FROM v_audio_music WHERE dir = 2 AND censor = 't';"),NULL,0);
 	}
 }
 ?>
