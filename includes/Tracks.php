@@ -41,9 +41,9 @@ class Tracks{
 
 	public function get_newest($num=10) {
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM v_audio_music WHERE dir = 2 ORDER BY id DESC LIMIT ".$num.";");
-		while($object = pg_fetch_object($result,NULL,"Track"))
-                 $tracks[] = $object;
+		$result = DigiplayDB::query("SELECT id FROM v_audio_music WHERE dir = 2 ORDER BY id DESC LIMIT ".$num.";");
+		while($track = pg_fetch_array($result)) 
+            $tracks[] = Tracks::get_by_id($track[0]);
     	return $tracks;
 	}
 
@@ -52,7 +52,7 @@ class Tracks{
 		$tracks = array();
 		$result = DigiplayDB::query("SELECT * FROM audio WHERE type = ".$type." AND flagged = 't' ORDER BY import_date DESC;");
 		while($object = pg_fetch_object($result,NULL,"Track"))
-                 $tracks[] = $object;
+            $tracks[] = $object;
     	return $tracks;
 	}
 
@@ -60,9 +60,9 @@ class Tracks{
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		$tracks = array();
-		$result = DigiplayDB::query("SELECT * FROM v_audio_music WHERE dir = 2 AND censor = 't' ORDER BY id DESC".$limit.$offset);
-		while($object = pg_fetch_object($result,NULL,"Track"))
-                 $tracks[] = $object;
+		$result = DigiplayDB::query("SELECT id FROM v_audio_music WHERE dir = 2 AND censor = 't' ORDER BY id DESC".$limit.$offset);
+		while($track = pg_fetch_array($result)) 
+            $tracks[] = Tracks::get_by_id($track[0]);
     	return $tracks;
 	}
 
