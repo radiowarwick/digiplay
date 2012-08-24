@@ -15,7 +15,7 @@ if(!isset($_GET['id'])) {
 if(!$track = Tracks::get($_GET["id"])) {
 	exit("<h2>Invalid track ID</h2><h3>If you got to this page via a link from somewhere else on the site, there may be a bug.  A bug you should bug the techies about!</h3>");
 }
-if(!Session::is_group_user("music_admin")) $disabled = " disabled";
+if(!Session::is_group_user("Music Admin")) $disabled = " disabled";
 
 echo("
 	<script>
@@ -219,7 +219,7 @@ echo("
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label class=\"control-label\" for=\"sustainer\">On Sue</label>
+						<label class=\"control-label\" for=\"sustainer\">On Sustainer</label>
 						<div class=\"controls\">
 							<input type=\"checkbox\" name=\"sustainer\" class=\"".$disabled."\" ".($track->is_sustainer()? "checked" : "").">
 						</div>
