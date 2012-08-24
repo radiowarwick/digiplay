@@ -67,6 +67,12 @@ if (get_magic_quotes_gpc()) {
 	define("DATABASE_DPS_NAME", $local_config["DB_NAME"]);
 	define("DATABASE_DPS_USER", $local_config["DB_USER"]);
 	@define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
+
+	if (!function_exists('http_response_code')) {
+		function http_response_code($code = NULL) {
+			header(':', true, $code);
+		}
+	}
 }
 
 session_start();

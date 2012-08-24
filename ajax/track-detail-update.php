@@ -3,7 +3,10 @@ require_once("pre.php");
 
 if(Session::is_group_user('Music Admin')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);
-	if(!$_REQUEST["title"]) exit("You must specify a title");
+	if(!$_REQUEST["title"]) {
+		http_response_code(400);
+		exit(json_encode(array("error" => "You did not specify a title.")));
+	};
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
 
 	$curr_artists_obj = $track->get_artists();
@@ -27,14 +30,43 @@ if(Session::is_group_user('Music Admin')){
 	$track->set_censored($_REQUEST["censored"]);
 	$track->set_sustainer($_REQUEST["sustainer"]);
 
+	if($_REQUEST["notes"] != $track->get_notes()) $track->set_notes($_REQUEST["notes"]);
+	if($_REQUEST["new_keyword"]) $track->add_keywords($_REQUEST["new_keyword"]);
+
 	$result = $track->save();
-	if(!$result) exit("Something is incorrect.  You may have discovered a bug!");
+	if(!$result) { 
+		http_response_code(400);
+		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!")));
+	}
 
 	$result = $track->save_audio();
-	if(!$result) exit("Something is incorrect.  You may have discovered a bug!");
+	if(!$result) { 
+		http_response_code(400);
+		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!")));
+	}
 
-	exit("success");
+	$new_track = Tracks::get_by_id($_REQUEST["id"]);
+	http_response_code(200);
+	$json = array(
+		"title" => $new_track->get_title(),
+		"album" => $new_track->get_album()->get_name(),
+		"year" => $new_track->get_year(),
+		"length" => $new_track->get_length(),
+		"origin" => $new_track->get_origin(),
+		"censored" => $new_track->is_censored(),
+		"sustainer" => $new_track->is_sustainer(),
+		"notes" => $new_track->get_notes()
+		);
+
+	$artists_return = array(); $keywords_return = array();
+	foreach($track->get_artists() as $key=>$artist) $artists_return[] = $artist->get_name();
+	foreach($track->get_keywords() as $key=>$keyword) $keywords_return[] = $keyword->get_text();
+	$json["artists"] = $artists_return;
+	$json["keywords"] = $keywords_return;
+
+	exit(json_encode($json));
+
 } else {
-	exit("You do not have permission to modify this.");
+	http_response_code(403);
 }
 ?>

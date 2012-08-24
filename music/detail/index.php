@@ -15,59 +15,95 @@ if(!isset($_GET['id'])) {
 if(!$track = Tracks::get($_GET["id"])) {
 	exit("<h2>Invalid track ID</h2><h3>If you got to this page via a link from somewhere else on the site, there may be a bug.  A bug you should bug the techies about!</h3>");
 }
+if(!Session::is_group_user("music_admin")) $disabled = " disabled";
 
 echo("
 	<script>
 		$(function () {
-			$('.track-meta-form').submit(function(event) {
-				event.preventDefault();
-				var el = $(this);
-				el.find('.help-inline').remove();
-				submit = $(this).find('input[type=\"submit\"]');
-				submit.button('loading');
-				$.post('".SITE_LINK_REL."ajax/meta-update', $(this).serialize(), function(data) {
-					if(data == \"success\") { 
-						submit.button('reset');
-						location.reload();
-					} else {
-						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
-						$('.alert-message').show('fast').alert();
-						submit.button('reset');
-					}
-				})
-			});
 			$('.track-detail-form').submit(function(event) {
 				event.preventDefault();
-				var el = $(this);
-				el.find('.help-inline').remove();
 				submit = $(this).find('input[type=\"submit\"]');
 				submit.button('loading');
-				$.post('".SITE_LINK_REL."ajax/track-detail-update', $(this).serialize(), function(data) {
-					if(data == \"success\") { 
-						submit.button('reset');
-						$('h2').after('".AlertMessage::basic("success","Track details altered. Reloading page...","Success!",false)."');
-						setTimeout(function() {
-    						$('.alert-message').hide('fast', function(){
-        						$(this).remove(); 
-           					});},4000);
-           				setTimeout(\"location.reload();\",4200);
-					} else {
-						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
+				$.ajax({
+					url: '".SITE_LINK_REL."ajax/track-detail-update',
+					data: $(this).serialize(),
+					type: 'POST',
+					error: function(xhr,text,error) {
+						value = $.parseJSON(xhr.responseText);
+						$('h2').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
 						$('.alert-message').alert();
 						submit.button('reset');
+					},
+					success: function(data,text,xhr) {
+						values = $.parseJSON(data);
+						submit.button('reset');
+						$('h2').after('".AlertMessage::basic("success","Track details altered.","Success!",false)."');
+						$('[name=new_artist]').val('');
+						$('[name=artist\\\\[\\\\]]').remove();
+						artists_str = '';
+						$.each(values.artists, function(i, val) {
+							artists_str += '<div class=\"controls\"><input name=\"artist[]\" class=\"required".$disabled."\" value=\"'+val+'\"></div>';
+						});
+						$('[for=artist]').after(artists_str);
+						$('[name=new_keyword]').val('');
+						$('.keyword').parent().remove();
+						keywords_str = '';
+						$.each(values.keywords, function(i, val) {
+							keywords_str += '<div class=\"controls\"><div class=\"keyword\"><a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword='+val+'\"><i class=\"icon-remove-sign\"></i></a></div><span class=\"uneditable-input\">'+val+'</span></div>';
+						});
+						$('[for=keyword]').after(keywords_str);
+						setTimeout(function() {
+    						$('.alert').hide('fast', function(){
+        						$(this).remove(); 
+           				});},4000);
 					}
-				})
+				});
 			});
-			$('.keyword a').click(function(event) {
+
+			$('.keyword a').live(\"click\", function(event) {
 				event.preventDefault();
+				parent = $(this).parent().parent();
 				$.get($(this).attr('href'), function(data) {
 					if(data == \"success\") {
-						location.reload();
+						parent.remove();
 					} else {
 						$('h2').after('".AlertMessage::basic("error","'+data+'","Error!")."');
 						$('.alert-message').show('fast').alert();
 					}
 				})
+			});
+
+			$('[name=flag]').click(function() {
+				event.preventDefault();
+				t = $(this);
+				t.after('<img src=\"".SITE_LINK_REL."images/ajax-loader.gif\" id=\"flag-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
+				$.ajax({
+					url: '".SITE_LINK_REL."ajax/flag',
+					data: 'id=".$track->get_id()."&flag=toggle',
+					type: 'POST',
+					error: function(xhr,text,error) {
+						value = $.parseJSON(xhr.responseText);
+						$('h2').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
+						$('.alert-message').alert();
+						$('#flag-load').remove();
+					},
+					success: function(data,text,xhr) {
+							value = $.parseJSON(xhr.responseText);
+							$('#flag-load').remove();
+							if(value.response == 'flagged') {
+								t.addClass('active');
+								response = 'This track has been flagged for censorship and will be reviewed in due course.';
+							} else {
+								t.removeClass('active');
+								response = 'This track has been unflagged.';
+							}
+							$('h2').after('".AlertMessage::basic("warning","'+response+'","Success!",false)."'); 
+							setTimeout(function() {
+	    						$('.alert').hide('fast', function(){
+	        						$(this).remove(); 
+	           				});},4000);
+					}
+				});
 			});
 
    			$(\"#jquery_jplayer_1\").jPlayer({
@@ -93,17 +129,6 @@ echo("
 	</script>
 	<h2>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h2>
 	".(Session::is_group_user("Music Admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
-	if($_REQUEST["flag"]) {
-		if($track->is_flagged()) {
-			$track->set_flagged(false);
-			$track->save();
-			echo(AlertMessage::basic("success","This track has been unflagged for censorship.","Track unflagged!"));
-		} else {
-			$track->set_flagged(true);
-			$track->save();
-			echo(AlertMessage::basic("success","This track has been flagged for censorship and will be reviewed in due course.","Track flagged!"));
-		}
-	}
 	echo("
 
        <div id=\"jquery_jplayer_1\" class=\"jp-jplayer\"></div>
@@ -136,11 +161,10 @@ echo("
 
             </div>
         </div>
-
-	<div class=\"row\">
-		<div class=\"span6\">
-			<form class=\"track-detail-form form-horizontal\" action=\"\" method=\"post\">
-				<fieldset>
+	<form class=\"track-detail-form\" action=\"\" method=\"post\">
+		<fieldset>
+			<div class=\"row\">
+				<div class=\"span6 form-horizontal\">
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"title\">Title</label>
@@ -150,7 +174,7 @@ echo("
 					</div>
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"artist\">Artists</label>");
-						foreach($track->get_artists() as $artist) {
+						foreach($track->get_artists() as $key=>$artist) {
 							echo("
 						<div class=\"controls\">
 							<input name=\"artist[]\" class=\"required".$disabled."\" value=\"".$artist->get_name()."\">
@@ -158,7 +182,7 @@ echo("
 						}
 					echo("
 						<div class=\"controls\">
-							<input name=\"new_artist[]\" class=\"click-clear".$disabled."\" placeholder=\"Add new artist...\">
+							<input name=\"new_artist\" class=\"click-clear".$disabled."\" placeholder=\"Add new artist...\">
 						</div>
 					</div>
 					<div class=\"control-group\">
@@ -202,13 +226,8 @@ echo("
 							<input type=\"submit\" class=\"btn btn-primary\" value=\"Save\">
 						</div>
 					</div>
-				</fieldset>
-			</form>
-		</div>
-		<div class=\"span3\">
-			<form class=\"track-meta-form form-stacked\" action=\"".SITE_LINK_REL."ajax/meta-update\" method=\"POST\">
-				<fieldset>
-					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
+				</div>
+				<div class=\"span3 form-stacked\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"notes\">Notes</label>
 						<div class=\"controls\">
@@ -221,34 +240,25 @@ echo("
 							echo("
 						<div class=\"controls\">
 							<div class=\"keyword\">
-								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\" rel=\"twipsy\" title=\"Delete this keyword\"><i class=\"icon-remove-sign\"></i></a>
-							</div>
+								<a href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><i class=\"icon-remove-sign\"></i></a>
+							</div>	
 							<span class=\"uneditable-input\">".$keyword->get_text()."</span>
 						</div>");
 						}
 					echo("
 						<div class=\"input-prepend\">
 							<span class=\"add-on\"><i class=\"icon-tag\"></i></span>
-							<input name=\"new_keyword[]\" style=\"width: 183px\" class=\"click-clear".$disabled."\" placeholder=\"Add new keyword...\">
+							<input name=\"new_keyword\" style=\"width: 183px\" class=\"click-clear".$disabled."\" placeholder=\"Add new keyword...\">
 						</div>
 					</div>
 					<div class=\"control-group\">
 						<div class=\"controls\">
-							<input type=\"submit\" class=\"btn btn-primary\" value=\"Save\">
+							<input type=\"button\" name=\"flag\" class=\"btn btn-danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
 						</div>
 					</div>
-				</fieldset>
-			</form>
-			<form class=\"flag-track-form form-stacked\" action=\"\" method=\"POST\">
-				<fieldset>
-					<div class=\"control-group\">
-						<div class=\"controls\">
-							<input type=\"submit\" name=\"flag\" class=\"btn btn-danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
-						</div>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-	</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 ");
 ?>
