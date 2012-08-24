@@ -24,12 +24,14 @@ echo("
 				event.preventDefault();
 				submit = $(this).find('input[type=\"submit\"]');
 				submit.button('loading');
+				submit.after('<img src=\"".SITE_LINK_REL."images/ajax-loader.gif\" id=\"detail-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
 				$.ajax({
 					url: '".SITE_LINK_REL."ajax/track-detail-update',
 					data: $(this).serialize(),
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
+						$('#detail-load').remove();
 						$('h2').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
 						$('.alert-message').alert();
 						submit.button('reset');
@@ -37,6 +39,7 @@ echo("
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
 						submit.button('reset');
+						$('#detail-load').remove();
 						$('h2').after('".AlertMessage::basic("success","Track details altered.","Success!",false)."');
 						$('[name=new_artist]').val('');
 						$('[name=artist\\\\[\\\\]]').remove();
