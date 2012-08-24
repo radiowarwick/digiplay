@@ -77,7 +77,7 @@ if (get_magic_quotes_gpc()) {
 
 session_start();
 
-if((!Session::is_user()) && ((substr(SITE_PAGE,0,4) == "ajax") && (SITE_PAGE != "ajax/login.php"))) { exit("Your session has timed out, or you have logged out in another tab. Please log in again."); }
+if((!Session::is_user()) && ((substr(SITE_PAGE,0,4) == "ajax") && (SITE_PAGE != "ajax/login.php"))) { http_response_code(403); exit(json_encode(array("error" => "Your session has timed out, or you have logged out in another tab. Please log in again."))); }
 if((SITE_PAGE != "index.php") && (SITE_PAGE != "ajax/login.php")) { Output::require_user(); }
 
 if (Session::is_developer()) {
