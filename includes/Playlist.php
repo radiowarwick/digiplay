@@ -24,4 +24,14 @@ class Playlist {
 	public function get_tracks(){
 		return Tracks::get_playlisted($this);
 	}
+
+	public function add_track($track) {
+		$query = DigiplayDB::query("INSERT INTO audioplaylists (audioid,playlistid) VALUES (".$track->get_id().",".$this->id.");");
+		return ($query? true : false);
+	}
+
+	public function del_track($track) {
+		$query = DigiplayDB::query("DELETE FROM audioplaylists WHERE audioid = ".$track->get_id()." AND playlistid = ".$this->id.";");
+		return ($query? true : false);
+	}
 }

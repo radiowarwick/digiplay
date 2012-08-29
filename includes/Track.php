@@ -112,6 +112,30 @@ class Track extends Audio{
 			$object->del_from_track($this->id);
 		}
 	}
+
+	public function get_playlists_in() {
+		return Playlists::get_by_track($this);
+	}
+
+	public function add_to_playlist($playlist) {
+		return $playlist->add_track($this);
+	}
+
+	public function del_from_playlist($playlist) {
+		return $playlist->del_track($this);
+	}
+
+	public function move_to_trash() {
+		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 3 WHERE audioid = ".$this->id.";");
+		if($sql) return true;
+		return false;
+	}
+
+	public function fetch_from_trash() {
+		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 2 WHERE audioid = ".$this->id.";");
+		if($sql) return true;
+		return false;
+	}
 }
 
 ?>

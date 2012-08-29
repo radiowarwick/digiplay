@@ -16,5 +16,13 @@ class Playlists {
                  $playlists[] = $object;
     	return $playlists;
 	}
+
+	public function get_by_track($track) {
+		$playlists = array();
+		$result = DigiplayDB::query("SELECT playlists.* FROM playlists INNER JOIN audioplaylists ON playlists.id = audioplaylists.playlistid WHERE audioplaylists.audioid = ".$track->get_id().";");
+		while($object = pg_fetch_object($result,NULL,"Playlist"))
+                 $playlists[] = $object;
+    	return $playlists;
+	}
 }
 ?>
