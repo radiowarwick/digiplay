@@ -230,7 +230,8 @@ if(Session::is_group_user("Playlist Admin")) {
 				</ul>
 			</div>
 			<div class=\"modal-footer\">
-				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn btn-primary\">Manage playlists</a>
+				<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
+				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
 			</div>
 		</div>"
 	);
