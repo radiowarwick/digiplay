@@ -81,8 +81,30 @@ echo("<script>
 				$(this).find('i').removeClass('icon-plus').addClass('icon-white icon-minus');
 			}
 		});		
-" : "")."
-	});
+" : "").
+(Session::is_group_user("Music Admin") ? "
+		var trackid;
+		$('.track-delete').click(function() {
+			$('.delete-track-title').html($(this).parent().parent().find('.title').html());
+			trackid = $(this).attr('data-dps-id');
+		});
+
+		$('.yes-definitely-delete').click(function() {
+			$.ajax({
+				url: '".SITE_LINK_REL."ajax/delete-track',
+				data: 'id='+trackid,
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+" : "").
+"	});
 </script>");
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
@@ -232,6 +254,24 @@ if(Session::is_group_user("Playlist Admin")) {
 			<div class=\"modal-footer\">
 				<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
 				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+			</div>
+		</div>"
+	);
+}
+
+if(Session::is_group_user("Music Admin")) {
+	echo("
+		<div class=\"modal fade\" id=\"delete-modal\">
+			<div class=\"modal-header\">
+				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
+				<h3>Delete Track</h3>
+			</div>
+			<div class=\"modal-body\">
+				<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>
+			</div>
+			<div class=\"modal-footer\">
+				<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a>
+				<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">No</a>
 			</div>
 		</div>"
 	);

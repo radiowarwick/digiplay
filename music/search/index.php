@@ -93,7 +93,30 @@ if($tracks) {
 				$(this).find('i').removeClass('icon-plus').addClass('icon-white icon-minus');
 			}
 		});		
-" : "")."		});
+" : "").
+(Session::is_group_user("Music Admin") ? "
+		var trackid;
+		$('.track-delete').click(function() {
+			$('.delete-track-title').html($(this).parent().parent().find('.title').html());
+			trackid = $(this).attr('data-dps-id');
+		});
+
+		$('.yes-definitely-delete').click(function() {
+			$.ajax({
+				url: '".SITE_LINK_REL."ajax/delete-track',
+				data: 'id='+trackid,
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+" : "").
+"		});
 	</script>");
 
 	$indexes = implode(", ", explode(" ", $index));
@@ -145,7 +168,7 @@ if($tracks) {
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
 				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\"><i class=\"icon-plus-sign\"></i></a></td>"); 
 			}
-			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"delete/".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
+			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></a></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
@@ -183,6 +206,24 @@ if(Session::is_group_user("Playlist Admin")) {
 			<div class=\"modal-footer\">
 				<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
 				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+			</div>
+		</div>"
+	);
+}
+
+if(Session::is_group_user("Music Admin")) {
+	echo("
+		<div class=\"modal fade\" id=\"delete-modal\">
+			<div class=\"modal-header\">
+				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
+				<h3>Delete Track</h3>
+			</div>
+			<div class=\"modal-body\">
+				<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>
+			</div>
+			<div class=\"modal-footer\">
+				<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a>
+				<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">No</a>
 			</div>
 		</div>"
 	);

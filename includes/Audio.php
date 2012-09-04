@@ -56,4 +56,16 @@ class Audio {
 		exec($command, $output);
 		return readfile(SITE_FILE_PATH."lib/waveformgen/tmp.png");
 	}
+	
+	public function move_to_trash() {
+		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 3 WHERE audioid = ".$this->id.";");
+		if($sql) return true;
+		return false;
+	}
+
+	public function fetch_from_trash() {
+		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 2 WHERE audioid = ".$this->id.";");
+		if($sql) return true;
+		return false;
+	}
 }

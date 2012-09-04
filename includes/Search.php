@@ -28,7 +28,7 @@ class Search {
     }
 
     public function update_index() {
-        $return = shell_exec("/usr/bin/indexer --quiet --rotate title-delta artist-delta album-delta keyword-delta");
+        $return = shell_exec("/usr/bin/indexer --quiet --rotate --all");
         return ($return)? false:true;
     }
 }

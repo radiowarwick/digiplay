@@ -124,18 +124,6 @@ class Track extends Audio{
 	public function del_from_playlist($playlist) {
 		return $playlist->del_track($this);
 	}
-
-	public function move_to_trash() {
-		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 3 WHERE audioid = ".$this->id.";");
-		if($sql) return true;
-		return false;
-	}
-
-	public function fetch_from_trash() {
-		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 2 WHERE audioid = ".$this->id.";");
-		if($sql) return true;
-		return false;
-	}
 }
 
 ?>
