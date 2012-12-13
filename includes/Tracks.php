@@ -69,5 +69,18 @@ class Tracks{
 	public function count_censored() {
 		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(id) FROM v_audio_music WHERE dir = 2 AND censor = 't';"),NULL,0);
 	}
+	
+	public function get_tracks_of_the_day($count = 1){
+		$today = mktime(0, 0, 0, (int)date("n"),(int)date("j"), (int)date("Y"));
+		srand($today/pi());
+		$trackcount = pg_fetch_result(DigiplayDB::query("SELECT count(*) FROM audio INNER JOIN audiodir ON audio.id=audiodir.audioid WHERE audio.import_date < ".$today." AND audio.type = 1 AND audiodir.dirid = 2;"),0);
+		$tracks = array();
+		for($i = 1; $i <= $count; $i++){
+			$track = rand(0,$trackcount);
+			$sql = "SELECT audio.id FROM audio INNER JOIN audiodir ON audio.id=audiodir.audioid WHERE audio.import_date < ".$today." AND audio.type = 1 AND audiodir.dirid = 2 ORDER BY audio.id LIMIT 1 OFFSET ".$track.";";
+			$tracks[] = Tracks::get_by_id(pg_fetch_result(DigiplayDB::query($sql),0));
+		}
+		return $tracks;
+	}
 }
 ?>

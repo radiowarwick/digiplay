@@ -89,10 +89,16 @@ $(function () {
 		</div>");
 
 	if(Session::is_user()) {
-	Output::set_title("Welcome, ".Session::get_first_name());
-	MainTemplate::set_subtitle("Enjoying your day?");
-	$lastlogin = Session::get_lastlogin();
-	if($lastlogin) echo("<h4>You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</h4>");
-	else echo ("<h4>You've never logged in before! Welcome to the Digiplay Web Management System.</h4>");
+		Output::set_title("Welcome, ".Session::get_first_name());
+		MainTemplate::set_subtitle("Enjoying your day?");
+		$lastlogin = Session::get_lastlogin();
+		if($lastlogin) echo("<p class=\"text-success\">You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</p>");
+		else echo ("<p class=\"text-success\">You've never logged in before! Welcome to the Digiplay Web Management System.</p>");
+		echo"<h3>Tracks of the Day:</h3><ul>";
+		$tracks = Tracks::get_tracks_of_the_day(3);
+		foreach( $tracks as $track ) {
+			echo"<li><a href=\"music/detail/".$track->get_id()."\">".$track->get_artists_str()." - ".$track->get_title()."</a></li>";
+		}
+		echo "</ul>";
 	}; 
 ?>
