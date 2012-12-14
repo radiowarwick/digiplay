@@ -27,13 +27,54 @@ class Search {
                 $results[] = $item["id"];
                 $total = $item["full_count"];
             }
-            
         }
 
         $return = array(
             "results" => $results,
             "total" => $total);
 
+        return ((count($results) > 0)? $return : NULL);
+    }
+
+    public function artists($query, $limit=0, $offset=0) {
+        $query_str = "SELECT id, count(*) OVER() AS full_count FROM artists WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
+
+        if($limit > 0) $query_str .= " LIMIT ".$limit;
+        if($offset > 0) $query_str .= " OFFSET ".$offset;
+
+        $result = DigiplayDB::query($query_str);
+        if ($result === false) throw new UserError("Query failed");
+
+        $results = array();
+        if(pg_num_rows($result) > 0) {
+            while($item = pg_fetch_assoc($result,NULL)) {
+                $results[] = $item["id"];
+                $total = $item["full_count"];
+            }
+        }
+
+        $return = array("results" => $results, "total" => $total);
+        return ((count($results) > 0)? $return : NULL);
+    }
+
+    public function albums($query, $limit=0, $offset=0) {
+        $query_str = "SELECT id, count(*) OVER() AS full_count FROM albums WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
+
+        if($limit > 0) $query_str .= " LIMIT ".$limit;
+        if($offset > 0) $query_str .= " OFFSET ".$offset;
+
+        $result = DigiplayDB::query($query_str);
+        if ($result === false) throw new UserError("Query failed");
+
+        $results = array();
+        if(pg_num_rows($result) > 0) {
+            while($item = pg_fetch_assoc($result,NULL)) {
+                $results[] = $item["id"];
+                $total = $item["full_count"];
+            }
+        }
+
+        $return = array("results" => $results, "total" => $total);
         return ((count($results) > 0)? $return : NULL);
     }
 }

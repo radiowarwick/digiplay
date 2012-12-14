@@ -21,48 +21,36 @@ if($tracks) {
 	}
 }
 
-if($query) $search = Search::tracks("\"".$query."\"","artist",5,0,"artist");
+if($query) $search = Search::artists($query,5);
 $artists = $search["results"];
 $artists_array = array();
 
 if($artists) {	
-	foreach($artists as $artist_id) {
-		$track = Tracks::get($artist_id);
-		$artists = $track->get_artists();
-		foreach ($artists as $artist_object) {
-			$artist = array(
-					'id' => $artist_object->get_id(),
-					'title' => $artist_object->get_name(),
-					'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
-					);
-			array_push($artists_array, $artist);
-		}
+	foreach ($artists as $artist) {
+		$artist_object = Artists::get_by_id($artist);
+		$artist = array(
+				'id' => $artist_object->get_id(),
+				'title' => $artist_object->get_name(),
+				'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
+				);
+		array_push($artists_array, $artist);
 	}
 }
 
 
-if($query) $search = Search::tracks("\"".$query."\"","album",5);
+if($query) $search = Search::albums($query,5);
 $albums = $search["results"];
 $albums_array = array();
 
 if($albums) {	
-	foreach($albums as $album_id) {
-		$track = Tracks::get($album_id);
-		$album_object = $track->get_album();
-		$skip = false;
-		foreach($albums_array as $curr) {
-			if(($curr["title"] == $album_object->get_name())) {
-				$skip = true;
-			}
-		}
-		if(!$skip) {
-			$album = array(
-				'id' => $album_object->get_id(),
-				'title' => $album_object->get_name(),
-				'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
-				);
-			array_push($albums_array, $album);
-		}
+	foreach($albums as $album) {
+		$album_object = Albums::get_by_id($album);
+		$album = array(
+			'id' => $album_object->get_id(),
+			'title' => $album_object->get_name(),
+			'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
+			);
+		array_push($albums_array, $album);
 	}
 }
 
