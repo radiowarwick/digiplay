@@ -49,14 +49,6 @@ class Audio {
 		return $time_str;
 	}
 	
-	public function get_waveform_png(){
-		$md5 = $this->get_md5();
-		$fl = substr($md5, 0, 1);
-		$command = SITE_FILE_PATH."lib/waveformgen/waveformgen -m -d 1240x160 -b EEEEEE -r FFFFFF -p FFFFFF ".$this->get_archive()->get_localpath()."/".$fl."/".$md5." tmp.png";
-		exec($command, $output);
-		return readfile(SITE_FILE_PATH."lib/waveformgen/tmp.png");
-	}
-	
 	public function move_to_trash() {
 		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 3 WHERE audioid = ".$this->id.";");
 		if($sql) return true;
