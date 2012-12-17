@@ -55,7 +55,7 @@ $(function() {
 });
 </script>");
 
-echo("<h2>Current playlists:</h2>");
+echo("<h3>Current playlists:</h3>");
 
 echo("
 <form class=\"sortorder\">
@@ -130,10 +130,10 @@ echo("
 if(Session::is_group_user("Playlist Admin")) {
 	echo("
 <a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" data-backdrop=\"true\" data-keyboard=\"true\" id=\"add\">Add a new playlist &raquo;</a>
-<div class=\"modal fade\" id=\"addnew-modal\">
+<div class=\"modal fade hide\" id=\"addnew-modal\">
 	<div class=\"modal-header\">
 		<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-		<h3>Add new playlist</h3>
+		<h4>Add new playlist</h4>
 	</div>
 	<div class=\"modal-body\">
 		<form class=\"form-horizontal\" action=\"\" method=\"POST\">

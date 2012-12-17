@@ -24,16 +24,12 @@ if($_REQUEST["delete"]) {
 }
 
 echo("
-<form action=\"\" method=\"post\" name=\"request-track\">
+<h3 style=\"margin-top: -4px\">Request a track</h3>
+<form action=\"\" method=\"post\" name=\"request-track\" class=\"form-inline\">
 	<fieldset>
-		<div class=\"clearfix\">
-			<div class=\"pull-right\">
-				<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"span3\">
-				<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"span3\">
-				<input type=\"submit\" value=\"Request\" class=\"btn primary\">
-			</div>
-			<h3 style=\"margin-top: -4px\">Request a track</h3>
-		</div>
+			<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"span3\">
+			<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"span3\">
+			<input type=\"submit\" value=\"Request\" class=\"btn btn-primary\">
 	</fieldset>
 </form>");
 
@@ -42,8 +38,8 @@ if($requested = Requests::get_all()) {
 <table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
-			<th class=\"artist\">Artist</th>
-			<th class=\"title\">Title</th>
+			<th class=\"rartist\">Artist</th>
+			<th class=\"rtitle\">Title</th>
 			<th class=\"date\">Date Requested</th>
 			<th class=\"requester\">Requester</th>
 			".(Session::is_group_user("Music Admin")? "
@@ -54,8 +50,8 @@ if($requested = Requests::get_all()) {
 	foreach($requested as $request) {
 		echo("
 	<tr id=\"".$request->get_id()."\">
-		<td class=\"artist\">".$request->get_artist_name()."</td>
-		<td class=\"title\">".$request->get_name()."</td>
+		<td class=\"rartist\">".$request->get_artist_name()."</td>
+		<td class=\"rtitle\">".$request->get_name()."</td>
 		<td class=\"date\">".date("d/m/Y H:i",$request->get_date())."</td>
 		<td class=\"requester\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("Music Admin")? "
 		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-upload\"></i></td>

@@ -2,7 +2,6 @@
 require_once('pre.php');
 Output::set_title("Music Library");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 function total_track_time($time_arr) {
 	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
@@ -16,6 +15,7 @@ echo("<script>
 	$(function () {
 		$('.track-info').popover({
 			'html': true, 
+			'trigger': 'hover',
 			'title': function() { 
 				return($(this).parent().parent().find('.title').html())
 			},
@@ -114,7 +114,7 @@ if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href
 echo("
 <div class=\"row\">
 	<div class=\"span4\">
-	<h2>Library Statistics</h2>
+	<h3>Library Statistics</h3>
 		<dl>
 			<dt>Tracks Stored</dt>
 			<dd>".number_format(Tracks::get_total_tracks())."</dd>
@@ -125,7 +125,7 @@ echo("
 		</dl>
 	</div>
 	<div class=\"span5\">
-		<h2>Requested Tracks</h2>
+		<h3>Requested Tracks</h3>
 		");
 		if($requested = Requests::get_latest(3)) {
 			echo("
@@ -181,7 +181,7 @@ echo("
 $tracks = Tracks::get_newest();
 
 if($tracks) {
-	echo("<h2>10 newest tracks</h2>");
+	echo("<h3>10 newest tracks</h3>");
 	echo("<table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
@@ -236,10 +236,10 @@ if($tracks) {
 }
 if(Session::is_group_user("Playlist Admin")) {
 	echo("
-		<div class=\"modal fade\" id=\"playlist-modal\">
+		<div class=\"modal fade hide\" id=\"playlist-modal\">
 			<div class=\"modal-header\">
 				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h3>Add to playlist</h3>
+				<h4>Add to playlist</h4>
 			</div>
 			<div class=\"modal-body\">
 				<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p>
@@ -261,10 +261,10 @@ if(Session::is_group_user("Playlist Admin")) {
 
 if(Session::is_group_user("Music Admin")) {
 	echo("
-		<div class=\"modal fade\" id=\"delete-modal\">
+		<div class=\"modal fade hide\" id=\"delete-modal\">
 			<div class=\"modal-header\">
 				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h3>Delete Track</h3>
+				<h4>Delete Track</h4>
 			</div>
 			<div class=\"modal-body\">
 				<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>

@@ -15,7 +15,7 @@ function menu() {
 }
 function sidebar() {
 	$return .= "
-	<h3>Music Library</h3>
+	<h4>Music Library</h4>
 	<dl>
 		<dt>Tracks</dt>
 		<dd>".number_format(Tracks::get_total_tracks())."</dd>
@@ -36,7 +36,7 @@ function sidebar() {
 	}
 
 	$return .= "
-	<h3>Archive Storage</h3>
+	<h4>Archive Storage</h4>
 	<dl>";
 	foreach(Archives::get_all() as $archive) {
 		$pc = (int) ( 100 - ( $archive->get_free_space()/$archive->get_total_space() * 100 ) );

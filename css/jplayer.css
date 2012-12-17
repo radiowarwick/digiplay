@@ -7,7 +7,7 @@
 
 .jp-controls { width: 52px; height:52px; list-style:none; padding:0px; margin:0px; position:absolute; top:19px; left:14px; z-index:1;}
 .jp-controls li { padding:0px; margin:0px; display:none; }
-.jp-controls li a { width:52px; height:52px; background-image:url(../images/playpause.png); text-indent:-1000px; overflow:hidden; display:block; }
+.jp-controls li a { width:52px; height:52px; background-image:url(../img/playpause.png); text-indent:-1000px; overflow:hidden; display:block; }
 .jp-controls li.dps-file-loading { display:block; padding: 18px; }
 .jp-play { background-position:0px 0px; }
 .jp-play:hover { background-position:0px -52px; }

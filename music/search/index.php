@@ -1,8 +1,6 @@
 <?php
 require_once('pre.php');
 Output::set_title("Library Search");
-Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 $query = $_REQUEST['q'];
 $index = (isset($_REQUEST['i'])? $_REQUEST["i"] : "title artist album");
@@ -29,6 +27,7 @@ if($tracks) {
 		$(function () {
 			$('.track-info').popover({
 				'html': true, 
+				'trigger': 'hover',
 				'title': function() { 
 					return($(this).parent().parent().find('.title').html())
 				},
@@ -120,8 +119,8 @@ if($tracks) {
 	</script>");
 
 	$indexes = implode(", ", explode(" ", $index));
-	echo("<h2>".$search["total"]." results for ".$query."<small> searching in ".$indexes."</small></h2>");
-	echo("<div class=\"row\"><div class=\"span5\"><h4>Showing results ".$low." to ".$high."</h4></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
+	echo("<h3>".$search["total"]." results for ".$query."<small> searching in ".$indexes."</small></h3>");
+	echo("<div class=\"row\"><div class=\"span5\"><h5>Showing results ".$low." to ".$high."</h5></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 	echo("<table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
@@ -176,10 +175,10 @@ if($tracks) {
 	
 } else {
 	if($query) {
-		echo("<h2>Sorry, no results for ".$query."</h2>");
-		echo("<h3>Try a more generic search term.</h3>");
+		echo("<h3>Sorry, no results for ".$query."</h3>");
+		echo("<h4>Try a more generic search term.</h4>");
 	} 
-	echo("<h3>Enter keywords below to search for tracks:</h3>
+	echo("<h4>Enter keywords below to search for tracks:</h4>
 	<form action=\"".SITE_LINK_REL."music/search\" method=\"GET\" class=\"form-inline\">
 		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
        	<input type=\"submit\" class=\"btn primary\" value=\"Search\">
@@ -188,10 +187,10 @@ if($tracks) {
 
 if(Session::is_group_user("Playlist Admin")) {
 	echo("
-		<div class=\"modal fade\" id=\"playlist-modal\">
+		<div class=\"modal fade hide\" id=\"playlist-modal\">
 			<div class=\"modal-header\">
 				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h3>Add to playlist</h3>
+				<h4>Add to playlist</h4>
 			</div>
 			<div class=\"modal-body\">
 				<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p>
@@ -213,10 +212,10 @@ if(Session::is_group_user("Playlist Admin")) {
 
 if(Session::is_group_user("Music Admin")) {
 	echo("
-		<div class=\"modal fade\" id=\"delete-modal\">
+		<div class=\"modal fade hide\" id=\"delete-modal\">
 			<div class=\"modal-header\">
 				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h3>Delete Track</h3>
+				<h4>Delete Track</h4>
 			</div>
 			<div class=\"modal-body\">
 				<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>

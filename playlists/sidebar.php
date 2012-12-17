@@ -12,14 +12,14 @@ function sidebar() {
 	$total_length .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
 
 	$return .= "
-	<h3>Playlists</h3>
+	<h4>Playlists</h4>
 	<dl>
 		<dt>Playlisted Tracks:</dt>
 		<dd>".count($tracks)."</dd>
 		<dt>Length of Playlists:</dt>
 		<dd>".$total_length."</dd>
 	</dl>
-	<h3>Sustainer Service</h3>
+	<h4>Sustainer Service</h4>
 	<dl>
 		<dt>Tracks on Sustainer</dt>
 		<dd>".Sustainer::get_total_tracks()."</dd>

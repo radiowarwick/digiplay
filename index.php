@@ -36,7 +36,7 @@ $(function () {
 	MainTemplate::set_summary("
 		<div class=\"row\">
 			<div class=\"span4\">
-				<h2>Music Library</h2>
+				<h3>Music Library</h3>
 				<dl>
 					<dt>Tracks Stored</dt>
 					<dd>".number_format(Tracks::get_total_tracks())."</dd>
@@ -47,7 +47,7 @@ $(function () {
 				</dl>
 			</div>
 			<div class=\"span4\">
-				<h2>Sustainer Service</h2>
+				<h3>Sustainer Service</h3>
 				<dl>
 					<dt>Tracks on Sustainer</dt>
 					<dd>".Sustainer::get_total_tracks()."</dd>
@@ -57,12 +57,12 @@ $(function () {
 			</div>
 			<div class=\"span4\">
 			".((Session::is_user())? "
-				<h2>Common Tasks</h2>
+				<h3>Common Tasks</h3>
 				<a href=\"upload\" class=\"btn-primary btn\">Upload Audio &raquo;</a>
 				<a href=\"playlists\" class=\"btn-primary btn\">Edit Playlists &raquo;</a>
 				<a href=\"sue/schedule\" class=\"btn-primary btn\">Schedule Prerecorded Content &raquo;</a>
 			":"
-				<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h2><br />
+				<h3>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h3><br />
 				<form class=\"login-form form-horizontal\" action=\"ajax/login\" method=\"post\">
 					<fieldset>
 						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
@@ -94,7 +94,7 @@ $(function () {
 		$lastlogin = Session::get_lastlogin();
 		if($lastlogin) echo("<p class=\"text-success\">You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</p>");
 		else echo ("<p class=\"text-success\">You've never logged in before! Welcome to the Digiplay Web Management System.</p>");
-		echo"<h3>Tracks of the Day:</h3><ul>";
+		echo"<h4>Tracks of the Day:</h4><ul>";
 		$tracks = Tracks::get_tracks_of_the_day(3);
 		foreach( $tracks as $track ) {
 			echo"<li><a href=\"music/detail/".$track->get_id()."\">".$track->get_artists_str()." - ".$track->get_title()."</a></li>";

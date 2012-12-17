@@ -1,13 +1,12 @@
 <?php
 require_once('pre.php');
 Output::set_title("Censored Tracks");
-Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
 
 echo("<script>
 	$(function () {
 		$('.track-info').popover({
 			'html': true, 
+			'trigger': 'hover',
 			'title': function() { 
 				return($(this).parent().parent().find('.title').html())
 			},
@@ -63,7 +62,7 @@ if($_REQUEST["unflag"]) {
 	}
 }
 
-echo("<h2>Flagged for Censorship</h2>");
+echo("<h3>Flagged for Censorship</h3>");
 echo("<strong>To flag a track for censorship, search for it in the music library, click the <i class=\"icon-info-sign\"></i> and click the \"Flag for censorship\" button.</strong>");
 if($flagged = Tracks::get_flagged()) {
 	echo("
@@ -104,7 +103,7 @@ if($flagged = Tracks::get_flagged()) {
 	echo("
 </table>");
 } else {
-	echo("<h3>No tracks currently flagged for censorship.</h3>");
+	echo("<h4>No tracks currently flagged for censorship.</h4>");
 }
 
 $limit = (isset($_REQUEST['n']))? $_REQUEST['n'] : 10;
@@ -124,7 +123,7 @@ if($censored = Tracks::get_censored($limit,(($page-1)*$limit))) {
 	$high = (($low + $limit - 1) > $num_of_censored)? $num_of_censored : $low + $limit - 1;
 
 	echo("
-<h2>Censored Tracks</h2>
+<h3>Censored Tracks</h3>
 <table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
