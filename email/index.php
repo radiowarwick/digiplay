@@ -19,9 +19,9 @@ $emails = Emails::get(NULL, NULL, NULL, $limit,(($page-1)*$limit));
 	
 ?>
 <style type="text/css">
-.subject, .sender { display:block; word-wrap: break-word; width:364px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
+.subject, .sender { display:block; word-wrap: break-word; width:350px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
 .subject { font-weight:bold; }
-.sender { fkont-size:0.8em; }
+.sender { font-size:0.8em; }
 small { display:block; margin-bottom:10px; }
 #message { overflow:auto; border: 1px solid #DDD;
 -webkit-border-radius: 6px;
@@ -32,6 +32,7 @@ border-radius: 6px;
 box-shadow: 0 1px 2px rgba(0,0,0,.075);
 border-image: initial; padding:10px; width:438px; }
 tbody tr { cursor:pointer; }
+.pagination { text-align: center; }
 </style>
 <script type="text/javascript">
 $(function(){
@@ -42,8 +43,8 @@ $(function(){
 });
 </script>
 <div class="row">
-<div class="span8" id="messagelist">
-<table class="bordered-table zebra-striped span8">
+<div class="span6" id="messagelist">
+<table class="table table-bordered table-striped span6">
 <thead><tr><th class="span2">Date</th><th class="span8">Sender</th></tr></thead>
 <tbody>
 <?php
@@ -60,11 +61,11 @@ echo("<tr data-dps-email-id=\"".$email->get_id()."\">
 ?>
 </tbody>
 </table>
-<div class="pagination_wrap span8">
+<div class="pagination_wrap span6">
 <?php
 echo($pages->return);
 ?>
 </div>
 </div>
-<div class="span8" id="message">
+<div class="span6" id="message">
 </div></div>
