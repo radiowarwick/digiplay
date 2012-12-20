@@ -81,7 +81,7 @@ echo("
 				$.ajax({
 					url: '".SITE_LINK_REL."ajax/flag',
 					data: 'id=".$track->get_id()."&flag=toggle',
-					type: 'POST',
+					type: 'GET',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
 						$('h3').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
@@ -252,11 +252,9 @@ echo("
 							<input type=\"text\" name=\"new_keyword\" class=\"input-medium click-clear\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
-					<div class=\"control-group\">
-						<div class=\"controls\">
-							<input type=\"button\" name=\"flag\" class=\"btn btn-danger".($track->is_flagged()? " active" : "")."\" value=\"Flag for censorship\">
-						</div>
-					</div>
+					<a href=\"#\" name=\"flag\" class=\"btn btn-danger span2".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
+					<hr />
+					".(Session::is_group_user("Music Admin")? "<a href=\"".SITE_LINK_REL."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary span2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>
