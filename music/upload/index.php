@@ -18,119 +18,103 @@ echo("
 $(function () {
     'use strict';
 
-    // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload();
 
     $('#fileupload').fileupload('option', {
-        acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|aif|pcm|raw|wma|cda)$/i
+        acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma)$/i,
+        url: '".SITE_LINK_REL."ajax/file-upload.php',
+        limitConcurrentUploads: 3
     });
-
+        
     // Load existing files:
-    $.getJSON($('#fileupload').prop('action'), function (files) {
-        var fu = $('#fileupload').data('fileupload'),
-            template;
-        fu._adjustMaxNumberOfFiles(-files.length);
-        template = fu._renderDownload(files)
-            .appendTo($('#fileupload .files'));
-        // Force reflow:
-        fu._reflow = fu._transition && template.length &&
-            template[0].offsetWidth;
-        template.addClass('in');
+    $.ajax({
+        url: $('#fileupload').fileupload('option', 'url'),
+        dataType: 'json',
+        context: $('#fileupload')[0]
+    }).done(function (result) {
+        $(this).fileupload('option', 'done')
+            .call(this, null, {result: result});
     });
-
-    $('#fileupload').bind('fileuploadsend', function (e, data) {
-        if (data.dataType.substr(0, 6) === 'iframe') {
-            var target = $('<a/>').prop('href', data.url)[0];
-            if (window.location.host !== target.host) {
-                data.formData.push({
-                    name: 'redirect',
-                    value: redirectPage
-                });
-            }
-        }
-    });
-
-    // Open download dialogs via iframes,
-    // to prevent aborting current uploads:
-    $('#fileupload .files').delegate(
-        'a:not([rel^=gallery])',
-        'click',
-        function (e) {
-            e.preventDefault();
-            $('<iframe style=\"display:none;\"></iframe>')
-                .prop('src', this.href)
-                .appendTo(document.body);
-        }
-    );
 });
 </script>
     <form id=\"fileupload\" action=\"".SITE_LINK_REL."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
-        <div class=\"row\">
-            <div class=\"span9 fileupload-buttonbar\">
-                <div class=\"progressbar fileupload-progressbar\"><div style=\"width:0%;\"></div></div>
+        <div class=\"row fileupload-buttonbar\">
+            <div class=\"span6\">
                 <span class=\"btn btn-success fileinput-button\">
-                    <span>Add files...</span>
+                    <i class=\"icon-plus icon-white\"></i>
+                    <span>Add files</span>
                     <input type=\"file\" name=\"files[]\" multiple>
                 </span>
-                <button type=\"submit\" class=\"btn btn-primary start\">Start upload</button>
-                <button type=\"reset\" class=\"btn btn-info cancel\">Cancel upload</button>
-                <button type=\"button\" class=\"btn btn-danger delete\">Delete selected</button>
+                <button type=\"submit\" class=\"btn btn-primary start\">
+                    <i class=\"icon-upload icon-white\"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type=\"reset\" class=\"btn btn-warning cancel\">
+                    <i class=\"icon-ban-circle icon-white\"></i>
+                    <span>Cancel upload</span>
+                </button>
+            </div>
+            <div class=\"span3 fileupload-progress\">
+                <div class=\"progress-extended\">&nbsp;</div>
             </div>
         </div>
+        <div class=\"fileupload-loading\"></div>
         <br>
-        <div class=\"row\">
-            <div class=\"span9\">
-                <table class=\"table table-striped\"><tbody class=\"files\"></tbody></table>
-            </div>
-        </div>
+        <table role=\"presentation\" class=\"table table-striped\"><tbody class=\"files\" data-toggle=\"modal-gallery\" data-target=\"#modal-gallery\"></tbody></table>
     </form>
-    <script>
-var fileUploadErrors = {
-    maxFileSize: 'File is too big',
-    minFileSize: 'File is too small',
-    acceptFileTypes: 'Filetype not allowed',
-    maxNumberOfFiles: 'Max number of files exceeded',
-    uploadedBytes: 'Uploaded bytes exceed file size',
-    emptyResult: 'Empty file upload result'
-};
+
+<script>
 </script>
-<script id=\"template-upload\" type=\"text/html\">
-{% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
-    <tr class=\"template-upload fade\">
-        <td class=\"name\">{%=file.name%}</td>
-        <td class=\"size\">{%=o.formatFileSize(file.size)%}</td>
+<script id=\"template-upload\" type=\"text/x-tmpl\">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class=\"template-upload\">
+        <td class=\"name span5\"><span>{%=file.name%}</span></td>
+        <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% if (file.error) { %}
-            <td class=\"error\" colspan=\"2\"><span class=\"label important\">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+            <td class=\"error\" colspan=\"2\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
-            <td class=\"progress\"><div class=\"progressbar\"><div style=\"width:0%;\"></div></div></td>
-            <td class=\"start\">{% if (!o.options.autoUpload) { %}<button class=\"btn btn-primary\">Start</button>{% } %}</td>
+            <td>
+                <div class=\"progress progress-success progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\"><div class=\"bar\" style=\"width:0%;\"></div></div>
+            </td>
+            <td class=\"start\">{% if (!o.options.autoUpload) { %}
+                <button class=\"btn btn-primary pull-right\">
+                    <span>Start</span>
+                </button>
+            {% } %}</td>
         {% } else { %}
             <td colspan=\"2\"></td>
         {% } %}
-        <td class=\"cancel\">{% if (!i) { %}<button class=\"btn btn-info\">Cancel</button>{% } %}</td>
+        <td class=\"cancel\">{% if (!i) { %}
+            <button class=\"btn btn-warning pull-right\">
+                <span>Cancel</span>
+            </button>
+        {% } %}</td>
     </tr>
 {% } %}
 </script>
-<script id=\"template-download\" type=\"text/html\">
-{% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
-    <tr class=\"template-download fade\">
+<script id=\"template-download\" type=\"text/x-tmpl\">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class=\"template-download\">
         {% if (file.error) { %}
-            <td class=\"name\">{%=file.name%}</td>
-            <td class=\"size\">{%=o.formatFileSize(file.size)%}</td>
-            <td class=\"error\" colspan=\"2\"><span class=\"label important\">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+            <td></td>
+            <td class=\"name span7\" colspan=\"3\"><span>{%=file.name%}</span></td>
+            <td class=\"error\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
+            <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% } else { %}
-            <td class=\"name\">
-                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" rel=\"{%=file.thumbnail_url&&'gallery'%}\">{%=file.name%}</a>
+            <td class=\"name span7\" colspan=\"3\">
+                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\">{%=file.name%}</a>
             </td>
-            <td class=\"size\">{%=o.formatFileSize(file.size)%}</td>
-            <td colspan=\"2\"></td>
+            <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% } %}
         <td class=\"delete\">
-            <button class=\"btn btn-danger\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\">Delete</button>
+            <button class=\"btn btn-danger pull-right\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.delete_with_credentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>
+                <i class=\"icon-trash icon-white\"></i>
+            </button>
         </td>
     </tr>
 {% } %}
 </script>
+
 ");
 echo AlertMessage::basic("info","<a href=\"".SITE_LINK_REL."import\">Click here to go import the files to Digiplay.</a>","Finished uploading?");
 
