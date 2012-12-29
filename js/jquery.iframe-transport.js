@@ -1,5 +1,5 @@
 /*
- * jQuery Iframe Transport Plugin 1.2.5
+ * jQuery Iframe Transport Plugin 1.6
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2011, Sebastian Tschan
@@ -10,9 +10,18 @@
  */
 
 /*jslint unparam: true, nomen: true */
-/*global jQuery, document */
+/*global define, window, document */
 
-(function ($) {
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(['jquery'], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function ($) {
     'use strict';
 
     // Helper variable to create unique names for the transport iframes:
@@ -21,7 +30,8 @@
     // The iframe transport accepts three additional options:
     // options.fileInput: a jQuery collection of file input fields
     // options.paramName: the parameter name for the file form data,
-    //  overrides the name property of the file input field(s)
+    //  overrides the name property of the file input field(s),
+    //  can be a string or an array of strings.
     // options.formData: an array of objects with name and value properties,
     //  equivalent to the return data of .serializeArray(), e.g.:
     //  [{name: 'a', value: 1}, {name: 'b', value: 2}]
@@ -32,6 +42,7 @@
             return {
                 send: function (_, completeCallback) {
                     form = $('<form style="display:none;"></form>');
+                    form.attr('accept-charset', options.formAcceptCharset);
                     // javascript:false as initial iframe src
                     // prevents warning popups on HTTPS in IE6.
                     // IE versions below IE8 cannot set the name property of
@@ -41,7 +52,9 @@
                         '<iframe src="javascript:false;" name="iframe-transport-' +
                             (counter += 1) + '"></iframe>'
                     ).bind('load', function () {
-                        var fileInputClones;
+                        var fileInputClones,
+                            paramNames = $.isArray(options.paramName) ?
+                                    options.paramName : [options.paramName];
                         iframe
                             .unbind('load')
                             .bind('load', function () {
@@ -92,8 +105,11 @@
                                 return fileInputClones[index];
                             });
                             if (options.paramName) {
-                                options.fileInput.each(function () {
-                                    $(this).prop('name', options.paramName);
+                                options.fileInput.each(function (index) {
+                                    $(this).prop(
+                                        'name',
+                                        paramNames[index] || options.paramName
+                                    );
                                 });
                             }
                             // Appending the file input fields to the hidden form
@@ -139,18 +155,18 @@
     $.ajaxSetup({
         converters: {
             'iframe text': function (iframe) {
-                return $(iframe[0].body).text();
+                return iframe && $(iframe[0].body).text();
             },
             'iframe json': function (iframe) {
-                return $.parseJSON($(iframe[0].body).text());
+                return iframe && $.parseJSON($(iframe[0].body).text());
             },
             'iframe html': function (iframe) {
-                return $(iframe[0].body).html();
+                return iframe && $(iframe[0].body).html();
             },
             'iframe script': function (iframe) {
-                return $.globalEval($(iframe[0].body).text());
+                return iframe && $.globalEval($(iframe[0].body).text());
             }
         }
     });
 
-}(jQuery));
+}));
