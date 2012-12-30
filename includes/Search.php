@@ -40,6 +40,7 @@ class Search {
     }
 
     public function artists($query, $limit=0, $offset=0) {
+        $query = pg_escape_string($query);
         $query_str = "SELECT id, count(*) OVER() AS full_count FROM artists WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
 
         if($limit > 0) $query_str .= " LIMIT ".$limit;
@@ -61,6 +62,7 @@ class Search {
     }
 
     public function albums($query, $limit=0, $offset=0) {
+        $query = pg_escape_string($query);
         $query_str = "SELECT id, count(*) OVER() AS full_count FROM albums WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
 
         if($limit > 0) $query_str .= " LIMIT ".$limit;
