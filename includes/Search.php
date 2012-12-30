@@ -1,6 +1,9 @@
 <?php
 class Search {
     public function tracks($query,$fields="title,artist,album",$limit=0,$offset=0) {
+        // make the query safe
+        $query = pg_escape_string($query);
+
         // make sure the caller hasn't used spaces
         $fields = str_replace(" ",",",$fields);
 
@@ -19,7 +22,7 @@ class Search {
 
         // QUERY MOFOS
         $result = DigiplayDB::query($query_str);
-        if ($result === false) throw new UserError("Query failed");
+        if ($result === false) throw new UserError("Query failed: $query_str");
 
         $results = array();
         if(pg_num_rows($result) > 0) {
