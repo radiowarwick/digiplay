@@ -100,6 +100,14 @@ table .icon { width: 16px; }
   font-size: 0.9em;
 }
 
+.form-horizontal .control-label {
+  width: 120px !important;
+}
+
+.form-horizontal .controls {
+  margin-left: 140px !important;
+}
+
 /* ============ Music pages ============ */
 table .artist { width: 150px; }
 table .title { width: 250px; }
@@ -107,3 +115,11 @@ table .album { width: 200px; }
 table .length { width: 52px; }
 
 .keyword a i { float: right; margin-right: 6px; margin-top: 6px; display: inline;}
+
+/* ============= Music import ========== */
+.template-upload .name { overflow: hidden; white-space:nowrap; text-overflow: ellipsis; width: 100%;}
+.template-upload .size { white-space: nowrap; }
+
+.table-file-import tr.file { background: #f9f9f9; cursor: pointer; }
+.table-file-import tr.file:hover { background: #ededed; }
+.deleted { text-decoration: line-through; color: #666; cursor: default;}
