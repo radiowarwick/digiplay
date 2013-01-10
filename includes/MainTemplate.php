@@ -36,7 +36,6 @@ class MainTemplate implements Template{
 
 		$main_menu = new Menu;
 		$main_menu->add_many(
-			array("index","Overview"),
 			array("music","Music Library"),
 			array("playlists","Playlists"),
 			array("audiowalls","Audiowalls"),
