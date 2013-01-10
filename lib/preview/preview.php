@@ -22,15 +22,11 @@ ob_end_flush();
 $md5 = $audio->get_md5();
 $fl = substr($md5, 0, 1);
 
-if($audio->get_filetype() == "raw") $command = "/usr/local/bin/lame --silent -r -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5." -";
-if($audio->get_filetype() == "flac") $command = "/usr/bin/flac -c -d ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac | /usr/local/bin/lame --silent -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" - -";
-if($audio->get_filetype() == "mp3") $command = "/usr/local/bin/lame --silent -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".mp3 -";
+if($audio->get_filetype() == "raw") $command = "lame --silent -r -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5." -";
+if($audio->get_filetype() == "flac") $command = "flac -c -d ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac | lame --silent -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" - -";
+if($audio->get_filetype() == "mp3") $command = "lame --silent -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".mp3 -";
 
 $handle = popen($command, 'r');
-while(
-$read = fread($handle, 2096)
-) {
-	echo $read;
-}
+while($read = fread($handle, 2096)) echo $read;
 pclose($handle);
 ?>
