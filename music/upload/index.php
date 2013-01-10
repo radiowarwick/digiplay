@@ -116,6 +116,6 @@ $(function () {
 </script>
 
 ");
-echo AlertMessage::basic("info","<a href=\"".SITE_LINK_REL."import\">Click here to go import the files to Digiplay.</a>","Finished uploading?");
+echo AlertMessage::basic("info","<a href=\"".SITE_LINK_REL."music/import\">Click here to go import the files to Digiplay.</a>","Finished uploading?");
 
 ?>
