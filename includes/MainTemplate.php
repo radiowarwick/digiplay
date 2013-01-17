@@ -55,97 +55,46 @@ class MainTemplate implements Template{
 		$return .= " - ".Output::get_title();
 	$return .= "</title> 
 		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-		<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/jquery-1.8.3.min.js\"></script>";
+		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>
+		";
 		if(Session::is_developer()) {
 			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.js\"></script>
-						<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />";
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />
+		";
 		} else {
 			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.min.js\"></script>
-						<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.min.css\" />";
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.min.css\" />
+		";
 		}
 	if(count(Output::get_less_stylesheets())>0) {
 		foreach(Output::get_less_stylesheets() AS $src){
-			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet/less\"/>";
+			$return .= "<link href=\"".$src."\" rel=\"stylesheet/less\"/>
+		";
 		}
-		$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>";
+		$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>
+		";
 	}
 
-	$return .="	<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />";
+	$return .="<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />
+		";
 	if(count(Output::get_stylesheets())>0)
 		foreach(Output::get_stylesheets() AS $src){
-			$return .= "\n	<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>";
+			$return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>
+		";
 		}
 	if(count(Output::get_scripts())>0)
 		foreach(Output::get_scripts() AS $src){
-			$return .= "\n	<script src=\"".$src."\" type=\"text/javascript\"></script>";
+			$return .= "<script src=\"".$src."\" type=\"text/javascript\"></script>
+		";
 		}
-	
 	if(count(Output::get_feeds())>0)
 		foreach(Output::get_feeds() AS $feed){
-			$return .= "\n	<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\" />";
+			$return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\" />
+		";
 		}
-	
-	$return .= "
-	<script type=\"text/javascript\">
-		$(function () {
-			$('a[rel=\"twipsy\"]').tooltip();
-			$('.alert-message').alert();
-			$(\"input.search-query\").keyup(function(){
-				var value=this.value;
-				var searchbox = this;
-    			setTimeout(function(){
-          			if (searchbox.value == value) {
-                		if(searchbox.value.length < 3) {
-     						$(\"ul#quick-search\").slideUp(200,function(){
-        						return false;
-      						});
-    					} else {
-     						$.ajax({
-        						type: \"GET\",
-        						url: \"".SITE_LINK_REL."ajax/json-search.php?q=\"+searchbox.value,
-        						dataType: \"json\",
-        						success: function(data){
-          							if(data.length < 1){
-        								$(\"ul#quick-search\").slideUp(200);
-        							} else {
-            							var output_html = '';
-            							$.each(data, function(i, val) {
-            								output_html += '<li class=\"nav-header\">'+val.title+'</li>';
-              								$.each(val.data, function(i, data) {
-              									if(typeof(data.by) == \"undefined\") {
-              										output_html += '<li><a href=\"'+data.href+'\"><b>'+data.title+'</b></a></li>'
-              									} else {
-              										output_html += '<li><a href=\"'+data.href+'\"><b>'+data.title+'</b> by '+data.by+'</a></li>'
-              									}
-              								});
-											output_html += '<li class=\"full-search\"><em><a href=\"'+val.href+'\">Full Search...</a></em></li>';
-            							});
-									
-            							$(\"ul#quick-search\").html(output_html);
-            							$(\"ul#quick-search\").slideDown(200);
-          							}
-        						}
-      						});
-						}
-    				}
-    			},250);
-  			});
-			$('#quick-search').click(function (e) {
-    			e.stopPropagation();
-			});
-			$('input.search-query').click(function (e) {
-				e.stopPropagation();
-				if($('ul#quick-search').children().length > 0) {
-					$('ul#quick-search').slideDown(200);
-				}
-			});
-			$(document).click(function() {
-    			$('#quick-search').slideUp(200);
-			});
-		});
-	</script>
-</head> 
-	<body> 
+	$return .= "<script src=\"".SITE_LINK_REL."js/main.js\" type=\"text/javascript\"></script>
+	</head>
+	<body>
 		<div class=\"navbar navbar-inverse navbar-fixed-top\">
 			<div class=\"navbar-inner\">
 				<div class=\"container\">
@@ -227,7 +176,7 @@ class MainTemplate implements Template{
 		$return .= "
 				<div class=\"span12\">";
 	}
-	
+
 	$return .= $content;
 
 	$return .= "
@@ -251,14 +200,14 @@ class MainTemplate implements Template{
 		</div>";
 
 	$return .= "
-		<footer class=\"footer\"> 
+		<footer class=\"footer\">
 			<div class=\"container\">
 				<p class=\"pull-right\">
-					<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."img/footer_logo.png\" alt=\"RaW 1251AM\" /></a> 
+					<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."img/footer_logo.png\" alt=\"RaW 1251AM\" /></a>
 				</p>
 				<p>";
 	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#\" data-toggle=\"modal\" data-target=\"#logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a><br />";
-	else $return .= "Not logged in<br />";				
+	else $return .= "Not logged in<br />";
 	$return .= "Copyright &copy; 2011-12 Radio Warwick
 				</p>
 			</div>
