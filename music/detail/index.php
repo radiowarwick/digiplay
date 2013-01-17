@@ -146,7 +146,7 @@ echo("
                     <div class=\"jp-progress-wrap\">
                     <div class=\"jp-progress\">
 			   <img class=\"dps-waveform-loading\" src=\"".SITE_LINK_REL."img/ajax-loader.gif\" />
-			   <div class=\"dps-waveform\"><img src=\"".SITE_LINK_REL."lib/waveformgen/waveform.php?id=".$track->get_id()."\" /></div>
+			   <div class=\"dps-waveform\"><img src=\"".SITE_LINK_REL."lib/waveform/index.php?id=".$track->get_id()."\" /></div>
                         <div class=\"jp-seek-bar\">
                             <div class=\"jp-play-bar\"></div>
                         </div>

@@ -1,0 +1,25 @@
+https://github.com/superjoe30/waveform
+
+Command Line Usage:
+
+    waveform [options] audiofile pngfile
+
+    Available options with their defaults:
+    --width 256                 width of the image
+    --height 64                 height of the image
+    --color-bg 00000000         bg color, rrggbbaa
+    --color-center 000000ff     gradient center color, rrggbbaa
+    --color-outer 000000ff      gradient outer color, rrggbbaa
+
+    Substitute '-' for a filename to use stdio.
+
+Dependencies:
+
+    libsox
+    libpng
+    zlib
+
+Compile:
+
+    gcc -o waveform main.c -O3 -lsox -lz -lpng
+
