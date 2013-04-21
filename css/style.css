@@ -1,0 +1,103 @@
+html,body {
+  height: 100%;
+}
+
+body { 
+  padding-top:60px !important;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px;
+}
+
+#push, footer {
+  height: 60px;
+}
+ 
+footer {  background-color: #eee; }
+footer p { margin: 20px 0; }
+footer img { margin: 12px 0; }
+
+.feature-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  background-image: url('../img/homepage.jpg');
+  background-size: cover;
+  background-position: center center;
+  height: 410px;
+}
+
+.feature {
+  height: 350px;
+  padding-top: 40px;
+}
+
+@media (min-width: 992px) {
+  .feature h1 {
+    font-size: 5.3em;
+    line-height: 1.6;
+  }
+  .feature h1 small {
+    font-size: 0.5em;
+  }
+  .feature p {
+    font-size: 1.9em;
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+  .feature h1 {
+    font-size: 3.5em;
+    line-height: 1.2;
+  }
+  .feature h1 small {
+    font-size: 0.5em;
+  }
+  .feature p {
+    font-size: 1.8em;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-image {
+    height: 500px;
+  }
+
+  small { float: right; width: 100%; text-align: right; }
+  small:after { content: ""; clear: both; display: block; }
+
+  .feature {
+    height: 450px;
+    padding-top: 0px;
+  }
+}
+
+.navbar { font-size: 15px !important; }
+.form-signin input { margin: 5px 0; }
+
+/* ============ Generic rules ============ */
+table .icon { width: 16px; }
+.hover-info { display: none; white-space: nowrap;}
+
+/* ============ Music pages ============ */
+table .artist { width: 150px; }
+table .title { width: 250px; }
+table .album { width: 200px; }
+table .length { width: 52px; }
+
+.keyword a i { float: right; margin-right: 6px; margin-top: 6px; display: inline;}
+
+/* ============= Music import ========== */
+.template-upload .name { overflow: hidden; white-space:nowrap; text-overflow: ellipsis; width: 100%;}
+.template-upload .size { white-space: nowrap; }
+
+.table-file-import tr.file { background: #f9f9f9; cursor: pointer; }
+.table-file-import tr.file:hover { background: #ededed; }
+.deleted { text-decoration: line-through; color: #666; cursor: default;}

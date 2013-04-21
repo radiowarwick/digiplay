@@ -3,16 +3,16 @@ class MainTemplate implements Template{
 	protected static $sidebar;
 	protected static $menu;
 	protected static $subtitle;
-	protected static $masthead;
-	protected static $summary;
+	protected static $feature_image;
+	protected static $feature_html;
 	public static function set_subtitle($subtitle){
 		self::$subtitle = $subtitle;
 	}
-	public static function set_masthead($masthead) {
-		self::$masthead = $masthead;
+	public static function set_feature_image($image) {
+		self::$feature_image = $image;
 	}
-	public static function set_summary($summary) {
-		self::$summary = $summary;
+	public static function set_feature_html($html) {
+		self::$feature_html = $html;
 	}
 	public static function set_sidebar($sidebar) {
 		self::$sidebar = $sidebar;
@@ -36,12 +36,12 @@ class MainTemplate implements Template{
 
 		$main_menu = new Menu;
 		$main_menu->add_many(
-			array("music","Music Library"),
-			array("playlists","Playlists"),
-			array("audiowalls","Audiowalls"),
-			array("files","Files"),
-			array("showplans","Show Planning"));
-	if(Session::is_admin()) $main_menu->add("admin","Admin");
+			array("music","Music Library","music"),
+			array("playlists","Playlists","th-list"),
+			array("audiowalls","Audiowalls","th"),
+			array("files","Files","folder-open"),
+			array("showplans","Show Planning","tasks"));
+	if(Session::is_admin()) $main_menu->add("admin","Admin","cog");
 	
 	$site_path_array = explode("/",SITE_PAGE);
 	$main_menu->set_active($site_path_array[0]);
@@ -54,32 +54,31 @@ class MainTemplate implements Template{
 	if(Output::get_title() != 'Untitled Page')
 		$return .= " - ".Output::get_title();
 	$return .= "</title> 
+		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>
+		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js\"></script>
 		";
 		if(Session::is_developer()) {
 			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.js\"></script>
-		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\" />
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\">
 		";
 		} else {
 			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.min.js\"></script>
-		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.min.css\" />
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.min.css\">
 		";
 		}
 	if(count(Output::get_less_stylesheets())>0) {
 		foreach(Output::get_less_stylesheets() AS $src){
-			$return .= "<link href=\"".$src."\" rel=\"stylesheet/less\"/>
+			$return .= "<link href=\"".$src."\" rel=\"stylesheet/less\">
 		";
 		}
 		$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>
 		";
 	}
 
-	$return .="<link rel=\"stylesheet\" type=\"text/css\" href=\"".SITE_LINK_REL."css/dps.css\" />
-		";
 	if(count(Output::get_stylesheets())>0)
 		foreach(Output::get_stylesheets() AS $src){
-			$return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\"/>
+			$return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\">
 		";
 		}
 	if(count(Output::get_scripts())>0)
@@ -89,74 +88,61 @@ class MainTemplate implements Template{
 		}
 	if(count(Output::get_feeds())>0)
 		foreach(Output::get_feeds() AS $feed){
-			$return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\" />
+			$return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\">
 		";
 		}
-	$return .= "<script src=\"".SITE_LINK_REL."js/main.js\" type=\"text/javascript\"></script>
+	$return .= "
+		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/style.css\">
+		<script src=\"".SITE_LINK_REL."js/main.js\" type=\"text/javascript\"></script>
 	</head>
 	<body>
-		<div class=\"navbar navbar-inverse navbar-fixed-top\">
-			<div class=\"navbar-inner\">
+		<div id=\"wrap\">
+			".(isset(self::$feature_image)? "<div class=\"feature-image\" style=\"background-image: url('".self::$feature_image."')\"></div>" : "")."
+			<div class=\"navbar navbar-inverse navbar-fixed-top\">
 				<div class=\"container\">
-				<a class=\"brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>"
-					.$main_menu->output(SITE_LINK_REL,6,"nav");
-					if(Session::is_user()) { $return .= "
+					<a class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".nav-collapse\">
+	         			<span class=\"icon-bar\"></span>
+	          			<span class=\"icon-bar\"></span>
+	         			<span class=\"icon-bar\"></span>
+	        		</a>
+					<a class=\"navbar-brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>
+					<div class=\"nav-collapse collapse\">"
+						.$main_menu->output(SITE_LINK_REL,6,"nav");
+						if(Session::is_user()) { $return .= "
 						<ul class=\"nav pull-right\">
 							<li>
-								<form class=\"navbar-search pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
-            						<input type=\"text\" class=\"search-query\" style=\"width: 180px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
-            					</form>
-            				</li>
-            				<li>
-	          					<ul id=\"quick-search\" class=\"dropdown-menu pull-right\"></ul>
-	          				</li>
-	          			</ul>
-	          		"; }
-          			$return .= "
+								<form class=\"navbar-form pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+	            					<input type=\"text\" class=\"search-query\" style=\"width: 180px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
+	            				</form>
+	            			</li>
+	            			<li>
+		          				<ul id=\"quick-search\" class=\"dropdown-menu pull-right\"></ul>
+		          			</li>
+		          		</ul>
+		          		"; }
+	          			$return .= "
+					</div>
 				</div>
-			</div>
-		</div>
-		";
-
-	if(isset(self::$masthead)) {
-		$return .= "
-		<div class=\"masthead\">
-			<div class=\"intro\">
-				<div class=\"container\">
-					".self::$masthead."
-				</div>
-			</div>
-		</div>";
-	}
-
-	if(isset(self::$summary)) {
-		$return .= "
-		<div class=\"summary\">
-			<div class=\"container\">
-				".self::$summary."
-			</div>
-		</div>";
-	}
-
+			</div>";
 	$return .= "
-		<div class=\"container\">";
-
+			<div class=\"container\">
+			".(isset(self::$feature_html)? "<div class=\"feature\">".self::$feature_html."</div>" : "")."";
 	if(Output::get_title() != 'Untitled Page') {
 		$return .= "
-			<div class=\"page-header\">
-				<h2>".Output::get_title();
-				if(isset(self::$subtitle)) {
-					$return .= " <small>".self::$subtitle."</small>";
-				}
+				<div class=\"page-header\">
+					<h2>".Output::get_title();
+					if(isset(self::$subtitle)) {
+						$return .= " <small>".self::$subtitle."</small>";
+					}
 		$return .= "</h2>
-			</div>";
+				</div>";
 	}
 
 	$return .= "
-			<div class=\"row\">";
+				<div class=\"row\">";
 	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
-			<div class=\"span3\">";
+				<div class=\"col-span-3\">";
 		if(isset(self::$menu)) {
 			$return .= "	
 					<div class=\"well\" style=\"padding: 8px 0; margin-bottom: 0;\">".
@@ -170,19 +156,19 @@ class MainTemplate implements Template{
 					</div>";
 		}
 		$return .= "
-			</div>
-			<div class=\"span9\">";
+					</div>
+					<div class=\"col-span-9\">";
 	} else {
 		$return .= "
-				<div class=\"span12\">";
+				<div class=\"col-span-12\">";
 	}
 
 	$return .= $content;
 
 	$return .= "
+					</div>
 				</div>
-			</div>
-		</div>";
+			</div>";
 
 	if(Session::is_user())
 		$return .= "
@@ -200,16 +186,22 @@ class MainTemplate implements Template{
 		</div>";
 
 	$return .= "
-		<footer class=\"footer\">
+		<div id=\"push\"></div>
+	</div>
+		<footer>
 			<div class=\"container\">
-				<p class=\"pull-right\">
-					<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."img/footer_logo.png\" alt=\"RaW 1251AM\" /></a>
-				</p>
-				<p>";
-	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#\" data-toggle=\"modal\" data-target=\"#logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a><br />";
-	else $return .= "Not logged in<br />";
-	$return .= "Copyright &copy; 2011-12 Radio Warwick
-				</p>
+				<div class=\"row\">
+					<div class=\"col-span-8\">
+						<p class=\"text-muted credit\">";
+	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#\" data-toggle=\"modal\" data-target=\"#logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a>. ";
+	else $return .= "Not logged in. ";
+	$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
+						</p>
+					</div>
+					<div class=\"col-span-4\">
+						<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."img/footer_logo.png\" alt=\"RaW 1251AM\" class=\"pull-right\"/></a>
+					</div>
+				</div>
 			</div>
 		</footer>
 	</body> 

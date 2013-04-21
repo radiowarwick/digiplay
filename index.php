@@ -1,53 +1,68 @@
 <?php
 require_once('pre.php');
 
-$masthead = "<h1>Digiplay, from Radio Warwick</h1><p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>";
-MainTemplate::set_masthead($masthead);
-
-function total_track_time($time_arr) {
-	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
-	$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
-	$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]." minutes, " : "";
-	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
-	return $time_str;
-}
 $refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1);
 if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".SITE_LINK_REL.$refer);
-?>
-<script type="text/javascript">
-$(function () {
-	$('#username').focus();
-	$('.login-form').submit(function(event) {
-		event.preventDefault();
-		$('#submit').button('loading');
-		$('.help-inline').remove();
-		$.post('ajax/login.php', $(this).serialize(), function(data) {
-			if(data == "success") { 
-				location.reload()
-			} else {
-				$('#submit').after('<span class="help-inline">'+data+'</span>');
-				$('#submit').button('reset');
-			}
-		})
-	});
-});
-</script>
-<?php
-	MainTemplate::set_summary("
-		<div class=\"row\">
-			<div class=\"span4\">
-				<h3>Music Library</h3>
+MainTemplate::set_feature_image(SITE_LINK_REL."img/homepage.jpg");
+
+echo("
+		<script type=\"text/javascript\">
+		$(function () {
+			$('#username').focus();
+			$('.form-signin').submit(function(event) {
+				event.preventDefault();
+				$('#submit').button('loading');
+				$('.help-inline').remove();
+				$.post('ajax/login.php', $(this).serialize(), function(data) {
+					if(data == \"success\") { 
+						location.reload()
+					} else {
+						$('#submit').after('<span class=\"help-inline\">'+data+'</span>');
+						$('#submit').button('reset');
+					}
+				})
+			});
+		});
+		</script>");
+$feature = "
+			<div class=\"row\">
+				<div class=\"col-span-8\">
+					<h1>Digiplay <small>by Radio Warwick</small></h1>
+					<p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>
+				</div>
+				<div class=\"col-span-4\">
+				".((Session::is_user())? "
+					<h2>Common Tasks</h2>
+					<a href=\"upload\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
+					<a href=\"playlists\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
+					<a href=\"sue/schedule\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
+				":"
+					<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h2><br />
+					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
+						<fieldset>
+							<input id=\"username\" name=\"username\" type=\"text\" class=\"input-block-level\" placeholder=\"Username\">
+							<input id=\"password\" name=\"password\" type=\"password\" class=\"input-block-level\" placeholder=\"Password\">
+							<input type=\"submit\" class=\"btn btn-large btn-primary btn-block\" id=\"submit\" name=\"submit\" value=\"Log In\">
+						</fieldset>
+					</form>
+				")."
+				</div>
+			</div>
+		";
+		echo("<div class=\"row\">
+			<div class=\"col-span-4\">
+				<h2>Music Library</h2>
 				<dl>
 					<dt>Tracks Stored</dt>
 					<dd>".number_format(Tracks::get_total_tracks())."</dd>
 					<dt>Length of Tracks</dt>
-					<dd>".total_track_time(Time::seconds_to_dhms(Tracks::get_total_length()))."</dd>
+					<dd>".Time::format_pretty(Tracks::get_total_length())."</dd>
 					<dt>Playlisted Tracks</dt>
 					<dd>".count(Tracks::get_playlisted())."</dd>
 				</dl>
 			</div>
-			<div class=\"span4\">
-				<h3>Sustainer Service</h3>
+			<div class=\"col-span-4\">
+				<h2>Sustainer Service</h2>
 				<dl>
 					<dt>Tracks on Sustainer</dt>
 					<dd>".Sustainer::get_total_tracks()."</dd>
@@ -55,42 +70,33 @@ $(function () {
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
 			</div>
-			<div class=\"span4\">
-			".((Session::is_user())? "
-				<h3>Common Tasks</h3>
-				<a href=\"upload\" class=\"btn-primary btn\">Upload Audio &raquo;</a>
-				<a href=\"playlists\" class=\"btn-primary btn\">Edit Playlists &raquo;</a>
-				<a href=\"sue/schedule\" class=\"btn-primary btn\">Schedule Prerecorded Content &raquo;</a>
-			":"
-				<h3>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h3><br />
-				<form class=\"login-form form-horizontal\" action=\"ajax/login\" method=\"post\">
-					<fieldset>
-						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
-							<label for=\"username\" class=\"control-label\">Username</label>
-							<div class=\"controls\">
-								<input id=\"username\" name=\"username\" type=\"text\" class=\"required\">
-							</div>
-						</div>
-						<div class=\"control-group".(isset($_REQUEST['refer'])? " error" : "")."\">
-							<label for=\"password\" class=\"control-label\">Password</label>
-							<div class=\"controls\">
-								<input id=\"password\" name=\"password\" type=\"password\" class=\"required\">
-							</div>
-						</div>
-						<div class=\"control-group\">
-							<div class=\"controls\">
-								<input type=\"submit\" class=\"btn btn-primary\" id=\"submit\" name=\"submit\" value=\"Log In\">
-							</div>
-						</div>
-					</fieldset>
-				</form>
-			")."
+			<div class=\"col-span-4\">
+				<h2>Newest Tracks</h2>");
+				$tracks = Tracks::get_newest(5);
+				echo("<table class=\"table table-striped table-hover table-condensed\" cellspacing=\"0\">");
+				foreach($tracks as $track) {
+					$artists = Artists::get_by_audio_id($track->get_id());
+					$artist_str = "";
+					foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
+					$artist_str = substr($artist_str,0,-2);
+					echo("
+					<tr>
+						<td class=\"icon\">
+							<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
+								<i class=\"glyphicon glyphicon-info-sign\"></i>
+							</a>
+						</td>
+						<td class=\"title\">".$track->get_title()." by ".$artist_str."</td>
+					</tr>");
+				}
+				echo("
+				</table>
 			</div>
 		</div>");
 
+	MainTemplate::set_feature_html($feature);
+
 	if(Session::is_user()) {
-		Output::set_title("Welcome, ".Session::get_first_name());
-		MainTemplate::set_subtitle("Enjoying your day?");
 		$lastlogin = Session::get_lastlogin();
 		if($lastlogin) echo("<p class=\"text-success\">You last logged in: ".strftime("%A %e %B %G %H:%M", $lastlogin)."</p>");
 		else echo ("<p class=\"text-success\">You've never logged in before! Welcome to the Digiplay Web Management System.</p>");
