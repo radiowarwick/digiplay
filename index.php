@@ -12,7 +12,7 @@ function total_track_time($time_arr) {
 	return $time_str;
 }
 $refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1);
-if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".SITE_LINK_ABS.$refer);
+if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".SITE_LINK_REL.$refer);
 ?>
 <script type="text/javascript">
 $(function () {
@@ -21,7 +21,7 @@ $(function () {
 		event.preventDefault();
 		$('#submit').button('loading');
 		$('.help-inline').remove();
-		$.post('ajax/login', $(this).serialize(), function(data) {
+		$.post('ajax/login.php', $(this).serialize(), function(data) {
 			if(data == "success") { 
 				location.reload()
 			} else {

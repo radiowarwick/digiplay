@@ -195,7 +195,7 @@ class MainTemplate implements Template{
 				You'll lose any unsaved changes on this page.
 			</div>
 			<div class=\"modal-footer\">
-				<a class=\"btn btn-primary\" href=\"".SITE_LINK_REL."ajax/logout\">Yes, log out</a>
+				<a class=\"btn btn-primary\" href=\"".SITE_LINK_REL."ajax/logout.php\">Yes, log out</a>
 			</div>
 		</div>";
 

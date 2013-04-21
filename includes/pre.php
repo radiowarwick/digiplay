@@ -1,7 +1,5 @@
 <?php
-function __autoload($class_name) {
-	require_once (SITE_FILE_PATH ."includes/" .$class_name . ".php");
-}
+function __autoload($class_name) { require_once (SITE_FILE_PATH ."includes/" .$class_name . ".php"); }
 
 ini_set("session.use_only_cookies",true);
 
@@ -18,40 +16,33 @@ if (get_magic_quotes_gpc()) {
 }
 
 {
-	//Definitions
-	//root:	Operating System root
-	//file:	File requested by user. eg index.php
-	//install:	Installation of template manager. Sometimes at site root, sometimes not.
-	//domain:	Document root of site as seen by user
-	
-	$root_to_file		= preg_split("%[/\\\]%",$_SERVER['SCRIPT_FILENAME'],null,PREG_SPLIT_NO_EMPTY);
-	$root_to_install	= array_slice(preg_split("%[/\\\]%",dirname(__FILE__),null,PREG_SPLIT_NO_EMPTY),0,-1);
-	$docroot_to_file	= preg_split("%[/\\\]%",$_SERVER['PHP_SELF'],null,PREG_SPLIT_NO_EMPTY);
-			
-	$install_to_file	= array_slice($root_to_file, count($root_to_install));
+	define('SITE_FILE_BASE', str_replace('\\', '/', dirname(dirname(__FILE__))) . '/');
 
-	$request			= preg_split("%[/\\\]%",current(explode("?",$_SERVER['REQUEST_URI'])));
-	$domain_to_install	= array_slice($request, 1, count($docroot_to_file) - count($install_to_file));
-	
-	//Path on server to installation root
-	define("SITE_FILE_PATH", (substr(__FILE__,0,1)== DIRECTORY_SEPARATOR?DIRECTORY_SEPARATOR:"").implode(DIRECTORY_SEPARATOR,$root_to_install).DIRECTORY_SEPARATOR);
-	//Path from installation root
-	define("SITE_PATH",	implode("/",array_slice($install_to_file,0,-1)));
-	//Page from installation root
-	define("SITE_PAGE",	implode("/",$install_to_file));
-	
-	//Actual path in URL from document root
-	define("SITE_LINK_INSTALL_PATH", implode("/",$domain_to_install).(count($domain_to_install)>0?"/":""));
-	//Absolute link to installation root
-	define("SITE_LINK_ABS",	(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=="on"?"https":"http")."://" . $_SERVER['HTTP_HOST'] . "/" .SITE_LINK_INSTALL_PATH);
-	//Absolute link to installation root (Force http)
-	define("SITE_LINK_ABS_HTTP",	"http://" . $_SERVER['HTTP_HOST'] . "/" . SITE_LINK_INSTALL_PATH);
-	//Absolute link to installation root (Force https)
-	define("SITE_LINK_ABS_HTTPS",	"https://" . $_SERVER['HTTP_HOST'] . "/" . SITE_LINK_INSTALL_PATH);
-	//Relative link to site root
-	define("SITE_LINK_REL",	str_repeat("../",count($request) - count($domain_to_install) - 2));
+	$tempPath1 = explode('/', str_replace('\\', '/', dirname($_SERVER['SCRIPT_FILENAME'])));
+	$tempPath2 = explode('/', substr(SITE_FILE_BASE, 0, -1));
+	$tempPath3 = explode('/', str_replace('\\', '/', dirname($_SERVER['PHP_SELF'])));
+	$tempPath4 = array();
+	$tempPath5 = explode('/', str_replace('\\', '/', $_SERVER['PHP_SELF']));
 
-	unset($root_to_file,$root_to_install,$docroot_to_file,$install_to_file,$request,$domain_to_install);
+	for ($i = count($tempPath2); $i < count($tempPath1); $i++) $tempPath4[] = array_pop ($tempPath3);
+	$tempPath4[] = "";
+
+	$urladdr = implode('/', $tempPath3);
+	$reladdr = implode('/', array_reverse($tempPath4));
+
+	if ($urladdr{strlen($urladdr) - 1}== '/') define('SITE_URL_ROOT', $urladdr);
+	else define('SITE_URL_ROOT', $urladdr . '/');
+	if ($urladdr{strlen($reladdr) - 1}== '/') define('SITE_URL_REL', $reladdr);
+	else define('SITE_URL_REL', $reladdr . '/');
+	define('SITE_FILE_REL', implode('/',array_diff($tempPath5,$tempPath3)));
+
+	// Legacy definitions
+	define('SITE_LINK_REL',SITE_URL_ROOT);
+	define('SITE_LINK_ABS',SITE_URL_REL);
+	define('SITE_FILE_PATH',SITE_FILE_BASE);
+	define('SITE_PATH',SITE_FILE_REL);
+
+	unset($tempPath1, $tempPath2, $tempPath3, $tempPath4, $urladdr, $reladdr);
 
 	// Include config file
 	if(file_exists(SITE_FILE_PATH."digiplay.conf")) {
@@ -77,8 +68,18 @@ if (get_magic_quotes_gpc()) {
 
 session_start();
 
-if((!Session::is_user()) && ((substr(SITE_PAGE,0,4) == "ajax") && (SITE_PAGE != "ajax/login.php"))) { http_response_code(403); exit(json_encode(array("error" => "Your session has timed out, or you have logged out in another tab. Please log in again."))); }
-if((SITE_PAGE != "index.php") && (SITE_PAGE != "ajax/login.php")) { Output::require_user(); }
+if((!Session::is_user()) && ((substr(SITE_PATH,0,4) == "ajax") && (SITE_PATH != "ajax/login.php"))) { 
+	http_response_code(403); 
+	exit(
+		json_encode(
+			array(
+				"error" => "Your session has timed out, or you have logged out in another tab. Please log in again."
+			)
+		)
+	);
+}
+
+if((SITE_PATH != "index.php") && (SITE_PATH != "ajax/login.php")) Output::require_user();
 
 if (Session::is_developer()) {
     ini_set ( "display_errors", "1");
@@ -89,5 +90,5 @@ if (Session::is_developer()) {
     ini_set ( "error_append_string", "</div>");
 }
 
-if(substr(SITE_PAGE,0,4) != "ajax") Output::set_template("MainTemplate");
+if(substr(SITE_PATH,0,4) != "ajax") Output::set_template("MainTemplate");
 ?>
