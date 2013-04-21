@@ -43,9 +43,9 @@ $(function(){
 });
 </script>
 <div class="row">
-<div class="span6" id="messagelist">
-<table class="table table-bordered table-striped span6">
-<thead><tr><th class="span2">Date</th><th class="span8">Sender</th></tr></thead>
+<div class="col-span-6" id="messagelist">
+<table class="table table-bordered table-striped col-span-6">
+<thead><tr><th class="col-span-2">Date</th><th class="col-span-8">Sender</th></tr></thead>
 <tbody>
 <?php
 
@@ -61,11 +61,11 @@ echo("<tr data-dps-email-id=\"".$email->get_id()."\">
 ?>
 </tbody>
 </table>
-<div class="pagination_wrap span6">
+<div class="pagination_wrap col-span-6">
 <?php
 echo($pages->return);
 ?>
 </div>
 </div>
-<div class="span6" id="message">
+<div class="col-span-6" id="message">
 </div></div>

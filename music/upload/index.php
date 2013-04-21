@@ -39,7 +39,7 @@ $(function () {
 </script>
     <form id=\"fileupload\" action=\"".SITE_LINK_REL."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
         <div class=\"row fileupload-buttonbar\">
-            <div class=\"span6\">
+            <div class=\"col-span-6\">
                 <span class=\"btn btn-success fileinput-button\">
                     <i class=\"icon-plus icon-white\"></i>
                     <span>Add files</span>
@@ -54,7 +54,7 @@ $(function () {
                     <span>Cancel upload</span>
                 </button>
             </div>
-            <div class=\"span3 fileupload-progress\">
+            <div class=\"col-span-3 fileupload-progress\">
                 <div class=\"progress-extended\">&nbsp;</div>
             </div>
         </div>
@@ -68,8 +68,8 @@ $(function () {
 <script id=\"template-upload\" type=\"text/x-tmpl\">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class=\"template-upload\">
-        <td class=\"name span5\"><span>{%=file.name%}</span></td>
-        <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class=\"name col-span-5\"><span>{%=file.name%}</span></td>
+        <td class=\"size col-span-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% if (file.error) { %}
             <td class=\"error\" colspan=\"2\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
@@ -97,14 +97,14 @@ $(function () {
     <tr class=\"template-download\">
         {% if (file.error) { %}
             <td></td>
-            <td class=\"name span7\" colspan=\"3\"><span>{%=file.name%}</span></td>
+            <td class=\"name col-span-7\" colspan=\"3\"><span>{%=file.name%}</span></td>
             <td class=\"error\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
-            <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class=\"size col-span-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% } else { %}
-            <td class=\"name span7\" colspan=\"3\">
+            <td class=\"name col-span-7\" colspan=\"3\">
                 <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\">{%=file.name%}</a>
             </td>
-            <td class=\"size span2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class=\"size col-span-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% } %}
         <td class=\"delete\">
             <button class=\"btn btn-danger pull-right\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.delete_with_credentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>

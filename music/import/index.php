@@ -128,14 +128,14 @@ foreach($files as $file) {
 
 	echo("<tr class=\"file\">
 			<td class=\"icon\"> <i class=\"icon-chevron-right\"></i></td>
-			<td class=\"name span7\">".$file." (<a href=\"".SITE_LINK_REL."uploads/".$file."\">Download</a>)</td>
+			<td class=\"name col-span-7\">".$file." (<a href=\"".SITE_LINK_REL."uploads/".$file."\">Download</a>)</td>
 		</tr>
 		<tr class=\"fileinfo-tr\">
 			<td colspan=\"2\">
 				<div class=\"fileinfo\" style=\"display: none\">
 					<div class=\"warnings\">".$warnings."</div>
 					<div class=\"row\">
-						<div class=\"span5\">
+						<div class=\"col-span-5\">
 							<form class=\"form-horizontal\" action=\"".SITE_LINK_REL."ajax/file-import.php\" method=\"POST\" enctype=\"multipart/form-data\">
 								<fieldset>
 									<input type=\"hidden\" name=\"filename\" value=\"".$file."\" />
@@ -173,7 +173,7 @@ foreach($files as $file) {
 								</fieldset>
 							</form>
 						</div>
-						<div class=\"span3\">
+						<div class=\"col-span-3\">
 							<strong>Length: </strong>".$length."<br />
 							<strong>Origin: </strong>".$origin."<br />
 							<strong>Filetype: </strong>".$filetype."<br />
