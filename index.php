@@ -69,10 +69,12 @@ $feature = "
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
+				<a class=\"btn\" href=\"".SITE_LINK_REL."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
+				<a class=\"btn\" href=\"".SITE_LINK_REL."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
 			</div>
 			<div class=\"col-span-4\">
 				<h2>Newest Tracks</h2>");
-				$tracks = Tracks::get_newest(5);
+				$tracks = Tracks::get_newest(4);
 				echo("<table class=\"table table-striped table-hover table-condensed\" cellspacing=\"0\">");
 				foreach($tracks as $track) {
 					$artists = Artists::get_by_audio_id($track->get_id());
@@ -91,6 +93,7 @@ $feature = "
 				}
 				echo("
 				</table>
+				<a class=\"btn\" href=\"".SITE_LINK_REL."music/\"><span class=\"glyphicon glyphicon-chevron-right\"></span> More</a>
 			</div>
 		</div>");
 
