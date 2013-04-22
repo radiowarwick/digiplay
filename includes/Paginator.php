@@ -92,7 +92,7 @@ class Paginator{
 		$this->low = ($this->current_page <= 0) ? 0:($this->current_page-1) * $this->items_per_page;
 		if($this->current_page <= 0) $this->items_per_page = 0;
 		$this->limit = ($_GET['n'] == 'All') ? "":" LIMIT $this->low,$this->items_per_page";
-		$this->return .= "</div>";
+		$this->return .= "</ul>";
 	}
 	function display_items_per_page()
 	{
