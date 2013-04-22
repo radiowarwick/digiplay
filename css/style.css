@@ -3,7 +3,7 @@ html,body {
 }
 
 body { 
-  padding-top:60px !important;
+  padding-top:50px !important;
 }
 
 #wrap {
@@ -34,7 +34,7 @@ footer img { margin: 12px 0; }
 
 .feature {
   height: 350px;
-  padding-top: 40px;
+  padding-top: 50px;
 }
 
 @media (min-width: 992px) {
@@ -62,6 +62,12 @@ footer img { margin: 12px 0; }
   .feature p {
     font-size: 1.8em;
     line-height: 1.1;
+  }
+  .search-bar {
+    display: none;
+  }
+  .navbar-brand {
+    display: none;
   }
 }
 
