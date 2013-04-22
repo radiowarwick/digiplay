@@ -145,7 +145,7 @@ class MainTemplate implements Template{
 				<div class=\"col-span-3\">";
 		if(isset(self::$menu)) {
 			$return .= "	
-					<div class=\"well\" style=\"padding: 8px 0; margin-bottom: 0;\">".
+					<div class=\"well sidebar-menu\">".
 					self::$menu."
 					</div>";
 		}

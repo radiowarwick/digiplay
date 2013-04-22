@@ -41,6 +41,15 @@ footer img { margin: 12px 0; }
   padding: 19px;
 }
 
+.sidebar-menu {
+  padding: 8px 0; 
+  margin-bottom: 0;
+}
+
+.sidebar-menu .nav li a {
+  padding: 5px 15px;
+}
+
 @media (min-width: 992px) {
   .feature h1 {
     font-size: 5.3em;
