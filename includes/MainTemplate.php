@@ -172,16 +172,20 @@ class MainTemplate implements Template{
 
 	if(Session::is_user())
 		$return .= "
-		<div class=\"modal fade hide\" id=\"logout-modal\">
-			<div class=\"modal-header\">
-				<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>
-				<h4>Log out?</h4>
-			</div>
-			<div class=\"modal-body\">
-				You'll lose any unsaved changes on this page.
-			</div>
-			<div class=\"modal-footer\">
-				<a class=\"btn btn-primary\" href=\"".SITE_LINK_REL."ajax/logout.php\">Yes, log out</a>
+		<div class=\"modal fade\" id=\"logout-modal\">
+			<div class=\"modal-dialog\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header\">
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>
+						<h4 class=\"modal-title\">Log out?</h4>
+					</div>
+					<div class=\"modal-body\">
+						You'll lose any unsaved changes on this page.
+					</div>
+					<div class=\"modal-footer\">
+						<a class=\"btn btn-primary\" href=\"".SITE_LINK_REL."ajax/logout.php\">Yes, log out</a>
+					</div>
+				</div>
 			</div>
 		</div>";
 
@@ -193,7 +197,7 @@ class MainTemplate implements Template{
 				<div class=\"row\">
 					<div class=\"col-span-8\">
 						<p class=\"text-muted credit\">";
-	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#\" data-toggle=\"modal\" data-target=\"#logout-modal\" data-backdrop=\"true\" data-keyboard=\"true\">Logout</a>. ";
+	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#logout-modal\" data-toggle=\"modal\">Logout</a>. ";
 	else $return .= "Not logged in. ";
 	$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
 						</p>
