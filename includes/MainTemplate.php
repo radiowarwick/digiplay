@@ -105,11 +105,11 @@ class MainTemplate implements Template{
 	          			<span class=\"icon-bar\"></span>
 	         			<span class=\"icon-bar\"></span>
 	        		</a>
-					<a class=\"navbar-brand\" href=\"".SITE_LINK_REL."\">Digiplay</a>
+					<a class=\"navbar-brand hidden-tablet\" href=\"".SITE_LINK_REL."\">Digiplay</a>
 					<div class=\"nav-collapse collapse\">"
 						.$main_menu->output(SITE_LINK_REL,6,"nav");
 						if(Session::is_user()) { $return .= "
-						<ul class=\"nav pull-right search-bar\">
+						<ul class=\"nav pull-right hidden-tablet\">
 							<li>
 								<form class=\"navbar-form pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
 	            					<input type=\"text\" class=\"search-query\" style=\"width: 180px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
@@ -151,7 +151,7 @@ class MainTemplate implements Template{
 		}
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div style=\"padding: 19px;\">".
+					<div class=\"sidebar\">".
 					self::$sidebar."
 					</div>";
 		}

@@ -37,6 +37,10 @@ footer img { margin: 12px 0; }
   padding-top: 50px;
 }
 
+.sidebar {
+  padding: 19px;
+}
+
 @media (min-width: 992px) {
   .feature h1 {
     font-size: 5.3em;
@@ -63,12 +67,6 @@ footer img { margin: 12px 0; }
     font-size: 1.8em;
     line-height: 1.1;
   }
-  .search-bar {
-    display: none;
-  }
-  .navbar-brand {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
@@ -86,6 +84,8 @@ footer img { margin: 12px 0; }
 
   #push, footer { height: 120px; }
   footer p { margin: 10px 0; }
+
+  .sidebar { display: none; }
 }
 
 .navbar { font-size: 15px !important; }
