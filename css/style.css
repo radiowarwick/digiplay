@@ -84,8 +84,6 @@ footer img { margin: 12px 0; }
 
   #push, footer { height: 120px; }
   footer p { margin: 10px 0; }
-
-  .sidebar { display: none; }
 }
 
 .navbar { font-size: 15px !important; }

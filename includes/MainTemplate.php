@@ -151,7 +151,7 @@ class MainTemplate implements Template{
 		}
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div class=\"sidebar\">".
+					<div class=\"sidebar hidden-phone\">".
 					self::$sidebar."
 					</div>";
 		}
