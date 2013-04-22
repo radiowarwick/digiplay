@@ -3,14 +3,6 @@ require_once('pre.php');
 Output::set_title("Music Library");
 Output::add_stylesheet(SITE_LINK_REL."css/music.css");
 
-function total_track_time($time_arr) {
-	$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
-	$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
-	$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]." minutes, " : "";
-	$time_str .= ($time_arr["seconds"])? $time_arr["seconds"]." seconds" : "";
-	return $time_str;
-}
-
 echo("<script>
 	$(function () {
 		$('.track-info').popover({
@@ -44,7 +36,7 @@ echo("<script>
 			if($(this).parent().hasClass('active')) {
 				$(this).find('i').removeClass('icon-minus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update',
+					url: '".SITE_LINK_REL."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -62,7 +54,7 @@ echo("<script>
 			} else {
 				$(this).find('i').removeClass('icon-plus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update',
+					url: '".SITE_LINK_REL."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -91,7 +83,7 @@ echo("<script>
 
 		$('.yes-definitely-delete').click(function() {
 			$.ajax({
-				url: '".SITE_LINK_REL."ajax/delete-track',
+				url: '".SITE_LINK_REL."ajax/delete-track.php',
 				data: 'id='+trackid,
 				type: 'POST',
 				error: function(xhr,text,error) {
@@ -113,18 +105,18 @@ if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href
 
 echo("
 <div class=\"row\">
-	<div class=\"col-span-4\">
+	<div class=\"col-span-5\">
 	<h3>Library Statistics</h3>
 		<dl>
 			<dt>Tracks Stored</dt>
 			<dd>".number_format(Tracks::get_total_tracks())."</dd>
 			<dt>Length of Tracks</dt>
-			<dd>".total_track_time(Time::seconds_to_dhms(Tracks::get_total_length()))."</dd>
+			<dd>".Time::format_pretty(Tracks::get_total_length())."</dd>
 			<dt>Playlisted Tracks</dt>
 			<dd>".count(Tracks::get_playlisted())."</dd>
 		</dl>
 	</div>
-	<div class=\"col-span-5\">
+	<div class=\"col-span-7\">
 		<h3>Requested Tracks</h3>
 		");
 		if($requested = Requests::get_latest(3)) {
@@ -144,7 +136,7 @@ echo("
 			<tr id=\"".$request->get_id()."\">
 				<td class=\"icon\">
 					<a href=\"#\" class=\"track-info\">
-						<i class=\"icon-info-sign\"></i>
+						<i class=\"glyphicon glyphicon-info-sign\"></i>
 					</a>
 					<div class=\"hover-info\">
 						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
@@ -155,8 +147,8 @@ echo("
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
 				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("Music Admin")? "
-				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-plus-sign\"></i></td>
-				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-minus-sign\"></td>" : "") : "")."
+				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></td>
+				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-minus-sign\"></td>" : "") : "")."
 			</tr>");
 			}
 			echo("
@@ -204,7 +196,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
-					<i class=\"icon-info-sign\"></i>
+					<i class=\"glyphicon glyphicon-info-sign\"></i>
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$artist_str."<br />
@@ -225,9 +217,9 @@ if($tracks) {
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
-				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\"><i class=\"icon-plus-sign\"></i></a></td>"); 
+				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></a></td>"); 
 			}
-			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></a></td>" : "")."
+			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-remove-sign\"></i></a></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
@@ -236,24 +228,28 @@ if($tracks) {
 }
 if(Session::is_group_user("Playlist Admin")) {
 	echo("
-		<div class=\"modal fade hide\" id=\"playlist-modal\">
-			<div class=\"modal-header\">
-				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h4>Add to playlist</h4>
-			</div>
-			<div class=\"modal-body\">
-				<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p>
-				<ul class=\"nav nav-pills nav-stacked\">
-				");
-				foreach(Playlists::get_all() as $playlist) {
-					echo("<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\"><i class=\"icon-music\" style=\"margin-right: 10px\"></i>".$playlist->get_name()."</a></li>");
-				}
-				echo("
-				</ul>
-			</div>
-			<div class=\"modal-footer\">
-				<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
-				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+		<div class=\"modal fade\" id=\"playlist-modal\">
+			<div class=\"modal-dialog\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header\">
+						<a class=\"close\" data-dismiss=\"modal\">&times;</a>
+						<h4>Add to playlist</h4>
+					</div>
+					<div class=\"modal-body\">
+						<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p>
+						<ul class=\"nav nav-pills nav-stacked\">
+						");
+						foreach(Playlists::get_all() as $playlist) {
+							echo("<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\"><i class=\"glyphicon glyphicon-music\" style=\"margin-right: 10px\"></i>".$playlist->get_name()."</a></li>");
+						}
+						echo("
+						</ul>
+					</div>
+					<div class=\"modal-footer\">
+						<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
+						<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+					</div>
+				</div>
 			</div>
 		</div>"
 	);
@@ -261,17 +257,21 @@ if(Session::is_group_user("Playlist Admin")) {
 
 if(Session::is_group_user("Music Admin")) {
 	echo("
-		<div class=\"modal fade hide\" id=\"delete-modal\">
-			<div class=\"modal-header\">
-				<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-				<h4>Delete Track</h4>
-			</div>
-			<div class=\"modal-body\">
-				<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>
-			</div>
-			<div class=\"modal-footer\">
-				<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a>
-				<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">No</a>
+		<div class=\"modal fade\" id=\"delete-modal\">
+			<div class=\"modal-dialog\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header\">
+						<a class=\"close\" data-dismiss=\"modal\">&times;</a>
+						<h4>Delete Track</h4>
+					</div>
+					<div class=\"modal-body\">
+						<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>
+					</div>
+					<div class=\"modal-footer\">
+						<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a>
+						<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">No</a>
+					</div>
+				</div>
 			</div>
 		</div>"
 	);
