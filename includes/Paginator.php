@@ -49,7 +49,7 @@ class Paginator{
 		$this->querystring = urlencode($this->querystring);
 		$this->index = urlencode($this->index);
 
-		$this->return = "<div class=\"pagination\"><ul>";
+		$this->return = "<ul class=\"pagination\">";
 
 		$this->return .= ($this->current_page > 1 And $this->items_total >= 10) ? "<li class=\"prev\"><a href=\"$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=$prev_page&n=$this->items_per_page\">&laquo; Previous</a></li> ":"<li class=\"prev disabled\"><a href=\"#\">&laquo; Previous</a></li> ";
 
