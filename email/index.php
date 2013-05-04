@@ -30,7 +30,7 @@ border-radius: 6px;
 -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.075);
 -moz-box-shadow: 0 1px 2px rgba(0,0,0,.075);
 box-shadow: 0 1px 2px rgba(0,0,0,.075);
-border-image: initial; padding:10px; width:438px; }
+border-image: initial; padding:10px; /*width:438px;*/ }
 tbody tr { cursor:pointer; }
 .pagination { text-align: center; }
 </style>
@@ -44,7 +44,7 @@ $(function(){
 </script>
 <div class="row">
 <div class="col-span-6" id="messagelist">
-<table class="table table-bordered table-striped col-span-6">
+<table class="table table-striped col-span-6">
 <thead><tr><th class="col-span-2">Date</th><th class="col-span-8">Sender</th></tr></thead>
 <tbody>
 <?php
@@ -61,7 +61,7 @@ echo("<tr data-dps-email-id=\"".$email->get_id()."\">
 ?>
 </tbody>
 </table>
-<div class="pagination_wrap col-span-6">
+<div class="pagination_wrap">
 <?php
 echo($pages->return);
 ?>
