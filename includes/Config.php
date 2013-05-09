@@ -20,5 +20,22 @@ class Config {
 			return true;
 		}
 	}
+
+	public function get_locations() {
+		$locations = array();
+		$result = DigiplayDB::query("SELECT location FROM configuration WHERE location != -1 GROUP BY location ORDER BY location ASC;");
+		while($location = pg_fetch_assoc($result, NULL)) {
+			 $locations[] = $location['location'];
+		}
+    	return $locations;
+	}
+
+	public function get_by_location($location) {
+		$settings = array();
+		$result = DigiplayDB::query("SELECT * FROM configuration WHERE location = '$location';");
+		while($setting = pg_fetch_assoc($result,NULL))
+                 $settings[] = $setting['parameter'];
+    	return $settings;
+	}
 }
 ?>
