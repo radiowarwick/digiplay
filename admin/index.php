@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 Output::set_title("Administration");
 Output::add_script(LINK_ABS."js/jquery-ui-1.8.17.custom.min.js");
 Output::add_script(LINK_ABS."js/bootstrap-popover.js");

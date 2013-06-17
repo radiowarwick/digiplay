@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 Output::set_title("Track Detail");
 Output::add_script(LINK_ABS."js/jquery.jplayer.min.js");
 Output::add_stylesheet(LINK_ABS."css/jplayer.css");

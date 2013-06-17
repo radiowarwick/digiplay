@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 Output::set_title("Music Library");
 Output::add_stylesheet(LINK_ABS."css/music.css");
 

@@ -1,4 +1,4 @@
-<?php require_once("pre.php");
+<?php 
 if(!Session::is_group_user("Music Admin")) {
 	Output::http_error(401);
 } else {

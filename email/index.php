@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 Output::set_title("Emails to the Studio");
 
 $limit = (isset($_GET['n']))? $_GET['n'] : 10;

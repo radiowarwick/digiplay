@@ -1,4 +1,4 @@
-<?php require_once("pre.php");
+<?php 
 Output::set_title("Import Music");
 MainTemplate::set_subtitle("Add new music to the Digiplay system");
 

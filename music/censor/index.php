@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 Output::set_title("Censored Tracks");
 
 echo("<script>

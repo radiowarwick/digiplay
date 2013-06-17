@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 Output::set_template();
 
 $query = $_REQUEST['q'];

@@ -1,5 +1,5 @@
 <?php
-require_once('pre.php');
+
 
 $refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1);
 if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".LINK_ABS.$refer);

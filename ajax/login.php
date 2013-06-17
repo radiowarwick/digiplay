@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 
 if(Session::login($_POST['username'],$_POST['password'])){
 	exit("success");

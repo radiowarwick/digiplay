@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 
 if(Session::is_group_user('Music Admin')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);

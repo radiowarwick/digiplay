@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 
 if(Session::is_group_user('Music Admin')){
 	if($_REQUEST["track_id"] && $_REQUEST["keyword"]) {

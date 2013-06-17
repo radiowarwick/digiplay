@@ -1,6 +1,6 @@
 <?php
 
-require_once("pre.php");
+
 Output::set_template();
 $audio = Tracks::get($_GET['id']);
 

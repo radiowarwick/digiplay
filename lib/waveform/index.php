@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 Output::set_template();
 header("Content-type: image/png");
 

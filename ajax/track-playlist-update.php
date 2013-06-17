@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 
 if(Session::is_group_user('Playlist Admin')){
 	$track = Tracks::get($_REQUEST['trackid']);

@@ -1,5 +1,6 @@
 #set this to your DPS website installation path:
 php_value include_path /usr/share/dps/www/includes
+php_value auto_prepend_file pre.php
 
 RewriteEngine  on
 RewriteBase /

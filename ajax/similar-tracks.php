@@ -1,4 +1,4 @@
-<?php require_once("pre.php");
+<?php 
 
 $search_str = preg_replace('/[^a-z0-9]+/i', ' ', trim(preg_replace('/\s*\([^)]*\)/', '', $_REQUEST["title"]." ".$_REQUEST["artist"])));
 $similar_tracks = Search::tracks($search_str);

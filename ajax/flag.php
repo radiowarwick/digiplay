@@ -1,5 +1,5 @@
 <?php
-require_once("pre.php");
+
 
 $track = Tracks::get_by_id($_REQUEST["id"]);
 if($_REQUEST["flag"]) {
