@@ -71,19 +71,19 @@ class Output{
 	public static function fatal_error(){
 		header("HTTP/1.0 503 Service Unavailable");
 		ob_end_clean();
-		include(SITE_FILE_PATH . "errors/fatal_error.php");
+		include(FILE_ROOT . "errors/fatal_error.php");
 		exit();
 	}
 	
 	public static function require_non_user(){
 		if(Session::is_user()){
-			header("Location: ".SITE_LINK_ABS);
+			header("Location: ".LINK_ABS);
 			exit();
 		}
 	}
 	public static function require_user(){
 		if(!Session::is_user()){
-			header("Location: ".SITE_LINK_REL."index.php?refer=".ltrim(SITE_LINK_ABS,'/').(count($_GET)>0?urlencode("&".http_build_query($_GET)):""));
+			header("Location: ".LINK_ABS."index.php?refer=".ltrim(LINK_ABS,'/').(count($_GET)>0?urlencode("&".http_build_query($_GET)):""));
 			exit();
 		}
 	}

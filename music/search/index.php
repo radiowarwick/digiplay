@@ -55,7 +55,7 @@ if($tracks) {
 			if($(this).parent().hasClass('active')) {
 				$(this).find('i').removeClass('icon-minus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update',
+					url: '".LINK_ABS."ajax/track-playlist-update',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -73,7 +73,7 @@ if($tracks) {
 			} else {
 				$(this).find('i').removeClass('icon-plus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update',
+					url: '".LINK_ABS."ajax/track-playlist-update',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -102,7 +102,7 @@ if($tracks) {
 
 		$('.yes-definitely-delete').click(function() {
 			$.ajax({
-				url: '".SITE_LINK_REL."ajax/delete-track',
+				url: '".LINK_ABS."ajax/delete-track',
 				data: 'id='+trackid,
 				type: 'POST',
 				error: function(xhr,text,error) {
@@ -144,7 +144,7 @@ if($tracks) {
 		echo("
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
-				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
+				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
 					<i class=\"icon-info-sign\"></i>
 				</a>
 				<div class=\"hover-info\">
@@ -179,7 +179,7 @@ if($tracks) {
 		echo("<h4>Try a more generic search term.</h4>");
 	} 
 	echo("<h4>Enter keywords below to search for tracks:</h4>
-	<form action=\"".SITE_LINK_REL."music/search\" method=\"GET\" class=\"form-inline\">
+	<form action=\"".LINK_ABS."music/search\" method=\"GET\" class=\"form-inline\">
 		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
        	<input type=\"submit\" class=\"btn primary\" value=\"Search\">
     </form>");
@@ -204,7 +204,7 @@ if(Session::is_group_user("Playlist Admin")) {
 			</div>
 			<div class=\"modal-footer\">
 				<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
-				<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+				<a href=\"".LINK_ABS."playlists\" class=\"btn\">Manage playlists</a>
 			</div>
 		</div>"
 	);

@@ -37,9 +37,9 @@ function menu() {
 		array("index.php#add","Add a new playlist", "plus-sign"),
 		array("sustainer/","Edit sustainer playlist", "edit")
 	);
-	$site_path_array = explode("/",SITE_PAGE);
+	$site_path_array = explode("/",LINK_PAGE);
 
 	$menu->set_active($site_path_array[1]);
-	return $menu->output(SITE_LINK_REL."playlists/",6,"nav nav-list");
+	return $menu->output(LINK_ABS."playlists/",6,"nav nav-list");
 }
 ?>

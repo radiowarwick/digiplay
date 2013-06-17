@@ -1,8 +1,8 @@
 <?php
 require_once('pre.php');
 Output::set_title("Administration");
-Output::add_script(SITE_LINK_REL."js/jquery-ui-1.8.17.custom.min.js");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
+Output::add_script(LINK_ABS."js/jquery-ui-1.8.17.custom.min.js");
+Output::add_script(LINK_ABS."js/bootstrap-popover.js");
 
 MainTemplate::set_subtitle("View and edit configuration settings");
 

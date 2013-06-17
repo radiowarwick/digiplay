@@ -1,8 +1,8 @@
 <?php
 require_once('pre.php');
 Output::set_title("Requested Tracks");
-Output::add_stylesheet(SITE_LINK_REL."css/music.css");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
+Output::add_stylesheet(LINK_ABS."css/music.css");
+Output::add_script(LINK_ABS."js/bootstrap-popover.js");
 
 MainTemplate::set_subtitle("Want to play a track, but it's not in the database? Request it here");
 
@@ -54,8 +54,8 @@ if($requested = Requests::get_all()) {
 		<td class=\"rtitle\">".$request->get_name()."</td>
 		<td class=\"date\">".date("d/m/Y H:i",$request->get_date())."</td>
 		<td class=\"requester\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("Music Admin")? "
-		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-upload\"></i></td>
-		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "") : "")."
+		<td class=\"icon\"><a href=\"".LINK_ABS."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"icon-upload\"></i></td>
+		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "") : "")."
 	</tr>");
 	}
 	echo("

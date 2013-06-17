@@ -21,10 +21,10 @@ class MainTemplate implements Template{
 		self::$menu = $menu;
 	}
 	public static function print_page($content){
-		if(strlen(SITE_PATH)>0){
-			$sitePathArray = explode("/",SITE_PATH);
+		if(strlen(LINK_PATH)>0){
+			$sitePathArray = explode("/",LINK_PATH);
 			for($i = 0; $i < count($sitePathArray); $i++){
-				$file = SITE_FILE_PATH.implode("/",array_slice($sitePathArray,0,$i+1))."/sidebar.php";
+				$file = FILE_ROOT.implode("/",array_slice($sitePathArray,0,$i+1))."/sidebar.php";
 				if(file_exists($file)){
 					include($file);
 					MainTemplate::set_sidebar(sidebar());
@@ -43,7 +43,7 @@ class MainTemplate implements Template{
 			array("showplans","Show Planning","tasks"));
 	if(Session::is_admin()) $main_menu->add("admin","Admin","cog");
 	
-	$site_path_array = explode("/",SITE_PAGE);
+	$site_path_array = explode("/",LINK_PATH);
 	$main_menu->set_active($site_path_array[0]);
 	
 	header("Content-Type: text/html; charset=utf-8");
@@ -59,12 +59,12 @@ class MainTemplate implements Template{
 		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js\"></script>
 		";
 		if(Session::is_developer()) {
-			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.js\"></script>
-		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.css\">
+			$return .= "<script type=\"text/javascript\" src=\"".LINK_ABS."js/bootstrap.js\"></script>
+		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/bootstrap.css\">
 		";
 		} else {
-			$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/bootstrap.min.js\"></script>
-		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/bootstrap.min.css\">
+			$return .= "<script type=\"text/javascript\" src=\"".LINK_ABS."js/bootstrap.min.js\"></script>
+		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/bootstrap.min.css\">
 		";
 		}
 	if(count(Output::get_less_stylesheets())>0) {
@@ -72,7 +72,7 @@ class MainTemplate implements Template{
 			$return .= "<link href=\"".$src."\" rel=\"stylesheet/less\">
 		";
 		}
-		$return .= "<script type=\"text/javascript\" src=\"".SITE_LINK_REL."js/less-1.1.5.min.js\"></script>
+		$return .= "<script type=\"text/javascript\" src=\"".LINK_ABS."js/less-1.1.5.min.js\"></script>
 		";
 	}
 
@@ -92,8 +92,8 @@ class MainTemplate implements Template{
 		";
 		}
 	$return .= "
-		<link rel=\"stylesheet\" href=\"".SITE_LINK_REL."css/style.css\">
-		<script src=\"".SITE_LINK_REL."js/main.js\" type=\"text/javascript\"></script>
+		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/style.css\">
+		<script src=\"".LINK_ABS."js/main.js\" type=\"text/javascript\"></script>
 	</head>
 	<body>
 		<div id=\"wrap\">
@@ -105,13 +105,13 @@ class MainTemplate implements Template{
 	          			<span class=\"icon-bar\"></span>
 	         			<span class=\"icon-bar\"></span>
 	        		</a>
-					<a class=\"navbar-brand hidden-tablet\" href=\"".SITE_LINK_REL."\">Digiplay</a>
+					<a class=\"navbar-brand hidden-tablet\" href=\"".LINK_ABS."\">Digiplay</a>
 					<div class=\"nav-collapse collapse\">"
-						.$main_menu->output(SITE_LINK_REL,6,"nav");
+						.$main_menu->output(LINK_ABS,6,"nav");
 						if(Session::is_user()) { $return .= "
 						<ul class=\"nav pull-right hidden-tablet\">
 							<li>
-								<form class=\"navbar-form pull-right\" action=\"".SITE_LINK_REL."music/search\" method=\"GET\">
+								<form class=\"navbar-form pull-right\" action=\"".LINK_ABS."music/search\" method=\"GET\">
 	            					<input type=\"text\" class=\"search-query\" style=\"width: 180px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
 	            				</form>
 	            			</li>
@@ -183,7 +183,7 @@ class MainTemplate implements Template{
 						You'll lose any unsaved changes on this page.
 					</div>
 					<div class=\"modal-footer\">
-						<a class=\"btn btn-primary\" href=\"".SITE_LINK_REL."ajax/logout.php\">Yes, log out</a>
+						<a class=\"btn btn-primary\" href=\"".LINK_ABS."ajax/logout.php\">Yes, log out</a>
 					</div>
 				</div>
 			</div>
@@ -203,7 +203,7 @@ class MainTemplate implements Template{
 						</p>
 					</div>
 					<div class=\"col-span-4\">
-						<a href=\"".SITE_LINK_REL."\"><img src=\"".SITE_LINK_REL."img/footer_logo.png\" alt=\"RaW 1251AM\" class=\"pull-right\"/></a>
+						<a href=\"".LINK_ABS."\"><img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" class=\"pull-right\"/></a>
 					</div>
 				</div>
 			</div>

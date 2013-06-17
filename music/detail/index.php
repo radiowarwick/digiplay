@@ -1,8 +1,8 @@
 <?php
 require_once('pre.php');
 Output::set_title("Track Detail");
-Output::add_script(SITE_LINK_REL."js/jquery.jplayer.min.js");
-Output::add_stylesheet(SITE_LINK_REL."css/jplayer.css");
+Output::add_script(LINK_ABS."js/jquery.jplayer.min.js");
+Output::add_stylesheet(LINK_ABS."css/jplayer.css");
 
 MainTemplate::set_subtitle("View and edit track metadata");
 
@@ -22,9 +22,9 @@ echo("
 				event.preventDefault();
 				submit = $(this).find('input[type=\"submit\"]');
 				submit.button('loading');
-				submit.after('<img src=\"".SITE_LINK_REL."img/ajax-loader.gif\" id=\"detail-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
+				submit.after('<img src=\"".LINK_ABS."img/ajax-loader.gif\" id=\"detail-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-detail-update',
+					url: '".LINK_ABS."ajax/track-detail-update',
 					data: $(this).serialize(),
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -50,7 +50,7 @@ echo("
 						$('.keyword').parent().remove();
 						keywords_str = '';
 						$.each(values.keywords, function(i, val) {
-							keywords_str += '<div class=\"input-prepend\"><span class=\"add-on\"><a class=\"keyword-remove\" href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword='+val+'\"><i class=\"icon-remove-sign\"></i></a></span><input type=\"text\" class=\"input-medium\" disabled value=\"'+val+'\"></div></div>'
+							keywords_str += '<div class=\"input-prepend\"><span class=\"add-on\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords?track_id=".$track->get_id()."&keyword='+val+'\"><i class=\"icon-remove-sign\"></i></a></span><input type=\"text\" class=\"input-medium\" disabled value=\"'+val+'\"></div></div>'
 						});
 						$('.for-keywords').html(keywords_str);
 						setTimeout(function() {
@@ -77,9 +77,9 @@ echo("
 			$('[name=flag]').click(function() {
 				event.preventDefault();
 				t = $(this);
-				t.after('<img src=\"".SITE_LINK_REL."img/ajax-loader.gif\" id=\"flag-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
+				t.after('<img src=\"".LINK_ABS."img/ajax-loader.gif\" id=\"flag-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/flag',
+					url: '".LINK_ABS."ajax/flag',
 					data: 'id=".$track->get_id()."&flag=toggle',
 					type: 'GET',
 					error: function(xhr,text,error) {
@@ -110,7 +110,7 @@ echo("
    			$(\"#jquery_jplayer_1\").jPlayer({
 				ready: function(event) {
 					$(this).jPlayer(\"setMedia\", {
-						mp3: \"".SITE_LINK_REL."lib/preview/preview.php?id=".$track->get_id()."\"
+						mp3: \"".LINK_ABS."lib/preview/preview.php?id=".$track->get_id()."\"
 					});
 				},
 				supplied: \"mp3\"
@@ -138,15 +138,15 @@ echo("
             <div class=\"jp-type-single\">
                 <div class=\"jp-gui jp-interface\">
                     <ul class=\"jp-controls\">
-                        <li class=\"dps-file-loading\"><img src=\"".SITE_LINK_REL."img/ajax-loader.gif\"></li>
+                        <li class=\"dps-file-loading\"><img src=\"".LINK_ABS."img/ajax-loader.gif\"></li>
                         <li><a href=\"javascript:;\" class=\"jp-play\" tabindex=\"1\">play</a></li>
                         <li><a href=\"javascript:;\" class=\"jp-pause\" tabindex=\"1\">pause</a></li>
                     </ul>
                     
                     <div class=\"jp-progress-wrap\">
                     <div class=\"jp-progress\">
-			   <img class=\"dps-waveform-loading\" src=\"".SITE_LINK_REL."img/ajax-loader.gif\" />
-			   <div class=\"dps-waveform\"><img src=\"".SITE_LINK_REL."lib/waveform/index.php?id=".$track->get_id()."\" /></div>
+			   <img class=\"dps-waveform-loading\" src=\"".LINK_ABS."img/ajax-loader.gif\" />
+			   <div class=\"dps-waveform\"><img src=\"".LINK_ABS."lib/waveform/index.php?id=".$track->get_id()."\" /></div>
                         <div class=\"jp-seek-bar\">
                             <div class=\"jp-play-bar\"></div>
                         </div>
@@ -241,7 +241,7 @@ echo("
 							foreach($track->get_keywords() as $keyword) {
 								echo("
 							<div class=\"input-prepend\">
-									<span class=\"add-on\"><a class=\"keyword-remove\" href=\"".SITE_LINK_REL."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><i class=\"icon-remove-sign\"></i></a></span>
+									<span class=\"add-on\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><i class=\"icon-remove-sign\"></i></a></span>
 									<input type=\"text\" class=\"input-medium\" disabled value=\"".$keyword->get_text()."\">							
 							</div>");
 							}
@@ -254,7 +254,7 @@ echo("
 					</div>
 					<a href=\"#\" name=\"flag\" class=\"btn btn-danger col-span-2".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
 					<hr />
-					".(Session::is_group_user("Music Admin")? "<a href=\"".SITE_LINK_REL."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary col-span-2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
+					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary col-span-2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>

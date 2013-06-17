@@ -8,10 +8,10 @@ function menu() {
 		array("censor","Tag for Censorship", "exclamation-sign"),
 		array("upload","Upload Tracks", "upload")
 	);
-	$site_path_array = explode("/",SITE_PAGE);
+	$site_path_array = explode("/",LINK_FILE);
 
 	$menu->set_active($site_path_array[1]);
-	return $menu->output(SITE_LINK_REL."music/",6,"nav nav-list");
+	return $menu->output(LINK_ABS."music/",6,"nav nav-list");
 }
 function sidebar() {
 	$return .= "

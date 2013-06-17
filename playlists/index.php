@@ -1,8 +1,8 @@
 <?php
 require_once('pre.php');
 Output::set_title("Playlists");
-Output::add_script(SITE_LINK_REL."js/jquery-ui-1.8.17.custom.min.js");
-Output::add_script(SITE_LINK_REL."js/bootstrap-popover.js");
+Output::add_script(LINK_ABS."js/jquery-ui-1.8.17.custom.min.js");
+Output::add_script(LINK_ABS."js/bootstrap-popover.js");
 
 MainTemplate::set_subtitle("View and edit music playlists");
 
@@ -102,7 +102,7 @@ foreach (Playlists::get_all() as $playlist) {
 	if(Session::is_group_user("Playlist Admin")) {
 		echo("
 			<td>
-				<a href=\"".SITE_LINK_REL."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
+				<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
 					<i class=\"icon-pencil\"></i>
 				</a>
 			</td>

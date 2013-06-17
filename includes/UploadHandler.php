@@ -36,9 +36,9 @@ class UploadHandler
 
     function __construct($options = null, $initialize = true) {
         $this->options = array(
-            'script_url' => SITE_LINK_ABS.SITE_PAGE,
-            'upload_dir' => SITE_FILE_PATH.'uploads/',
-            'upload_url' => SITE_LINK_ABS.'uploads/',
+            'script_url' => LINK_PAGE,
+            'upload_dir' => FILE_ROOT.'uploads/',
+            'upload_url' => LINK_ABS.'uploads/',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
             'param_name' => 'files',

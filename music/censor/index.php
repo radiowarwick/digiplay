@@ -80,7 +80,7 @@ if($flagged = Tracks::get_flagged()) {
 		echo("
 	<tr id=\"".$flag->get_id()."\">
 		<td class=\"icon\">
-			<a href=\"".SITE_LINK_REL."music/detail/".$flag->get_id()."\" class=\"track-info\">
+			<a href=\"".LINK_ABS."music/detail/".$flag->get_id()."\" class=\"track-info\">
 				<i class=\"icon-info-sign\"></i>
 			</a>
 			<div class=\"hover-info\">
@@ -96,8 +96,8 @@ if($flagged = Tracks::get_flagged()) {
 		<td class=\"artist\">".$flag->get_artists_str()."</td>
 		<td class=\"title\">".$flag->get_title()."</td>
 		".(Session::is_group_user("Music Admin")? "
-		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?censor=".$flag->get_id()."\" class=\"censor\" title=\"Approve censorship\" rel=\"twipsy\"><i class=\"icon-ok-sign\"></i></td>
-		<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?unflag=".$flag->get_id()."\" class=\"unflag\" title=\"Remove flag\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
+		<td class=\"icon\"><a href=\"".LINK_ABS."music/censor/?censor=".$flag->get_id()."\" class=\"censor\" title=\"Approve censorship\" rel=\"twipsy\"><i class=\"icon-ok-sign\"></i></td>
+		<td class=\"icon\"><a href=\"".LINK_ABS."music/censor/?unflag=".$flag->get_id()."\" class=\"unflag\" title=\"Remove flag\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></td>" : "")."
 	</tr>");
 	}
 	echo("
@@ -138,7 +138,7 @@ if($censored = Tracks::get_censored($limit,(($page-1)*$limit))) {
 		echo("
 	<tr id=\"".$censor->get_id()."\">
 		<td class=\"icon\">
-			<a href=\"".SITE_LINK_REL."music/detail/".$censor->get_id()."\" class=\"track-info\">
+			<a href=\"".LINK_ABS."music/detail/".$censor->get_id()."\" class=\"track-info\">
 				<i class=\"icon-info-sign\"></i>
 			</a>
 			<div class=\"hover-info\">
@@ -153,7 +153,7 @@ if($censored = Tracks::get_censored($limit,(($page-1)*$limit))) {
 		</td>
 		<td class=\"artist\">".$censor->get_artists_str()."</td>
 		<td class=\"title\">".$censor->get_title()."</td>
-		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/censor/?uncensor=".$censor->get_id()."\" class=\"uncensor\" title=\"Uncensor this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "")."
+		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/censor/?uncensor=".$censor->get_id()."\" class=\"uncensor\" title=\"Uncensor this track\" rel=\"twipsy\"><i class=\"icon-remove-sign\"></i></td>" : "")."
 	</tr>");
 	}
 	echo("

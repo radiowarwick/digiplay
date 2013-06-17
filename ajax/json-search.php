@@ -15,7 +15,7 @@ if($tracks) {
 			'id' => $track_object->get_id(),
 			'title' => $track_object->get_title(),
 			'by' => $track_object->get_artists_str(),
-			'href' => SITE_LINK_ABS."music/detail/".$track_object->get_id()
+			'href' => LINK_ABS."music/detail/".$track_object->get_id()
 			);
 		array_push($tracks_array, $track);
 	}
@@ -31,7 +31,7 @@ if($artists) {
 		$artist = array(
 				'id' => $artist_object->get_id(),
 				'title' => $artist_object->get_name(),
-				'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
+				'href' => LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
 				);
 		array_push($artists_array, $artist);
 	}
@@ -48,7 +48,7 @@ if($albums) {
 		$album = array(
 			'id' => $album_object->get_id(),
 			'title' => $album_object->get_name(),
-			'href' => SITE_LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
+			'href' => LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
 			);
 		array_push($albums_array, $album);
 	}
@@ -57,15 +57,15 @@ if($albums) {
 $array = array(
 	array( 
 		"title" => "Tracks",
-		"href" => SITE_LINK_ABS."music/search/?i=title&q=".$query,
+		"href" => LINK_ABS."music/search/?i=title&q=".$query,
 		"data" => $tracks_array),
 	array(
 		"title" => "Artists",
-		"href" => SITE_LINK_ABS."music/search/?i=artist&q=".$query,
+		"href" => LINK_ABS."music/search/?i=artist&q=".$query,
 		"data" => $artists_array),
 	array(
 		"title" => "Albums",
-		"href" => SITE_LINK_ABS."music/search/?i=album&q=".$query,
+		"href" => LINK_ABS."music/search/?i=album&q=".$query,
 		"data" => $albums_array)
 	);
 

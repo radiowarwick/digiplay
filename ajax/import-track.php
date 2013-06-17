@@ -8,7 +8,7 @@ if(!Session::is_group_user("Music Admin")) {
 	$tempname = rand(0,1000).".pcm";
 	$output = array();
 
-	exec("/usr/bin/ffmpeg -i \"".SITE_FILE_PATH."uploads/".$_REQUEST["filename"]."\" -f s16le -acodec pcm_s16le -ar 44100 -ac 2 ".$path.$tempname." 2>&1", $output);
+	exec("/usr/bin/ffmpeg -i \"".FILE_ROOT."uploads/".$_REQUEST["filename"]."\" -f s16le -acodec pcm_s16le -ar 44100 -ac 2 ".$path.$tempname." 2>&1", $output);
 	if(substr(end($output),0,5) != "video") die(json_encode(array("error" => "ffmpeg could not convert file", "debug" => $output)));
 
 	$md5 = md5_file($path.$tempname);
@@ -26,7 +26,7 @@ if(!Session::is_group_user("Music Admin")) {
 	exec("sudo flacinate.sh ".$md5,$output);
 	if($output[1] != "Success!") die(json_encode(array("error" => "could not convert audio to flac", "debug" => $output)));
 
-	$output = unlink(SITE_FILE_PATH."uploads/".$_REQUEST["filename"]);
+	$output = unlink(FILE_ROOT."uploads/".$_REQUEST["filename"]);
 	if($output === false) die(json_encode(array("error" => "could not remove uploaded file")));
 }
 ?>

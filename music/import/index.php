@@ -2,7 +2,7 @@
 Output::set_title("Import Music");
 MainTemplate::set_subtitle("Add new music to the Digiplay system");
 
-$basepath = SITE_FILE_PATH."uploads/";
+$basepath = FILE_ROOT."uploads/";
 $files = scandir($basepath);
 require_once('/usr/share/php-getid3/getid3.php');
 $getid3 = new getID3;
@@ -40,7 +40,7 @@ $(function() {
 		elem = $(this);
 		$.ajax({
 			type: 'DELETE',
-			url: '".SITE_LINK_REL."ajax/file-upload.php?file='+elem.parents('fieldset').find('[name=filename]').attr('value'),
+			url: '".LINK_ABS."ajax/file-upload.php?file='+elem.parents('fieldset').find('[name=filename]').attr('value'),
 			dataType: 'json',
 			success: function(data) {
 				elem.parents('.fileinfo-tr').prev('.file').find('.icon').find('i').remove();
@@ -62,16 +62,16 @@ $(function() {
 		if(elem.hasClass('btn-primary')) {
 				$.ajax({
 					type: 'GET',
-					url: '".SITE_LINK_REL."ajax/similar-tracks.php?artist='+elem.parents('fieldset').find('[name=artist]').attr('value')+'&title='+elem.parents('fieldset').find('[name=title]').attr('value'),
+					url: '".LINK_ABS."ajax/similar-tracks.php?artist='+elem.parents('fieldset').find('[name=artist]').attr('value')+'&title='+elem.parents('fieldset').find('[name=title]').attr('value'),
 					dataType: 'json',
 					success: function(data) {
 						if(data) {
 							elem.button('reset');
 							elem.removeClass('btn-primary').addClass('btn-warning');
 							if(data.tracks.length > 1) {
-								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".SITE_LINK_REL."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							} else {
-								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".SITE_LINK_REL."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							}
 						} else {
 							importTrack(elem.parents('form'),elem)
@@ -87,7 +87,7 @@ $(function() {
 		console.log(form);
 		$.ajax({
 			type: 'GET',
-			url: '".SITE_LINK_REL."ajax/import-track.php',
+			url: '".LINK_ABS."ajax/import-track.php',
 			dataType: 'json',
 			data: form.serialize(),
 			success: function(data) {
@@ -128,7 +128,7 @@ foreach($files as $file) {
 
 	echo("<tr class=\"file\">
 			<td class=\"icon\"> <i class=\"icon-chevron-right\"></i></td>
-			<td class=\"name col-span-7\">".$file." (<a href=\"".SITE_LINK_REL."uploads/".$file."\">Download</a>)</td>
+			<td class=\"name col-span-7\">".$file." (<a href=\"".LINK_ABS."uploads/".$file."\">Download</a>)</td>
 		</tr>
 		<tr class=\"fileinfo-tr\">
 			<td colspan=\"2\">
@@ -136,7 +136,7 @@ foreach($files as $file) {
 					<div class=\"warnings\">".$warnings."</div>
 					<div class=\"row\">
 						<div class=\"col-span-5\">
-							<form class=\"form-horizontal\" action=\"".SITE_LINK_REL."ajax/file-import.php\" method=\"POST\" enctype=\"multipart/form-data\">
+							<form class=\"form-horizontal\" action=\"".LINK_ABS."ajax/file-import.php\" method=\"POST\" enctype=\"multipart/form-data\">
 								<fieldset>
 									<input type=\"hidden\" name=\"filename\" value=\"".$file."\" />
 									<input type=\"hidden\" name=\"origin\" value=\"".$origin."\" />

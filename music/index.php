@@ -1,7 +1,7 @@
 <?php
 require_once('pre.php');
 Output::set_title("Music Library");
-Output::add_stylesheet(SITE_LINK_REL."css/music.css");
+Output::add_stylesheet(LINK_ABS."css/music.css");
 
 echo("<script>
 	$(function () {
@@ -36,7 +36,7 @@ echo("<script>
 			if($(this).parent().hasClass('active')) {
 				$(this).find('i').removeClass('icon-minus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update.php',
+					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -54,7 +54,7 @@ echo("<script>
 			} else {
 				$(this).find('i').removeClass('icon-plus').addClass('icon-refresh');
 				$.ajax({
-					url: '".SITE_LINK_REL."ajax/track-playlist-update.php',
+					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -83,7 +83,7 @@ echo("<script>
 
 		$('.yes-definitely-delete').click(function() {
 			$.ajax({
-				url: '".SITE_LINK_REL."ajax/delete-track.php',
+				url: '".LINK_ABS."ajax/delete-track.php',
 				data: 'id='+trackid,
 				type: 'POST',
 				error: function(xhr,text,error) {
@@ -101,7 +101,7 @@ echo("<script>
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
 
-if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href=\"".SITE_LINK_REL."music/censor\">Click here to view them.</a>", "Tracks have been flagged for censorship."));
+if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href=\"".LINK_ABS."music/censor\">Click here to view them.</a>", "Tracks have been flagged for censorship."));
 
 echo("
 <div class=\"row\">
@@ -147,22 +147,22 @@ echo("
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
 				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("Music Admin")? "
-				<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></td>
-				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".SITE_LINK_REL."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-minus-sign\"></td>" : "") : "")."
+				<td class=\"icon\"><a href=\"".LINK_ABS."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></td>
+				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-minus-sign\"></td>" : "") : "")."
 			</tr>");
 			}
 			echo("
 		</table>");
 			$total_requests = Requests::count();
 			if($total_requests <= count($requested)) {
-				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; Go to requests</a>");
+				echo("<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
 			} else {
-				echo("<a href=\"".SITE_LINK_REL."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
+				echo("<a href=\"".LINK_ABS."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
 			}
 		} else {
 			echo("
 		<strong>No new requested tracks.</strong><br />
-		<a href=\"".SITE_LINK_REL."music/request\">&raquo; Go to requests</a>");
+		<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
 		}
 		echo("
 	</div>
@@ -195,7 +195,7 @@ if($tracks) {
 		echo("
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
-				<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
+				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
 					<i class=\"glyphicon glyphicon-info-sign\"></i>
 				</a>
 				<div class=\"hover-info\">
@@ -247,7 +247,7 @@ if(Session::is_group_user("Playlist Admin")) {
 					</div>
 					<div class=\"modal-footer\">
 						<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
-						<a href=\"".SITE_LINK_REL."playlists\" class=\"btn\">Manage playlists</a>
+						<a href=\"".LINK_ABS."playlists\" class=\"btn\">Manage playlists</a>
 					</div>
 				</div>
 			</div>

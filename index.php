@@ -2,8 +2,8 @@
 require_once('pre.php');
 
 $refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1);
-if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".SITE_LINK_REL.$refer);
-MainTemplate::set_feature_image(SITE_LINK_REL."img/homepage.jpg");
+if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".LINK_ABS.$refer);
+MainTemplate::set_feature_image(LINK_ABS."img/homepage.jpg");
 
 echo("
 		<script type=\"text/javascript\">
@@ -69,8 +69,8 @@ $feature = "
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
-				<a class=\"btn\" href=\"".SITE_LINK_REL."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
-				<a class=\"btn\" href=\"".SITE_LINK_REL."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
+				<a class=\"btn\" href=\"".LINK_ABS."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
+				<a class=\"btn\" href=\"".LINK_ABS."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
 			</div>
 			<div class=\"col-span-4\">
 				<h2>Newest Tracks</h2>");
@@ -84,7 +84,7 @@ $feature = "
 					echo("
 					<tr>
 						<td class=\"icon\">
-							<a href=\"".SITE_LINK_REL."music/detail/".$track->get_id()."\" class=\"track-info\">
+							<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
 								<i class=\"glyphicon glyphicon-info-sign\"></i>
 							</a>
 						</td>
@@ -93,7 +93,7 @@ $feature = "
 				}
 				echo("
 				</table>
-				<a class=\"btn\" href=\"".SITE_LINK_REL."music/\"><span class=\"glyphicon glyphicon-chevron-right\"></span> More</a>
+				<a class=\"btn\" href=\"".LINK_ABS."music/\"><span class=\"glyphicon glyphicon-chevron-right\"></span> More</a>
 			</div>
 		</div>");
 

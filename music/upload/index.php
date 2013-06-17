@@ -1,11 +1,11 @@
 <?php
 require_once('pre.php');
 Output::set_title("Music Upload");
-Output::add_stylesheet(SITE_LINK_REL."css/jquery.fileupload-ui.css");
-Output::add_script(SITE_LINK_REL."js/jquery.ui.widget.js");
-Output::add_script(SITE_LINK_REL."js/tmpl.min.js");
-Output::add_script(SITE_LINK_REL."js/jquery.fileupload.js");
-Output::add_script(SITE_LINK_REL."js/jquery.fileupload-ui.js");
+Output::add_stylesheet(LINK_ABS."css/jquery.fileupload-ui.css");
+Output::add_script(LINK_ABS."js/jquery.ui.widget.js");
+Output::add_script(LINK_ABS."js/tmpl.min.js");
+Output::add_script(LINK_ABS."js/jquery.fileupload.js");
+Output::add_script(LINK_ABS."js/jquery.fileupload-ui.js");
 
 MainTemplate::set_subtitle("Drag and drop music to add to the file importer");
 
@@ -22,7 +22,7 @@ $(function () {
 
     $('#fileupload').fileupload('option', {
         acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma)$/i,
-        url: '".SITE_LINK_REL."ajax/file-upload.php',
+        url: '".LINK_ABS."ajax/file-upload.php',
         limitConcurrentUploads: 3
     });
         
@@ -37,7 +37,7 @@ $(function () {
     });
 });
 </script>
-    <form id=\"fileupload\" action=\"".SITE_LINK_REL."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
+    <form id=\"fileupload\" action=\"".LINK_ABS."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
         <div class=\"row fileupload-buttonbar\">
             <div class=\"col-span-6\">
                 <span class=\"btn btn-success fileinput-button\">
@@ -116,6 +116,6 @@ $(function () {
 </script>
 
 ");
-echo AlertMessage::basic("info","<a href=\"".SITE_LINK_REL."music/import\">Click here to go import the files to Digiplay.</a>","Finished uploading?");
+echo AlertMessage::basic("info","<a href=\"".LINK_ABS."music/import\">Click here to go import the files to Digiplay.</a>","Finished uploading?");
 
 ?>
