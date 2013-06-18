@@ -28,12 +28,18 @@ define("DATABASE_DPS_USER", $local_config["DB_USER"]);
 
 session_start();
 
-if((!Session::is_user()) && ((substr(LINK_PATH,0,4) == "ajax") && (LINK_PATH != "ajax/login.php"))) {
+if (!function_exists('http_response_code')) {
+    function http_response_code($code = NULL) {
+        header(':', true, $code);
+    }
+}
+
+if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != "ajax/login.php"))) {
 	http_response_code(403);
 	exit(json_encode(array("error" => "Your session has timed out, or you have logged out in another tab. Please log in again.")));
 }
 
-if((LINK_PATH != "index.php") && (LINK_PATH != "ajax/login.php")) Output::require_user();
+if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php")) Output::require_user();
 
 if (Session::is_developer()) {
     ini_set ( "display_errors", "1");
@@ -44,5 +50,5 @@ if (Session::is_developer()) {
     ini_set ( "error_append_string", "</div>");
 }
 
-if(substr(LINK_PATH,0,4) != "ajax") Output::set_template("MainTemplate");
+if(substr(LINK_FILE,0,4) != "ajax") Output::set_template("MainTemplate");
 ?>
