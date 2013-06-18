@@ -27,8 +27,8 @@ echo("
 <h3 style=\"margin-top: -4px\">Request a track</h3>
 <form action=\"\" method=\"post\" name=\"request-track\" class=\"form-inline\">
 	<fieldset>
-			<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"col-span-3\">
-			<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"col-span-3\">
+			<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"col-lg-3\">
+			<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"col-lg-3\">
 			<input type=\"submit\" value=\"Request\" class=\"btn btn-primary\">
 	</fieldset>
 </form>");

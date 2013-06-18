@@ -43,9 +43,9 @@ $(function(){
 });
 </script>
 <div class="row">
-<div class="col-span-6" id="messagelist">
-<table class="table table-striped col-span-6">
-<thead><tr><th class="col-span-2">Date</th><th class="col-span-8">Sender</th></tr></thead>
+<div class="col-lg-6" id="messagelist">
+<table class="table table-striped col-lg-6">
+<thead><tr><th class="col-lg-2">Date</th><th class="col-lg-8">Sender</th></tr></thead>
 <tbody>
 <?php
 
@@ -67,5 +67,5 @@ echo($pages->return);
 ?>
 </div>
 </div>
-<div class="col-span-6" id="message">
+<div class="col-lg-6" id="message">
 </div></div>

@@ -105,7 +105,7 @@ if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href
 
 echo("
 <div class=\"row\">
-	<div class=\"col-span-5\">
+	<div class=\"col-lg-5\">
 	<h3>Library Statistics</h3>
 		<dl>
 			<dt>Tracks Stored</dt>
@@ -116,7 +116,7 @@ echo("
 			<dd>".count(Tracks::get_playlisted())."</dd>
 		</dl>
 	</div>
-	<div class=\"col-span-7\">
+	<div class=\"col-lg-7\">
 		<h3>Requested Tracks</h3>
 		");
 		if($requested = Requests::get_latest(3)) {

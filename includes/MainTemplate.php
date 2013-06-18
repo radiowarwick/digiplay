@@ -100,14 +100,14 @@ class MainTemplate implements Template{
 			".(isset(self::$feature_image)? "<div class=\"feature-image\" style=\"background-image: url('".self::$feature_image."')\"></div>" : "")."
 			<div class=\"navbar navbar-inverse navbar-fixed-top\">
 				<div class=\"container\">
-					<a class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".nav-collapse\">
+					<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".nav-collapse\">
 	         			<span class=\"icon-bar\"></span>
 	          			<span class=\"icon-bar\"></span>
 	         			<span class=\"icon-bar\"></span>
-	        		</a>
+	        		</button>
 					<a class=\"navbar-brand hidden-tablet\" href=\"".LINK_ABS."\">Digiplay</a>
 					<div class=\"nav-collapse collapse\">"
-						.$main_menu->output(LINK_ABS,6,"nav");
+						.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
 						if(Session::is_user()) { $return .= "
 						<ul class=\"nav pull-right hidden-tablet\">
 							<li>
@@ -142,7 +142,7 @@ class MainTemplate implements Template{
 				<div class=\"row\">";
 	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
-				<div class=\"col-span-3\">";
+				<div class=\"col-lg-3\">";
 		if(isset(self::$menu)) {
 			$return .= "	
 					<div class=\"well sidebar-menu\">".
@@ -157,10 +157,10 @@ class MainTemplate implements Template{
 		}
 		$return .= "
 					</div>
-					<div class=\"col-span-9\">";
+					<div class=\"col-lg-9\">";
 	} else {
 		$return .= "
-				<div class=\"col-span-12\">";
+				<div class=\"col-lg-12\">";
 	}
 
 	$return .= $content;
@@ -195,14 +195,14 @@ class MainTemplate implements Template{
 		<footer>
 			<div class=\"container\">
 				<div class=\"row\">
-					<div class=\"col-span-8\">
+					<div class=\"col-lg-8\">
 						<p class=\"text-muted credit\">";
 	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#logout-modal\" data-toggle=\"modal\">Logout</a>. ";
 	else $return .= "Not logged in. ";
 	$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
 						</p>
 					</div>
-					<div class=\"col-span-4\">
+					<div class=\"col-lg-4\">
 						<a href=\"".LINK_ABS."\"><img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" class=\"pull-right\"/></a>
 					</div>
 				</div>

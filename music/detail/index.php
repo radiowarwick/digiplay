@@ -165,7 +165,7 @@ echo("
 	<form class=\"track-detail-form\" action=\"\" method=\"post\">
 		<fieldset>
 			<div class=\"row\">
-				<div class=\"col-span-6 form-horizontal\">
+				<div class=\"col-lg-6 form-horizontal\">
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"title\">Title</label>
@@ -228,7 +228,7 @@ echo("
 						</div>
 					</div>
 				</div>
-				<div class=\"col-span-3 form-stacked\">
+				<div class=\"col-lg-3 form-stacked\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"notes\">Notes</label>
 						<div class=\"controls\">
@@ -252,9 +252,9 @@ echo("
 							<input type=\"text\" name=\"new_keyword\" class=\"input-medium click-clear\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
-					<a href=\"#\" name=\"flag\" class=\"btn btn-danger col-span-2".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
+					<a href=\"#\" name=\"flag\" class=\"btn btn-danger col-lg-2".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
 					<hr />
-					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary col-span-2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
+					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary col-lg-2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>

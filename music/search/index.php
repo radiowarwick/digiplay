@@ -120,7 +120,7 @@ if($tracks) {
 
 	$indexes = implode(", ", explode(" ", $index));
 	echo("<h3>".$search["total"]." results for ".$query."<small> searching in ".$indexes."</small></h3>");
-	echo("<div class=\"row\"><div class=\"col-span-5\"><h5>Showing results ".$low." to ".$high."</h5></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
+	echo("<div class=\"row\"><div class=\"col-lg-5\"><h5>Showing results ".$low." to ".$high."</h5></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 	echo("<table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>

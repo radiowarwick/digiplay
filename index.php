@@ -26,11 +26,11 @@ echo("
 		</script>");
 $feature = "
 			<div class=\"row\">
-				<div class=\"col-span-8\">
+				<div class=\"col-lg-8\">
 					<h1>Digiplay <small>by Radio Warwick</small></h1>
 					<p>A magical software suite run by miniature elves, which is amazing because elves are already very small by their nature.</p>
 				</div>
-				<div class=\"col-span-4\">
+				<div class=\"col-lg-4\">
 				".((Session::is_user())? "
 					<h2>Common Tasks</h2>
 					<a href=\"upload\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
@@ -50,7 +50,7 @@ $feature = "
 			</div>
 		";
 		echo("<div class=\"row\">
-			<div class=\"col-span-4\">
+			<div class=\"col-lg-4\">
 				<h2>Music Library</h2>
 				<dl>
 					<dt>Tracks Stored</dt>
@@ -61,7 +61,7 @@ $feature = "
 					<dd>".count(Tracks::get_playlisted())."</dd>
 				</dl>
 			</div>
-			<div class=\"col-span-4\">
+			<div class=\"col-lg-4\">
 				<h2>Sustainer Service</h2>
 				<dl>
 					<dt>Tracks on Sustainer</dt>
@@ -69,10 +69,10 @@ $feature = "
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
-				<a class=\"btn\" href=\"".LINK_ABS."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
-				<a class=\"btn\" href=\"".LINK_ABS."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
+				<a class=\"btn btn-primary\" href=\"".LINK_ABS."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
+				<a class=\"btn btn-primary\" href=\"".LINK_ABS."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
 			</div>
-			<div class=\"col-span-4\">
+			<div class=\"col-lg-4\">
 				<h2>Newest Tracks</h2>");
 				$tracks = Tracks::get_newest(4);
 				echo("<table class=\"table table-striped table-hover table-condensed\" cellspacing=\"0\">");
