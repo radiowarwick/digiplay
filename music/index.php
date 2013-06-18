@@ -22,10 +22,10 @@ echo("<script>
 			item = $(this).parent().parent();
 			playlists = $(this).attr('data-playlists-in').split(',');
 			$('.playlist-select').parent().removeClass('active');
-			$('.playlist-select').find('i').removeClass('icon-white icon-minus').addClass('icon-plus');
+			$('.playlist-select').find('span').removeClass('glyphicon-white icon-minus').addClass('glyphicon-plus');
 			$('.playlist-select').each(function() {
 				if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
-					$(this).find('i').removeClass('icon-plus').addClass('icon-minus icon-white');
+					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus icon-white');
 					$(this).parent().addClass('active');
 				}
 			})
@@ -34,43 +34,43 @@ echo("<script>
 		$('.playlist-select').click(function() {
 			obj = $(this);
 			if($(this).parent().hasClass('active')) {
-				$(this).find('i').removeClass('icon-minus').addClass('icon-refresh');
+				$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-refresh');
 				$.ajax({
 					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-minus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('i').removeClass('icon-refresh icon-white').addClass('icon-plus');
+						obj.find('span').removeClass('glyphicon-refresh icon-white').addClass('glyphicon-plus');
 						obj.parent().removeClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 			} else {
-				$(this).find('i').removeClass('icon-plus').addClass('icon-refresh');
+				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-refresh');
 				$.ajax({
 					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-plus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-minus icon-white');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus glyphicon-white');
 						obj.parent().addClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 				$(this).parent().addClass('active');
-				$(this).find('i').removeClass('icon-plus').addClass('icon-white icon-minus');
+				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-white glyphicon-minus');
 			}
 		});		
 " : "").
