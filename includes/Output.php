@@ -83,7 +83,7 @@ class Output{
 	}
 	public static function require_user(){
 		if(!Session::is_user()){
-			header("Location: ".LINK_ABS."index.php?refer=".ltrim(LINK_ABS,'/').(count($_GET)>0?urlencode("&".http_build_query($_GET)):""));
+			header("Location: ".LINK_ABS."index.php?refer=".ltrim(LINK_FILE,'/').(count($_GET)>0?urlencode("&".http_build_query($_GET)):""));
 			exit();
 		}
 	}
