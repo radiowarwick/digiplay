@@ -21,44 +21,44 @@ MainTemplate::set_subtitle("Heard some naughty words? Censor tracks so their pla
 
 if($_REQUEST["censor"]) {
 	if(!Session::is_group_user("Music Admin")) {
-		echo AlertMessage::basic("error","You are trying to censor a track, but you do not have the required privileges!","Error!");
+		echo Bootstrap::alert_message_basic("error","You are trying to censor a track, but you do not have the required privileges!","Error!");
 	} else {
 		$track = Tracks::get_by_id($_REQUEST["censor"]);
 		if($track) {
 			$track->set_censored(true);
 			$track->set_flagged(false);
 			$track->save();
-			echo AlertMessage::basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been censored.","Track censored!");
+			echo Bootstrap::alert_message_basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been censored.","Track censored!");
 		}
-		else echo AlertMessage::basic("error","The track you are trying to censor doesn't exist!","Error!");
+		else echo Bootstrap::alert_message_basic("error","The track you are trying to censor doesn't exist!","Error!");
 	}
 }
 
 if($_REQUEST["uncensor"]) {
 	if(!Session::is_group_user("Music Admin")) {
-		echo AlertMessage::basic("error","You are trying to uncensor a track, but you do not have the required privileges!","Error!");
+		echo Bootstrap::alert_message_basic("error","You are trying to uncensor a track, but you do not have the required privileges!","Error!");
 	} else {
 		$track = Tracks::get_by_id($_REQUEST["uncensor"]);
 		if($track) {
 			$track->set_censored(false);
 			$track->save();
-			echo AlertMessage::basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been uncensored.","Track uncensored!");
+			echo Bootstrap::alert_message_basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been uncensored.","Track uncensored!");
 		}
-		else echo AlertMessage::basic("error","The track you are trying to uncensor doesn't exist!","Error!");
+		else echo Bootstrap::alert_message_basic("error","The track you are trying to uncensor doesn't exist!","Error!");
 	}
 }
 
 if($_REQUEST["unflag"]) {
 	if(!Session::is_group_user("Music Admin")) {
-		echo AlertMessage::basic("error","You are trying to unflag a track, but you do not have the required privileges!","Error!");
+		echo Bootstrap::alert_message_basic("error","You are trying to unflag a track, but you do not have the required privileges!","Error!");
 	} else {
 		$track = Tracks::get_by_id($_REQUEST["unflag"]);
 		if($track) {
 			$track->set_flagged(false);
 			$track->save();
-			echo AlertMessage::basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been unflagged.","Track unflagged!");
+			echo Bootstrap::alert_message_basic("success","The track ".$track->get_title()." by ".$track->get_artists_str()." has been unflagged.","Track unflagged!");
 		}
-		else echo AlertMessage::basic("error","The track you are trying to unflag doesn't exist!","Error!");
+		else echo Bootstrap::alert_message_basic("error","The track you are trying to unflag doesn't exist!","Error!");
 	}
 }
 

@@ -101,7 +101,7 @@ echo("<script>
 
 MainTemplate::set_subtitle("Add and remove tracks, edit track details");
 
-if($flagged = Tracks::get_flagged()) echo(AlertMessage::basic("warning","<a href=\"".LINK_ABS."music/censor\">Click here to view them.</a>", "Tracks have been flagged for censorship."));
+if($flagged = Tracks::get_flagged()) echo(Bootstrap::alert_message_basic("warning","<a href=\"".LINK_ABS."music/censor\">Click here to view them.</a>", "Tracks have been flagged for censorship."));
 
 echo("
 <div class=\"row\">
@@ -136,7 +136,7 @@ echo("
 			<tr id=\"".$request->get_id()."\">
 				<td class=\"icon\">
 					<a href=\"#\" class=\"track-info\">
-						<i class=\"glyphicon glyphicon-info-sign\"></i>
+						".Bootstrap::glyphicon("info-sign")."
 					</a>
 					<div class=\"hover-info\">
 						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
@@ -147,8 +147,8 @@ echo("
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
 				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("Music Admin")? "
-				<td class=\"icon\"><a href=\"".LINK_ABS."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></td>
-				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-minus-sign\"></td>" : "") : "")."
+				<td class=\"icon\"><a href=\"".LINK_ABS."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</i></td>
+				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("minus-sign")."</td>" : "") : "")."
 			</tr>");
 			}
 			echo("
@@ -196,7 +196,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-					<i class=\"glyphicon glyphicon-info-sign\"></i>
+					".Bootstrap::glyphicon("info-sign")."
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$artist_str."<br />
@@ -217,9 +217,9 @@ if($tracks) {
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
-				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-plus-sign\"></i></a></td>"); 
+				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</i></a></td>"); 
 			}
-			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\"><i class=\"glyphicon glyphicon-remove-sign\"></i></a></td>" : "")."
+			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</i></a></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
@@ -240,7 +240,7 @@ if(Session::is_group_user("Playlist Admin")) {
 						<ul class=\"nav nav-pills nav-stacked\">
 						");
 						foreach(Playlists::get_all() as $playlist) {
-							echo("<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\"><i class=\"glyphicon glyphicon-music\" style=\"margin-right: 10px\"></i>".$playlist->get_name()."</a></li>");
+							echo("<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("music").$playlist->get_name()."</a></li>");
 						}
 						echo("
 						</ul>

@@ -30,7 +30,7 @@ echo("
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
 						$('#detail-load').remove();
-						$('h3').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
+						$('h3').after('".Bootstrap::alert_message_basic("error","'+value.error+'","Error!")."');
 						$('.alert-message').alert();
 						submit.button('reset');
 					},
@@ -38,7 +38,7 @@ echo("
 						values = $.parseJSON(data);
 						submit.button('reset');
 						$('#detail-load').remove();
-						$('h3').after('".AlertMessage::basic("success","Track details altered.","Success!",false)."');
+						$('h3').after('".Bootstrap::alert_message_basic("success","Track details altered.","Success!",false)."');
 						$('[name=new_artist]').val('');
 						$('[name=artist\\\\[\\\\]]').remove();
 						artists_str = '';
@@ -68,7 +68,7 @@ echo("
 					if(data == \"success\") {
 						parent.remove();
 					} else {
-						$('h3').after('".AlertMessage::basic("error","'+data+'","Error!")."');
+						$('h3').after('".Bootstrap::alert_message_basic("error","'+data+'","Error!")."');
 						$('.alert-message').show('fast').alert();
 					}
 				})
@@ -84,7 +84,7 @@ echo("
 					type: 'GET',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						$('h3').after('".AlertMessage::basic("error","'+value.error+'","Error!")."');
+						$('h3').after('".Bootstrap::alert_message_basic("error","'+value.error+'","Error!")."');
 						$('.alert-message').alert();
 						$('#flag-load').remove();
 					},
@@ -98,7 +98,7 @@ echo("
 								t.removeClass('active');
 								response = 'This track has been unflagged.';
 							}
-							$('h3').after('".AlertMessage::basic("warning","'+response+'","Success!",false)."'); 
+							$('h3').after('".Bootstrap::alert_message_basic("warning","'+response+'","Success!",false)."'); 
 							setTimeout(function() {
 	    						$('.alert').hide('fast', function(){
 	        						$(this).remove(); 
@@ -129,7 +129,7 @@ echo("
 		});
 	</script>
 	<h3>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h3>
-	".(Session::is_group_user("Music Admin")? "":AlertMessage::basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
+	".(Session::is_group_user("Music Admin")? "":Bootstrap::alert_message_basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
 	echo("
 
        <div id=\"jquery_jplayer_1\" class=\"jp-jplayer\"></div>

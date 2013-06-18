@@ -16,7 +16,7 @@ if($_REQUEST["name"] && $_REQUEST["artistname"]) {
 
 if($_REQUEST["delete"]) {
 	if(!Session::is_group_user("Music Admin")) {
-		echo AlertMessage::basic("error","You are trying to delete a request, but you do not have the requred privelidges!","Error!");
+		echo Bootstrap::alert_message_basic("error","You are trying to delete a request, but you do not have the requred privelidges!","Error!");
 	} else {
 		$request = Requests::get_by_id($_REQUEST["delete"]);
 		if($request) $request->delete();

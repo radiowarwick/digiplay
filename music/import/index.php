@@ -69,9 +69,9 @@ $(function() {
 							elem.button('reset');
 							elem.removeClass('btn-primary').addClass('btn-warning');
 							if(data.tracks.length > 1) {
-								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warn","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							} else {
-								elem.parents('.fileinfo').append('".AlertMessage::basic("warn","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warn","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							}
 						} else {
 							importTrack(elem.parents('form'),elem)
@@ -98,7 +98,7 @@ $(function() {
 			},
 			error: function(data) {
 				console.log(data);
-				form.parents('.fileinfo').append('".AlertMessage::basic("error","There was an error when trying to upload this file.<br />'+data.error+'","Oh no!",true)."');
+				form.parents('.fileinfo').append('".Bootstrap::alert_message_basic("error","There was an error when trying to upload this file.<br />'+data.error+'","Oh no!",true)."');
 				button.button('reset');
 			}
 		});
@@ -124,7 +124,7 @@ foreach($files as $file) {
 	$warnings = "";
 
 	$acceptable_bitrate = isset($acceptable_bitrates[$filetype])? $acceptable_bitrates[$filetype] : null;
-	$warnings .= (!($bitrate >= $acceptable_bitrate))? AlertMessage::basic("warn","File bitrate is below the recommended minimum.  Try and find a better quality version!","Warning!",true) : "";
+	$warnings .= (!($bitrate >= $acceptable_bitrate))? Bootstrap::alert_message_basic("warn","File bitrate is below the recommended minimum.  Try and find a better quality version!","Warning!",true) : "";
 
 	echo("<tr class=\"file\">
 			<td class=\"icon\"> <i class=\"icon-chevron-right\"></i></td>

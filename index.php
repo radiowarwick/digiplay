@@ -69,8 +69,8 @@ $feature = "
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
-				<a class=\"btn btn-primary\" href=\"".LINK_ABS."sue/\"><span class=\"glyphicon glyphicon-headphones\"></span> Now playing</a>
-				<a class=\"btn btn-primary\" href=\"".LINK_ABS."playlists/0\"><span class=\"glyphicon glyphicon-list\"></span> View playlist</a>
+				<a class=\"btn btn-primary\" href=\"".LINK_ABS."sue/\">".Bootstrap::glyphicon("headphones")."Now playing</a>
+				<a class=\"btn btn-primary\" href=\"".LINK_ABS."playlists/0\">".Bootstrap::glyphicon("list")."View playlist</a>
 			</div>
 			<div class=\"col-lg-4\">
 				<h2>Newest Tracks</h2>");
@@ -85,7 +85,7 @@ $feature = "
 					<tr>
 						<td class=\"icon\">
 							<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-								<i class=\"glyphicon glyphicon-info-sign\"></i>
+								".Bootstrap::glyphicon("info-sign")."
 							</a>
 						</td>
 						<td class=\"title\">".$track->get_title()." by ".$artist_str."</td>
@@ -93,7 +93,7 @@ $feature = "
 				}
 				echo("
 				</table>
-				<a class=\"btn\" href=\"".LINK_ABS."music/\"><span class=\"glyphicon glyphicon-chevron-right\"></span> More</a>
+				<a class=\"btn\" href=\"".LINK_ABS."music/\">".Bootstrap::glyphicon("chevron-right")."More</a>
 			</div>
 		</div>");
 

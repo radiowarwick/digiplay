@@ -27,7 +27,7 @@ $(function() {
                 	if(data == \"success\") {
                 		$('.ajax-loader').remove();
                 	} else {
-                		$('.sortorder').before('".AlertMessage::basic("error","'+data+'","Error!")."');
+                		$('.sortorder').before('".Bootstrap::alert_message_basic("error","'+data+'","Error!")."');
                 		$('.alert-message').alert();
                 	}
                 }
