@@ -24,7 +24,7 @@ echo("
 				submit.button('loading');
 				submit.after('<img src=\"".LINK_ABS."img/ajax-loader.gif\" id=\"detail-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
 				$.ajax({
-					url: '".LINK_ABS."ajax/track-detail-update',
+					url: '".LINK_ABS."ajax/track-detail-update.php',
 					data: $(this).serialize(),
 					type: 'POST',
 					error: function(xhr,text,error) {
@@ -50,7 +50,7 @@ echo("
 						$('.keyword').parent().remove();
 						keywords_str = '';
 						$.each(values.keywords, function(i, val) {
-							keywords_str += '<div class=\"input-prepend\"><span class=\"add-on\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords?track_id=".$track->get_id()."&keyword='+val+'\"><i class=\"icon-remove-sign\"></i></a></span><input type=\"text\" class=\"input-medium\" disabled value=\"'+val+'\"></div></div>'
+							keywords_str += '<div class=\"input-group\"><span class=\"input-group-addon\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords.php?track_id=".$track->get_id()."&keyword='+val+'\">".Bootstrap::glyphicon("remove-sign")."</a></span><input type=\"text\" class=\"input-medium\" disabled value=\"'+val+'\"></div></div>'
 						});
 						$('.for-keywords').html(keywords_str);
 						setTimeout(function() {
@@ -61,7 +61,7 @@ echo("
 				});
 			});
 
-			$('.keyword-remove').live(\"click\", function(event) {
+			$('.keyword-remove').on(\"click\", function(event) {
 				event.preventDefault();
 				parent = $(this).parent().parent();
 				$.get($(this).attr('href'), function(data) {
@@ -71,7 +71,8 @@ echo("
 						$('h3').after('".Bootstrap::alert_message_basic("error","'+data+'","Error!")."');
 						$('.alert-message').show('fast').alert();
 					}
-				})
+				});
+				return false;
 			});
 
 			$('[name=flag]').click(function() {
@@ -79,7 +80,7 @@ echo("
 				t = $(this);
 				t.after('<img src=\"".LINK_ABS."img/ajax-loader.gif\" id=\"flag-load\" style=\"position: relative; top: 5px; left: 5px;\"/>');
 				$.ajax({
-					url: '".LINK_ABS."ajax/flag',
+					url: '".LINK_ABS."ajax/flag.php',
 					data: 'id=".$track->get_id()."&flag=toggle',
 					type: 'GET',
 					error: function(xhr,text,error) {
@@ -132,7 +133,7 @@ echo("
 	".(Session::is_group_user("Music Admin")? "":Bootstrap::alert_message_basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
 	echo("
 
-       <div id=\"jquery_jplayer_1\" class=\"jp-jplayer\"></div>
+       <div id=\"jquery_jplayer_1\" class=\"jp-jplayer col-lg-12\"></div>
         
         <div id=\"jp_container_1\" class=\"jp-audio\">
             <div class=\"jp-type-single\">
@@ -165,7 +166,7 @@ echo("
 	<form class=\"track-detail-form\" action=\"\" method=\"post\">
 		<fieldset>
 			<div class=\"row\">
-				<div class=\"col-lg-6 form-horizontal\">
+				<div class=\"col-lg-7 form-horizontal\">
 					<input type=\"hidden\" name=\"id\" value=\"".$track->get_id()."\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"title\">Title</label>
@@ -211,15 +212,19 @@ echo("
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label class=\"control-label\" for=\"censored\">Censored</label>
-						<div class=\"controls\">
-							<input type=\"checkbox\" name=\"censored\" ".$disabled." ".($track->is_censored()? "checked" : "").">
+						<div class=\"checkbox\">
+							<label class=\"control-label\" for=\"censored\">
+								<input type=\"checkbox\" name=\"censored\" ".$disabled." ".($track->is_censored()? "checked" : "").">
+								Censored
+							</label>
 						</div>
 					</div>
 					<div class=\"control-group\">
-						<label class=\"control-label\" for=\"sustainer\">On Sustainer</label>
-						<div class=\"controls\">
-							<input type=\"checkbox\" name=\"sustainer\" ".$disabled." ".($track->is_sustainer()? "checked" : "").">
+						<div class=\"checkbox\">
+							<label class=\"control-label\" for=\"sustainer\">
+								<input type=\"checkbox\" name=\"sustainer\" ".$disabled." ".($track->is_sustainer()? "checked" : "").">
+								On Sustainer
+							</label>
 						</div>
 					</div>
 					<div class=\"control-group\">
@@ -228,7 +233,7 @@ echo("
 						</div>
 					</div>
 				</div>
-				<div class=\"col-lg-3 form-stacked\">
+				<div class=\"col-lg-5 form-stacked\">
 					<div class=\"control-group\">
 						<label class=\"control-label\" for=\"notes\">Notes</label>
 						<div class=\"controls\">
@@ -240,10 +245,11 @@ echo("
 						<div class=\"for-keywords\">");
 							foreach($track->get_keywords() as $keyword) {
 								echo("
-							<div class=\"input-prepend\">
-									<span class=\"add-on\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\"><i class=\"icon-remove-sign\"></i></a></span>
-									<input type=\"text\" class=\"input-medium\" disabled value=\"".$keyword->get_text()."\">							
-							</div>");
+								<div class=\"input-group\">
+									<span class=\"input-group-addon\"><a class=\"keyword-remove\" href=\"".LINK_ABS."ajax/del-keywords.php?track_id=".$track->get_id()."&keyword=".$keyword->get_text()."\">".Bootstrap::glyphicon("remove-sign")."</a></span>
+									<input type=\"text\" class=\"input-medium\" disabled value=\"".$keyword->get_text()."\">
+								</div>
+							");
 							}
 					echo("
 						</div>
@@ -252,9 +258,9 @@ echo("
 							<input type=\"text\" name=\"new_keyword\" class=\"input-medium click-clear\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
-					<a href=\"#\" name=\"flag\" class=\"btn btn-danger col-lg-2".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
-					<hr />
-					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary col-lg-2\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
+					<hr />					
+					<a href=\"#\" name=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
+					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary btn-block\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>
