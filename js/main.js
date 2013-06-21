@@ -1,4 +1,5 @@
 		$(function () {
+      var site_root = $('script[src*=main]').attr('src').replace('/js/main.js', '');
 			$('a[rel="twipsy"]').tooltip();
 			$('.alert-message').alert();
 			$("input.search-query").keyup(function(){
@@ -13,7 +14,7 @@
     					} else {
      						$.ajax({
         						type: "GET",
-        						url: "../ajax/json-search.php?q="+searchbox.value,
+        						url: site_root+"/ajax/json-search.php?q="+searchbox.value,
         						dataType: "json",
         						success: function(data){
           							if(data.length < 1){
@@ -29,7 +30,7 @@
               										output_html += '<li><a href="'+data.href+'"><b>'+data.title+'</b> by '+data.by+'</a></li>'
               									}
               								});
-											output_html += '<li class="full-search"><em><a href="'+val.href+'">Full Search...</a></em></li>';
+											output_html += '<li class="full-search"><a href="'+val.href+'">Full Search...</a></li>';
             							});
 									
             							$("ul#quick-search").html(output_html);

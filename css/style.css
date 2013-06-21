@@ -97,6 +97,8 @@ footer img { margin: 12px 0; }
 
 .navbar { font-size: 15px !important; }
 .form-signin input { margin: 5px 0; }
+#quick-search { top: 45px; }
+.full-search { font-style: italic; }
 
 /* ============ Generic rules ============ */
 table .icon { width: 16px; }
