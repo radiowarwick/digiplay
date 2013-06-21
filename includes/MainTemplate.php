@@ -105,14 +105,14 @@ class MainTemplate implements Template{
 	          			<span class=\"icon-bar\"></span>
 	         			<span class=\"icon-bar\"></span>
 	        		</button>
-					<a class=\"navbar-brand hidden-tablet\" href=\"".LINK_ABS."\">Digiplay</a>
+					<a class=\"navbar-brand hidden-md\" href=\"".LINK_ABS."\">Digiplay</a>
 					<div class=\"nav-collapse collapse\">"
 						.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
 						if(Session::is_user()) { $return .= "
-						<ul class=\"nav pull-right hidden-tablet\">
+						<ul class=\"nav pull-right hidden-md\">
 							<li>
 								<form class=\"navbar-form pull-right\" action=\"".LINK_ABS."music/search\" method=\"GET\">
-	            					<input type=\"text\" class=\"search-query\" style=\"width: 180px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
+	            					<input type=\"text\" class=\"search-query\" style=\"width: 160px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
 	            				</form>
 	            			</li>
 	            			<li>
@@ -151,7 +151,7 @@ class MainTemplate implements Template{
 		}
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div class=\"sidebar hidden-phone\">".
+					<div class=\"sidebar hidden-sm\">".
 					self::$sidebar."
 					</div>";
 		}
@@ -195,14 +195,14 @@ class MainTemplate implements Template{
 		<footer>
 			<div class=\"container\">
 				<div class=\"row\">
-					<div class=\"col-lg-8\">
+					<div class=\"col-sm-8\">
 						<p class=\"text-muted credit\">";
 	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#logout-modal\" data-toggle=\"modal\">Logout</a>. ";
 	else $return .= "Not logged in. ";
 	$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
 						</p>
 					</div>
-					<div class=\"col-lg-4\">
+					<div class=\"col-sm-4\">
 						<a href=\"".LINK_ABS."\"><img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" class=\"pull-right\"/></a>
 					</div>
 				</div>
