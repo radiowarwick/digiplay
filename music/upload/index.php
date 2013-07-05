@@ -41,16 +41,16 @@ $(function () {
         <div class=\"row fileupload-buttonbar\">
             <div class=\"col-lg-6\">
                 <span class=\"btn btn-success fileinput-button\">
-                    <i class=\"icon-plus icon-white\"></i>
+                    ".Bootstrap::glyphicon("plus icon-white")."
                     <span>Add files</span>
                     <input type=\"file\" name=\"files[]\" multiple>
                 </span>
                 <button type=\"submit\" class=\"btn btn-primary start\">
-                    <i class=\"icon-upload icon-white\"></i>
+                    ".Bootstrap::glyphicon("upload icon-white")."
                     <span>Start upload</span>
                 </button>
                 <button type=\"reset\" class=\"btn btn-warning cancel\">
-                    <i class=\"icon-ban-circle icon-white\"></i>
+                    ".Bootstrap::glyphicon("ban-circle icon-white")."
                     <span>Cancel upload</span>
                 </button>
             </div>
@@ -108,7 +108,7 @@ $(function () {
         {% } %}
         <td class=\"delete\">
             <button class=\"btn btn-danger pull-right\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.delete_with_credentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>
-                <i class=\"icon-trash icon-white\"></i>
+                ".Bootstrap::glyphicon("trash icon-white")."
             </button>
         </td>
     </tr>

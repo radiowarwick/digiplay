@@ -254,13 +254,13 @@ echo("
 					echo("
 						</div>
 						<div class=\"input-prepend\">
-							<span class=\"add-on\"><i class=\"icon-tag\"></i></span>
+							<span class=\"add-on\">".Bootstrap::glyphicon("tag")."</span>
 							<input type=\"text\" name=\"new_keyword\" class=\"input-medium click-clear\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
 					<hr />					
-					<a href=\"#\" name=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\"><i class=\"icon-warning-sign icon-white\"></i> Flag for censorship</a>
-					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary btn-block\"><i class=\"icon-download-alt icon-white\"></i> Download FLAC</a>" : "")."
+					<a href=\"#\" name=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\">".Bootstrap::glyphicon("warning-sign icon-white")." Flag for censorship</a>
+					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."lib/preview/download.php?id=".$track->get_id()."\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt icon-white")." Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>

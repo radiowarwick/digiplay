@@ -85,7 +85,7 @@ foreach (Playlists::get_all() as $playlist) {
 		<tr>
 			<td>
 				<a href=\"#\" class=\"info\">
-					<i class=\"icon-info-sign\"></i>
+					".Bootstrap::glyphicon("info-sign")."
 					<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 				</a>
 				<div class=\"hover-info\">
@@ -103,17 +103,17 @@ foreach (Playlists::get_all() as $playlist) {
 		echo("
 			<td>
 				<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
-					<i class=\"icon-pencil\"></i>
+					".Bootstrap::glyphicon("pencil")."
 				</a>
 			</td>
 			<td>
 				<a href=\"#\" title=\"Delete this playlist\" rel=\"twipsy\">
-					<i class=\"icon-remove-sign\"></i>
+					".Bootstrap::glyphicon("remove-sign")."
 				</a>
 			</td>
 			<td>
 				<a href=\"#\" class=\"move\">
-					<i class=\"icon-move\"></i>
+					".Bootstrap::glyphicon("move")."
 				</a>
 			</td>
 		");

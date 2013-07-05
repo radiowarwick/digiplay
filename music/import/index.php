@@ -127,7 +127,7 @@ foreach($files as $file) {
 	$warnings .= (!($bitrate >= $acceptable_bitrate))? Bootstrap::alert_message_basic("warn","File bitrate is below the recommended minimum.  Try and find a better quality version!","Warning!",true) : "";
 
 	echo("<tr class=\"file\">
-			<td class=\"icon\"> <i class=\"icon-chevron-right\"></i></td>
+			<td class=\"icon\"> ".Bootstrap::glyphicon("chevron-right")."</td>
 			<td class=\"name col-lg-7\">".$file." (<a href=\"".LINK_ABS."uploads/".$file."\">Download</a>)</td>
 		</tr>
 		<tr class=\"fileinfo-tr\">
@@ -166,8 +166,8 @@ foreach($files as $file) {
 									</div>
 									<div class=\"control-group\">
 										<div class=\"controls\">
-											<button class=\"import btn btn-primary\" data-loading=\"Loading...\"><i class=\"icon-ok icon-white\"></i> Import</button>
-											<button class=\"delete btn btn-danger\" ><i class=\"icon-trash icon-white\"></i> Delete</button>
+											<button class=\"import btn btn-primary\" data-loading=\"Loading...\">".Bootstrap::glyphicon("ok icon-white")." Import</button>
+											<button class=\"delete btn btn-danger\" >".Bootstrap::glyphicon("trash icon-white")." Delete</button>
 										</div>
 									</div>
 								</fieldset>
