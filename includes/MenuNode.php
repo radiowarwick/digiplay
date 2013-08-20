@@ -18,9 +18,9 @@ class MenuNode{
 	public function set_active(){
 		$this->active = true;
 	}
-	public function output($path,$tabs){
+	public function output($path,$tabs,$li_class=false){
 		$out = "\n".str_repeat("\t",$tabs);
-		$out .= "<li".($this->active?" class=\"active\"":"").">";
+		$out .= "<li class=\"".($this->active? "active ":"").($li_class? $li_class : "")."\">";
 		$out .= "<a href=\"".$this->url($path)."\">";
 		if(strlen($this->icon) > 0)  $out .= Bootstrap::glyphicon($this->icon);
 		$out .= $this->label."</a>";

@@ -19,11 +19,11 @@ class Menu{
 		if(isset($this->menu[$id]))
 		$this->menu[$id]->set_active();
 	}
-	public function output($path="",$tabs=0,$ul_class = false){
+	public function output($path="",$tabs=0,$ul_class = false,$li_class = false){
 		if(count($this->menu)>0){
 			$out  = "\n".str_repeat("\t",$tabs)."<ul".($ul_class?" class=\"".$ul_class."\"":"").">";
 			foreach($this->menu AS $object){
-				$out .= $object->output($path,$tabs+1);
+				$out .= $object->output($path,$tabs+1,$li_class);
 			}
 			$out  .= "\n".str_repeat("\t",$tabs)."</ul>";
 			return $out;
