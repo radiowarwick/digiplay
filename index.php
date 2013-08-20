@@ -37,16 +37,15 @@ $feature = "
 					<a href=\"playlists\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
 					<a href=\"sue/schedule\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
 				":"
-					<h2>Log In".(isset($_REQUEST['refer'])? "<small> to access restricted content</small>" : "")."</h2><br />
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
-						<div class=\"form-group\">
+						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">
 							<input id=\"username\" name=\"username\" type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\">
 						</div>
-						<div class=\"form-group\">
+						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">
 							<input id=\"password\" name=\"password\" type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\">
 						</div>
 						<div class=\"form-group\">
-							<input type=\"submit\" class=\"btn btn-lg btn-primary btn-block\" id=\"submit\" name=\"submit\" value=\"Log In\">
+							<input type=\"submit\" class=\"btn btn-lg ".(isset($_REQUEST['refer'])? "btn-danger" : "btn-primary")." btn-block\" id=\"submit\" name=\"submit\" value=\"Log In\">
 						</div>
 					</form>
 				")."
