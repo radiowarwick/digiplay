@@ -180,8 +180,8 @@ if($tracks) {
 	} 
 	echo("<h4>Enter keywords below to search for tracks:</h4>
 	<form action=\"".LINK_ABS."music/search\" method=\"GET\" class=\"form-inline\">
-		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\">
-       	<input type=\"submit\" class=\"btn primary\" value=\"Search\">
+		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\" class=\"col-9\">
+       	<input type=\"submit\" class=\"btn btn-primary\" value=\"Search\" class=\"col-2 col-offset-1\">
     </form>");
 }
 

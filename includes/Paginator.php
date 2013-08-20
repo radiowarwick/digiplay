@@ -99,7 +99,7 @@ class Paginator{
 		$items = '';
 		if(!isset($_GET['n'])) $this->items_per_page = $this->default_n;
 		foreach($this->n_array as $n_opt) $items .= ($n_opt == $this->items_per_page) ? "<option selected value=\"$n_opt\">$n_opt</option>\n":"<option value=\"$n_opt\">$n_opt</option>\n";
-		return "<span>Items per page </span> <select name=\"items-per-page\" class=\"col-lg-1\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=1&n='+this[this.selectedIndex].value;return false\">$items</select>\n";
+		return "<span>Items per page </span> <select name=\"items-per-page\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p=1&n='+this[this.selectedIndex].value;return false\">$items</select>\n";
 	}
 	function display_jump_menu()
 	{
@@ -107,7 +107,7 @@ class Paginator{
 		{
 			$option .= ($i==$this->current_page) ? "<option value=\"$i\" selected>$i</option>\n":"<option value=\"$i\">$i</option>\n";
 		}
-		return "<span>Page </span> <select class=\"col-lg-1\" name=\"page-select\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p='+this[this.selectedIndex].value+'&n=$this->items_per_page';return false\">$option</select>\n";
+		return "<span>Page </span> <select name=\"page-select\" onchange=\"window.location='$_SERVER[PHP_SELF]?q=$this->querystring&i=$this->index&p='+this[this.selectedIndex].value+'&n=$this->items_per_page';return false\">$option</select>\n";
 	}
 	function display_pages()
 	{
