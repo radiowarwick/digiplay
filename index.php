@@ -3,7 +3,7 @@
 
 $refer = preg_replace('/\&/', '?', $_REQUEST["refer"], 1);
 if(isset($_REQUEST['refer']) && Session::is_user()) header("Location: ".LINK_ABS.$refer);
-MainTemplate::set_feature_image(LINK_ABS."img/homepage.jpg");
+MainTemplate::set_feature_image(LINK_ABS."img/homepage.png");
 
 echo("
 		<script type=\"text/javascript\">

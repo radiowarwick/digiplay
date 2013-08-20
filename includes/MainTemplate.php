@@ -185,7 +185,7 @@ class MainTemplate implements Template{
 	$return .= "
 		<div id=\"push\"></div>
 	</div>
-		<footer>
+		<footer class=\"jumbotron\">
 			<div class=\"container\">
 				<div class=\"row\">
 					<div class=\"col-sm-8\">

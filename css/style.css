@@ -17,7 +17,7 @@ body {
   height: 60px;
 }
  
-footer {  background-color: #eee; }
+footer { font-size: 1em !important; padding: 0px !important; margin: 0px !important; }
 footer p { margin: 20px 0; }
 footer img { margin: 12px 0; }
 
