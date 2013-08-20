@@ -37,13 +37,17 @@ $feature = "
 					<a href=\"playlists\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
 					<a href=\"sue/schedule\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
 				":"
-					<h2>Log In".(isset($_REQUEST['refer'])? "<small class=\"error\" style=\"font-size: 0.7em\"> to access restricted content</small>" : "")."</h2><br />
+					<h2>Log In".(isset($_REQUEST['refer'])? "<small> to access restricted content</small>" : "")."</h2><br />
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
-						<fieldset>
-							<input id=\"username\" name=\"username\" type=\"text\" class=\"input-block-level\" placeholder=\"Username\">
-							<input id=\"password\" name=\"password\" type=\"password\" class=\"input-block-level\" placeholder=\"Password\">
-							<input type=\"submit\" class=\"btn btn-large btn-primary btn-block\" id=\"submit\" name=\"submit\" value=\"Log In\">
-						</fieldset>
+						<div class=\"form-group\">
+							<input id=\"username\" name=\"username\" type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\">
+						</div>
+						<div class=\"form-group\">
+							<input id=\"password\" name=\"password\" type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\">
+						</div>
+						<div class=\"form-group\">
+							<input type=\"submit\" class=\"btn btn-lg btn-primary btn-block\" id=\"submit\" name=\"submit\" value=\"Log In\">
+						</div>
 					</form>
 				")."
 				</div>

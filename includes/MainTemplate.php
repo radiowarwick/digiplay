@@ -90,7 +90,6 @@ class MainTemplate implements Template{
 	</head>
 	<body>
 		<div id=\"wrap\">
-			".(isset(self::$feature_image)? "<div class=\"feature-image\" style=\"background-image: url('".self::$feature_image."')\"></div>" : "")."
 			<div class=\"navbar navbar-inverse navbar-fixed-top\">
 				<div class=\"container\">
 					<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".nav-collapse\">
@@ -116,10 +115,9 @@ class MainTemplate implements Template{
 	          			$return .= "
 					</div>
 				</div>
-			</div>";
-	$return .= "
-			<div class=\"container\">
-			".(isset(self::$feature_html)? "<div class=\"feature\">".self::$feature_html."</div>" : "")."";
+			</div>"
+			.(isset(self::$feature_html)? "<div class=\"jumbotron".(isset(self::$feature_image)? " feature-image\" style=\"background-image: url('".self::$feature_image."')\"" : "\"")."><div class=\"container\">".self::$feature_html."</div></div>" : "").
+			"<div class=\"container\">";
 	if(Output::get_title() != 'Untitled Page') {
 		$return .= "
 				<div class=\"page-header\">

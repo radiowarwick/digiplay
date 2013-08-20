@@ -22,19 +22,8 @@ footer p { margin: 20px 0; }
 footer img { margin: 12px 0; }
 
 .feature-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  background-image: url('../img/homepage.jpg');
   background-size: cover;
   background-position: center center;
-  height: 410px;
-}
-
-.feature {
-  height: 350px;
-  padding-top: 50px;
 }
 
 .sidebar {
@@ -51,52 +40,22 @@ footer img { margin: 12px 0; }
 }
 
 @media (min-width: 992px) {
-  .feature h1 {
-    font-size: 5.3em;
-    line-height: 1.6;
-  }
-  .feature h1 small {
-    font-size: 0.5em;
-  }
-  .feature p {
-    font-size: 1.9em;
-    line-height: 1.1;
-  }
+
 }
 
 @media (min-width: 769px) and (max-width: 991px) {
-  .feature h1 {
-    font-size: 3.5em;
-    line-height: 1.2;
-  }
-  .feature h1 small {
-    font-size: 0.5em;
-  }
-  .feature p {
-    font-size: 1.8em;
-    line-height: 1.1;
-  }
+
 }
 
 @media (max-width: 768px) {
-  .feature-image {
-    height: 500px;
-  }
-
   small { float: right; width: 100%; text-align: right; }
   small:after { content: ""; clear: both; display: block; }
-
-  .feature {
-    height: 450px;
-    padding-top: 0px;
-  }
 
   #push, footer { height: 120px; }
   footer p { margin: 10px 0; }
 }
 
 .navbar { font-size: 15px !important; }
-.form-signin input { margin: 5px 0; }
 #quick-search { top: 45px; }
 .full-search { font-style: italic; }
 
