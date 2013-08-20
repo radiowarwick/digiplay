@@ -141,12 +141,7 @@ class MainTemplate implements Template{
 	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
 				<div class=\"col-lg-3\">";
-		if(isset(self::$menu)) {
-			$return .= "	
-					<div class=\"well sidebar-menu\">".
-					self::$menu."
-					</div>";
-		}
+		if(isset(self::$menu)) $return .= self::$menu;
 		if(isset(self::$sidebar)) {
 			$return .= "	
 					<div class=\"sidebar hidden-sm\">".

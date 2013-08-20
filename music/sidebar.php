@@ -1,17 +1,23 @@
 <?php
 function menu() {
-	$menu = new Menu;
-	$menu->add_many(
-		array("index.php","Library Overview","home"),
-		array("search", "Search Tracks", "search"),
-		array("request","Request Tracks", "question-sign"),
-		array("censor","Tag for Censorship", "exclamation-sign"),
-		array("upload","Upload Tracks", "upload")
-	);
 	$site_path_array = explode("/",LINK_FILE);
 
-	$menu->set_active($site_path_array[1]);
-	return $menu->output(LINK_ABS."music/",6,"nav nav-list");
+	$menu = array(
+		array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Library Overview", "icon" => "home"),
+		array("url" => LINK_ABS.$site_path_array[0]."/search", "text" => "Search Tracks", "icon" => "search"),
+		array("url" => LINK_ABS.$site_path_array[0]."/request", "text" => "Request Tracks", "icon" => "question-sign"),
+		array("url" => LINK_ABS.$site_path_array[0]."/censor", "text" => "Tag for Censorship", "icon" => "exclamation-sign"),
+		array("url" => LINK_ABS.$site_path_array[0]."/upload", "text" => "Upload Tracks", "icon" => "upload")
+	);
+
+	$requests = Requests::count();
+	if($requests > 0) $menu[2]["badge"] = $requests;
+
+	$flagged = count(Tracks::get_flagged());
+	if($flagged > 0) $menu[3]["badge"] = $flagged;
+
+	foreach($menu as &$item) if($site_path_array[1] == array_pop(explode("/",$item["url"]))) $item["active"] = true;
+	return Bootstrap::list_group($menu);
 }
 function sidebar() {
 	$return .= "

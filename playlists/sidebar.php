@@ -1,4 +1,16 @@
 <?php
+function menu() {
+	$site_path_array = explode("/",LINK_FILE);
+
+	$menu = array(
+		array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Playlists Overview", "icon" => "home"),
+		array("url" => LINK_ABS.$site_path_array[0]."/index.php#add", "text" => "Add a new playlist", "icon" => "plus-sign"),
+		array("url" => LINK_ABS.$site_path_array[0]."/sustainer/", "text" => "Edit sustainer playlist", "icon" => "edit")
+	);
+
+	foreach($menu as &$item) if($site_path_array[1] == array_pop(explode("/",$item["url"]))) $item["active"] = true;
+	return Bootstrap::list_group($menu);
+}
 function sidebar() {
 
 
@@ -28,18 +40,5 @@ function sidebar() {
 	</dl>";
 
 	return $return;
-}
-
-function menu() {
-	$menu = new Menu;
-	$menu->add_many(
-		array("index.php","Playlists Overview", "home"),
-		array("index.php#add","Add a new playlist", "plus-sign"),
-		array("sustainer/","Edit sustainer playlist", "edit")
-	);
-	$site_path_array = explode("/",LINK_PAGE);
-
-	$menu->set_active($site_path_array[1]);
-	return $menu->output(LINK_ABS."playlists/",6,"nav nav-list");
 }
 ?>
