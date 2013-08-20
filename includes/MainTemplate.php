@@ -90,32 +90,37 @@ class MainTemplate implements Template{
 	</head>
 	<body>
 		<div id=\"wrap\">
-			<div class=\"navbar navbar-inverse navbar-fixed-top\">
+			<nav class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">
 				<div class=\"container\">
-					<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".nav-collapse\">
-	         			<span class=\"icon-bar\"></span>
-	          			<span class=\"icon-bar\"></span>
-	         			<span class=\"icon-bar\"></span>
-	        		</button>
-					<a class=\"navbar-brand hidden-md\" href=\"".LINK_ABS."\">Digiplay</a>
-					<div class=\"nav-collapse collapse\">"
-						.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
-						if(Session::is_user()) { $return .= "
-						<ul class=\"nav pull-right hidden-md\">
-							<li>
-								<form class=\"navbar-form pull-right\" action=\"".LINK_ABS."music/search\" method=\"GET\">
-	            					<input type=\"text\" class=\"search-query\" style=\"width: 160px\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
-	            				</form>
-	            			</li>
-	            			<li>
-		          				<ul id=\"quick-search\" class=\"dropdown-menu pull-right\"></ul>
-		          			</li>
-		          		</ul>
-		          		"; }
-	          			$return .= "
-					</div>
+				<div class=\"navbar-header\">
+					<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-dps-collapse\">
+      					<span class=\"sr-only\">Toggle navigation</span>
+      					<span class=\"icon-bar\"></span>
+      					<span class=\"icon-bar\"></span>
+      					<span class=\"icon-bar\"></span>
+    				</button>
+    				<a class=\"navbar-brand\" href=\"".LINK_ABS."\">Digiplay</a>
 				</div>
-			</div>"
+				<div class=\"navbar-collapse collapse navbar-dps-collapse\">"
+					.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
+					if(Session::is_user()) { $return .= "
+					<ul class=\"nav pull-right visible-lg visible-xs\">
+						<li>
+							<form class=\"navbar-form pull-right\" action=\"".LINK_ABS."music/search\" method=\"GET\" role=\"search\">
+								<div class=\"form-group\">
+	            					<input type=\"text\" class=\"form-control search-query\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
+	            				</div>
+	            			</form>
+	            		</li>
+	            		<li>
+		          			<ul id=\"quick-search\" class=\"dropdown-menu pull-right\"></ul>
+		          		</li>
+		          	</ul>
+		          	"; }
+	          		$return .= "
+				</div>
+				</div>
+			</nav>"
 			.(isset(self::$feature_html)? "<div class=\"jumbotron".(isset(self::$feature_image)? " feature-image\" style=\"background-image: url('".self::$feature_image."')\"" : "\"")."><div class=\"container\">".self::$feature_html."</div></div>" : "").
 			"<div class=\"container\">";
 	if(Output::get_title() != 'Untitled Page') {
