@@ -1,10 +1,5 @@
-html,body {
-  height: 100%;
-}
-
-body { 
-  padding-top:50px !important;
-}
+html,body { height: 100%; }
+body { padding-top:50px !important; }
 
 #wrap {
   min-height: 100%;
@@ -13,22 +8,17 @@ body {
   margin: 0 auto -60px;
 }
 
-#push, footer {
-  height: 60px;
-}
+#push, footer { height: 60px; }
  
 footer { font-size: 1em !important; padding: 0px !important; margin: 0px !important; }
 footer p { margin: 20px 0; }
 footer img { margin: 12px 0; }
 
-.feature-image {
-  background-size: cover;
-  background-position: center center;
-}
-
+.feature-image { background-size: cover; background-position: center center; }
 .search-pull-right { float: right; }
-
 .panel-noborder { box-shadow: none !important;}
+#quick-search { top: 45px; }
+.full-search { font-style: italic; }
 
 @media (min-width: 992px) and (max-width: 1200px) {
   .search-pull-right { width: 20% !important; }
@@ -47,9 +37,6 @@ footer img { margin: 12px 0; }
 
   .search-pull-right { float: none !important; width: 100% !important; }
 }
-
-#quick-search { top: 45px; }
-.full-search { font-style: italic; }
 
 /* ============ Generic rules ============ */
 table .icon { width: 16px; }

@@ -151,8 +151,8 @@ class MainTemplate implements Template{
 					</div>";
 		}
 		$return .= "
-					</div>
-					<div class=\"col-md-9\">";
+				</div>
+				<div class=\"col-md-9\">";
 	} else {
 		$return .= "
 				<div class=\"col-md-12\">";
