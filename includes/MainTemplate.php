@@ -101,14 +101,14 @@ class MainTemplate implements Template{
       					<span class=\"icon-bar\"></span>
       					<span class=\"icon-bar\"></span>
     				</button>
-    				<a class=\"navbar-brand\" href=\"".LINK_ABS."\">Digiplay</a>
+    				<a class=\"navbar-brand hidden-sm\" href=\"".LINK_ABS."\">Digiplay</a>
 				</div>
 				<div class=\"navbar-collapse collapse navbar-dps-collapse\">"
 					.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
 					if(Session::is_user()) { $return .= "
-					<ul class=\"nav pull-right visible-lg visible-xs\">
+					<ul class=\"nav search-pull-right hidden-sm\">
 						<li>
-							<form class=\"navbar-form pull-right\" action=\"".LINK_ABS."music/search\" method=\"GET\" role=\"search\">
+							<form class=\"navbar-form\" action=\"".LINK_ABS."music/search\" method=\"GET\" role=\"search\">
 								<div class=\"form-group\">
 	            					<input type=\"text\" class=\"form-control search-query\" placeholder=\"Search Tracks\" name=\"q\" autocomplete=\"off\">
 	            				</div>
@@ -140,20 +140,20 @@ class MainTemplate implements Template{
 				<div class=\"row\">";
 	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
-				<div class=\"col-lg-3\">";
+				<div class=\"col-md-3\">";
 		if(isset(self::$menu)) $return .= self::$menu;
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div class=\"sidebar hidden-sm\">".
+					<div class=\"sidebar visible-md visible-lg\">".
 					self::$sidebar."
 					</div>";
 		}
 		$return .= "
 					</div>
-					<div class=\"col-lg-9\">";
+					<div class=\"col-md-9\">";
 	} else {
 		$return .= "
-				<div class=\"col-lg-12\">";
+				<div class=\"col-md-12\">";
 	}
 
 	$return .= $content;
