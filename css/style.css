@@ -26,20 +26,9 @@ footer img { margin: 12px 0; }
   background-position: center center;
 }
 
-.sidebar {
-  padding: 19px;
-}
-
-.sidebar-menu {
-  padding: 8px 0; 
-  margin-bottom: 0;
-}
-
-.sidebar-menu .nav li a {
-  padding: 5px 15px;
-}
-
 .search-pull-right { float: right; }
+
+.panel-noborder { box-shadow: none !important;}
 
 @media (min-width: 992px) and (max-width: 1200px) {
   .search-pull-right { width: 20% !important; }

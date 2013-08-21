@@ -144,8 +144,10 @@ class MainTemplate implements Template{
 		if(isset(self::$menu)) $return .= self::$menu;
 		if(isset(self::$sidebar)) {
 			$return .= "	
-					<div class=\"sidebar visible-md visible-lg\">".
-					self::$sidebar."
+					<div class=\"panel panel-noborder visible-md visible-lg\">
+						<div class=\"panel-body\">".
+						self::$sidebar."
+						</div>
 					</div>";
 		}
 		$return .= "
