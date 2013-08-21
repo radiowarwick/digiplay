@@ -42,7 +42,7 @@ footer img { margin: 12px 0; }
 .search-pull-right { float: right; }
 
 @media (min-width: 992px) and (max-width: 1200px) {
-  .search-pull-right { float: none !important; }
+  .search-pull-right { width: 20% !important; }
 }
 
 @media (min-width: 769px) and (max-width: 991px) {
