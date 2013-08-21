@@ -1,7 +1,6 @@
 <?php
 
 Output::set_title("Music Library");
-Output::add_stylesheet(LINK_ABS."css/music.css");
 
 echo("<script>
 	$(function () {
@@ -105,7 +104,7 @@ if($flagged = Tracks::get_flagged()) echo(Bootstrap::alert_message_basic("warnin
 
 echo("
 <div class=\"row\">
-	<div class=\"col-lg-5\">
+	<div class=\"col-sm-5\">
 	<h3>Library Statistics</h3>
 		<dl>
 			<dt>Tracks Stored</dt>
@@ -116,7 +115,7 @@ echo("
 			<dd>".count(Tracks::get_playlisted())."</dd>
 		</dl>
 	</div>
-	<div class=\"col-lg-7\">
+	<div class=\"col-sm-7\">
 		<h3>Requested Tracks</h3>
 		");
 		if($requested = Requests::get_latest(3)) {
