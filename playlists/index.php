@@ -59,6 +59,7 @@ echo("<h3>Current playlists:</h3>");
 
 echo("
 <form class=\"sortorder\">
+<div class=\"table-responsive\">
 <table class=\"table table-striped\">
 	<thead>
 		<tr>
@@ -124,6 +125,7 @@ foreach (Playlists::get_all() as $playlist) {
 echo("
 	</tbody>
 </table>
+</div>
 </form>
 ");
 

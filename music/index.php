@@ -174,7 +174,7 @@ $tracks = Tracks::get_newest();
 
 if($tracks) {
 	echo("<h3>10 newest tracks</h3>");
-	echo("<table class=\"table table-striped\" cellspacing=\"0\">
+	echo("<div class=\"table-responsive\"><table class=\"table table-striped\" cellspacing=\"0\">
 	<thead>
 		<tr>
 			<th class=\"icon\"> </th>
@@ -222,7 +222,7 @@ if($tracks) {
 			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</i></a></td>" : "")."
 		</tr>");
 	}
-	echo("</table>");
+	echo("</table></div>");
 } else {
 	echo("Sorry, no results");
 }
