@@ -51,41 +51,21 @@ class MainTemplate implements Template{
 <html> 
 	<head> 
 		<title>RaW Digiplay";
-	if(Output::get_title() != 'Untitled Page')
-		$return .= " - ".Output::get_title();
+	if(Output::get_title() != 'Untitled Page') $return .= " - ".Output::get_title();
+
 	$return .= "</title> 
 		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js\"></script>
 		<script type=\"text/javascript\" src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js\"></script>
 		";
-	if(isset($_REQUEST["theme"])) $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootswatch/3.0.0/".$_REQUEST["theme"]."/bootstrap.min.css\">";
-	else $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css\">";
+	if(isset($_REQUEST["theme"])) $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootswatch/3.0.0/".$_REQUEST["theme"]."/bootstrap.min.css\">\n";
+	else $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css\">\n";
 
-	if(count(Output::get_less_stylesheets())>0) {
-		foreach(Output::get_less_stylesheets() AS $src){
-			$return .= "<link href=\"".$src."\" rel=\"stylesheet/less\">
-		";
-		}
-		$return .= "<script type=\"text/javascript\" src=\"".LINK_ABS."js/less-1.1.5.min.js\"></script>
-		";
-	}
+	if(count(Output::get_stylesheets())>0) foreach(Output::get_stylesheets() AS $src) $return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\">\n";
+	if(count(Output::get_scripts())>0) foreach(Output::get_scripts() AS $src) $return .= "<script src=\"".$src."\" type=\"text/javascript\"></script>\n";
+	if(count(Output::get_feeds())>0) foreach(Output::get_feeds() AS $feed) $return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\">\n";
 
-	if(count(Output::get_stylesheets())>0)
-		foreach(Output::get_stylesheets() AS $src){
-			$return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\">
-		";
-		}
-	if(count(Output::get_scripts())>0)
-		foreach(Output::get_scripts() AS $src){
-			$return .= "<script src=\"".$src."\" type=\"text/javascript\"></script>
-		";
-		}
-	if(count(Output::get_feeds())>0)
-		foreach(Output::get_feeds() AS $feed){
-			$return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\">
-		";
-		}
 	$return .= "
 		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/style.css\">
 		<script src=\"".LINK_ABS."js/main.js\" type=\"text/javascript\"></script>
@@ -122,8 +102,8 @@ class MainTemplate implements Template{
 	          		$return .= "
 				</div>
 				</div>
-			</nav>"
-			.(isset(self::$feature_html)? "<div class=\"jumbotron".(isset(self::$feature_image)? " feature-image\" style=\"background-image: url('".self::$feature_image."')\"" : "\"")."><div class=\"container\">".self::$feature_html."</div></div>" : "").
+			</nav>
+			".(isset(self::$feature_html)? "<div class=\"jumbotron".(isset(self::$feature_image)? " feature-image\" style=\"background-image: url('".self::$feature_image."')\"" : "\"")."><div class=\"container\">".self::$feature_html."</div></div>" : "").
 			"<div class=\"container\">";
 	if(Output::get_title() != 'Untitled Page') {
 		$return .= "

@@ -17,7 +17,6 @@ footer img { margin: 12px 0; }
 .feature-image { background-size: cover; background-position: center center; }
 .search-pull-right { float: right; }
 .panel-noborder { box-shadow: none !important;}
-#quick-search { top: 45px; }
 .full-search { font-style: italic; }
 
 @media (min-width: 992px) and (max-width: 1200px) {

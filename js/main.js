@@ -22,12 +22,12 @@
         							} else {
             							var output_html = '';
             							$.each(data, function(i, val) {
-            								output_html += '<li class="nav-header">'+val.title+'</li>';
+            								output_html += '<li class="dropdown-header">'+val.title+'</li>';
               								$.each(val.data, function(i, data) {
               									if(typeof(data.by) == "undefined") {
-              										output_html += '<li><a href="'+data.href+'"><b>'+data.title+'</b></a></li>'
+              										output_html += '<li><a href="'+data.href+'"><strong>'+data.title+'</strong></a></li>'
               									} else {
-              										output_html += '<li><a href="'+data.href+'"><b>'+data.title+'</b> by '+data.by+'</a></li>'
+              										output_html += '<li><a href="'+data.href+'"><strong>'+data.title+'</strong> by '+data.by+'</a></li>'
               									}
               								});
 											output_html += '<li class="full-search"><a href="'+val.href+'">Full Search...</a></li>';
