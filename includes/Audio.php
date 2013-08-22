@@ -60,4 +60,39 @@ class Audio {
 		if($sql) return true;
 		return false;
 	}
+
+	public function player() {
+		Output::add_script(LINK_ABS."js/observer.js");
+		Output::add_script(LINK_ABS."js/wavesurfer.js");
+		Output::add_script(LINK_ABS."js/webaudio.js");
+		Output::add_script(LINK_ABS."js/drawer.js");
+		Output::add_script(LINK_ABS."js/drawer.svg.js");
+		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
+
+		$html = "
+		<script> $(function () { wavesurfer['".$this->get_id()."'] = wv_create('#waveform".$this->get_id()."', '".LINK_ABS."lib/preview/preview.php?id=".$this->get_id()."'); }); </script>
+		<div class=\"row\">
+			<div class=\"col-xs-12\">
+				<div class=\"well well-sm\">
+					<div style=\"width: 100%; margin: auto;\">
+						<div style=\"width: 65px; float: left;\">
+							<button class=\"btn btn-primary\" id=\"playpause\" disabled style=\"height: 60px; width: 60px; font-size: 2.2em; padding-left: 15px; border-radius: 100%;\">
+								".Bootstrap::glyphicon("play")."
+							</button>
+							<h6><small id=\"timings\">00:00 / 00:00</small></h6>
+						</div>
+						<div style=\"margin-left: 70px;\">
+							<div id=\"waveform".$this->get_id()."\" style=\"height: 80px; position: relative\">
+								<div id=\"progress-div\" class=\"progress progress-striped\" style=\"position: absolute; width: 100%; top: 30px\">
+									<div class=\"progress-bar\">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>";
+		return $html;
+	}
 }

@@ -100,7 +100,8 @@ echo("
 	</script>
 	<h3>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h3>
 	".(Session::is_group_user("Music Admin")? "":Bootstrap::alert_message_basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
-	echo("
+	
+	echo($track->player()."
 	<form class=\"track-detail-form\" action=\"\" method=\"post\">
 		<fieldset>
 			<div class=\"row\">
