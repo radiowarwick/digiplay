@@ -71,19 +71,19 @@ class Audio {
 
 		$html = "
 		<script> $(function () { wavesurfer['".$this->get_id()."'] = wv_create('#waveform".$this->get_id()."', '".LINK_ABS."lib/preview/preview.php?id=".$this->get_id()."'); }); </script>
-		<div class=\"row\">
+		<div class=\"row audio-player\">
 			<div class=\"col-xs-12\">
 				<div class=\"well well-sm\">
-					<div style=\"width: 100%; margin: auto;\">
-						<div style=\"width: 65px; float: left;\">
-							<button class=\"btn btn-primary\" id=\"playpause\" disabled style=\"height: 60px; width: 60px; font-size: 2.2em; padding-left: 15px; border-radius: 100%;\">
+					<div>
+						<div>
+							<button class=\"btn btn-primary playpause\" id=\"playpause\" disabled>
 								".Bootstrap::glyphicon("play")."
 							</button>
 							<h6><small id=\"timings\">00:00 / 00:00</small></h6>
 						</div>
-						<div style=\"margin-left: 70px;\">
-							<div id=\"waveform".$this->get_id()."\" style=\"height: 80px; position: relative\">
-								<div id=\"progress-div\" class=\"progress progress-striped\" style=\"position: absolute; width: 100%; top: 30px\">
+						<div>
+							<div id=\"waveform".$this->get_id()."\">
+								<div id=\"progress-div\" class=\"progress progress-striped\">
 									<div class=\"progress-bar\">
 									</div>
 								</div>

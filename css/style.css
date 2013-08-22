@@ -56,3 +56,11 @@ table .length { width: 52px; }
 .table-file-import tr.file { background: #f9f9f9; cursor: pointer; }
 .table-file-import tr.file:hover { background: #ededed; }
 .deleted { text-decoration: line-through; color: #666; cursor: default;}
+
+/* ============= Audio players =============== */
+.audio-player > div > div > div { width: 100%; margin: auto; }
+.audio-player > div > div > div > div:nth-child(1) { width: 65px; float: left; }
+.audio-player > div > div > div > div:nth-child(2) { margin-left: 70px; }
+.audio-player > div > div > div > div:nth-child(2) > div { height: 80px; position: relative; }
+.audio-player button { height: 60px; width: 60px; font-size: 2.2em; padding-left: 15px; border-radius: 100%; }
+.audio-player .progress { position: absolute; width: 100%; top: 30px; }
