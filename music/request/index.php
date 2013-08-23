@@ -26,11 +26,15 @@ if($_REQUEST["delete"]) {
 echo("
 <h3 style=\"margin-top: -4px\">Request a track</h3>
 <form action=\"\" method=\"post\" name=\"request-track\" class=\"form-inline\">
-	<fieldset>
-			<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"col-lg-3\">
-			<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"col-lg-3\">
-			<input type=\"submit\" value=\"Request\" class=\"btn btn-primary\">
-	</fieldset>
+	<div class=\"form-group\">
+		<input type=\"text\" name=\"artistname\" placeholder=\"Artist...\" class=\"form-control\">
+	</div>
+	<div class=\"form-group\">
+		<input type=\"text\" name=\"name\" placeholder=\"Title...\" class=\"form-control\">
+	</div>
+	<div class=\"form-group\">
+		<input type=\"submit\" value=\"Request\" class=\"btn btn-primary\">
+	</div>
 </form>");
 
 if($requested = Requests::get_all()) {
