@@ -1,7 +1,7 @@
 <?php
 class Output{
 	protected static $stylesheets	= array();
-	protected static $less = array();
+	protected static $less_stylesheets = array();
 	protected static $scripts	= array();
 	protected static $feeds	= array();
 	protected static $title		= "Untitled Page";
