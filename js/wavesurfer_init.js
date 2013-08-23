@@ -43,4 +43,8 @@ function wv_progress(wv) {
 	$('#'+wv.params.container.id).parent().parent().first('div').find('small').html(
 		((a < 10) ? ('0' + a) : a)+':'+((b < 10) ? ('0' + b) : b)+' / '+((c < 10) ? ('0' + c) : c)+':'+((d < 10) ? ('0' + d) : d)
 	);
+	if(Math.round(t[0] * 10) == Math.round(t[1] * 10)) {
+		$('#'+wv.params.container.id).parent().parent().first('div').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
+		wv.stop();
+	}
 }
