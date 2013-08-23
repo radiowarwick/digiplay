@@ -41,5 +41,26 @@ class Bootstrap {
 		$return .= "</".($div? "div" : "ul").">";
 		return $return;
 	}
+
+	public function modal($id, $content, $header = NULL, $footer = NULL) {
+		$return = "
+		<div class=\"modal fade\" id=\"".$id."\">
+			<div class=\"modal-dialog\">
+				<div class=\"modal-content\">
+					".(!is_null($header)? "<div class=\"modal-header\">
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>
+						<h4 class=\"modal-title\">".$header."</h4>
+					</div>" : "")."
+					<div class=\"modal-body\">
+						".$content."
+					</div>
+					".(!is_null($footer)? "<div class=\"modal-footer\">
+						".$footer."
+					</div>" : "")."
+				</div>
+			</div>
+		</div>";
+		return $return;
+	}
 }
 ?>
