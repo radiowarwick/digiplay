@@ -1,35 +1,35 @@
 <?php
 
 Output::set_title("Playlists");
-Output::add_script(LINK_ABS."js/jquery-ui-1.8.17.custom.min.js");
-Output::add_script(LINK_ABS."js/bootstrap-popover.js");
+Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 
 MainTemplate::set_subtitle("View and edit music playlists");
 
 echo("<script type=\"text/javascript\">
 $(function() {
-	var fixHelper = function(e, ui) {
-    ui.children().each(function() {
-        $(this).width($(this).width());
-    });
-    return ui;
-	};
 	$('.table-striped tbody').sortable({ 
 		axis: 'y',
 		handle: '.move',
-		helper: fixHelper,
+		helper: function(e, tr){
+			var originals = tr.children();
+			var helper = tr.clone();
+			helper.children().each(function(index) {
+				$(this).width(originals.eq(index).width())
+			});
+			return helper;
+		},
 		update : function () { 
+			$('.move').removeClass('.glyphicon-move').addClass('.glyphicon-refresh');
             $.ajax({
-                type: \"POST\",
-                url: \"/ajax/update-playlist-sortorder.php\",
-                data: $(\".sortorder\").serialize(),
+                type: 'POST',
+                url: '".LINK_ABS."/ajax/update-playlist-sortorder.php',
+                data: $('.sortorder').serialize(),
                 success: function(data) {
-                	if(data == \"success\") {
-                		$('.ajax-loader').remove();
-                	} else {
+                	if(data != 'success') {
                 		$('.sortorder').before('".Bootstrap::alert_message_basic("error","'+data+'","Error!")."');
                 		$('.alert-message').alert();
                 	}
+                	$('.move').removeClass('.glyphicon-refresh').addClass('.glyphicon-move');
                 }
             });
         }
@@ -114,7 +114,7 @@ foreach (Playlists::get_all() as $playlist) {
 			</td>
 			<td>
 				<a href=\"#\" class=\"move\">
-					".Bootstrap::glyphicon("move")."
+					".Bootstrap::glyphicon("move move")."
 				</a>
 			</td>
 		");
