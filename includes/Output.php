@@ -23,19 +23,19 @@ class Output{
 			self::$template = $template;
 	}
 	public static function add_stylesheet($stylesheet){
-		self::$stylesheets[] = $stylesheet;
+		if(!in_array($stylesheet, self::$stylesheets)) self::$stylesheets[] = $stylesheet;
 	}
 	public static function get_stylesheets(){
 		return self::$stylesheets;
 	}
-	public static function add_less_stylesheet($stylesheet){
-		self::$less[] = $stylesheet;
+	public static function add_less_stylesheet($less){
+		if(!in_array($less, self::$less_stylesheets)) self::$less_stylesheets[] = $less;
 	}
 	public static function get_less_stylesheets(){
-		return self::$less;
+		return self::$less_stylesheets;
 	}
 	public static function add_script($script){
-		self::$scripts[] = $script;
+		if(!in_array($script, self::$scripts)) self::$scripts[] = $script;
 	}
 	public static function get_scripts(){
 		return self::$scripts;
