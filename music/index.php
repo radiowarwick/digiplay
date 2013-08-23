@@ -226,53 +226,11 @@ if($tracks) {
 	echo("Sorry, no results");
 }
 if(Session::is_group_user("Playlist Admin")) {
-	echo("
-		<div class=\"modal fade\" id=\"playlist-modal\">
-			<div class=\"modal-dialog\">
-				<div class=\"modal-content\">
-					<div class=\"modal-header\">
-						<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-						<h4>Add to playlist</h4>
-					</div>
-					<div class=\"modal-body\">
-						<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p>
-						<ul class=\"nav nav-pills nav-stacked\">
-						");
-						foreach(Playlists::get_all() as $playlist) {
-							echo("<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("music").$playlist->get_name()."</a></li>");
-						}
-						echo("
-						</ul>
-					</div>
-					<div class=\"modal-footer\">
-						<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a>
-						<a href=\"".LINK_ABS."playlists\" class=\"btn\">Manage playlists</a>
-					</div>
-				</div>
-			</div>
-		</div>"
-	);
+	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("music").$playlist->get_name()."</a></li>";
+	$playlist_modal_content .= "</ul>";
+	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }
 
-if(Session::is_group_user("Music Admin")) {
-	echo("
-		<div class=\"modal fade\" id=\"delete-modal\">
-			<div class=\"modal-dialog\">
-				<div class=\"modal-content\">
-					<div class=\"modal-header\">
-						<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-						<h4>Delete Track</h4>
-					</div>
-					<div class=\"modal-body\">
-						<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>
-					</div>
-					<div class=\"modal-footer\">
-						<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a>
-						<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">No</a>
-					</div>
-				</div>
-			</div>
-		</div>"
-	);
-}
+if(Session::is_group_user("Music Admin")) echo(Bootstrap::modal("delete-modal", "<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>", "Delete track", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
 ?>

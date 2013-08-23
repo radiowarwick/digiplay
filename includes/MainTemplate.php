@@ -145,24 +145,7 @@ class MainTemplate implements Template{
 				</div>
 			</div>";
 
-	if(Session::is_user())
-		$return .= "
-		<div class=\"modal fade\" id=\"logout-modal\">
-			<div class=\"modal-dialog\">
-				<div class=\"modal-content\">
-					<div class=\"modal-header\">
-						<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>
-						<h4 class=\"modal-title\">Log out?</h4>
-					</div>
-					<div class=\"modal-body\">
-						You'll lose any unsaved changes on this page.
-					</div>
-					<div class=\"modal-footer\">
-						<a class=\"btn btn-primary\" href=\"".LINK_ABS."ajax/logout.php\">Yes, log out</a>
-					</div>
-				</div>
-			</div>
-		</div>";
+	if(Session::is_user()) $return .= Bootstrap::modal("logout-modal", "You'll lose any unsaved changes on this page.", "Log out?", "<a class=\"btn btn-primary\" href=\"".LINK_ABS."ajax/logout.php\">Yes, log out</a>");
 
 	$return .= "
 		<div id=\"push\"></div>
