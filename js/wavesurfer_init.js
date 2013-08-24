@@ -21,10 +21,14 @@ function wv_create(id, url) {
 
 function wv_loading(wv, percent) {
 	$('#'+wv.params.container.id).find('.progress').find('.progress-bar').css('width', percent*100+'%');
-  	if(percent == 1) {
+  	if(Math.round(percent * 10) == 0) {
+  		$('#'+wv.params.container.id).parent().parent().first('div').find('button').attr('disabled', 'disabled');
+  		$('#'+wv.params.container.id).parent().parent().first('div').find('small').html('00:00 / 00:00');
+		$('#'+wv.params.container.id).find('svg').fadeTo('fast', 0, function() { $('#'+wv.params.container.id).find('.progress').removeClass('active').fadeIn('fast'); });
+  	} else if (percent == 1) {
   		$('#'+wv.params.container.id).find('.progress').addClass('active');
   	} else if (percent >= 100) {
-  		$('#'+wv.params.container.id).find('.progress').fadeOut('fast', function() { $('#'+wv.params.container.id).find('svg').fadeTo('fast', 1); });
+  		$('#'+wv.params.container.id).find('.progress').removeClass('active').fadeOut('fast', function() { $('#'+wv.params.container.id).find('svg').fadeTo('fast', 1); });
   	}
 }
 
