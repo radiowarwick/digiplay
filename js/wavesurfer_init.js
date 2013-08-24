@@ -1,22 +1,22 @@
 var wavesurfer = Array();
 
-function wv_create(container, url) {
-	wv = Object.create(WaveSurfer);
+function wv_create(id, url) {
+	wavesurfer[id] = Object.create(WaveSurfer);
 	var options = {
-    	container     : document.querySelector(container),
+    	container     : document.querySelector('#waveform'+id),
     	renderer	  : 'SVG'
     };
 
-	wv.init(options);
-	wv.setVolume(0);
-	wv.on('loading', function(p) { wv_loading(wv, p); });
-	wv.on('ready', function() { wv_ready(wv); });
-	wv.on('progress', function() { wv_progress(wv); });
-	$(container).find('svg').css('opacity', '0');
+	wavesurfer[id].init(options);
+	wavesurfer[id].setVolume(0);
+	wavesurfer[id].on('loading', function(p) { wv_loading(wavesurfer[id], p); });
+	wavesurfer[id].on('ready', function() { wv_ready(wavesurfer[id]); });
+	wavesurfer[id].on('progress', function() { wv_progress(wavesurfer[id]); });
+	$('#waveform'+id).find('svg').css('opacity', '0');
 
-	wv.load(url);
+	wavesurfer[id].load(url);
 
-	return wv;
+	return wavesurfer[id];
 }
 
 function wv_loading(wv, percent) {
