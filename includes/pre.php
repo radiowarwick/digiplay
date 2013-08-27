@@ -43,7 +43,7 @@ if(substr(LINK_FILE,0,6) == "studio") {
     if(isset($_REQUEST["key"])) {
         foreach(Config::get_locations() as $location) {
             if(Config::get_param("security_key", $location) == $_REQUEST["key"]) {
-                MainTemplate::set_barebones($true);
+                MainTemplate::set_barebones(true);
                 $valid = true;
             }
         }
