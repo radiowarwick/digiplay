@@ -37,5 +37,14 @@ class Config {
                  $settings[] = $setting['parameter'];
     	return $settings;
 	}
+
+	public function hash_generator() {
+		$fp = @fopen('/dev/urandom','rb');
+		if ($fp !== FALSE) {
+    		$pr_bits .= @fread($fp,16);
+    		@fclose($fp);
+    	}
+    	return sha1($pr_bits);
+	}
 }
 ?>

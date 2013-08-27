@@ -39,7 +39,21 @@ if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != 
 	exit(json_encode(array("error" => "Your session has timed out, or you have logged out in another tab. Please log in again.")));
 }
 
-if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php")) Output::require_user();
+if(substr(LINK_FILE,0,6) == "studio") {
+    if(isset($_REQUEST["key"])) {
+        foreach(Config::get_locations() as $location) {
+            if(Config::get_param("security_key", $location) == $_REQUEST["key"]) {
+                MainTemplate::set_barebones($true);
+                $valid = true;
+            }
+        }
+        if(!$valid) exit("Sorry, you provided an invalid security key.");
+    } else {
+        Output::require_user();
+    }
+}
+
+if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php") && (substr(LINK_FILE,0,6) != "studio")) Output::require_user();
 
 if (Session::is_developer()) {
     ini_set ( "display_errors", "1");
