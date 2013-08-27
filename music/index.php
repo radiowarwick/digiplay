@@ -179,8 +179,8 @@ if($tracks) {
 			<th class=\"icon\"> </th>
 			<th class=\"artist\">Artist</th>
 			<th class=\"title\">Title</th>
-			<th class=\"album\">Date Added</th>
-			<th class=\"length\">Length</th> 
+			<th class=\"date-added nowrap\">Date Added</th>
+			<th class=\"length nowrap\">Length</th> 
 			".(Session::is_group_user("Playlist Admin")? "<th class=\"icon\"></th>" : "")."
 			".(Session::is_group_user("Music Admin")? "<th class=\"icon\"></th>" : "")."
 		</tr>
@@ -210,15 +210,15 @@ if($tracks) {
 			</td>
 			<td class=\"artist\">".$artist_str."</td>
 			<td class=\"title\">".$track->get_title()."</td>
-			<td class=\"album\">".$import_date."</td>
-			<td class=\"length\">".Time::format_succinct($track->get_length())."</td>
+			<td class=\"date-added nowrap\">".$import_date."</td>
+			<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>
 			");
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
 				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</i></a></td>"); 
 			}
-			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</i></a></td>" : "")."
+			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</i></a></td>" : "")."
 		</tr>");
 	}
 	echo("</table></div>");

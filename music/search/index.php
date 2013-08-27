@@ -128,7 +128,7 @@ if($tracks) {
 			<th class=\"artist\">Artist</th>
 			<th class=\"title\">Title</th>
 			<th class=\"album\">Album</th>
-			<th class=\"length\">Length</th> 
+			<th class=\"length nowrap\">Length</th> 
 			".(Session::is_group_user("Playlist Admin")? "<th class=\"icon\"></th>" : "")."
 			".(Session::is_group_user("Music Admin")? "<th class=\"icon\"></th>" : "")."
 		</tr>
@@ -161,7 +161,7 @@ if($tracks) {
 			<td class=\"artist\">".$artist_str."</td>
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$album."</td>
-			<td class=\"length\">".Time::format_succinct($track->get_length())."</td>");
+			<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>");
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();

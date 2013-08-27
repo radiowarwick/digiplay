@@ -40,12 +40,7 @@ footer img { margin: 12px 0; }
 /* ============ Generic rules ============ */
 table .icon { width: 16px; }
 .hover-info { display: none; white-space: nowrap;}
-
-/* ============ Music pages ============ */
-table .artist { width: 150px; }
-table .title { width: 250px; }
-table .album { width: 200px; }
-table .length { width: 52px; }
+table .nowrap { white-space: nowrap; }
 
 .keyword a i { float: right; margin-right: 6px; margin-top: 6px; display: inline;}
 
