@@ -5,6 +5,8 @@ class MainTemplate{
 	protected static $subtitle;
 	protected static $feature_image;
 	protected static $feature_html;
+	protected static $barebones = false;
+
 	public static function set_subtitle($subtitle){
 		self::$subtitle = $subtitle;
 	}
@@ -19,6 +21,9 @@ class MainTemplate{
 	}
 	public static function set_menu($menu) {
 		self::$menu = $menu;
+	}
+	public static function set_barebones($barebones) {
+		self::$barebones = $barebones;
 	}
 	public static function print_page($content){
 		if(strlen(LINK_PATH)>0){
@@ -70,7 +75,9 @@ class MainTemplate{
 		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/style.css\">
 		<script src=\"".LINK_ABS."js/main.js\" type=\"text/javascript\"></script>
 	</head>
-	<body>
+	<body>";
+	if(self::$barebones == false) {
+		$return .= "
 		<div id=\"wrap\">
 			<nav class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">
 				<div class=\"container\">
@@ -105,49 +112,52 @@ class MainTemplate{
 			</nav>
 			".(isset(self::$feature_html)? "<div class=\"jumbotron".(isset(self::$feature_image)? " feature-image\" style=\"background-image: url('".self::$feature_image."')\"" : "\"")."><div class=\"container\">".self::$feature_html."</div></div>" : "").
 			"<div class=\"container\">";
-	if(Output::get_title() != 'Untitled Page') {
-		$return .= "
+		
+		if(Output::get_title() != 'Untitled Page') {
+			$return .= "
 				<div class=\"page-header\">
 					<h2>".Output::get_title();
 					if(isset(self::$subtitle)) {
 						$return .= " <small>".self::$subtitle."</small>";
 					}
-		$return .= "</h2>
+			$return .= "</h2>
 				</div>";
-	}
+		}
 
-	$return .= "
-				<div class=\"row\">";
-	if (isset(self::$sidebar) || isset(self::$menu)){
 		$return .= "
+				<div class=\"row\">";
+		if (isset(self::$sidebar) || isset(self::$menu)){
+			$return .= "
 				<div class=\"col-md-3\">";
-		if(isset(self::$menu)) $return .= self::$menu;
-		if(isset(self::$sidebar)) {
-			$return .= "	
+			if(isset(self::$menu)) $return .= self::$menu;
+			if(isset(self::$sidebar)) {
+				$return .= "	
 					<div class=\"panel panel-noborder visible-md visible-lg\">
 						<div class=\"panel-body\">".
 						self::$sidebar."
 						</div>
 					</div>";
-		}
-		$return .= "
+			}
+			$return .= "
 				</div>
 				<div class=\"col-md-9\">";
-	} else {
-		$return .= "
+		} else {
+			$return .= "
 				<div class=\"col-md-12\">";
+		}
 	}
 
 	$return .= $content;
 
-	$return .= "
+	if(self::$barebones == false) {
+		$return .= "
 					</div>
 				</div>
 			</div>";
 
-	if(Session::is_user()) $return .= Bootstrap::modal("logout-modal", "You'll lose any unsaved changes on this page.", "Log out?", "<a class=\"btn btn-primary\" href=\"".LINK_ABS."ajax/logout.php\">Yes, log out</a>");
+		if(Session::is_user()) $return .= Bootstrap::modal("logout-modal", "You'll lose any unsaved changes on this page.", "Log out?", "<a class=\"btn btn-primary\" href=\"".LINK_ABS."ajax/logout.php\">Yes, log out</a>");
 
-	$return .= "
+		$return .= "
 		<div id=\"push\"></div>
 	</div>
 		<footer class=\"jumbotron\">
@@ -155,9 +165,9 @@ class MainTemplate{
 				<div class=\"row\">
 					<div class=\"col-sm-8\">
 						<p class=\"text-muted credit\">";
-	if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#logout-modal\" data-toggle=\"modal\">Logout</a>. ";
-	else $return .= "Not logged in. ";
-	$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
+		if(Session::is_user()) $return .= "Logged in as ".Session::get_username().". <a href=\"#logout-modal\" data-toggle=\"modal\">Logout</a>. ";
+		else $return .= "Not logged in. ";
+		$return .= "Copyright &copy; 2011-".date("y")." Radio Warwick
 						</p>
 					</div>
 					<div class=\"col-sm-4\">
@@ -165,7 +175,10 @@ class MainTemplate{
 					</div>
 				</div>
 			</div>
-		</footer>
+		</footer>";
+	}
+
+	$return .= "
 	</body> 
 </html>";
 	return $return;
