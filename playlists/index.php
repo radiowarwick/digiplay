@@ -144,7 +144,7 @@ echo("
 	<tbody>
 ");
 
-foreach (Playlists::get_all() as $playlist) {
+foreach (Playlists::get_all(false) as $playlist) {
 	echo("
 		<tr>
 			<td>
@@ -154,9 +154,11 @@ foreach (Playlists::get_all() as $playlist) {
 				</a>
 				<div class=\"hover-info\">
 				");
-	foreach($playlist->get_tracks() as $track) {
+	$count = $playlist->count_tracks();
+	foreach($playlist->get_tracks(10) as $track) {
 		echo("<strong>".$track->get_title()."</strong> by ".$track->get_artists_str()."<br />");
 	}
+	if($count > 10) echo("<br />and <strong>".($count - 10)." more...<br />");
 	echo("
 				</div>
 			</td>

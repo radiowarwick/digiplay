@@ -13,23 +13,21 @@ function menu() {
 }
 function sidebar() {
 
-
-	$tracks = Tracks::get_playlisted();
-	foreach ($tracks as $track) { $total_length += $track->get_length(); }
-
-	$time_arr = Time::seconds_to_dhms($total_length);
-	$total_length = ($time_arr["days"])? $time_arr["days"]."d " : "";
-	$total_length .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
-	$total_length .= ($time_arr["minutes"])? $time_arr["minutes"]."m " : "0m ";
-	$total_length .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
+	foreach(Playlists::get_all(false) as $playlist) {
+		foreach ($playlist->get_tracks() as $track) {
+			$tracks++;
+			$total_length += $track->get_length();
+		}
+	}
+	
 
 	$return .= "
 	<h4>Playlists</h4>
 	<dl>
 		<dt>Playlisted Tracks:</dt>
-		<dd>".count($tracks)."</dd>
+		<dd>".$tracks."</dd>
 		<dt>Length of Playlists:</dt>
-		<dd>".$total_length."</dd>
+		<dd>".Time::format_succinct($total_length)."</dd>
 	</dl>
 	<h4>Sustainer Service</h4>
 	<dl>

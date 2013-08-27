@@ -9,9 +9,9 @@ class Playlists {
 		return pg_fetch_object($result,NULL,"Playlist");
 	}
 
-	public function get_all() {
+	public function get_all($sustainer = true) {
 		$playlists = array();
-		$result = DigiplayDB::query("SELECT * FROM playlists ORDER BY sortorder ASC;");
+		$result = DigiplayDB::query("SELECT * FROM playlists".($sustainer? "" : " WHERE id > 0")." ORDER BY sortorder ASC;");
 		while($object = pg_fetch_object($result,NULL,"Playlist"))
                  $playlists[] = $object;
     	return $playlists;

@@ -1,6 +1,6 @@
 <?php
 
-Output::set_title("Playlist detail");
+Output::set_title("Playlist Detail");
 
 $playlist = Playlists::get_by_id($_REQUEST['q']);
 $limit = (isset($_GET['n']))? $_REQUEST['n'] : 10;

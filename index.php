@@ -61,7 +61,7 @@ $feature = "
 					<dt>Length of Tracks</dt>
 					<dd>".Time::format_pretty(Tracks::get_total_length())."</dd>
 					<dt>Playlisted Tracks</dt>
-					<dd>".count(Tracks::get_playlisted())."</dd>
+					<dd>".(count(Tracks::get_playlisted()) - count(Tracks::get_playlisted(Playlists::get(0))))."</dd>
 				</dl>
 			</div>
 			<div class=\"col-sm-4\">
