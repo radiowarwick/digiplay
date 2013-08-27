@@ -71,10 +71,14 @@ class MainTemplate{
 	if(count(Output::get_scripts())>0) foreach(Output::get_scripts() AS $src) $return .= "<script src=\"".$src."\" type=\"text/javascript\"></script>\n";
 	if(count(Output::get_feeds())>0) foreach(Output::get_feeds() AS $feed) $return .= "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$feed['title']."\" href=\"".$feed['url']."\">\n";
 
-	$return .= "
-		<link rel=\"stylesheet\" href=\"".LINK_ABS."css/style.css\">
-		<script src=\"".LINK_ABS."js/main.js\" type=\"text/javascript\"></script>
-	</head>
+	if(self::$barebones == false) {
+		$return .= "
+			<link rel=\"stylesheet\" href=\"".LINK_ABS."css/style.css\">
+			<script src=\"".LINK_ABS."js/main.js\" type=\"text/javascript\"></script>
+			";
+	}
+
+	$return .= "	</head>
 	<body>";
 	if(self::$barebones == false) {
 		$return .= "
