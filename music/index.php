@@ -21,10 +21,10 @@ echo("<script>
 			item = $(this).parent().parent();
 			playlists = $(this).attr('data-playlists-in').split(',');
 			$('.playlist-select').parent().removeClass('active');
-			$('.playlist-select').find('span').removeClass('glyphicon-white icon-minus').addClass('glyphicon-plus');
+			$('.playlist-select').find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
 			$('.playlist-select').each(function() {
 				if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
-					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus icon-white');
+					$(this).find('span').removeClass('icon-plus').addClass('glyphicon-minus');
 					$(this).parent().addClass('active');
 				}
 			})
@@ -45,7 +45,7 @@ echo("<script>
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('span').removeClass('glyphicon-refresh icon-white').addClass('glyphicon-plus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
 						obj.parent().removeClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
@@ -63,13 +63,13 @@ echo("<script>
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus glyphicon-white');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
 						obj.parent().addClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 				$(this).parent().addClass('active');
-				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-white glyphicon-minus');
+				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
 			}
 		});		
 " : "").
@@ -227,7 +227,7 @@ if($tracks) {
 }
 if(Session::is_group_user("Playlist Admin")) {
 	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
-	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("music").$playlist->get_name()."</a></li>";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }

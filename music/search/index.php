@@ -3,7 +3,7 @@
 Output::set_title("Library Search");
 
 $query = $_REQUEST['q'];
-$index = (isset($_REQUEST['i'])? $_REQUEST["i"] : "title artist album");
+$index = (isset($_REQUEST['span'])? $_REQUEST["i"] : "title artist album");
 $limit = (isset($_GET['n']))? $_GET['n'] : 10;
 $page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
 
@@ -41,10 +41,10 @@ if($tracks) {
 			item = $(this).parent().parent();
 			playlists = $(this).attr('data-playlists-in').split(',');
 			$('.playlist-select').parent().removeClass('active');
-			$('.playlist-select').find('i').removeClass('icon-white icon-minus').addClass('icon-plus');
+			$('.playlist-select').find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
 			$('.playlist-select').each(function() {
 				if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
-					$(this).find('i').removeClass('icon-plus').addClass('icon-minus icon-white');
+					$(this).find('span').removeClass('icon-plus').addClass('glyphicon-minus');
 					$(this).parent().addClass('active');
 				}
 			})
@@ -53,43 +53,43 @@ if($tracks) {
 		$('.playlist-select').click(function() {
 			obj = $(this);
 			if($(this).parent().hasClass('active')) {
-				$(this).find('i').removeClass('icon-minus').addClass('icon-refresh');
+				$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-refresh');
 				$.ajax({
-					url: '".LINK_ABS."ajax/track-playlist-update',
+					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-minus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('i').removeClass('icon-refresh icon-white').addClass('icon-plus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
 						obj.parent().removeClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 			} else {
-				$(this).find('i').removeClass('icon-plus').addClass('icon-refresh');
+				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-refresh');
 				$.ajax({
-					url: '".LINK_ABS."ajax/track-playlist-update',
+					url: '".LINK_ABS."ajax/track-playlist-update.php',
 					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-plus');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('i').removeClass('icon-refresh').addClass('icon-minus icon-white');
+						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
 						obj.parent().addClass('active');
 						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 				$(this).parent().addClass('active');
-				$(this).find('i').removeClass('icon-plus').addClass('icon-white icon-minus');
+				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
 			}
 		});		
 " : "").
@@ -187,7 +187,7 @@ if($tracks) {
 
 if(Session::is_group_user("Playlist Admin")) {
 	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
-	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("music").$playlist->get_name()."</a></li>";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }
