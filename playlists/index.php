@@ -37,6 +37,7 @@ $(function() {
 
 	$('.info').popover({
 		'html': true, 
+		'trigger': 'hover',
 		'title': function() { 
 			return($(this).parent().parent().find('.title').html()+' tracks')
 		},
@@ -47,12 +48,74 @@ $(function() {
 	if(window.location.hash == '#add') {
 		$('#add').click();
 	}
-	$('a[href=\"../playlists/index.php#add\"]').click(function() {
+	$('a[href=\"".LINK_ABS."playlists/index.php#add\"]').click(function() {
 		event.preventDefault();
 		$('#add').click();
-	})
+	});
+".(Session::is_group_user("Playlist Admin") ? "
+		var playlist_id;
+		$('.delete-playlist').click(function() {
+			$('.delete-playlist-title').html($(this).parent().parent().find('.title').html());
+			playlist_id = $(this).attr('data-dps-id');
+		});
 
-});
+		$('.edit-playlist').click(function() {
+			$('.playlist-edit-name').val($(this).parent().parent().find('.title').html());
+			$('.update-id').val($(this).attr('data-dps-id'));
+		});
+
+		$('.yes-definitely-delete').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/delete-playlist.php',
+				data: 'id='+playlist_id,
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('.add-playlist').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/add-update-playlist.php',
+				data: 'name='+$('.playlist-name').val(),
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('.playlist-name').keypress(function(e) { if(e.keyCode == 13) { e.preventDefault(); $('.add-playlist').click(); }});
+
+
+
+		$('.update-playlist').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/add-update-playlist.php',
+				data: 'id='+$('.update-id').val()+'&name='+$('.playlist-edit-name').val(),
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('.playlist-edit-name').keypress(function(e) { if(e.keyCode == 13) { e.preventDefault(); $('.update-playlist').click(); }});
+" : "").
+"});
 </script>");
 
 echo("<h3>Current playlists:</h3>");
@@ -64,7 +127,7 @@ echo("
 	<thead>
 		<tr>
 			<th class=\"icon\"></th>
-			<th class=\"title\">Title</th>
+			<th>Title</th>
 			<th class=\"icon\">Items</th>
 			");
 if(Session::is_group_user("Playlist Admin")) {
@@ -85,7 +148,7 @@ foreach (Playlists::get_all() as $playlist) {
 	echo("
 		<tr>
 			<td>
-				<a href=\"#\" class=\"info\">
+				<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" class=\"info\">
 					".Bootstrap::glyphicon("info-sign")."
 					<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 				</a>
@@ -103,12 +166,12 @@ foreach (Playlists::get_all() as $playlist) {
 	if(Session::is_group_user("Playlist Admin")) {
 		echo("
 			<td>
-				<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" title=\"View/Edit this playlist\" rel=\"twipsy\">
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
 					".Bootstrap::glyphicon("pencil")."
 				</a>
 			</td>
 			<td>
-				<a href=\"#\" title=\"Delete this playlist\" rel=\"twipsy\">
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"delete-playlist\" title=\"Delete this playlist\" rel=\"twipsy\">
 					".Bootstrap::glyphicon("remove-sign")."
 				</a>
 			</td>
@@ -130,30 +193,38 @@ echo("
 ");
 
 if(Session::is_group_user("Playlist Admin")) {
-	echo("
-<a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" data-backdrop=\"true\" data-keyboard=\"true\" id=\"add\">Add a new playlist &raquo;</a>
-<div class=\"modal fade hide\" id=\"addnew-modal\">
-	<div class=\"modal-header\">
-		<a class=\"close\" data-dismiss=\"modal\">&times;</a>
-		<h4>Add new playlist</h4>
-	</div>
-	<div class=\"modal-body\">
-		<form class=\"form-horizontal\" action=\"\" method=\"POST\">
+	echo("<a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" id=\"add\">Add a new playlist &raquo;</a>".
+	Bootstrap::modal("addnew-modal", "
+		<form class=\"form-horizontal\" action=\"".LINK_ABS."/ajax/add-update-playlist.php\" method=\"POST\">
 			<fieldset>
 				<div class=\"control-group\">
 					<label class=\"control-label\" for=\"name\">Name</label>
 					<div class=\"controls\">
-						<input type=\"text\" class=\"input-xlarge\" id=\"name\">
+						<input type=\"text\" class=\"form-control playlist-name\" id=\"name\">
 						<p class=\"help-block\">Enter a name for the new playlist.</p>
 					</div>
 				</div>
 			</fieldset>
 		</form>
-	</div>
-	<div class=\"modal-footer\">
-		<a class=\"btn btn-primary\" href=\"#\">Save</a>
-		<a class=\"btn\" data-dismiss=\"modal\">Cancel</a>
-	</div>
-</div>");
+	", "Add new playlist", "<a class=\"btn btn-primary add-playlist\" href=\"#\">Save</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
+	"</div>
+</div>".
+Bootstrap::modal("update-modal", "
+		<form class=\"form-horizontal\" action=\"".LINK_ABS."/ajax/add-update-playlist.php\" method=\"POST\">
+			<fieldset>
+				<div class=\"control-group\">
+					<label class=\"control-label\" for=\"name\">Name</label>
+					<div class=\"controls\">
+						<input type=\"hidden\"class=\"update-id\">
+						<input type=\"text\" class=\"form-control playlist-edit-name\">
+						<p class=\"help-block\">Enter a name for the playlist.</p>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	", "Edit playlist name", "<a class=\"btn btn-primary update-playlist\" href=\"#\">Save</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
+	"</div>
+</div>".
+	Bootstrap::modal("delete-modal", "<p>Are you sure you want to permanently delete <span class=\"delete-playlist-title\">this playlist</span>? </p><p>(this does not delete any of the tracks on it)</p>", "Delete playlist", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
 }
 ?>

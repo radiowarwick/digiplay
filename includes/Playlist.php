@@ -20,6 +20,12 @@ class Playlist {
 		}
 		return $this->id;
 	}
+
+	public function delete() {
+		foreach($this->get_tracks() as $track) $this->del_track($track);
+		$query = DigiplayDB::query("DELETE FROM playlists WHERE id = ".$this->id.";");
+		return ($query? true : false);
+	}
 	
 	public function get_tracks(){
 		return Tracks::get_playlisted($this);
