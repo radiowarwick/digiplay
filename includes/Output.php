@@ -19,7 +19,7 @@ class Output{
 	}
 	public static function set_template($template = null){
 		if(is_null($template)) self::$template = null;
-		else if((new $template) instanceof Template)
+		else if(new $template)
 			self::$template = $template;
 	}
 	public static function add_stylesheet($stylesheet){

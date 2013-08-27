@@ -1,5 +1,5 @@
 <?php
-class MainTemplate implements Template{
+class MainTemplate{
 	protected static $sidebar;
 	protected static $menu;
 	protected static $subtitle;
