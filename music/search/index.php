@@ -3,7 +3,7 @@
 Output::set_title("Library Search");
 
 $query = $_REQUEST['q'];
-$index = (isset($_REQUEST['span'])? $_REQUEST["i"] : "title artist album");
+$index = (isset($_REQUEST['i'])? $_REQUEST["i"] : "title artist album");
 $limit = (isset($_GET['n']))? $_GET['n'] : 10;
 $page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
 
