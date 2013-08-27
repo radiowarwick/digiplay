@@ -27,12 +27,14 @@ class Tracks{
 		return $length;
 	}
 
-	public function get_playlisted($playlist = NULL) {
+	public function get_playlisted($playlist = NULL,$limit = 0,$offset = 0) {
+		$limit = ($limit > 0)? " LIMIT ".$limit : "";
+		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		$tracks = array();
 		if($playlist) {
-			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = ".$playlist->get_id());
+			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = ".$playlist->get_id().$limit.$offset);
 		} else {
-			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid);");
+			$result = DigiplayDB::query("SELECT audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid)".$limit.$offset);
 		}
 		while($object = pg_fetch_object($result,NULL,"Track"))
                  $tracks[] = $object;

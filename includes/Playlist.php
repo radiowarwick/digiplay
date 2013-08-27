@@ -27,8 +27,12 @@ class Playlist {
 		return ($query? true : false);
 	}
 	
-	public function get_tracks(){
-		return Tracks::get_playlisted($this);
+	public function get_tracks($limit = 0, $offset = 0){
+		return Tracks::get_playlisted($this,$limit,$offset);
+	}
+
+	public function count_tracks() {
+		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(audioid) FROM audioplaylists WHERE playlistid = ".$this->id.";"),NULL,0);
 	}
 
 	public function add_track($track) {

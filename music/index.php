@@ -204,7 +204,6 @@ if($tracks) {
 					<strong>Length:</strong> ".Time::format_succinct($track->get_length())."<br />
 					<strong>Origin:</strong> ".$track->get_origin()."<br />
 					".($track->get_reclibid()? "<strong>Reclib ID:</strong> ".$track->get_reclibid()."<br />" : "")."
-					<strong>On Sue:</strong> ".($track->is_sustainer()? "Yes" : "No")."<br />
 					<strong>Censored:</strong> ".($track->is_censored()? "Yes" : "No")."<br /> 
 				</div>
 			</td>

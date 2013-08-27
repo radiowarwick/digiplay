@@ -12,19 +12,17 @@ class Track extends Audio{
 	public function get_track() { return $this->music_track; }
 	public function get_year() { return ($this->music_released == 0 )? "(not set)" : $this->music_released; }
 	public function get_reclibid() { return $this->reclibid; }
-	public function is_sustainer(){ return (($this->sustainer == "t")? TRUE : FALSE); }
 	public function is_flagged() { return (($this->flagged == "t")? TRUE : FALSE); }
 	public function is_censored(){ return (($this->censor == "t")? TRUE : FALSE); }
 
 	public function set_track($track) { $this->track = $track; }
 	public function set_year($year) { $this->music_released = (is_numeric($year))? $year : 0; }
 	public function set_reclibid($reclibid) { $this->reclibid = $reclibid; }
-	public function set_sustainer($sustainer) { $this->sustainer = $sustainer? "t":"f"; }
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
 
 	public function save() {
-		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,sustainer,flagged,censor) = (".pg_escape_string($this->music_album).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",'".pg_escape_string($this->reclibid)."','".$this->sustainer."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
+		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,flagged,censor) = (".pg_escape_string($this->music_album).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",'".pg_escape_string($this->reclibid)."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
 		return (bool) DigiplayDB::query($sql);
 	}
 

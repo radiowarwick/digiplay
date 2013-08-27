@@ -1,12 +1,12 @@
 <?php
 class Sustainer {
 	public function get_total_tracks(){
-		$tracks = pg_fetch_assoc(DigiplayDB::query("SELECT COUNT(id) FROM audio WHERE sustainer = 't';"));
+		$tracks = pg_fetch_assoc(DigiplayDB::query("SELECT COUNT(audioid) FROM audioplaylists WHERE playlistid = 0;"));
 		return $tracks["count"];
 	}
 
 	public function get_total_length() {
-		$length = pg_fetch_assoc(DigiplayDB::query("SELECT SUM(length_smpl) FROM audio WHERE sustainer ='t';"));
+		$length = pg_fetch_assoc(DigiplayDB::query("SELECT SUM(length_smpl) FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = 0;"));
 		$length = $length["sum"] / 44100;
 		return $length;
 	}

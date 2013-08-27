@@ -90,7 +90,6 @@ if($flagged = Tracks::get_flagged()) {
 				<strong>Length:</strong> ".Time::format_succinct($flag->get_length())."<br />
 				<strong>Origin:</strong> ".$flag->get_origin()."<br />
 				".($flag->get_reclibid()? "<strong>Reclib ID:</strong> ".$flag->get_reclibid()."<br />" : "")."
-				<strong>On Sue:</strong> ".($flag->is_sustainer()? "Yes" : "No")."<br />
 			</div>
 		</td>
 		<td class=\"artist\">".$flag->get_artists_str()."</td>

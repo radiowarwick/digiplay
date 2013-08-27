@@ -164,16 +164,6 @@ echo("
 					</div>
 					<div class=\"form-group\">
 						<div class=\"col-md-10 col-md-offset-2\">
-							<div class=\"checkbox\">
-								<label for=\"sustainer\">
-									<input type=\"checkbox\" id=\"sustainer\" name=\"sustainer\" ".$disabled." ".($track->is_sustainer()? "checked" : "").">
-									On Sustainer
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class=\"form-group\">
-						<div class=\"col-md-10 col-md-offset-2\">
 							<button type=\"submit\" class=\"btn btn-primary btn-block\">
 								".Bootstrap::glyphicon("save save")."
 								Save
