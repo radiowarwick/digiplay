@@ -38,7 +38,16 @@ class Config {
     	return $settings;
 	}
 
-	public function hash_generator() {
+	public function get_location_from_key($key) {
+		$query = DigiplayDB::query("SELECT location FROM configuration WHERE parameter = 'security_key' AND val = '".$key."';");
+		if(pg_num_rows($query) == 1) {
+			return pg_fetch_result($query,0);
+		} else {
+			return false;
+		}
+	}
+
+	public function key_generator() {
 		$fp = @fopen('/dev/urandom','rb');
 		if ($fp !== FALSE) {
     		$pr_bits .= @fread($fp,16);
