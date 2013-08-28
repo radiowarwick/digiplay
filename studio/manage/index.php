@@ -50,7 +50,7 @@ echo("
 							</div>
 							<div class=\"tab-pane\" id=\"search\">
 								<script>
-									$(function() { $('#search-form').submit(function(e) { e.preventDefault(); $('#search-results').load('functions.php?action=search&q='+encodeURIComponent($('#search-text').find('input').val()), post_data) }) })
+									$(function() { $('#search-form').submit(function(e) { e.preventDefault(); $('#search-results').load('functions.php?action=search&'+$('#search-form').serialize(), post_data) }) })
 								</script>
 								<form class=\"form-horizontal\" id=\"search-form\">
 									<div class=\"form-group\">

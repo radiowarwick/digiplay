@@ -13,8 +13,12 @@ switch($_REQUEST["action"]) {
 		echo(Config::get_param("info-content"));
 		break;
 	case "search":
-		$query = $_REQUEST['q'];
-		$index = (isset($_REQUEST['i'])? $_REQUEST["i"] : "title artist album");
+		$index = array();
+		$query = $_REQUEST["search-text"];
+		if ($_REQUEST["search-title"] == "on") $index[] = "title";
+		if ($_REQUEST["search-artist"] == "on") $index[] = "artist";
+		if ($_REQUEST["search-album"] == "on") $index[] = "album";
+		$index = implode($index," ");
 
 		if($query) $search = Search::tracks($query,$index,50);
 
