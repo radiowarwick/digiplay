@@ -1,0 +1,15 @@
+html,body { height: 100% !important; overflow: hidden; }
+
+.container { max-width: 100% !important; height: 100% !important; }
+#main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane { height: 100% !important; }
+#search-results { height: 100% !important; overflow: scroll; }
+
+table { table-layout: fixed; }
+
+.nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+.icon { width: 25px; }
+.artist { width: 25%; }
+.title { width: auto; }
+.album { width: 20%; }
+.length { width: 15%; }

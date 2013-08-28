@@ -2,6 +2,13 @@
 Output::set_template();
 
 switch($_REQUEST["action"]) {
+	case "now-next":
+		$json = file_get_contents(Config::get_param("now-next-api"));
+		$json = json_decode($json);
+		$return = "<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\">".$json[0]->name."</span></div>
+			<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\">".$json[1]->name."</span></div>";
+		echo $return;
+		break;
 	case "info-content":
 		echo(Config::get_param("info-content"));
 		break;
@@ -19,16 +26,16 @@ switch($_REQUEST["action"]) {
 						<th class=\"artist\">Artist</th>
 						<th class=\"title\">Title</th>
 						<th class=\"album\">Album</th>
-						<th class=\"length nowrap\">Length</th>
+						<th class=\"length\">Length</th>
 					</tr>
 				</thead>";
 			foreach($search["results"] as $track) {
 				$track = Tracks::get($track);
 				$return .= "<tr id=\"".$track->get_id()."\">
 					<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
-					<td class=\"artist\">".$track->get_artists_str()."</td>
-					<td class=\"title\">".$track->get_title()."</td>
-					<td class=\"album\">".$track->get_album()->get_name()."</td>
+					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
+					<td class=\"title nowrap\">".$track->get_title()."</td>
+					<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
 					<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>
 				</tr>";
 			}

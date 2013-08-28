@@ -3,6 +3,7 @@ Output::set_title("Studio Management");
 
 if(isset($_REQUEST["key"])) {
 	$location = Config::get_location_from_key($_REQUEST["key"]);
+	Output::add_stylesheet(LINK_ABS."css/studio.css");
 } else {
 	if(isset($_REQUEST["location"])) {
 		$location = $_REQUEST["location"];
@@ -18,10 +19,17 @@ echo("
 			var post_data = [];
 			".(isset($_REQUEST["key"])? "post_data['key'] = '".$_REQUEST['key']."';" : "")."
 		</script>
+		<nav class=\"navbar navbar-default\">
+			<script> $(function() { setInterval(function() { $('#now-next').load('functions.php?action=now-next', post_data) }, 60000); $('#now-next').load('functions.php?action=now-next', post_data); }); </script>
+			<div id=\"now-next\">
+				<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\"></span></div>
+				<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\"></span></div>
+			</div>
+		</nav>
 		<div class=\"container\">
-			<div class=\"row\">
-				<div class=\"col-md-8\">
-					<ul class=\"nav nav-tabs\" id=\"tabs\">
+			<div class=\"row\" id=\"main-panel\">
+				<div class=\"col-md-7\" id=\"left-panel\">
+					<ul class=\"nav nav-tabs nav-justified\" id=\"tabs\">
 						<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
 						<li><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
 						<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
@@ -30,7 +38,7 @@ echo("
 						<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
 					</ul>
 					<p />
-					<div class=\"tab-content\" style=\"height: 100%\">
+					<div class=\"tab-content\" id=\"left-panel-content\">
 						<div class=\"tab-pane active\" id=\"info\">
 							<script>
 								$(function() { setInterval(function() { $('#info-content').load('functions.php?action=info-content', post_data) }, 60000) })
@@ -41,7 +49,7 @@ echo("
 						</div>
 						<div class=\"tab-pane\" id=\"search\">
 							<script>
-								$(function() { $('#search-form').submit(function(e) { e.preventDefault(); $('#search-results').load('functions.php?action=search&q='+$('#search-text').val(), post_data) }) })
+								$(function() { $('#search-form').submit(function(e) { e.preventDefault(); $('#search-results').load('functions.php?action=search&q='+encodeURIComponent($('#search-text').val()), post_data) }) })
 							</script>
 							<form class=\"form-horizontal\" id=\"search-form\">
 								<div class=\"form-group\">
@@ -66,7 +74,7 @@ echo("
 									</div>
 								</div>
 							</form>
-							<div id=\"search-results\" style=\"max-height: 100%; overflow: auto;\">
+							<div id=\"search-results\">
 								<h3>Enter something to search for in the box above.</h3>
 							</div>
 						</div>
@@ -76,7 +84,46 @@ echo("
 						<div class=\"tab-pane\" id=\"logging\">6</div>
 					</div>
 				</div>
-				<div class=\"col-md-4\">
+				<div class=\"col-md-5\">
+					<h3 id=\"showplan-title\">Showplan</h3>
+					<div class=\"list-group\" id=\"showplan\">
+						<a href=\"#\" class=\"list-group-item active\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+						<a href=\"#\" class=\"list-group-item\">
+    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
+    						<p class=\"list-group-item-text\">...</p>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
