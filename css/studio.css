@@ -7,6 +7,23 @@ body { padding-bottom: 70px; padding-top: 60px; }
   margin: 0 auto -60px;
 }
 
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+.rotate {
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         2s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function: linear;
+  padding-bottom: 6px;
+}
+
 #header {}
 #footer img { margin-top: 8px; }
 #footer a { margin-top: 3px; }
@@ -22,6 +39,7 @@ body { padding-bottom: 70px; padding-top: 60px; }
 #search-button { padding: 0px 15px 0px 5px !important; }
 #search-options { padding: 0px !important; margin-top: -15px; }
 #search-form { height: 65px; margin-top: -65px;}
+#searching { width: 100%; text-align: center; padding-top: 50px; }
 #search-results { height: 100% !important; overflow: scroll; }
 
 table { table-layout: fixed; }
