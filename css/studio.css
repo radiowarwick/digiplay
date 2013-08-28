@@ -1,7 +1,27 @@
-html,body { height: 100% !important; overflow: hidden; }
+html, body { height: 100% !important; overflow: hidden; }
+body { padding-bottom: 70px; padding-top: 60px; }
+
+.wrap {
+  min-height: 100%;
+  height: 100% !important;
+  margin: 0 auto -60px;
+}
+
+#header {}
+#footer img { margin-top: 8px; }
+#footer a { margin-top: 3px; }
 
 .container { max-width: 100% !important; height: 100% !important; }
 #main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane { height: 100% !important; }
+#left-panel { padding-top: 50px; }
+#tabs { position: absolute; top: 0px; padding-right: 30px; }
+
+#search { padding-top: 65px; }
+
+#search-text { padding: 0px 0px 0px 15px !important; }
+#search-button { padding: 0px 15px 0px 5px !important; }
+#search-options { padding: 0px !important; margin-top: -15px; }
+#search-form { height: 65px; margin-top: -65px;}
 #search-results { height: 100% !important; overflow: scroll; }
 
 table { table-layout: fixed; }
