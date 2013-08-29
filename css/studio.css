@@ -33,7 +33,7 @@ body { padding-bottom: 90px; padding-top: 60px; }
 #tabs { position: absolute; top: 0px; padding-right: 30px; }
 
 table { table-layout: fixed; }
-tr:hover { cursor: pointer; }
+tbody tr:hover { cursor: pointer; }
 .icon { width: 25px; }
 .nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
@@ -76,3 +76,4 @@ tr:hover { cursor: pointer; }
 /* Playlists tab */
 #playlists { height: 100%; overflow-y: scroll; }
 #playlists .panel-heading { cursor: pointer; }
+#playlists .panel-heading:hover { background: #eee; }
