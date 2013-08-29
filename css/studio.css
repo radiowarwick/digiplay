@@ -39,7 +39,7 @@ tr:hover { cursor: pointer; }
 .nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
 /* Search tab */
-#search { padding-top: 30%; }
+#search { padding-top: 60px; }
 
 #search-text { padding: 0px 0px 0px 15px !important; }
 #search-button { padding: 0px 15px 0px 5px !important; }

@@ -16,12 +16,12 @@ MainTemplate::set_subtitle("Studio ".$location);
 
 echo("
 		<script>
-			var post_data = [];
-			".(isset($_REQUEST["key"])? "post_data['key'] = '".$_REQUEST['key']."';" : "")."
+			var key;
+			".(isset($_REQUEST["key"])? "key = 'key=".$_REQUEST['key']."&';" : "")."
 		</script>
 		<div class=\"wrap\">
 			<nav class=\"navbar navbar-default navbar-fixed-top\" id=\"header\">
-				<script> $(function() { setInterval(function() { $('#now-next').load('functions.php?action=now-next', post_data) }, 60000); $('#now-next').load('functions.php?action=now-next', post_data); }); </script>
+				<script> $(function() { setInterval(function() { $('#now-next').load('functions.php?'+key+'action=now-next') }, 60000); $('#now-next').load('functions.php?'+key+'action=now-next'); }); </script>
 				<div id=\"now-next\">
 					<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\"></span></div>
 					<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\"></span></div>
@@ -42,7 +42,7 @@ echo("
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
 								<script>
-									$(function() { setInterval(function() { $('#info-content').load('functions.php?action=info-content', post_data) }, 60000) })
+									$(function() { setInterval(function() { $('#info-content').load('functions.php?'+key+'action=info-content') }, 60000) })
 								</script>
 								<div id=\"info-content\">
 									".Config::get_param("info-content")."
@@ -54,7 +54,7 @@ echo("
 										$('#search-form').submit(function(e) { 
 											e.preventDefault(); 
 											$('#search-results').html('<h1 id=\"searching\">".Bootstrap::glyphicon("refresh rotate")." Searching...</h1>')
-												.load('functions.php?action=search&'+$('#search-form').serialize(), post_data) 
+												.load('functions.php?'+key+'action=search&'+$('#search-form').serialize()) 
 										})
 									})
 								</script>
@@ -86,10 +86,10 @@ echo("
 							<div class=\"tab-pane\" id=\"messages\">
 								<script>
 									$(function() { 
-										setInterval(function() { $('#message-list').load('functions.php?action=messages', post_data) }, 30000); $('#message-list').load('functions.php?action=messages', post_data);
+										setInterval(function() { $('#message-list').load('functions.php?'+key+'action=messages') }, 30000); $('#message-list').load('functions.php?'+key+'action=messages');
 										$(document).on('click', '#message-list tr', function() { 
 											$('#message-content h4').html($(this).find('.subject').html());
-											$('#message-content iframe').attr('src', 'functions.php?key='+post_data['key']+'&action=message&id='+$(this).attr('id')); 
+											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('id')); 
 											$(this).find('span').removeClass('glyphicon-envelope');
 										});
 									})
