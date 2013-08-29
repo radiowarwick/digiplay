@@ -1,4 +1,4 @@
-html, body { height: 100% !important; overflow: hidden; }
+html, body { height: 100% !important; overflow: hidden; cursor: default; -webkit-user-select: none; }
 body { padding-bottom: 90px; padding-top: 60px; }
 
 .wrap {
@@ -52,7 +52,7 @@ tr:hover { cursor: pointer; }
 #search-options { padding: 0px !important; margin-top: -15px; }
 #search-form { height: 65px; margin-top: -65px;}
 #searching { width: 100%; text-align: center; padding-top: 50px; }
-#search-results { height: 100% !important; overflow: scroll; }
+#search-results { height: 100% !important; overflow-y: scroll; }
 
 .artist { width: 25%; }
 .title { width: auto; }
@@ -60,7 +60,7 @@ tr:hover { cursor: pointer; }
 .length { width: 15%; }
 
 /* Messages tab */
-#message-list { height: 30%; overflow: scroll; margin: -10px 0px 10px 0px; }
+#message-list { height: 30%; overflow-y: scroll; margin: -10px 0px 10px 0px; }
 #message-content { height: 70% !important; overflow-x: hidden; }
 #message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
 #message-content .panel { margin-bottom: 0px !important; }
@@ -71,3 +71,7 @@ tr:hover { cursor: pointer; }
 .from { width: 20%; }
 .subject { width: auto; }
 .datetime { width: 20%; }
+
+/* Playlists tab */
+#playlists { height: 100%; overflow-y: scroll; }
+#playlists .panel-heading { cursor: pointer; }

@@ -79,5 +79,50 @@ switch($_REQUEST["action"]) {
 		echo($message->get_body_formatted());
 		$message->mark_as_read();
 		break;
+	case "playlists":
+		$playlists = Playlists::get_all(false);
+		$return = "";
+		foreach($playlists as $playlist) {
+			$return .= "
+				<div class=\"panel panel-default\">
+					<!--<a class=\"accordion-toggle\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">-->
+						<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">
+							<h4 class=\"panel-title\">".Bootstrap::glyphicon("play-circle").$playlist->get_name()."</h4>
+						</div>
+					<!--</a>-->
+					<div id=\"playlist-".$playlist->get_id()."\" class=\"panel-collapse collapse\">
+						<div class=\"panel-body\">
+							<table class=\"table table-striped table-hover\">
+								<thead>
+									<tr>
+										<th class=\"icon\"></th>
+										<th class=\"artist\">Artist</th>
+										<th class=\"title\">Title</th>
+										<th class=\"album\">Album</th>
+										<th class=\"length\">Length</th>
+									</tr>
+								</thead>
+								<tbody>";
+			foreach($playlist->get_tracks() as $track) {
+				$return .= "
+									<tr id=\"".$track->get_id()."\">
+										<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
+										<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
+										<td class=\"title nowrap\">".$track->get_title()."</td>
+										<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
+										<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>
+									</tr>";
+			}
+			$return .= "
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			";
+			$first = false;
+		}
+		echo($return);
+		break;
 }
 ?>

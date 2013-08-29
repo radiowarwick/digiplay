@@ -105,7 +105,32 @@ echo("
 									</div>
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"playlist\">4</div>
+							<div class=\"tab-pane\" id=\"playlist\">
+								<script>
+									$(function() { 
+										setInterval(function() {
+											var active_playlists = [];
+											$('#playlists .panel-collapse').each(function() { 
+												if($(this).hasClass('in')) {
+													active_playlists.push($(this).attr('id'));
+												}
+											});
+											console.log(active_playlists);
+											$('#playlists').load('functions.php?'+key+'action=playlists', function() {
+												$.each(active_playlists, function(key, value) {
+													$('#'+value).addClass('in');
+												});
+											});
+										}, 5000);
+
+										$('#playlists').load('functions.php?'+key+'action=playlists', function() {
+											$('#playlists .panel-collapse:first').addClass('in');
+										});
+									});
+								</script>
+								<div class=\"panel-group\" id=\"playlists\">
+								</div>
+							</div>
 							<div class=\"tab-pane\" id=\"files\">5</div>
 							<div class=\"tab-pane\" id=\"logging\">6</div>
 						</div>
