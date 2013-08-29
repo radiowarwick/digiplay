@@ -32,7 +32,7 @@ body { padding-bottom: 90px; padding-top: 60px; }
 #left-panel { padding-top: 50px; }
 #tabs { position: absolute; top: 0px; padding-right: 30px; }
 
-table { table-layout: fixed; }
+table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
 .icon { width: 25px; }
 .nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
@@ -66,7 +66,7 @@ tbody tr:hover { cursor: pointer; }
 #message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
 #message-content .panel { margin-bottom: 0px !important; }
 #message-content .panel-heading h4 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#message-content .panel-body { margin-top: -60px; padding-top: 75px; }
+#message-content .panel-body { margin-top: -60px; padding: 65px 5px 5px 5px; }
 #message-content iframe { border: 0; margin: 0; }
 
 .from { width: 20%; }
