@@ -121,7 +121,7 @@ echo("
 													$('#'+value).addClass('in');
 												});
 											});
-										}, 5000);
+										}, 60000);
 
 										$('#playlists').load('functions.php?'+key+'action=playlists', function() {
 											$('#playlists .panel-collapse:first').addClass('in');
