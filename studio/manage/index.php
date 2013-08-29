@@ -156,14 +156,26 @@ echo("
 			<nav class=\"navbar navbar-default navbar-fixed-bottom\" id=\"footer\">
 				<script>
 					$(function() { 
-						setInterval(function () { $('#clock').html(moment().format('MMMM Do YYYY, h:mm:ss a'));	}, 1000);
+						setInterval(function () { 
+							$('#clock .time').html(moment().format('h:mm:ss a'));
+							$('#clock .date').html(moment().format('dddd Do MMMM YYYY'));
+						}, 1000);
 					}); 
 				</script>
-				<div class=\"col-sm-3\">
-					<img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" />
+				<img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" id=\"logo\" />
+				<div class=\"col-sm-3 navbar-brand\">
+					<div id=\"clock\">
+						<span class=\"time\">00:00:00</span><br />
+						<span class=\"date\">1st January 1970</span>
+					</div>
 				</div>
-				<div class=\"col-sm-6 navbar-brand\"><div id=\"clock\">00:00:00</div></div>
 				<div class=\"col-sm-3 pull-right\"><a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a></div>
+
+				<div class=\"col-sm-3 pull-right\" id=\"contact\">
+					".Bootstrap::glyphicon("phone")." ".Config::get_param("contact_sms")."<br />
+					".Bootstrap::glyphicon("earphone")." ".Config::get_param("contact_phone")."<br />
+					".Bootstrap::glyphicon("envelope")." ".Config::get_param("contact_email")."
+				</div>
 			</nav>
 		</div>
 	");
