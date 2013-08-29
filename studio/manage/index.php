@@ -83,7 +83,27 @@ echo("
 									<h3>Enter something to search for in the box above.</h3>
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"messages\">3</div>
+							<div class=\"tab-pane\" id=\"messages\">
+								<script>
+									$(function() { 
+										setInterval(function() { $('#message-list').load('functions.php?action=messages', post_data) }, 30000); $('#message-list').load('functions.php?action=messages', post_data);
+										$(document).on('click', '#message-list tr', function() { 
+											$('#message-content h4').html($(this).find('.subject').html());
+											$('#message-content iframe').attr('src', 'functions.php?key='+post_data['key']+'&action=message&id='+$(this).attr('id')); 
+											$(this).find('span').removeClass('glyphicon-envelope');
+										});
+									})
+								</script>
+								<div id=\"message-list\">
+									No messages currently available.
+								</div>
+								<div id=\"message-content\">
+									<div class=\"panel panel-default\">
+										<div class=\"panel-heading\"><h4>&nbsp;</h4></div>
+										<div class=\"panel-body\"><iframe></iframe></div>
+									</div>
+								</div>
+							</div>
 							<div class=\"tab-pane\" id=\"playlist\">4</div>
 							<div class=\"tab-pane\" id=\"files\">5</div>
 							<div class=\"tab-pane\" id=\"logging\">6</div>

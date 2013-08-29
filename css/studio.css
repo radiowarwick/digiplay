@@ -33,7 +33,13 @@ body { padding-bottom: 70px; padding-top: 60px; }
 #left-panel { padding-top: 50px; }
 #tabs { position: absolute; top: 0px; padding-right: 30px; }
 
-#search { padding-top: 65px; }
+table { table-layout: fixed; }
+tr:hover { cursor: pointer; }
+.icon { width: 25px; }
+.nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+/* Search tab */
+#search { padding-top: 30%; }
 
 #search-text { padding: 0px 0px 0px 15px !important; }
 #search-button { padding: 0px 15px 0px 5px !important; }
@@ -42,12 +48,20 @@ body { padding-bottom: 70px; padding-top: 60px; }
 #searching { width: 100%; text-align: center; padding-top: 50px; }
 #search-results { height: 100% !important; overflow: scroll; }
 
-table { table-layout: fixed; }
-
-.nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-
-.icon { width: 25px; }
 .artist { width: 25%; }
 .title { width: auto; }
 .album { width: 20%; }
 .length { width: 15%; }
+
+/* Messages tab */
+#message-list { height: 30%; overflow: scroll; }
+#message-content { height: 70% !important; overflow-x: hidden; }
+#message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
+#message-content .panel { margin-bottom: 0px !important; }
+#message-content .panel-heading h4 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#message-content .panel-body { margin-top: -60px; padding-top: 75px; }
+#message-content iframe { border: 0; margin: 0; }
+
+.from { width: 20%; }
+.subject { width: auto; }
+.datetime { width: 20%; }
