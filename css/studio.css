@@ -54,7 +54,7 @@ tr:hover { cursor: pointer; }
 .length { width: 15%; }
 
 /* Messages tab */
-#message-list { height: 30%; overflow: scroll; }
+#message-list { height: 30%; overflow: scroll; margin: -10px 0px 10px 0px; }
 #message-content { height: 70% !important; overflow-x: hidden; }
 #message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
 #message-content .panel { margin-bottom: 0px !important; }

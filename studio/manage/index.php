@@ -1,5 +1,6 @@
 <?php
 Output::set_title("Studio Management");
+Output::add_script(LINK_ABS."js/moment.min.js");
 
 if(isset($_REQUEST["key"])) {
 	$location = Config::get_location_from_key($_REQUEST["key"]);
@@ -153,11 +154,15 @@ echo("
 				</div>
 			</div>
 			<nav class=\"navbar navbar-default navbar-fixed-bottom\" id=\"footer\">
-				<script> $(function() {  }); </script>
+				<script>
+					$(function() { 
+						setInterval(function () { $('#clock').html(moment().format('MMMM Do YYYY, h:mm:ss a'));	}, 1000);
+					}); 
+				</script>
 				<div class=\"col-sm-3\">
 					<img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" />
 				</div>
-				<div class=\"col-sm-6 navbar-brand\">14:24:46</span></div>
+				<div class=\"col-sm-6 navbar-brand\"><div id=\"clock\">00:00:00</div></div>
 				<div class=\"col-sm-3 pull-right\"><a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a></div>
 			</nav>
 		</div>
