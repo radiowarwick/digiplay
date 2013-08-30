@@ -64,7 +64,7 @@ switch($_REQUEST["action"]) {
 			</thead>
 			<tbody>";
 		foreach($emails as $email) {
-			$return .= "<tr id=\"".$email->get_id()."\">
+			$return .= "<tr id=\"message-".$email->get_id()."\">
 				<td class=\"icon\">".($email->get_new_flag()? Bootstrap::glyphicon("envelope") : "")."</td>
 				<td class=\"from nowrap\">".$email->get_sender()."</td>
 				<td class=\"subject nowrap\">".$email->get_subject()."</td>
@@ -75,7 +75,7 @@ switch($_REQUEST["action"]) {
 		echo($return);
 		break;
 	case "message":
-		$message = Emails::get_by_id($_REQUEST['id']);
+		$message = Emails::get_by_id(ltrim($_REQUEST['id'],"message-"));
 		echo($message->get_body_formatted());
 		$message->mark_as_read();
 		break;

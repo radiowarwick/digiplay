@@ -87,8 +87,22 @@ echo("
 							<div class=\"tab-pane\" id=\"messages\">
 								<script>
 									$(function() { 
-										setInterval(function() { $('#message-list').load('functions.php?'+key+'action=messages') }, 30000); $('#message-list').load('functions.php?'+key+'action=messages');
+										setInterval(function() { 
+											var active_message;
+											$('#message-list').ajax('functions.php?'+key+'action=messages').done(function(data) {
+												$('#message-list tr').each(function() { 
+													if($(this).hasClass('selected')) active_message = $(this).attr('id');
+													$('#message-list').html(data);
+													$('#'+active_message).addClass('selected');
+												});
+											});
+										}, 5000); 
+
+										$('#message-list').load('functions.php?'+key+'action=messages');
+
 										$(document).on('click', '#message-list tr', function() { 
+											$('#message-list tr').removeClass('selected');
+											$(this).addClass('selected');
 											$('#message-content h4').html($(this).find('.subject').html());
 											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('id')); 
 											$(this).find('span').removeClass('glyphicon-envelope');
