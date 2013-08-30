@@ -110,13 +110,13 @@ echo("
 									$(function() { 
 										setInterval(function() {
 											var active_playlists = [];
-											$('#playlists .panel-collapse').each(function() { 
-												if($(this).hasClass('in')) {
-													active_playlists.push($(this).attr('id'));
-												}
-											});
-											console.log(active_playlists);
-											$('#playlists').load('functions.php?'+key+'action=playlists', function() {
+											$.ajax('functions.php?'+key+'action=playlists').done(function(data) {
+												$('#playlists .panel-collapse').each(function() { 
+													if($(this).hasClass('in')) {
+														active_playlists.push($(this).attr('id'));
+													}
+												});
+												$('#playlists').html(data);
 												$.each(active_playlists, function(key, value) {
 													$('#'+value).addClass('in');
 												});
@@ -131,11 +131,13 @@ echo("
 								<div class=\"panel-group\" id=\"playlists\">
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"files\">5</div>
+							<div class=\"tab-pane\" id=\"files\">
+								<h4>File manager coming soon <br/>(When i've written one)</h4>
+							</div>
 							<div class=\"tab-pane\" id=\"logging\">6</div>
 						</div>
 					</div>
-					<div class=\"col-md-5\">
+					<div class=\"col-md-5 hidden-sm hidden-xs\">
 						<h3 id=\"showplan-title\">Showplan</h3>
 						<div class=\"list-group\" id=\"showplan\">
 							<a href=\"#\" class=\"list-group-item active\">
@@ -187,7 +189,7 @@ echo("
 						}, 1000);
 					}); 
 				</script>
-				<img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" id=\"logo\" />
+				<img src=\"".LINK_ABS."img/footer_logo.png\" alt=\"RaW 1251AM\" id=\"logo\" class=\"hidden-xs hidden-sm\" />
 				<div class=\"col-sm-3 navbar-brand\">
 					<div id=\"clock\">
 						<span class=\"time\">00:00:00</span><br />

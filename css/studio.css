@@ -40,9 +40,9 @@ tbody tr:hover { cursor: pointer; }
 /* Footer */
 #footer { height: 70px; }
 #logo { float: left !important; padding: 17px 10px; }
-#footer .navbar-brand { padding: 5px 0px; }
+#footer .navbar-brand { padding: 5px 0px; white-space: nowrap; }
 .time { font-size: 1.8em; font-weight: bold; line-height: 37px; }
-#contact { text-align: right; margin-top: 5px; }
+#contact { text-align: right; margin-top: 5px; white-space: nowrap; }
 #footer a { margin: 12.5px 0px; }
 
 /* Search tab */
@@ -51,7 +51,7 @@ tbody tr:hover { cursor: pointer; }
 #search-text { padding: 0px 0px 0px 15px !important; }
 #search-button { padding: 0px 15px 0px 5px !important; }
 #search-options { padding: 0px !important; margin-top: -15px; }
-#search-form { height: 65px; margin-top: -65px;}
+#search-form { height: 65px; margin-top: -60px;}
 #searching { width: 100%; text-align: center; padding-top: 50px; }
 #search-results { height: 100% !important; overflow-y: scroll; }
 
