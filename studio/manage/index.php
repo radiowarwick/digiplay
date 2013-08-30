@@ -19,6 +19,14 @@ echo("
 		<script>
 			var key;
 			".(isset($_REQUEST["key"])? "key = 'key=".$_REQUEST['key']."&';" : "")."
+
+			$(function() {
+				window.oncontextmenu = function(event) {
+  					event.preventDefault();
+    				event.stopPropagation();
+    				return false;
+				};				
+			});
 		</script>
 		<div class=\"wrap\">
 			<nav class=\"navbar navbar-default navbar-fixed-top\" id=\"header\">
@@ -89,7 +97,7 @@ echo("
 									$(function() { 
 										setInterval(function() { 
 											var active_message;
-											$('#message-list').ajax('functions.php?'+key+'action=messages').done(function(data) {
+											$.ajax('functions.php?'+key+'action=messages').done(function(data) {
 												$('#message-list tr').each(function() { 
 													if($(this).hasClass('selected')) active_message = $(this).attr('id');
 													$('#message-list').html(data);

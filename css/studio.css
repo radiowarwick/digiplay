@@ -30,7 +30,7 @@ body { padding-bottom: 90px; padding-top: 60px; }
 .container { max-width: 100% !important; height: 100% !important; }
 #main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane { height: 100% !important; }
 #left-panel { padding-top: 50px; }
-#tabs { position: absolute; top: 0px; padding-right: 30px; }
+#tabs { position: absolute; top: 0px; padding-right: 25px; }
 
 table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
