@@ -96,7 +96,7 @@ echo("
 													$('#'+active_message).addClass('selected');
 												});
 											});
-										}, 5000); 
+										}, 30000); 
 
 										$('#message-list').load('functions.php?'+key+'action=messages');
 
