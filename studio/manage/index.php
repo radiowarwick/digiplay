@@ -1,13 +1,15 @@
 <?php
 Output::set_title("Studio Management");
 Output::add_script(LINK_ABS."js/moment.min.js");
+Output::add_stylesheet(LINK_ABS."css/studio.css");
 
 if(isset($_REQUEST["key"])) {
 	$location = Locations::get_by_key($_REQUEST["key"]);
-	Output::add_stylesheet(LINK_ABS."css/studio.css");
+	$key = $_REQUEST["key"];
 } else {
 	if(isset($_REQUEST["location"])) {
-		$location = $_REQUEST["location"];
+		$location = Locations::get_by_id($_REQUEST["location"]);
+		$key = $location->get_key();
 	} else {
 		exit("No location specified!");
 	}
@@ -17,7 +19,7 @@ if(isset($_REQUEST["key"])) {
 echo("
 		<script>
 			var key;
-			".(isset($_REQUEST["key"])? "key = 'key=".$_REQUEST['key']."&';" : "")."
+			".(isset($key)? "key = 'key=".$key."&';" : "")."
 
 			$(function() {
 				window.oncontextmenu = function(event) {
