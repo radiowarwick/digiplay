@@ -125,7 +125,7 @@ switch($_REQUEST["action"]) {
 		echo($return);
 		break;
 	case "log":
-		$logitems = LogItems::get(NULL,"datetime DESC",20,NULL);
+		$logitems = LogItems::get(Locations::get_by_key($_REQUEST["key"]),"datetime DESC",20,NULL);
 		$return = "<table class=\"table table-striped table-hover\">
 			<thead>
 				<tr>
