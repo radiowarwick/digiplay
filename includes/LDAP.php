@@ -13,10 +13,10 @@ class LDAP{
 	private $login = false;
 	
 	function __construct(){
-		$ldap_host = Config::get_param("ldap_host");
-		$ldap_port = Config::get_param("ldap_port");
-		$this->ldap_filter = Config::get_param("ldap_filter");
-		$this->ldap_dn = Config::get_param("ldap_dn");
+		$ldap_host = Configs::get_system_param("ldap_host");
+		$ldap_port = Configs::get_system_param("ldap_port");
+		$this->ldap_filter = Configs::get_system_param("ldap_filter");
+		$this->ldap_dn = Configs::get_system_param("ldap_dn");
 		$this->link_identifier=@ldap_connect("ldap://".$ldap_host.":".$ldap_port);
 		if(!$this->link_identifier) trigger_error("LDAP Connection failure", E_USER_ERROR);
 		

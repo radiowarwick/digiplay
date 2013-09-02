@@ -27,7 +27,7 @@ class Archives {
 	}
 
 	public function get_playin() {
-		$current = Config::get_param("playin_archive");
+		$current = Configs::get_system_param("playin_archive");
 		return Archives::get_by_name($current);
 	}
 }

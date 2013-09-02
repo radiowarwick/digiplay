@@ -3,14 +3,14 @@ Output::set_template();
 
 switch($_REQUEST["action"]) {
 	case "now-next":
-		$json = file_get_contents(Config::get_param("now-next-api"));
+		$json = file_get_contents(Configs::get_system_param("now-next-api"));
 		$json = json_decode($json);
 		$return = "<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\">".$json[0]->name."</span></div>
 			<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\">".$json[1]->name."</span></div>";
 		echo $return;
 		break;
 	case "info-content":
-		echo(Config::get_param("info-content"));
+		echo(Configs::get_system_param("info-content"));
 		break;
 	case "search":
 		$index = array();
@@ -124,5 +124,27 @@ switch($_REQUEST["action"]) {
 		}
 		echo($return);
 		break;
+	case "log":
+		$logitems = LogItems::get(NULL,"datetime DESC",20,NULL);
+		$return = "<table class=\"table table-striped table-hover\">
+			<thead>
+				<tr>
+					<th class=\"icon\"></th>
+					<th class=\"artist\">Artist</th>
+					<th class=\"title\">Title</th>
+					<th class=\"datetime\">Date/Time</th>
+				</tr>
+			</thead>
+			<tbody>";
+		foreach($logitems as $logitem) {
+			$return .= "<tr id=\"message-".$logitem->get_id()."\">
+				<td class=\"icon\">".Bootstrap::glyphicon("headphones")."</td>
+				<td class=\"artist nowrap\">".$logitem->get_track_artist()."</td>
+				<td class=\"title nowrap\">".$logitem->get_track_title()."</td>
+				<td class=\"datetime nowrap\">".date("d/m/y H:i", $logitem->get_datetime())."</td>
+			</tr>";
+		}
+		$return .= "</tbody></table>";
+		echo($return);
 }
 ?>

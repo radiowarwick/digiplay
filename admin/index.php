@@ -8,18 +8,18 @@ MainTemplate::set_subtitle("View and edit configuration settings");
 
 echo("<h3>Current settings:</h3>");
 
-$locations = Config::get_locations();
+$locations = Locations::get_all();
 
 echo "	<div class='accordion' id='accordion2'>";
 
 foreach($locations as $location){
 	echo "<div class='accordion-group'>
 		<div class='accordion-heading'>
-			<a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion2' href='#collapse-".$location."'>
-				Location ".$location."
+			<a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion2' href='#collapse-".$location->get_id()."'>
+				Location ".$location->get_id()."
 			</a>
 		</div>
-		<div id='collapse-".$location."' class='accordion-body collapse'>
+		<div id='collapse-".$location->get_id()."' class='accordion-body collapse'>
 			<div class='accordion-inner'>
 												<table class=\"table table-striped\">
 									<thead>
@@ -31,7 +31,7 @@ foreach($locations as $location){
 										</tr>
 									</thead>
 									<tbody>";
-						$settings = Config::get_by_location($location);
+						$settings = Configs::get_by_location($location);
 						$count = 1;
 						foreach($settings as $setting){
 									echo "<tr>
@@ -39,10 +39,10 @@ foreach($locations as $location){
 												".$count."
 											</td>
 											<td>
-												".$setting."
+												".$setting->get_parameter()."
 											</td>
 											<td>
-												<strong>".Config::get_param($setting, $location)."</strong> <br />
+												<strong>".$setting->get_val()."</strong> <br />
 											</td>
 											<td class=\"icon\">
 												<span class='glyphicon glyphicon-edit'></span>

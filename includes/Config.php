@@ -1,59 +1,29 @@
 <?php
-class Config {
-	public function get_param($parameter,$location = -1) {
-		$query = DigiplayDB::query("SELECT val FROM configuration WHERE parameter = '$parameter' AND location = $location;");
-		if(pg_num_rows($query) == 1) {
-			return pg_fetch_result($query,0);
-		} else {
-			return false;
-		}
+Class Config {
+	protected $id;
+	protected $location;
+	protected $parameter;
+	protected $val;
+
+	public function get_id() { return $this->id; }
+	public function get_location() { return Locations::get_by_id($this->location); }
+	public function get_parameter() { return $this->parameter; }
+	public function get_val() { return $this->val; }
+
+	public function set_location($location) {
+		$result = DigiplayDB::query("UPDATE configuration SET location = '".$location->get_id()."' WHERE id = ".$this->id);
+		if((bool)$result) return ($this->location = $location->get_id());			
 	}
 
-	public function set_param($parameter,$value,$location = -1) {
-		$query = DigiplayDB::query("SELECT * FROM configuration WHERE parameter = $parameter;");
-		if(pg_num_rows($query) == 1) {
-			$result = pg_fetch_assoc($query);
-			DigiplayDB::query("UPDATE configuration SET val = '$value' WHERE parameter = '$parameter'");
-			return true;
-		} else {
-			DigiplayDB::query("INSERT INTO configuration (parameter,val,location) VALUES ('$parameter','$value',$location);");
-			return true;
-		}
+	public function set_parameter($parameter) {
+		$result = DigiplayDB::query("UPDATE configuration SET parameter = '".$parameter."' WHERE id = ".$this->id);
+		if((bool)$result) return ($this->parameter = $parameter);			
 	}
 
-	public function get_locations() {
-		$locations = array();
-		$result = DigiplayDB::query("SELECT location FROM configuration WHERE location != -1 GROUP BY location ORDER BY location ASC;");
-		while($location = pg_fetch_assoc($result, NULL)) {
-			 $locations[] = $location['location'];
-		}
-    	return $locations;
+	public function set_val($val) {
+		$result = DigiplayDB::query("UPDATE configuration SET val = '".$val."' WHERE id = ".$this->id);
+		if((bool)$result) return ($this->val = $val);			
 	}
 
-	public function get_by_location($location) {
-		$settings = array();
-		$result = DigiplayDB::query("SELECT * FROM configuration WHERE location = '$location';");
-		while($setting = pg_fetch_assoc($result,NULL))
-                 $settings[] = $setting['parameter'];
-    	return $settings;
-	}
-
-	public function get_location_from_key($key) {
-		$query = DigiplayDB::query("SELECT location FROM configuration WHERE parameter = 'security_key' AND val = '".$key."';");
-		if(pg_num_rows($query) == 1) {
-			return pg_fetch_result($query,0);
-		} else {
-			return false;
-		}
-	}
-
-	public function key_generator() {
-		$fp = @fopen('/dev/urandom','rb');
-		if ($fp !== FALSE) {
-    		$pr_bits .= @fread($fp,16);
-    		@fclose($fp);
-    	}
-    	return sha1($pr_bits);
-	}
 }
 ?>

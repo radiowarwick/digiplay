@@ -61,7 +61,7 @@ class Session{
 	}
 
 	public static function login($username,$password){
-		if(Config::get_param("auth_method") != "LDAP") {
+		if(Configs::get_system_param("auth_method") != "LDAP") {
 			$local_user = pg_fetch_assoc(DigiplayDB::query("SELECT * FROM users WHERE username = '".$username."' AND password = '".md5($password)."';"));
 			if($local_user) {
 				self::$data["user"] = true;

@@ -3,7 +3,7 @@ Output::set_title("Studio Management");
 Output::add_script(LINK_ABS."js/moment.min.js");
 
 if(isset($_REQUEST["key"])) {
-	$location = Config::get_location_from_key($_REQUEST["key"]);
+	$location = Locations::get_by_key($_REQUEST["key"]);
 	Output::add_stylesheet(LINK_ABS."css/studio.css");
 } else {
 	if(isset($_REQUEST["location"])) {
@@ -13,7 +13,6 @@ if(isset($_REQUEST["key"])) {
 	}
 }
 
-MainTemplate::set_subtitle("Studio ".$location);
 
 echo("
 		<script>
@@ -54,7 +53,7 @@ echo("
 									$(function() { setInterval(function() { $('#info-content').load('functions.php?'+key+'action=info-content') }, 60000) })
 								</script>
 								<div id=\"info-content\">
-									".Config::get_param("info-content")."
+									".Configs::get_system_param("info-content")."
 								</div>
 							</div>
 							<div class=\"tab-pane\" id=\"search\">
@@ -156,7 +155,31 @@ echo("
 							<div class=\"tab-pane\" id=\"files\">
 								<h4>File manager coming soon <br/>(When i've written one)</h4>
 							</div>
-							<div class=\"tab-pane\" id=\"logging\">6</div>
+							<div class=\"tab-pane\" id=\"logging\">
+								<script>
+									$(function() { 
+										$('#logging-form').submit(function(e) { 
+											e.preventDefault(); 
+											$('#log').load('functions.php?'+key+'action=log&'+$('#logging-form').serialize()) 
+										});
+
+										$(function() { setInterval(function() { $('#log').load('functions.php?'+key+'action=log') }, 30000) })
+										$('#log').load('functions.php?'+key+'action=log');
+									})
+								</script>
+								<form class=\"form-inline\" id=\"logging-form\">
+									<div class=\"form-group\">
+										<input type=\"text\" class=\"form-control\" name=\"artist\" placeholder=\"Artist\">
+									</div>
+									<div class=\"form-group\">
+										<input type=\"text\" class=\"form-control\" name=\"title\" placeholder=\"Title\">
+									</div>
+									<button type=\"submit\" class=\"btn btn-primary\">Log</button>
+								</form>
+								<div id=\"log\">
+									<h3>Log currently unavailable.</h3>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class=\"col-md-5 hidden-sm hidden-xs\">
@@ -221,9 +244,9 @@ echo("
 				<div class=\"col-sm-3 pull-right\"><a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a></div>
 
 				<div class=\"col-sm-3 pull-right\" id=\"contact\">
-					".Bootstrap::glyphicon("phone")." ".Config::get_param("contact_sms")."<br />
-					".Bootstrap::glyphicon("earphone")." ".Config::get_param("contact_phone")."<br />
-					".Bootstrap::glyphicon("envelope")." ".Config::get_param("contact_email")."
+					".Bootstrap::glyphicon("phone")." ".Configs::get_system_param("contact_sms")."<br />
+					".Bootstrap::glyphicon("earphone")." ".Configs::get_system_param("contact_phone")."<br />
+					".Bootstrap::glyphicon("envelope")." ".Configs::get_system_param("contact_email")."
 				</div>
 			</nav>
 		</div>
