@@ -40,10 +40,10 @@ if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != 
 }
 
 if(substr(LINK_FILE,0,6) == "studio") {
+    MainTemplate::set_barebones(true);
     if(isset($_REQUEST["key"])) {
         foreach(Config::get_locations() as $location) {
             if(Config::get_param("security_key", $location) == $_REQUEST["key"]) {
-                MainTemplate::set_barebones(true);
                 $valid = true;
             }
         }
