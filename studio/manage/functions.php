@@ -130,6 +130,7 @@ switch($_REQUEST["action"]) {
 		if(isset($_REQUEST["title"])) {
 			$log = new LogItem;
 			$log->set_location($location);
+			if(Session::is_user()) $log->set_user(Session::get_user());
 			$log->set_track_title($_REQUEST["title"]);
 			$log->set_track_artist($_REQUEST["artist"]);
 			$log->save();

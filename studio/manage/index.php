@@ -161,8 +161,10 @@ echo("
 									$(function() { 
 										$('#logging-form').submit(function(e) { 
 											e.preventDefault();
-											console.log($(this).serialize()); 
-											$('#log').load('functions.php?'+key+'action=log&'+$(this).serialize()) 
+											$('#log').load('functions.php?'+key+'action=log&'+$(this).serialize(), function() {
+												$('[name=artist]').val('').focus();
+												$('[name=title]').val('');
+											})
 										});
 
 										$(function() { setInterval(function() { $('#log').load('functions.php?'+key+'action=log') }, 30000) })
@@ -243,7 +245,9 @@ echo("
 						<span class=\"date\">1st January 1970</span>
 					</div>
 				</div>
-				<div class=\"col-sm-3 pull-right\"><a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a></div>
+				<div class=\"col-sm-3 pull-right\">".
+				(Session::is_user()? "<a href=\"#\" data-toggle=\"modal\" data-target=\"logout-modal\" class=\"btn btn-primary btn-lg btn-block\">Log Out</a>" : "<a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a>") 
+					."</div>
 
 				<div class=\"col-sm-3 pull-right\" id=\"contact\">
 					".Bootstrap::glyphicon("phone")." ".Configs::get_system_param("contact_sms")."<br />
