@@ -44,11 +44,10 @@ echo("
 							<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
 							<li><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
 							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
-							<li><a href=\"#playlist\" data-toggle=\"tab\">".Bootstrap::glyphicon("th-list")." Playlist</a></li>
+							<li><a href=\"#playlists\" data-toggle=\"tab\">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
 							<li><a href=\"#files\" data-toggle=\"tab\">".Bootstrap::glyphicon("folder-open")." Files</a></li>
 							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
 						</ul>
-						<p />
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
 								<script>
@@ -128,30 +127,30 @@ echo("
 									</div>
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"playlist\">
+							<div class=\"tab-pane\" id=\"playlists\">
 								<script>
 									$(function() { 
 										setInterval(function() {
 											var active_playlists = [];
 											$.ajax('functions.php?'+key+'action=playlists').done(function(data) {
-												$('#playlists .panel-collapse').each(function() { 
+												$('#playlists-list .panel-collapse').each(function() { 
 													if($(this).hasClass('in')) {
 														active_playlists.push($(this).attr('id'));
 													}
 												});
-												$('#playlists').html(data);
+												$('#playlists-list').html(data);
 												$.each(active_playlists, function(key, value) {
 													$('#'+value).addClass('in');
 												});
 											});
 										}, 60000);
 
-										$('#playlists').load('functions.php?'+key+'action=playlists', function() {
-											$('#playlists .panel-collapse:first').addClass('in');
+										$('#playlists-list').load('functions.php?'+key+'action=playlists', function() {
+											$('#playlists-list .panel-collapse:first').addClass('in');
 										});
 									});
 								</script>
-								<div class=\"panel-group\" id=\"playlists\">
+								<div class=\"panel-group\" id=\"playlists-list\">
 								</div>
 							</div>
 							<div class=\"tab-pane\" id=\"files\">

@@ -75,6 +75,11 @@ tbody tr:hover { cursor: pointer; }
 .datetime { width: 20%; }
 
 /* Playlists tab */
-#playlists { height: 100%; overflow-y: scroll; }
-#playlists .panel-heading { cursor: pointer; }
-#playlists .panel-heading:hover { background: #eee; }
+#playlists-list { height: 100%; overflow-y: scroll; }
+#playlists-list .panel-heading { cursor: pointer; }
+#playlists-list .panel-heading:hover { background: #eee; }
+
+/* Logging tab */
+#logging { padding-top: 35px; }
+#logging-form { height: 35px; margin-top: -35px; }
+#log { height: 100%; overflow-y: scroll; }
