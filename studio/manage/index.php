@@ -111,7 +111,7 @@ echo("
 
 										$('#message-list').load('functions.php?'+key+'action=messages');
 
-										$(document).on('click', '#message-list tr', function() { 
+										$(document).on('click', '#message-list tbody tr', function() { 
 											$('#message-list tr').removeClass('selected');
 											$(this).addClass('selected');
 											$('#message-content h4').html($(this).find('.subject').html());

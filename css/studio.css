@@ -67,7 +67,7 @@ tbody tr:hover { cursor: pointer; }
 .length { width: 15%; }
 
 /* Messages tab */
-#message-list { height: 30%; overflow-y: scroll; margin: -10px 0px 10px 0px; }
+#message-list { height: 30%; overflow-y: scroll; }
 #message-list .selected>td { background-color: #dcdcdc !important; }
 #message-content { height: 70% !important; overflow-x: hidden; }
 #message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
