@@ -44,8 +44,8 @@ echo("
 							<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
 							<li><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
 							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
-							<li><a href=\"#playlists\" data-toggle=\"tab\">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
-							<li><a href=\"#files\" data-toggle=\"tab\">".Bootstrap::glyphicon("folder-open")." Files</a></li>
+							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
+							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
 							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
 						</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
@@ -62,8 +62,11 @@ echo("
 									$(function() { 
 										$('#search-form').submit(function(e) { 
 											e.preventDefault(); 
-											$('#search-results').html('<h1 id=\"searching\">".Bootstrap::glyphicon("refresh rotate")." Searching...</h1>')
-												.load('functions.php?'+key+'action=search&'+$('#search-form').serialize()) 
+											$('[name=submit-search]').addClass('disabled');
+											$('#search-results').html('<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")." Searching...</h1>')
+												.load('functions.php?'+key+'action=search&'+$('#search-form').serialize(), function() {
+													$('[name=submit-search]').removeClass('disabled');
+												}) 
 										})
 									})
 								</script>
@@ -73,7 +76,7 @@ echo("
 											<input type=\"text\" class=\"form-control\" name=\"search-text\" placeholder=\"Search...\">
 										</div>
 										<div class=\"col-xs-2\" id=\"search-button\">
-											<button type=\"submit\" class=\"btn btn-primary btn-block\">Search</button>
+											<button type=\"submit\" class=\"btn btn-primary btn-block\" name=\"submit-search\">Search</button>
 										</div>
 									</div>
 										<div class=\"col-xs-12\" id=\"search-options\">
@@ -118,7 +121,7 @@ echo("
 									})
 								</script>
 								<div id=\"message-list\">
-									No messages currently available.
+									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
 								</div>
 								<div id=\"message-content\">
 									<div class=\"panel panel-default\">
@@ -151,6 +154,7 @@ echo("
 									});
 								</script>
 								<div class=\"panel-group\" id=\"playlists-list\">
+									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
 								</div>
 							</div>
 							<div class=\"tab-pane\" id=\"files\">
@@ -161,9 +165,11 @@ echo("
 									$(function() { 
 										$('#logging-form').submit(function(e) { 
 											e.preventDefault();
+											$('[name=submit-log]').addClass('disabled');
 											$('#log').load('functions.php?'+key+'action=log&'+$(this).serialize(), function() {
 												$('[name=artist]').val('').focus();
 												$('[name=title]').val('');
+												$('[name=submit-log]').removeClass('disabled');
 											})
 										});
 
@@ -178,10 +184,10 @@ echo("
 									<div class=\"form-group\">
 										<input type=\"text\" class=\"form-control\" name=\"title\" placeholder=\"Title\">
 									</div>
-									<button type=\"submit\" class=\"btn btn-primary\">Log</button>
+									<button type=\"submit\" class=\"btn btn-primary\" name=\"submit-log\">Log</button>
 								</form>
 								<div id=\"log\">
-									<h3>Log currently unavailable.</h3>
+									<h3><h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1></h3>
 								</div>
 							</div>
 						</div>
@@ -245,9 +251,10 @@ echo("
 						<span class=\"date\">1st January 1970</span>
 					</div>
 				</div>
-				<div class=\"col-sm-3 pull-right\">".
-				(Session::is_user()? "<a href=\"#\" data-toggle=\"modal\" data-target=\"logout-modal\" class=\"btn btn-primary btn-lg btn-block\">Log Out</a>" : "<a href=\"#\" data-toggle=\"modal\" data-target=\"login-modal\" class=\"btn btn-primary btn-lg btn-block\">Log In</a>") 
-					."</div>
+				<div class=\"col-sm-3 pull-right\">
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#logout-modal\" class=\"btn btn-primary btn-lg btn-block\" ".(Session::is_user()? "":"style=\"display:none\"").">Log Out</a>
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#login-modal\" class=\"btn btn-primary btn-lg btn-block\" ".(Session::is_user()? "style=\"display:none\"":"").">Log In</a>
+					</div>
 
 				<div class=\"col-sm-3 pull-right\" id=\"contact\">
 					".Bootstrap::glyphicon("phone")." ".Configs::get_system_param("contact_sms")."<br />
@@ -255,6 +262,72 @@ echo("
 					".Bootstrap::glyphicon("envelope")." ".Configs::get_system_param("contact_email")."
 				</div>
 			</nav>
+			<script>
+				$(function() {
+					$('#yes-login').click(function(e) {
+						e.preventDefault();
+						$(this).button('loading');
+						$('#username').parent().removeClass('has-error');
+						$('#password').parent().removeClass('has-error');
+						$('#login-modal').find('small').remove();
+						$('#login-modal').find('h1').find('span').removeClass('glyphicon-play-circle').addClass('glyphicon-refresh rotate');
+						$.ajax({
+							url: 'functions.php?'+key+'action=login',
+							data: 'username='+$('#username').val()+'&password='+$('#password').val(),
+							type: 'POST',
+							dataType: 'json'
+						}).done(function(data) {
+							$('#login-modal').find('h1').find('span').removeClass('glyphicon-refresh rotate').addClass('glyphicon-play-circle');
+							if(data.response == 'success') {
+								$('li.disabled').removeClass('disabled').find('a').attr('data-toggle','tab');
+								$('[data-target=#logout-modal]').show();
+								$('[data-target=#login-modal]').hide();
+								$('#login-modal').modal('hide');
+								$('#yes-login').button('reset');
+							} else {
+								$('#login-modal').find('h1').append(' <small>invalid username or password</small>');
+								$('#username').parent().addClass('has-error');
+								$('#password').parent().addClass('has-error');
+								$('#yes-login').button('reset');
+							}
+						})
+					});
+
+					$('#login-modal input').keypress(function(e) {
+						e.preventDefault;
+						if(e.which == 13) $('#yes-login').click();
+					});
+
+					$('#yes-logout').click(function(e) {
+						e.preventDefault();
+						$.ajax('functions.php?'+key+'action=logout').done(function() {
+							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
+							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
+							$('[data-target=#logout-modal]').hide();
+							$('[data-target=#login-modal]').show();
+							$('#logout-modal').modal('hide');
+						});
+					});
+				});
+			</script>
+			".Bootstrap::modal("logout-modal","<h1>".Bootstrap::glyphicon("remove-circle")." Log out?</h1>",NULL,"
+				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-logout\">Yes</a>
+				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-logout\" data-dismiss=\"modal\">No</a>")."
+			".Bootstrap::modal("login-modal","<h1>".Bootstrap::glyphicon("play-circle")." Log In</h1>",NULL,"
+				<div class=\"form-group\">
+					<div class=\"input-group\">
+						<span class=\"input-group-addon\">".Bootstrap::glyphicon("user")."</span>
+						<input type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\" id=\"username\">
+					</div>
+				</div>
+				<div class=\"form-group\">
+					<div class=\"input-group\">
+						<span class=\"input-group-addon\">".Bootstrap::glyphicon("lock")."</span>
+						<input type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\" id=\"password\">
+					</div>
+				</div>
+				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-login\" data-loading-text=\"Log in\">Log in</a>
+				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-login\" data-dismiss=\"modal\">Cancel</a>")."
 		</div>
 	");
 

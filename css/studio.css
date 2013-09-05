@@ -23,6 +23,7 @@ body { padding-bottom: 90px; padding-top: 60px; }
   -webkit-animation-iteration-count:  infinite;
   -webkit-animation-timing-function: linear;
   padding-bottom: 6px;
+  margin-bottom: -6px;
 }
 
 #header {}
@@ -36,6 +37,12 @@ table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
 .icon { width: 25px; }
 .nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.loading { width: 100%; text-align: center; padding-top: 50px; }
+
+/* Modals */
+.modal-body h1 { margin: 5px 0px -10px 10px; }
+.modal { overflow-y: hidden; }
+.modal-open, .modal-open .navbar { margin-right: 0px !important; }
 
 /* Footer */
 #footer { height: 70px; }
@@ -52,7 +59,6 @@ tbody tr:hover { cursor: pointer; }
 #search-button { padding: 0px 15px 0px 5px !important; }
 #search-options { padding: 0px !important; margin-top: -15px; }
 #search-form { height: 65px; margin-top: -60px;}
-#searching { width: 100%; text-align: center; padding-top: 50px; }
 #search-results { height: 100% !important; overflow-y: scroll; }
 
 .artist { width: 25%; }

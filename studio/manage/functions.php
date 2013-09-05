@@ -156,5 +156,14 @@ switch($_REQUEST["action"]) {
 		}
 		$return .= "</tbody></table>";
 		echo($return);
+		break;
+	case "login":
+		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
+		if(Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"success")));
+		else exit(json_encode(array("response"=>"invalid")));
+		break;
+	case "logout":
+		Session::logout();
+		break;
 }
 ?>
