@@ -305,6 +305,7 @@ echo("
 					$('#yes-logout').click(function(e) {
 						e.preventDefault();
 						$.ajax('functions.php?'+key+'action=logout').done(function() {
+							$('[href=#info]').tab('show');
 							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[data-target=#logout-modal]').hide();
