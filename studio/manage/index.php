@@ -293,6 +293,10 @@ echo("
 						})
 					});
 
+					$('#login-modal').on('shown.bs.modal', function() {
+						$('#username').focus();
+					});
+
 					$('#login-modal input').keypress(function(e) {
 						e.preventDefault;
 						if(e.which == 13) $('#yes-login').click();
