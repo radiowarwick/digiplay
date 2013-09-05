@@ -1,5 +1,6 @@
 <?php
 Output::set_template();
+$location = Locations::get_by_key($_REQUEST["key"]);
 
 switch($_REQUEST["action"]) {
 	case "now-next":
@@ -125,7 +126,15 @@ switch($_REQUEST["action"]) {
 		echo($return);
 		break;
 	case "log":
-		$logitems = LogItems::get(Locations::get_by_key($_REQUEST["key"]),"datetime DESC",20,NULL);
+
+		if(isset($_REQUEST["title"])) {
+			$log = new LogItem;
+			$log->set_location($location);
+			$log->set_track_title($_REQUEST["title"]);
+			$log->set_track_artist($_REQUEST["artist"]);
+			$log->save();
+		}
+		$logitems = LogItems::get($location,"datetime DESC",20,NULL);
 		$return = "<table class=\"table table-striped table-hover\">
 			<thead>
 				<tr>

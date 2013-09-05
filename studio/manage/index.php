@@ -161,8 +161,9 @@ echo("
 								<script>
 									$(function() { 
 										$('#logging-form').submit(function(e) { 
-											e.preventDefault(); 
-											$('#log').load('functions.php?'+key+'action=log&'+$('#logging-form').serialize()) 
+											e.preventDefault();
+											console.log($(this).serialize()); 
+											$('#log').load('functions.php?'+key+'action=log&'+$(this).serialize()) 
 										});
 
 										$(function() { setInterval(function() { $('#log').load('functions.php?'+key+'action=log') }, 30000) })
