@@ -1,5 +1,5 @@
 html, body { height: 100% !important; overflow: hidden; cursor: default; -webkit-user-select: none; }
-body { padding-bottom: 90px; padding-top: 60px; }
+body { padding-bottom: 80px; padding-top: 60px; }
 * { -webkit-user-drag: none; }
 
 .wrap {
@@ -31,8 +31,8 @@ body { padding-bottom: 90px; padding-top: 60px; }
 .container { max-width: 100% !important; height: 100% !important; }
 #main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane, #right-panel { height: 100% !important; }
 #left-panel { padding-top: 50px; }
-#right-panel { padding-top: 50px; }
-#tabs { position: absolute; top: 0px; padding-right: 25px; }
+#right-panel { padding-top: 50px; padding-left: 0px; }
+#tabs { margin-top:-50px; margin-bottom: 10px; height: 40px; }
 
 table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
@@ -55,12 +55,11 @@ tbody tr:hover { cursor: pointer; }
 #footer a { margin: 12.5px 0px; }
 
 /* Search tab */
-#search { padding-top: 60px; }
-
+#search { padding-top: 70px; }
 #search-text { padding: 0px 0px 0px 15px !important; }
 #search-button { padding: 0px 15px 0px 5px !important; }
 #search-options { padding: 0px !important; margin-top: -15px; }
-#search-form { height: 65px; margin-top: -60px;}
+#search-form { height: 70px; margin-top: -70px;}
 #search-results { height: 100% !important; overflow-y: scroll; }
 
 .artist { width: 25%; }
