@@ -187,50 +187,21 @@ echo("
 									<button type=\"submit\" class=\"btn btn-primary\" name=\"submit-log\">Log</button>
 								</form>
 								<div id=\"log\">
-									<h3><h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1></h3>
+									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class=\"col-md-5 hidden-sm hidden-xs\">
-						<h3 id=\"showplan-title\">Showplan</h3>
+					<div class=\"col-md-5 hidden-sm hidden-xs\" id=\"right-panel\">
+						<script>
+							$(function() { 
+								$(function() { setInterval(function() { $('#showplan').load('functions.php?'+key+'action=showplan') }, 30000) })
+								$('#showplan').load('functions.php?'+key+'action=showplan');
+							})
+						</script>
+						<h2 id=\"showplan-title\">Showplan</h2>
 						<div class=\"list-group\" id=\"showplan\">
-							<a href=\"#\" class=\"list-group-item active\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
-							<a href=\"#\" class=\"list-group-item\">
-	    						<h4 class=\"list-group-item-heading\">List group item heading</h4>
-	    						<p class=\"list-group-item-text\">...</p>
-							</a>
+							<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
 						</div>
 					</div>
 				</div>

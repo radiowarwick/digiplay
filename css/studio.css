@@ -29,8 +29,9 @@ body { padding-bottom: 90px; padding-top: 60px; }
 #header {}
 
 .container { max-width: 100% !important; height: 100% !important; }
-#main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane { height: 100% !important; }
+#main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane, #right-panel { height: 100% !important; }
 #left-panel { padding-top: 50px; }
+#right-panel { padding-top: 50px; }
 #tabs { position: absolute; top: 0px; padding-right: 25px; }
 
 table { table-layout: fixed; margin-bottom: 0px !important; }
@@ -89,3 +90,9 @@ tbody tr:hover { cursor: pointer; }
 #logging { padding-top: 35px; }
 #logging-form { height: 35px; margin-top: -35px; }
 #log { height: 100%; overflow-y: scroll; }
+
+/* Showplan */
+#showplan { height: 100%; overflow-y: scroll; }
+#showplan-title { margin-top: -50px; margin-bottom: 0px; height: 50px; }
+#showplan .panel-heading { cursor: pointer; }
+#showplan .panel-heading:hover { background: #eee; }

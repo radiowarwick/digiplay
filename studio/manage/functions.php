@@ -86,38 +86,34 @@ switch($_REQUEST["action"]) {
 		foreach($playlists as $playlist) {
 			$return .= "
 				<div class=\"panel panel-default\">
-					<!--<a class=\"accordion-toggle\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">-->
-						<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">
-							<h4 class=\"panel-title\">".Bootstrap::glyphicon("play-circle").$playlist->get_name()."</h4>
-						</div>
-					<!--</a>-->
+					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">
+						<h4 class=\"panel-title\">".Bootstrap::glyphicon("play-circle").$playlist->get_name()."</h4>
+					</div>
 					<div id=\"playlist-".$playlist->get_id()."\" class=\"panel-collapse collapse\">
-						<div class=\"panel-body\">
-							<table class=\"table table-striped table-hover\">
-								<thead>
-									<tr>
-										<th class=\"icon\"></th>
-										<th class=\"artist\">Artist</th>
-										<th class=\"title\">Title</th>
-										<th class=\"album\">Album</th>
-										<th class=\"length\">Length</th>
-									</tr>
-								</thead>
-								<tbody>";
+						<table class=\"table table-striped table-hover\">
+							<thead>
+								<tr>
+									<th class=\"icon\"></th>
+									<th class=\"artist\">Artist</th>
+									<th class=\"title\">Title</th>
+									<th class=\"album\">Album</th>
+									<th class=\"length\">Length</th>
+								</tr>
+							</thead>
+							<tbody>";
 			foreach($playlist->get_tracks() as $track) {
 				$return .= "
-									<tr id=\"".$track->get_id()."\">
-										<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
-										<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
-										<td class=\"title nowrap\">".$track->get_title()."</td>
-										<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
-										<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>
-									</tr>";
+								<tr id=\"".$track->get_id()."\">
+									<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
+									<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
+									<td class=\"title nowrap\">".$track->get_title()."</td>
+									<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
+									<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>
+								</tr>";
 			}
 			$return .= "
-								</tbody>
-							</table>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			";
@@ -156,6 +152,49 @@ switch($_REQUEST["action"]) {
 		}
 		$return .= "</tbody></table>";
 		echo($return);
+		break;
+	case "showplan":
+		//$showplan = Showplans::get_by_name("location_".$location->get_id());
+		$showplan = Showplans::get_by_id(127);
+		$items = $showplan->get_items();
+		$return = "<div class=\"panel-group\" id=\"showplan\">";
+
+		foreach($items as $item) {
+			if($audio = $item->get_audio()) {
+				$return .= "<div class=\"panel ".((Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())? "panel-primary" : "panel-default")."\">
+					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
+						<h4 class=\"panel-title\">
+							<div class=\"pull-right\">".Time::format_succinct($audio->get_length())."</div>
+							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
+						</h4>
+					</div>
+					<div id=\"item-".$item->get_id()."\" class=\"panel-collapse collapse\">
+						<div class=\"panel-body\">
+							<h3>".$item->get_title()."</h4>
+							".$item->get_comment()."
+						</div>
+					</div>
+				</div>";
+			}
+			
+			if($script = $item->get_script()) {
+				$return .= "<div class=\"panel panel-default\">
+					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
+						<h4 class=\"panel-title\">
+							<div class=\"pull-right\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
+							".Bootstrap::glyphicon("file").$script->get_name()."
+						</h4>
+					</div>
+					<div id=\"item-".$item->get_id()."\" class=\"panel-collapse collapse\">
+						<div class=\"panel-body\">
+							".$script->get_contents()."
+						</div>
+					</div>
+				</div>";
+			}
+		}
+		$return .= "</div>";
+		echo $return;
 		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));

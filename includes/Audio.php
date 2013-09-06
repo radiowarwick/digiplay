@@ -95,4 +95,15 @@ class Audio {
 		</div>";
 		return $html;
 	}
+
+	public function get_by_id($id) {
+		$result = DigiplayDB::query("SELECT type FROM audio WHERE id = ".$id);
+		if(pg_num_rows($result)) {
+			$type = pg_fetch_result($result,NULL,"type");
+			if($type == 1) return Tracks::get_by_id($id);
+			else if($type == 2) return Jingles::get_by_id($id);
+			else if($type == 3) return Adverts::get_by_id($id);
+			else if($type == 4) return Prerecs::get_by_id($id);
+		}
+	}
 }
