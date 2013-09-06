@@ -208,7 +208,7 @@ echo("
 							}
 
 							$(function() { 
-								setInterval('reloadShowplan', 10000);
+								setInterval('reloadShowplan()', 5000);
 								$('#showplan').load('functions.php?'+key+'action=showplan');
 
 								$(document).on('dblclick', '#showplan .showplan-audio', function() {
@@ -225,7 +225,7 @@ echo("
 								});
 
 								$(document).on('click', 'tbody tr', function() { 
-									$(this).parent().find('tr').removeClass('selected');
+									$(this).parentsUntil('.tab-pane').find('tr').removeClass('selected');
 									$(this).addClass('selected');
 								});
 
