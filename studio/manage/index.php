@@ -193,23 +193,30 @@ echo("
 					<div class=\"col-md-5 hidden-sm hidden-xs\" id=\"right-panel\">
 						<script>
 							function reloadShowplan() {
-								var active_items = [];
+								var expanded_items = [];
+								var selected_item;
 								var current_audio;
 								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
 									$('#showplan .panel').each(function() { 
 										if($(this).find('.panel-collapse').hasClass('in')) {
-											active_items.push($(this).find('.panel-collapse').attr('id'));
+											expanded_items.push($(this).find('.panel-collapse').attr('id'));
+										}
+										if($(this).hasClass('panel-info')) {
+											selected_item = $(this).attr('data-dps-id');
 										}
 										if($(this).hasClass('panel-primary')) {
 											current_audio = $(this).attr('data-dps-id');
 										}
 									});
 									$('#showplan').html(data);
-									$.each(active_items, function(key, value) {
+									$.each(expanded_items, function(key, value) {
 										$('#'+value).addClass('in');
 									});
 									if(!$('[data-dps-id='+current_audio+']').hasClass('panel-primary')) {
 										$('[data-dps-id='+current_audio+']').next('.showplan-audio').dblclick();
+									}
+									if(typeof selected_item != 'undefined') {
+										$('[data-dps-id='+selected_item+']').addClass('panel-info');
 									}
 								});
 							}
@@ -225,7 +232,7 @@ echo("
 									}).done(function(data) {
 										if(data.response == 'success') {
 											$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
-											$('[data-dps-id='+data.id+']').removeClass('panel-default').addClass('panel-primary');
+											$('[data-dps-id='+data.id+']').removeClass('panel-default panel-info').addClass('panel-primary');
 										}
 									});
 								});
@@ -233,6 +240,13 @@ echo("
 								$(document).on('click', 'tbody tr', function() { 
 									$(this).parentsUntil('.tab-pane').find('tr').removeClass('selected');
 									$(this).addClass('selected');
+								});
+
+								$(document).on('click', '#showplan .panel', function() { 
+									$(this).parent().find('.panel:not(.panel-primary)').removeClass('panel-info').addClass('panel-default');
+									if(!$(this).hasClass('panel-primary')) {
+										$(this).addClass('panel-info');
+									}
 								});
 
 								$(document).on('dblclick', '.track', function() {
