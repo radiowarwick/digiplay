@@ -195,8 +195,35 @@ echo("
 					<div class=\"col-md-5 hidden-sm hidden-xs\" id=\"right-panel\">
 						<script>
 							$(function() { 
-								$(function() { setInterval(function() { $('#showplan').load('functions.php?'+key+'action=showplan') }, 30000) })
+								setInterval(function() {
+									var active_items = [];
+									$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
+										$('#showplan .panel-collapse').each(function() { 
+											if($(this).hasClass('in')) {
+												active_items.push($(this).attr('id'));
+											}
+										});
+										$('#showplan').html(data);
+										$.each(active_items, function(key, value) {
+											$('#'+value).addClass('in');
+										});
+									});
+								}, 60000);
 								$('#showplan').load('functions.php?'+key+'action=showplan');
+
+
+								$(document).on('dblclick', '#showplan .showplan-audio', function() {
+									$.ajax({
+										url: 'functions.php?'+key+'action=set-next&id='+$(this).attr('data-dps-id'),
+										dataType: 'json'
+									}).done(function(data) {
+										if(data.response == 'success') {
+											console.log(data);
+											$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
+											$('[data-dps-id='+data.id+']').removeClass('panel-default').addClass('panel-primary');
+										}
+									});
+								})
 							})
 						</script>
 						<h2 id=\"showplan-title\">Showplan</h2>
@@ -293,13 +320,13 @@ echo("
 				<div class=\"form-group\">
 					<div class=\"input-group\">
 						<span class=\"input-group-addon\">".Bootstrap::glyphicon("user")."</span>
-						<input type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\" id=\"username\">
+						<input type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\" id=\"username\" autocomplete=\"off\">
 					</div>
 				</div>
 				<div class=\"form-group\">
 					<div class=\"input-group\">
 						<span class=\"input-group-addon\">".Bootstrap::glyphicon("lock")."</span>
-						<input type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\" id=\"password\">
+						<input type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\" id=\"password\" autocomplete=\"off\">
 					</div>
 				</div>
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-login\" data-loading-text=\"Log in\">Log in</a>

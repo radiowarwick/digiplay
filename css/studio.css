@@ -95,4 +95,4 @@ tbody tr:hover { cursor: pointer; }
 #showplan { height: 100%; overflow-y: scroll; }
 #showplan-title { margin-top: -50px; margin-bottom: 0px; height: 50px; }
 #showplan .panel-heading { cursor: pointer; }
-#showplan .panel-heading:hover { background: #eee; }
+#showplan .panel-default .panel-heading:hover { background: #eee; }

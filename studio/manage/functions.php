@@ -154,31 +154,24 @@ switch($_REQUEST["action"]) {
 		echo($return);
 		break;
 	case "showplan":
-		//$showplan = Showplans::get_by_name("location_".$location->get_id());
-		$showplan = Showplans::get_by_id(127);
+		$showplan = Showplans::get_by_name("location_".$location->get_id());
 		$items = $showplan->get_items();
 		$return = "<div class=\"panel-group\" id=\"showplan\">";
 
 		foreach($items as $item) {
 			if($audio = $item->get_audio()) {
-				$return .= "<div class=\"panel ".((Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())? "panel-primary" : "panel-default")."\">
+				$return .= "<div class=\"showplan-audio panel ".((Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())? "panel-primary" : "panel-default")."\" data-dps-id=\"".$audio->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">".Time::format_succinct($audio->get_length())."</div>
 							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
 						</h4>
 					</div>
-					<div id=\"item-".$item->get_id()."\" class=\"panel-collapse collapse\">
-						<div class=\"panel-body\">
-							<h3>".$item->get_title()."</h4>
-							".$item->get_comment()."
-						</div>
-					</div>
 				</div>";
 			}
 			
 			if($script = $item->get_script()) {
-				$return .= "<div class=\"panel panel-default\">
+				$return .= "<div class=\"showplan-script panel panel-default\" data-dps-id=\"".$script->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
@@ -195,6 +188,13 @@ switch($_REQUEST["action"]) {
 		}
 		$return .= "</div>";
 		echo $return;
+		break;
+	case "set-next":
+		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
+		$config = Configs::get(NULL,$location,"next_on_showplan");
+		$audio = Audio::get_by_id($_REQUEST["id"]);
+		$config->set_val($audio->get_md5());
+		echo(json_encode(array("response" => "success", "id" => $audio->get_id())));
 		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
