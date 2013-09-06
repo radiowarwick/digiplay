@@ -41,7 +41,7 @@ class Showplan {
 
 	public function get_end_position() { 
 		$result = DigiplayDB::query("SELECT MAX(position) AS max FROM showitems WHERE showplanid = ".$this->id);
-		if(pg_num_rows($result)) return pg_fetch_result($result,NULL,"max");
+		if(pg_num_rows($result)) return pg_fetch_result($result,NULL,"max")+1;
 		else return 1;
 	}
 }
