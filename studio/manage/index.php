@@ -112,8 +112,6 @@ echo("
 										$('#message-list').load('functions.php?'+key+'action=messages');
 
 										$(document).on('click', '#message-list tbody tr', function() { 
-											$('#message-list tr').removeClass('selected');
-											$(this).addClass('selected');
 											$('#message-content h4').html($(this).find('.subject').html());
 											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('id')); 
 											$(this).find('span').removeClass('glyphicon-envelope');
@@ -194,23 +192,24 @@ echo("
 					</div>
 					<div class=\"col-md-5 hidden-sm hidden-xs\" id=\"right-panel\">
 						<script>
-							$(function() { 
-								setInterval(function() {
-									var active_items = [];
-									$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
-										$('#showplan .panel-collapse').each(function() { 
-											if($(this).hasClass('in')) {
-												active_items.push($(this).attr('id'));
-											}
-										});
-										$('#showplan').html(data);
-										$.each(active_items, function(key, value) {
-											$('#'+value).addClass('in');
-										});
+							function reloadShowplan() {
+								var active_items = [];
+								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
+									$('#showplan .panel-collapse').each(function() { 
+										if($(this).hasClass('in')) {
+											active_items.push($(this).attr('id'));
+										}
 									});
-								}, 60000);
-								$('#showplan').load('functions.php?'+key+'action=showplan');
+									$('#showplan').html(data);
+									$.each(active_items, function(key, value) {
+										$('#'+value).addClass('in');
+									});
+								});
+							}
 
+							$(function() { 
+								setInterval('reloadShowplan', 10000);
+								$('#showplan').load('functions.php?'+key+'action=showplan');
 
 								$(document).on('dblclick', '#showplan .showplan-audio', function() {
 									$.ajax({
@@ -223,7 +222,21 @@ echo("
 											$('[data-dps-id='+data.id+']').removeClass('panel-default').addClass('panel-primary');
 										}
 									});
-								})
+								});
+
+								$(document).on('click', 'tbody tr', function() { 
+									$(this).parent().find('tr').removeClass('selected');
+									$(this).addClass('selected');
+								});
+
+								$(document).on('dblclick', '.track', function() {
+									$.ajax({
+										url: 'functions.php?'+key+'&action=showplan-append&id='+$(this).attr('id'),
+										dataType: 'json'
+									}).done(function(data) {
+										reloadShowplan();
+									});
+								});
 							})
 						</script>
 						<h2 id=\"showplan-title\">Showplan</h2>

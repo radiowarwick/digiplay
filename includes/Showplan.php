@@ -38,6 +38,12 @@ class Showplan {
 
 	public function get_items() { return ShowplanItems::get_by_showplan($this); }
 	public function add_item($item) { $item->set_showplan($this); }
+
+	public function get_end_position() { 
+		$result = DigiplayDB::query("SELECT MAX(position) AS max FROM showitems WHERE showplanid = ".$this->id);
+		if(pg_num_rows($result)) return pg_fetch_result($result,NULL,"max");
+		else return 1;
+	}
 }
 
 ?>

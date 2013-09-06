@@ -37,7 +37,7 @@ switch($_REQUEST["action"]) {
 				<tbody>";
 			foreach($search["results"] as $track) {
 				$track = Tracks::get($track);
-				$return .= "<tr id=\"".$track->get_id()."\">
+				$return .= "<tr id=\"".$track->get_id()."\" class=\"track\">
 					<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
 					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 					<td class=\"title nowrap\">".$track->get_title()."</td>
@@ -103,7 +103,7 @@ switch($_REQUEST["action"]) {
 							<tbody>";
 			foreach($playlist->get_tracks() as $track) {
 				$return .= "
-								<tr id=\"".$track->get_id()."\">
+								<tr id=\"".$track->get_id()."\" class=\"track\">
 									<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
 									<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 									<td class=\"title nowrap\">".$track->get_title()."</td>
@@ -143,7 +143,7 @@ switch($_REQUEST["action"]) {
 			</thead>
 			<tbody>";
 		foreach($logitems as $logitem) {
-			$return .= "<tr id=\"message-".$logitem->get_id()."\">
+			$return .= "<tr id=\"logitem-".$logitem->get_id()."\">
 				<td class=\"icon\">".Bootstrap::glyphicon("headphones")."</td>
 				<td class=\"artist nowrap\">".$logitem->get_track_artist()."</td>
 				<td class=\"title nowrap\">".$logitem->get_track_title()."</td>
@@ -188,6 +188,17 @@ switch($_REQUEST["action"]) {
 		}
 		$return .= "</div>";
 		echo $return;
+		break;
+	case "showplan-append":
+		$showplan = Showplans::get_by_name("location_".$location->get_id());
+		$item = new ShowplanItem();
+		$audio = Audio::get_by_id($_REQUEST["id"]);
+		if(!$audio) exit(json_encode(array("response"=>"invalid")));
+		$item->set_audio($audio);
+		$item->set_position($showplan->get_end_position());
+		$item->set_showplan($showplan);
+		$item->save();
+		echo(json_encode(array("response"=>"success")));
 		break;
 	case "set-next":
 		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));

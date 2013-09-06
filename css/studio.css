@@ -36,6 +36,7 @@ body { padding-bottom: 90px; padding-top: 60px; }
 
 table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
+.selected>td { background-color: #dcdcdc !important; }
 .icon { width: 25px; }
 .nowrap { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .loading { width: 100%; text-align: center; padding-top: 50px; }
@@ -69,7 +70,6 @@ tbody tr:hover { cursor: pointer; }
 
 /* Messages tab */
 #message-list { height: 30%; overflow-y: scroll; }
-#message-list .selected>td { background-color: #dcdcdc !important; }
 #message-content { height: 70% !important; overflow-x: hidden; }
 #message-content .panel, #message-content .panel-body, iframe { height: 100%; width: 100%; }
 #message-content .panel { margin-bottom: 0px !important; }

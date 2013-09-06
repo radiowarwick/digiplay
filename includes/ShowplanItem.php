@@ -28,10 +28,9 @@ class ShowplanItem {
 	public function set_length($length) { $this->length = $length; }
 
 	public function save() {
-		if(!$this->name) return false;
 		if($this->id) DigiplayDB::query("UPDATE showitems SET showplanid = ".$this->showplanid.", position = ".$this->position.", title = '".pg_escape_string($this->title)."', audioid = ".$this->audioid.", scriptid = ".$this->scriptid.", comment = '".pg_escape_string($this->comment)."', length = ".$this->length." WHERE id = ".$this->id.";");
 		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO showitems (showplanid,position,title,audioid,scriptid,comment,length) VALUES (".$this->showplanid.", ".$this->position.", '".pg_escape_string($this->title)."',".$this->audioid.",".$this->scriptid.",'".pg_escape_string($this->comment)."', ".$this->length." RETURNING id;"));
+			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO showitems (showplanid,position,title,audioid,scriptid,comment,length) VALUES (".$this->showplanid.", ".$this->position.", '".pg_escape_string($this->title)."',".($this->audioid? $this->audioid : "NULL").",".($this->scriptid? $this->scriptid : "NULL").",'".pg_escape_string($this->comment)."', ".($this->length? $this->length : 0).") RETURNING id;"));
 			$this->id = $return["id"];
 		}
 		return $this->id;
