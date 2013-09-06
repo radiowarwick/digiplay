@@ -156,7 +156,7 @@ switch($_REQUEST["action"]) {
 	case "showplan":
 		$showplan = Showplans::get_by_name("location_".$location->get_id());
 		$items = $showplan->get_items();
-		$return = "<div class=\"panel-group\" id=\"showplan\">";
+		$return = "<div class=\"panel-group\" id=\"showplan-list\">";
 
 		foreach($items as $item) {
 			if($audio = $item->get_audio()) {
