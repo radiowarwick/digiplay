@@ -323,7 +323,7 @@ echo("
 						e.preventDefault();
 						$.ajax('functions.php?'+key+'action=logout').done(function() {
 							if(typeof key == 'undefined') {
-								window.location('".LINK_ABS."'/?refer=studio/manage/');
+								window.location('".LINK_ABS."?refer=studio/manage/');
 							}
 							$('[href=#info]').tab('show');
 							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
