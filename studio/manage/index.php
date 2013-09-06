@@ -224,7 +224,6 @@ echo("
 										dataType: 'json'
 									}).done(function(data) {
 										if(data.response == 'success') {
-											console.log(data);
 											$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
 											$('[data-dps-id='+data.id+']').removeClass('panel-default').addClass('panel-primary');
 										}

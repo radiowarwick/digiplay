@@ -96,3 +96,5 @@ tbody tr:hover { cursor: pointer; }
 #showplan-title { margin-top: -50px; margin-bottom: 0px; height: 50px; }
 #showplan .panel-heading { cursor: pointer; }
 #showplan .panel-default .panel-heading:hover { background: #eee; }
+#showplan .panel h4 { padding-left: 20px; }
+#showplan .panel h4 span { float: left; margin-left: -23px; margin-top: -2px; }
