@@ -194,16 +194,23 @@ echo("
 						<script>
 							function reloadShowplan() {
 								var active_items = [];
+								var current_audio;
 								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
-									$('#showplan .panel-collapse').each(function() { 
-										if($(this).hasClass('in')) {
-											active_items.push($(this).attr('id'));
+									$('#showplan .panel').each(function() { 
+										if($(this).find('.panel-collapse').hasClass('in')) {
+											active_items.push($(this).find('.panel-collapse').attr('id'));
+										}
+										if($(this).hasClass('panel-primary')) {
+											current_audio = $(this).attr('data-dps-id');
 										}
 									});
 									$('#showplan').html(data);
 									$.each(active_items, function(key, value) {
 										$('#'+value).addClass('in');
 									});
+									if(!$('[data-dps-id='+current_audio+']').hasClass('panel-primary')) {
+										$('[data-dps-id='+current_audio+']').next('.showplan-audio').dblclick();
+									}
 								});
 							}
 
