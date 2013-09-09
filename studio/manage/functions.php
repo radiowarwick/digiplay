@@ -1,6 +1,16 @@
 <?php
 Output::set_template();
-$location = Locations::get_by_key($_REQUEST["key"]);
+if(isset($_REQUEST["key"])) {
+	$location = Locations::get_by_key($_REQUEST["key"]);
+	$key = $_REQUEST["key"];
+} else {
+	if(isset($_REQUEST["location"])) {
+		$location = Locations::get_by_id($_REQUEST["location"]);
+		$key = $location->get_key();
+	} else {
+		exit("No location specified!");
+	}
+}
 
 switch($_REQUEST["action"]) {
 	case "now-next":
@@ -37,7 +47,7 @@ switch($_REQUEST["action"]) {
 				<tbody>";
 			foreach($search["results"] as $track) {
 				$track = Tracks::get($track);
-				$return .= "<tr id=\"".$track->get_id()."\" class=\"track\">
+				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track\">
 					<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
 					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 					<td class=\"title nowrap\">".$track->get_title()."</td>
@@ -65,7 +75,7 @@ switch($_REQUEST["action"]) {
 			</thead>
 			<tbody>";
 		foreach($emails as $email) {
-			$return .= "<tr id=\"message-".$email->get_id()."\">
+			$return .= "<tr data-message-id=\"".$email->get_id()."\">
 				<td class=\"icon\">".($email->get_new_flag()? Bootstrap::glyphicon("envelope") : "")."</td>
 				<td class=\"from nowrap\">".$email->get_sender()."</td>
 				<td class=\"subject nowrap\">".$email->get_subject()."</td>
@@ -76,7 +86,7 @@ switch($_REQUEST["action"]) {
 		echo($return);
 		break;
 	case "message":
-		$message = Emails::get_by_id(ltrim($_REQUEST['id'],"message-"));
+		$message = Emails::get_by_id($_REQUEST['id']);
 		echo($message->get_body_formatted());
 		$message->mark_as_read();
 		break;
@@ -103,7 +113,7 @@ switch($_REQUEST["action"]) {
 							<tbody>";
 			foreach($playlist->get_tracks() as $track) {
 				$return .= "
-								<tr id=\"".$track->get_id()."\" class=\"track\">
+								<tr data-track-id=\"".$track->get_id()."\" class=\"track\">
 									<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
 									<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 									<td class=\"title nowrap\">".$track->get_title()."</td>
@@ -143,7 +153,7 @@ switch($_REQUEST["action"]) {
 			</thead>
 			<tbody>";
 		foreach($logitems as $logitem) {
-			$return .= "<tr id=\"logitem-".$logitem->get_id()."\">
+			$return .= "<tr data-log-id=\"logitem-".$logitem->get_id()."\">
 				<td class=\"icon\">".Bootstrap::glyphicon("headphones")."</td>
 				<td class=\"artist nowrap\">".$logitem->get_track_artist()."</td>
 				<td class=\"title nowrap\">".$logitem->get_track_title()."</td>
@@ -160,8 +170,12 @@ switch($_REQUEST["action"]) {
 
 		foreach($items as $item) {
 			if($audio = $item->get_audio()) {
-				$return .= "<div class=\"showplan-audio panel ".((Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())? "panel-primary" : "panel-default")."\" data-dps-id=\"".$audio->get_id()."\">
-					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
+				$current = false;
+				if(Configs::get(NULL,$location,"current_showplan_id")->get_val() == $item->get_id())
+					if(Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())
+						$current = true;
+				$return .= "<div class=\"showplan-audio panel ".($current? "panel-primary" : "panel-default")."\" data-item-id=\"".$item->get_id()."\">
+					<div class=\"panel-heading\" data-toggle=\"collapse\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">".Time::format_succinct($audio->get_length())."</div>
 							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
@@ -171,14 +185,14 @@ switch($_REQUEST["action"]) {
 			}
 			
 			if($script = $item->get_script()) {
-				$return .= "<div class=\"showplan-script panel panel-default\" data-dps-id=\"".$script->get_id()."\">
-					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."\">
+				$return .= "<div class=\"showplan-script panel panel-default\" data-item-id=\"".$item->get_id()."\">
+					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."-toggle\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
 							".Bootstrap::glyphicon("file").$script->get_name()."
 						</h4>
 					</div>
-					<div id=\"item-".$item->get_id()."\" class=\"panel-collapse collapse\">
+					<div id=\"item-".$item->get_id()."-toggle\" class=\"panel-collapse collapse\">
 						<div class=\"panel-body\">
 							".$script->get_contents()."
 						</div>
@@ -200,12 +214,12 @@ switch($_REQUEST["action"]) {
 		$item->save();
 		echo(json_encode(array("response"=>"success")));
 		break;
-	case "set-next":
+	case "set-current":
 		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
-		$config = Configs::get(NULL,$location,"next_on_showplan");
-		$audio = Audio::get_by_id($_REQUEST["id"]);
-		$config->set_val($audio->get_md5());
-		echo(json_encode(array("response" => "success", "id" => $audio->get_id())));
+		$item = ShowplanItems::get_by_id($_REQUEST["id"]);
+		Configs::get(NULL,$location,"next_on_showplan")->set_val($item->get_audio()->get_md5());
+		Configs::get(NULL,$location,"current_showplan_id")->set_val($item->get_id());
+		echo(json_encode(array("response" => "success", "id" => $item->get_id())));
 		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));

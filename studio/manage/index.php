@@ -102,9 +102,9 @@ echo("
 											var active_message;
 											$.ajax('functions.php?'+key+'action=messages').done(function(data) {
 												$('#message-list tr').each(function() { 
-													if($(this).hasClass('selected')) active_message = $(this).attr('id');
+													if($(this).hasClass('selected')) active_message = $(this).attr('data-message-id');
 													$('#message-list').html(data);
-													$('#'+active_message).addClass('selected');
+													$('[data-message-id='+active_message+']').addClass('selected');
 												});
 											});
 										}, 30000); 
@@ -113,7 +113,7 @@ echo("
 
 										$(document).on('click', '#message-list tbody tr', function() { 
 											$('#message-content h4').html($(this).find('.subject').html());
-											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('id')); 
+											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('data-message-id')); 
 											$(this).find('span').removeClass('glyphicon-envelope');
 										});
 									})
@@ -199,24 +199,24 @@ echo("
 								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
 									$('#showplan .panel').each(function() { 
 										if($(this).find('.panel-collapse').hasClass('in')) {
-											expanded_items.push($(this).find('.panel-collapse').attr('id'));
+											expanded_items.push($(this).find('.panel-collapse').attr('data-item-id'));
 										}
 										if($(this).hasClass('panel-info')) {
-											selected_item = $(this).attr('data-dps-id');
+											selected_item = $(this).attr('data-item-id');
 										}
 										if($(this).hasClass('panel-primary')) {
-											current_audio = $(this).attr('data-dps-id');
+											current_audio = $(this).attr('data-item-id');
 										}
 									});
 									$('#showplan').html(data);
 									$.each(expanded_items, function(key, value) {
-										$('#'+value).addClass('in');
+										$('[data-item-id='+value+']').addClass('in');
 									});
-									if(!$('[data-dps-id='+current_audio+']').hasClass('panel-primary')) {
-										$('[data-dps-id='+current_audio+']').next('.showplan-audio').dblclick();
+									if(!$('[data-item-id='+current_audio+']').hasClass('panel-primary')) {
+										$('[data-item-id='+current_audio+']').next('.showplan-audio').dblclick();
 									}
 									if(typeof selected_item != 'undefined') {
-										$('[data-dps-id='+selected_item+']').addClass('panel-info');
+										$('[data-item-id='+selected_item+']').addClass('panel-info');
 									}
 								});
 							}
@@ -227,12 +227,12 @@ echo("
 
 								$(document).on('dblclick', '#showplan .showplan-audio', function() {
 									$.ajax({
-										url: 'functions.php?'+key+'action=set-next&id='+$(this).attr('data-dps-id'),
+										url: 'functions.php?'+key+'action=set-current&id='+$(this).attr('data-item-id'),
 										dataType: 'json'
 									}).done(function(data) {
 										if(data.response == 'success') {
 											$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
-											$('[data-dps-id='+data.id+']').removeClass('panel-default panel-info').addClass('panel-primary');
+											$('[data-item-id='+data.id+']').removeClass('panel-default panel-info').addClass('panel-primary');
 										}
 									});
 								});
@@ -251,7 +251,7 @@ echo("
 
 								$(document).on('dblclick', '.track', function() {
 									$.ajax({
-										url: 'functions.php?'+key+'&action=showplan-append&id='+$(this).attr('id'),
+										url: 'functions.php?'+key+'&action=showplan-append&id='+$(this).attr('data-track-id'),
 										dataType: 'json'
 									}).done(function(data) {
 										reloadShowplan();
