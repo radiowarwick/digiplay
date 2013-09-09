@@ -53,3 +53,26 @@ table .nowrap { white-space: nowrap; }
 .audio-player > div > div > div > div:nth-child(2) > div { height: 80px; position: relative; }
 .audio-player button { height: 60px; width: 60px; font-size: 2.2em; padding-left: 15px; border-radius: 100%; }
 .audio-player .progress { position: absolute; width: 100%; top: 30px; }
+
+/* ============== Uploader =============== */
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+  float: left;
+  margin-right: 4px;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  font-size: 23px;
+  direction: ltr;
+  cursor: pointer;
+}
+.fileupload-progress { text-align: right; }
+.files tr td { vertical-align: middle !important; }
+.files .progress { margin-bottom: 0px !important; }

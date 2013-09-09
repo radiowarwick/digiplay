@@ -1,7 +1,6 @@
 <?php
 
 Output::set_title("Music Upload");
-Output::add_stylesheet(LINK_ABS."css/jquery.fileupload-ui.css");
 Output::add_script(LINK_ABS."js/jquery.ui.widget.js");
 Output::add_script(LINK_ABS."js/tmpl.min.js");
 Output::add_script(LINK_ABS."js/jquery.fileupload.js");
@@ -10,108 +9,99 @@ Output::add_script(LINK_ABS."js/jquery.fileupload-ui.js");
 MainTemplate::set_subtitle("Drag and drop music to add to the file importer");
 
 echo("
-<style>
-.name { width: 80%; }
-.size { width: 10%; }
-</style>
 <script>
 $(function () {
-    'use strict';
+	'use strict';
 
-    $('#fileupload').fileupload();
+	$('#fileupload').fileupload();
 
-    $('#fileupload').fileupload('option', {
-        acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma)$/i,
-        url: '".LINK_ABS."ajax/file-upload.php',
-        limitConcurrentUploads: 3
-    });
-        
-    // Load existing files:
-    $.ajax({
-        url: $('#fileupload').fileupload('option', 'url'),
-        dataType: 'json',
-        context: $('#fileupload')[0]
-    }).done(function (result) {
-        $(this).fileupload('option', 'done')
-            .call(this, null, {result: result});
-    });
+	$('#fileupload').fileupload('option', {
+		acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma)$/i,
+		url: '".LINK_ABS."ajax/file-upload.php',
+		limitConcurrentUploads: 3
+	});
+		
+	// Load existing files:
+	$.ajax({
+		url: $('#fileupload').fileupload('option', 'url'),
+		dataType: 'json',
+		context: $('#fileupload')[0]
+	}).done(function (result) {
+		$(this).fileupload('option', 'done')
+			.call(this, null, {result: result});
+	});
 });
 </script>
-    <form id=\"fileupload\" action=\"".LINK_ABS."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
-        <div class=\"row fileupload-buttonbar\">
-            <div class=\"col-lg-6\">
-                <span class=\"btn btn-success fileinput-button\">
-                    ".Bootstrap::glyphicon("plus icon-white")."
-                    <span>Add files</span>
-                    <input type=\"file\" name=\"files[]\" multiple>
-                </span>
-                <button type=\"submit\" class=\"btn btn-primary start\">
-                    ".Bootstrap::glyphicon("upload icon-white")."
-                    <span>Start upload</span>
-                </button>
-                <button type=\"reset\" class=\"btn btn-warning cancel\">
-                    ".Bootstrap::glyphicon("ban-circle icon-white")."
-                    <span>Cancel upload</span>
-                </button>
-            </div>
-            <div class=\"col-lg-3 fileupload-progress\">
-                <div class=\"progress-extended\">&nbsp;</div>
-            </div>
-        </div>
-        <div class=\"fileupload-loading\"></div>
-        <br>
-        <table role=\"presentation\" class=\"table table-striped\"><tbody class=\"files\" data-toggle=\"modal-gallery\" data-target=\"#modal-gallery\"></tbody></table>
-    </form>
+	<form id=\"fileupload\" action=\"".LINK_ABS."ajax/file-upload.php\" method=\"POST\" enctype=\"multipart/form-data\">
+		<div class=\"row fileupload-buttonbar\">
+			<div class=\"col-md-6\">
+				<span class=\"btn btn-success fileinput-button\">
+					".Bootstrap::glyphicon("plus icon-white")."
+					<span>Add files</span>
+					<input type=\"file\" name=\"files[]\" multiple>
+				</span>
+				<button type=\"submit\" class=\"btn btn-primary start\">
+					".Bootstrap::glyphicon("upload icon-white")."
+					<span>Start upload</span>
+				</button>
+				<button type=\"reset\" class=\"btn btn-warning cancel\">
+					".Bootstrap::glyphicon("ban-circle icon-white")."
+					<span>Cancel upload</span>
+				</button>
+			</div>
+			<div class=\"col-md-6 fileupload-progress\">
+				<div class=\"progress-extended\">&nbsp;</div>
+			</div>
+		</div>
+		<div class=\"fileupload-loading\"></div>
+		<br>
+		<table class=\"table table-striped\"><tbody class=\"files\"></tbody></table>
+	</form>
 
 <script>
 </script>
 <script id=\"template-upload\" type=\"text/x-tmpl\">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class=\"template-upload\">
-        <td class=\"name col-lg-5\"><span>{%=file.name%}</span></td>
-        <td class=\"size col-lg-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        {% if (file.error) { %}
-            <td class=\"error\" colspan=\"2\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
-        {% } else if (o.files.valid && !i) { %}
-            <td>
-                <div class=\"progress progress-success progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\"><div class=\"bar\" style=\"width:0%;\"></div></div>
-            </td>
-            <td class=\"start\">{% if (!o.options.autoUpload) { %}
-                <button class=\"btn btn-primary pull-right\">
-                    <span>Start</span>
-                </button>
-            {% } %}</td>
-        {% } else { %}
-            <td colspan=\"2\"></td>
-        {% } %}
-        <td class=\"cancel\">{% if (!i) { %}
-            <button class=\"btn btn-warning pull-right\">
-                <span>Cancel</span>
-            </button>
-        {% } %}</td>
-    </tr>
+	<tr class=\"template-upload\">
+		<td class=\"name col-md-5\"><span>{%=file.name%}</span></td>
+		{% if (file.error) { %}
+			<td class=\"error\" colspan=\"2\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
+		{% } else if (o.files.valid && !i) { %}
+			<td class=\"col-md-3\">
+				<div class=\"progress progress-striped active\"><div class=\"progress-bar\"></div></div>
+			</td>
+			<td class=\"size col-md-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+			<td class=\"start\">{% if (!o.options.autoUpload) { %}
+				<button class=\"btn btn-primary pull-right\">
+					<span>Start</span>
+				</button>
+			{% } %}</td>
+		{% } else { %}
+			<td colspan=\"2\"></td>
+		{% } %}
+		<td class=\"cancel col-md-1\">{% if (!i) { %}
+			<button class=\"btn btn-warning pull-right\">
+				<span>Cancel</span>
+			</button>
+		{% } %}</td>
+	</tr>
 {% } %}
 </script>
 <script id=\"template-download\" type=\"text/x-tmpl\">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class=\"template-download\">
-        {% if (file.error) { %}
-            <td></td>
-            <td class=\"name col-lg-7\" colspan=\"3\"><span>{%=file.name%}</span></td>
-            <td class=\"error\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
-            <td class=\"size col-lg-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        {% } else { %}
-            <td class=\"name col-lg-7\" colspan=\"3\">
-                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\">{%=file.name%}</a>
-            </td>
-            <td class=\"size col-lg-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        {% } %}
-        <td class=\"delete\">
-            <button class=\"btn btn-danger pull-right\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.delete_with_credentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>
-                ".Bootstrap::glyphicon("trash icon-white")."
-            </button>
-        </td>
-    </tr>
+	<tr class=\"template-download\">
+		{% if (file.error) { %}
+			<td></td>
+			<td class=\"name col-md-7\" colspan=\"2\"><span>{%=file.name%}</span></td>
+			<td class=\"error\"><span class=\"label label-important\">Error</span> {%=file.error%}</td>
+			<td class=\"size col-md-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+		{% } else { %}
+			<td class=\"name col-md-7\" colspan=\"2\">
+				<a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\">{%=file.name%}</a>
+			</td>
+			<td class=\"size col-md-2\"><span>{%=o.formatFileSize(file.size)%}</span></td>
+		{% } %}
+	</tr>
 {% } %}
 </script>
 

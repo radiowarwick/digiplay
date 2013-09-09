@@ -45,7 +45,7 @@ $(function() {
 			success: function(data) {
 				elem.parents('.panel').find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-remove');
 				elem.parents('.panel').removeClass('panel-default').addClass('panel-danger');
-				elem.parents('.panel').find('.panel-body').remove();
+				elem.parents('.panel').find('.panel-body').slideUp('fast', function() { $(this).remove() });
 			}
 		});
 	});
@@ -90,10 +90,9 @@ $(function() {
 			data: form.serialize()
 		}).done(function(data) {
 			if(data.error == undefined) {
-				form.parents('.panel').prev('.panel').find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-ok');
-				form.parents('.panel').prev('.panel').removeClass('panel-default').addClass('panel-success');
-				form.parents('.panel').collapse('hide');
-				form.parents('.panel').collapse({ toggle: false });
+				form.parents('.panel').find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-ok');
+				form.parents('.panel').removeClass('panel-default').addClass('panel-success');
+				form.parents('.panel').find('.panel-body').slideUp('fast', function() { $(this).remove() });
 				button.button('reset');
 			} else {
 				console.log(data);
