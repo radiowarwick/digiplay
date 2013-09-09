@@ -33,9 +33,9 @@ $feature = "
 				<div class=\"col-sm-4\">
 				".((Session::is_user())? "
 					<h2>Common Tasks</h2>
-					<a href=\"upload\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
-					<a href=\"playlists\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
-					<a href=\"sue/schedule\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
+					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
+					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
+					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
 				":"
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
 						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">
@@ -72,7 +72,7 @@ $feature = "
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
-				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."sue/\">".Bootstrap::glyphicon("headphones")."Now playing</a>
+				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."sustainer/\">".Bootstrap::glyphicon("headphones")."Now playing</a>
 				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."playlists/0\">".Bootstrap::glyphicon("list")."View playlist</a>
 			</div>
 			<div class=\"col-sm-4\">
