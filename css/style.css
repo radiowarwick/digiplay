@@ -43,14 +43,8 @@ table .icon { width: 16px; }
 table .nowrap { white-space: nowrap; }
 
 .keyword a i { float: right; margin-right: 6px; margin-top: 6px; display: inline;}
-
-/* ============= Music import ========== */
-.template-upload .name { overflow: hidden; white-space:nowrap; text-overflow: ellipsis; width: 100%;}
-.template-upload .size { white-space: nowrap; }
-
-.table-file-import tr.file { background: #f9f9f9; cursor: pointer; }
-.table-file-import tr.file:hover { background: #ededed; }
-.deleted { text-decoration: line-through; color: #666; cursor: default;}
+.panel [data-toggle=collapse] { cursor: pointer; }
+.panel-default [data-toggle=collapse]:hover { background: #eee; }
 
 /* ============= Audio players =============== */
 .audio-player > div > div > div { width: 100%; margin: auto; }

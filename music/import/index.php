@@ -4,7 +4,7 @@ MainTemplate::set_subtitle("Add new music to the Digiplay system");
 
 $basepath = FILE_ROOT."uploads/";
 $files = scandir($basepath);
-require_once('/usr/share/php-getid3/getid3.php');
+require_once('/usr/share/php/getid3/getid3.php');
 $getid3 = new getID3;
 
 $acceptable_bitrates = array(
@@ -69,9 +69,9 @@ $(function() {
 							elem.button('reset');
 							elem.removeClass('btn-primary').addClass('btn-warning');
 							if(data.tracks.length > 1) {
-								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warn","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warning","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							} else {
-								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warn","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warning","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 							}
 						} else {
 							importTrack(elem.parents('form'),elem)
@@ -105,12 +105,13 @@ $(function() {
 	}
 });
 </script>
-<table class=\"table table-file-import\">");
+<div class=\"panel-group\" id=\"tracks\">");
 foreach($files as $file) {
 	if(substr($file,0,1) == ".") continue;
 	$tags = $getid3->analyze($basepath.$file);
 	@getid3_lib::CopyTagsToComments($tags);
 
+	$rand = mt_rand(0,10000);
 	$title = isset($tags["comments"]["title"]) ? implode(";", $tags["comments"]["title"]) : "";
 	$artist = isset($tags["comments"]["artist"]) ? implode(";", $tags["comments"]["artist"]) : "";
 	$album = isset($tags["comments"]["album"]) ? implode(";", $tags["comments"]["album"]) : "";
@@ -124,48 +125,47 @@ foreach($files as $file) {
 	$warnings = "";
 
 	$acceptable_bitrate = isset($acceptable_bitrates[$filetype])? $acceptable_bitrates[$filetype] : null;
-	$warnings .= (!($bitrate >= $acceptable_bitrate))? Bootstrap::alert_message_basic("warn","File bitrate is below the recommended minimum.  Try and find a better quality version!","Warning!",true) : "";
+	$warnings .= (!($bitrate >= $acceptable_bitrate))? Bootstrap::alert_message_basic("warning","File bitrate is below the recommended minimum.  Try and find a better quality version!","Warning!",true) : "";
 
-	echo("<tr class=\"file\">
-			<td class=\"icon\"> ".Bootstrap::glyphicon("chevron-right")."</td>
-			<td class=\"name col-lg-7\">".$file." (<a href=\"".LINK_ABS."uploads/".$file."\">Download</a>)</td>
-		</tr>
-		<tr class=\"fileinfo-tr\">
-			<td colspan=\"2\">
-				<div class=\"fileinfo\" style=\"display: none\">
+	echo("
+		<div class=\"panel panel-default\">
+			<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#track-".$rand."\">
+				".Bootstrap::glyphicon("chevron-right").$file." (<a href=\"".LINK_ABS."uploads/".$file."\">Download</a>)
+			</div>
+			<div id=\"track-".$rand."\" class=\"panel-collapse collapse\">
+				<div class=\"panel-body\">
 					<div class=\"warnings\">".$warnings."</div>
 					<div class=\"row\">
-						<div class=\"col-lg-5\">
+						<div class=\"col-sm-8\">
 							<form class=\"form-horizontal\" action=\"".LINK_ABS."ajax/file-import.php\" method=\"POST\" enctype=\"multipart/form-data\">
-								<fieldset>
-									<input type=\"hidden\" name=\"filename\" value=\"".$file."\" />
-									<input type=\"hidden\" name=\"origin\" value=\"".$origin."\" />
-									<div class=\"control-group\">
-										<label class=\"control-label\" for=\"title\">Title</label>
-										<div class=\"controls\">
-											<input type=\"text\" id=\"title\" name=\"title\" value=\"".$title."\" />
+									<input class=\"form-control\" type=\"hidden\" name=\"filename\" value=\"".$file."\" />
+									<input class=\"form-control\" type=\"hidden\" name=\"origin\" value=\"".$origin."\" />
+									<div class=\"form-group\">
+										<label class=\"col-sm-2 control-label\" for=\"title\">Title</label>
+										<div class=\"col-sm-10\">
+											<input class=\"form-control\" type=\"text\" id=\"title\" name=\"title\" value=\"".$title."\" />
 										</div>
 									</div>
-									<div class=\"control-group\">
-										<label class=\"control-label\" for=\"artist\">Artist</label>
-										<div class=\"controls\">
-											<input type=\"text\" id=\"artist\" name=\"artist\" value=\"".$artist."\" />
+									<div class=\"form-group\">
+										<label class=\"col-sm-2 control-label\" for=\"artist\">Artist</label>
+										<div class=\"col-sm-10\">
+											<input class=\"form-control\" type=\"text\" id=\"artist\" name=\"artist\" value=\"".$artist."\" />
 										</div>
 									</div>
-									<div class=\"control-group\">
-										<label class=\"control-label\" for=\"album\">Album</label>
-										<div class=\"controls\">
-											<input type=\"text\" id=\"album\" name=\"album\" value=\"".$album."\" />
+									<div class=\"form-group\">
+										<label class=\"col-sm-2 control-label\" for=\"album\">Album</label>
+										<div class=\"col-sm-10\">
+											<input class=\"form-control\" type=\"text\" id=\"album\" name=\"album\" value=\"".$album."\" />
 										</div>
 									</div>
-									<div class=\"control-group\">
-										<label class=\"control-label\" for=\"year\">Year</label>
-										<div class=\"controls\">
-											<input type=\"text\" id=\"year\" name=\"year\" value=\"".$year."\" />
+									<div class=\"form-group\">
+										<label class=\"col-sm-2 control-label\" for=\"year\">Year</label>
+										<div class=\"col-sm-10\">
+											<input class=\"form-control\" type=\"text\" id=\"year\" name=\"year\" value=\"".$year."\" />
 										</div>
 									</div>
-									<div class=\"control-group\">
-										<div class=\"controls\">
+									<div class=\"form-group\">
+										<div class=\"col-sm-10 col-sm-offset-2\">
 											<button class=\"import btn btn-primary\" data-loading=\"Loading...\">".Bootstrap::glyphicon("ok icon-white")." Import</button>
 											<button class=\"delete btn btn-danger\" >".Bootstrap::glyphicon("trash icon-white")." Delete</button>
 										</div>
@@ -173,7 +173,7 @@ foreach($files as $file) {
 								</fieldset>
 							</form>
 						</div>
-						<div class=\"col-lg-3\">
+						<div class=\"col-sm-4\">
 							<strong>Length: </strong>".$length."<br />
 							<strong>Origin: </strong>".$origin."<br />
 							<strong>Filetype: </strong>".$filetype."<br />
@@ -182,8 +182,9 @@ foreach($files as $file) {
 						</div>
 					</div>
 				</div>
-			</td>
-		</tr>");
+			</div>
+		</div>
+			");
 }
-echo("</table>");
+echo("</div>");
 ?>
