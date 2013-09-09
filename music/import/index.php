@@ -40,18 +40,18 @@ $(function() {
 		elem = $(this);
 		$.ajax({
 			type: 'DELETE',
-			url: '".LINK_ABS."ajax/file-upload.php?file='+elem.parents('fieldset').find('[name=filename]').attr('value'),
+			url: '".LINK_ABS."ajax/file-upload.php?file='+elem.parents('form').find('[name=filename]').attr('value'),
 			dataType: 'json',
 			success: function(data) {
-				elem.parents('.fileinfo-tr').prev('.file').find('.icon').find('i').remove();
-				elem.parents('.fileinfo-tr').prev('.file').addClass('deleted').find('.name').html(elem.parents('fieldset').find('[name=filename]').attr('value'));
-				elem.parents('.fileinfo').slideUp('fast', function() { $(this).remove() });
+				elem.parents('.panel').find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-remove');
+				elem.parents('.panel').removeClass('panel-default').addClass('panel-danger');
+				elem.parents('.panel').find('.panel-body').remove();
 			}
 		});
 	});
 
 	$('input').keyup(function(){
-		closest = $(this).parents('fieldset').find('.import');
+		closest = $(this).parents('form').find('.import');
 		if(closest.hasClass('btn-warning')) closest.removeClass('btn-warning').addClass('btn-primary');
 	});
 
@@ -60,45 +60,45 @@ $(function() {
 		elem = $(this);
 		elem.button('loading');
 		if(elem.hasClass('btn-primary')) {
-				$.ajax({
-					type: 'GET',
-					url: '".LINK_ABS."ajax/similar-tracks.php?artist='+elem.parents('fieldset').find('[name=artist]').attr('value')+'&title='+elem.parents('fieldset').find('[name=title]').attr('value'),
-					dataType: 'json',
-					success: function(data) {
-						if(data) {
-							elem.button('reset');
-							elem.removeClass('btn-primary').addClass('btn-warning');
-							if(data.tracks.length > 1) {
-								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warning","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
-							} else {
-								elem.parents('.fileinfo').append('".Bootstrap::alert_message_basic("warning","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
-							}
-						} else {
-							importTrack(elem.parents('form'),elem)
-						}
+			$.ajax({
+				type: 'GET',
+				url: '".LINK_ABS."ajax/similar-tracks.php?artist='+elem.parents('form').find('[name=artist]').attr('value')+'&title='+elem.parents('form').find('[name=title]').attr('value'),
+				dataType: 'json'
+			}).done(function(data) {
+				if(data.response == 'fail') {
+					elem.button('reset');
+					elem.removeClass('btn-primary').addClass('btn-warning');
+					if(data.tracks.length > 1) {
+						elem.parents('.panel-body').find('.warnings').append('".Bootstrap::alert_message_basic("warning","There are other songs in the database that look similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/search/?q='+data.q+'\" target=\"_blank\">Click here to see the suggestions.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
+					} else {
+						elem.parents('.panel-body').find('.warnings').append('".Bootstrap::alert_message_basic("warning","There is another song in the database that looks similar to this. <br />Check you aren\'t importing a duplicate! <a href=\"".LINK_ABS."music/detail/'+data.tracks[0]+'\" target=\"_blank\">Click here to see the suggestion.</a><br /><strong>Click Import again to add the song anyway.</strong>","Hold up!",true)."');
 					}
-				});
+				} else {
+					importTrack(elem.parents('form'),elem)
+				}
+			});
 		} else {
 			importTrack(elem.parents('form'),elem);
 		}
 	});
 
 	function importTrack(form,button) {
-		console.log(form);
 		$.ajax({
 			type: 'GET',
 			url: '".LINK_ABS."ajax/import-track.php',
 			dataType: 'json',
-			data: form.serialize(),
-			success: function(data) {
-                                form.parents('.fileinfo-tr').prev('.file').find('.icon').find('i').remove();
-                                form.parents('.fileinfo-tr').prev('.file').addClass('deleted').find('.name').html(elem.parents('fieldset').find('[name=filename]').attr('value'));
-                                form.parents('.fileinfo').slideUp('fast', function() { $(this).remove() });
+			data: form.serialize()
+		}).done(function(data) {
+			if(data.error == undefined) {
+				form.parents('.panel').prev('.panel').find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-ok');
+				form.parents('.panel').prev('.panel').removeClass('panel-default').addClass('panel-success');
+				form.parents('.panel').collapse('hide');
+				form.parents('.panel').collapse({ toggle: false });
 				button.button('reset');
-			},
-			error: function(data) {
+			} else {
 				console.log(data);
-				form.parents('.fileinfo').append('".Bootstrap::alert_message_basic("error","There was an error when trying to upload this file.<br />'+data.error+'","Oh no!",true)."');
+				console.log(form.parentsUntil('.panel-body'));
+				form.parents('.panel-body').find('.warnings').append('".Bootstrap::alert_message_basic("danger","There was an error when trying to upload this file.<br />'+data.error+'","Oh no!",true)."');
 				button.button('reset');
 			}
 		});
@@ -130,7 +130,7 @@ foreach($files as $file) {
 	echo("
 		<div class=\"panel panel-default\">
 			<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#track-".$rand."\">
-				".Bootstrap::glyphicon("chevron-right").$file." (<a href=\"".LINK_ABS."uploads/".$file."\">Download</a>)
+				".Bootstrap::glyphicon("chevron-right").$file."
 			</div>
 			<div id=\"track-".$rand."\" class=\"panel-collapse collapse\">
 				<div class=\"panel-body\">
@@ -179,6 +179,7 @@ foreach($files as $file) {
 							<strong>Filetype: </strong>".$filetype."<br />
 							<strong>Codec: </strong>".$codec."<br />
 							<strong>Bitrate: </strong>".$bitrate." kbps".($lossless? " (lossless)" : "")."<br />
+							<em><a href=\"".LINK_ABS."uploads/".$file."\" target=\"_blank\">".Bootstrap::glyphicon("download-alt")."Download file</a></em>
 						</div>
 					</div>
 				</div>
