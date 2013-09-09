@@ -199,7 +199,7 @@ echo("
 								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
 									$('#showplan .panel').each(function() { 
 										if($(this).find('.panel-collapse').hasClass('in')) {
-											expanded_items.push($(this).find('.panel-collapse').attr('data-item-id'));
+											expanded_items.push($(this).find('.panel-collapse').attr('id'));
 										}
 										if($(this).hasClass('panel-info')) {
 											selected_item = $(this).attr('data-item-id');
@@ -210,7 +210,7 @@ echo("
 									});
 									$('#showplan').html(data);
 									$.each(expanded_items, function(key, value) {
-										$('[data-item-id='+value+']').addClass('in');
+										$('#'+value).addClass('in');
 									});
 									if(!$('[data-item-id='+current_audio+']').hasClass('panel-primary')) {
 										$('[data-item-id='+current_audio+']').next('.showplan-audio').dblclick();
