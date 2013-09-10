@@ -6,6 +6,7 @@ Class LogItem {
 	protected $datetime;
 	protected $track_title;
 	protected $track_artist;
+	protected $audioid;
 
 	public function get_id() { return $this->id; }
 	public function get_location() { return Locations::get_by_id($this->location); }
@@ -13,20 +14,22 @@ Class LogItem {
 	public function get_datetime() { return $this->datetime; }
 	public function get_track_title() { return $this->track_title; }
 	public function get_track_artist() { return $this->track_artist; }
+	public function get_audio() { return Audio::get_by_id($audioid); }
 
 	public function set_location($location) { $this->location = $location; }
 	public function set_user($user) { $this->userid = $user->get_id(); }
 	public function set_datetime($datetime) { $this->datetime = $datetime; }
 	public function set_track_title($track_title) { $this->track_title = $track_title; }
 	public function set_track_artist($track_artist) { $this->track_artist = $track_artist; }
+	public function set_audio($audio) { $this->audioid = $audio->get_id(); }
 
 	public function save() {
 		if(!$this->track_title) return false;
-		if($this->id) DigiplayDB::query("UPDATE log SET location = ".$this->location->get_id().", track_title = '".pg_escape_string($this->track_title)."', track_artist = '".pg_escape_string($this->track_artist)." WHERE id = ".$this->id.";");
+		if($this->id) DigiplayDB::query("UPDATE log SET location = ".$this->location->get_id().", track_title = '".pg_escape_string($this->track_title)."', track_artist = '".pg_escape_string($this->track_artist).", audioid = ".($this->audioid ? $this->audioid : "NULL")." WHERE id = ".$this->id.";");
 		else {
 			$this->datetime = time();
 			if($this->userid == NULL) $this->userid = 0;
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO log (location,userid,datetime,track_title,track_artist) VALUES (".$this->location->get_id().",".$this->userid.",".$this->datetime.",'".pg_escape_string($this->track_title)."','".pg_escape_string($this->track_artist)."') RETURNING id;"));
+			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO log (location,userid,datetime,track_title,track_artist,audioid) VALUES (".$this->location->get_id().",".$this->userid.",".$this->datetime.",'".pg_escape_string($this->track_title)."','".pg_escape_string($this->track_artist)."',".($this->audioid ? $this->audioid : "NULL").") RETURNING id;"));
 			$this->id = $return["id"];
 		}
 		return $this->id;
