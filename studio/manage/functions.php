@@ -233,11 +233,13 @@ switch($_REQUEST["action"]) {
 		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
-		if(Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"success")));
-		else exit(json_encode(array("response"=>"invalid")));
+		if(!Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"invalid")));
+		Configs::get(NULL,$location,"user_aw_set")->set_val(Session::get_user()->get_config_var("default_aw_set"));
+		echo(json_encode(array("response"=>"success")));
 		break;
 	case "logout":
 		Session::logout();
+		Configs::get(NULL,$location,"user_aw_set")->set_val(0);
 		break;
 }
 ?>
