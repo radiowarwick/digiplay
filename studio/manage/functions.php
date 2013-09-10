@@ -178,7 +178,7 @@ switch($_REQUEST["action"]) {
 					<div class=\"panel-heading\" data-toggle=\"collapse\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">
-								<div class=\"controls\">".Bootstrap::glyphicon("move").Bootstrap::glyphicon("remove")."</div>
+								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
 								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
 							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
 						</h4>
@@ -191,7 +191,7 @@ switch($_REQUEST["action"]) {
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."-toggle\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">
-								<div class=\"controls\">".Bootstrap::glyphicon("move").Bootstrap::glyphicon("remove")."</div>
+								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
 								<div class=\"duration\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
 							</div>
 							".Bootstrap::glyphicon("file").$script->get_name()."
