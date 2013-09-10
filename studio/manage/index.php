@@ -257,6 +257,25 @@ echo("
 										reloadShowplan();
 									});
 								});
+
+								$(document).on('mouseenter', '#showplan .panel:not(.panel-primary)', function() {
+									$(this).find('.duration').hide();
+									$(this).find('.controls').show();
+								});
+
+								$(document).on('mouseleave', '#showplan .panel:not(.panel-primary)', function() {
+									$(this).find('.controls').hide();
+									$(this).find('.duration').show();
+								});
+
+								$(document).on('click', '.controls .glyphicon-remove', function() {
+									$.ajax({
+										url: 'functions.php?'+key+'action=showplan-remove&id='+$(this).parents('.panel').attr('data-item-id'),
+										dataType: 'json'
+									}).done(function(data) {
+										reloadShowplan();
+									});
+								});
 							})
 						</script>
 						<h2 id=\"showplan-title\">Showplan</h2>

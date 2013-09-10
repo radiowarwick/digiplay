@@ -177,7 +177,9 @@ switch($_REQUEST["action"]) {
 				$return .= "<div class=\"showplan-audio panel ".($current? "panel-primary" : "panel-default")."\" data-item-id=\"".$item->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\">
 						<h4 class=\"panel-title\">
-							<div class=\"pull-right\">".Time::format_succinct($audio->get_length())."</div>
+							<div class=\"pull-right\">
+								<div class=\"controls\">".Bootstrap::glyphicon("move").Bootstrap::glyphicon("remove")."</div>
+								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
 							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
 						</h4>
 					</div>
@@ -188,7 +190,10 @@ switch($_REQUEST["action"]) {
 				$return .= "<div class=\"showplan-script panel panel-default\" data-item-id=\"".$item->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."-toggle\">
 						<h4 class=\"panel-title\">
-							<div class=\"pull-right\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
+							<div class=\"pull-right\">
+								<div class=\"controls\">".Bootstrap::glyphicon("move").Bootstrap::glyphicon("remove")."</div>
+								<div class=\"duration\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
+							</div>
 							".Bootstrap::glyphicon("file").$script->get_name()."
 						</h4>
 					</div>
@@ -212,6 +217,11 @@ switch($_REQUEST["action"]) {
 		$item->set_position($showplan->get_end_position());
 		$item->set_showplan($showplan);
 		$item->save();
+		echo(json_encode(array("response"=>"success")));
+		break;
+	case "showplan-remove":
+		$item = ShowplanItems::get_by_id($_REQUEST["id"]);
+		$item->delete();
 		echo(json_encode(array("response"=>"success")));
 		break;
 	case "set-current":

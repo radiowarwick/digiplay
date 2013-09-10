@@ -35,6 +35,11 @@ class ShowplanItem {
 		}
 		return $this->id;
 	}
+
+	public function delete() {
+		$query = DigiplayDB::query("DELETE FROM showitems WHERE id = ".$this->id.";");
+		return ($query? true : false);
+	}
 }
 
 ?>
