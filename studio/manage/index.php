@@ -36,7 +36,7 @@ echo("
 			function onOpen(e) {
 				connection = true;
 				console.log('Websocket connection established.');
-				websocket.send(JSON.stringify([{'ident':'".$key."'}]));
+				websocket.send(JSON.stringify({'ident':'".$key."'}));
 				clearTimeout(connect_timeout);
 				$.each(timers, function(i, v) { clearInterval(v); });
 				timers = [];
@@ -70,7 +70,8 @@ echo("
 								break;
 							case 'next_on_showplan':
 								if(data.payload.val == '') {
-									$('#showplan .panel-primary').removeClass('.panel-primary').next('.showplan-audio').dblclick();
+									if($('#showplan .panel-primary').is(':last-child')) $(this).removeClass('panel-primary').addClass('panel-default');
+									$('#showplan .panel-primary').removeClass('panel-primary').addClass('panel-default').next('.showplan-audio').dblclick();
 								}
 								break;
 						}
@@ -279,10 +280,12 @@ echo("
 						<script>
 							function reloadShowplan() {
 								var expanded_items = [];
+								var previous_items = [];
 								var selected_item;
 								var current_audio;
 								$.ajax('functions.php?'+key+'action=showplan').done(function(data) {
 									$('#showplan .panel').each(function() { 
+										previous_items.push($(this).attr('data-item-id'));
 										if($(this).find('.panel-collapse').hasClass('in')) {
 											expanded_items.push($(this).find('.panel-collapse').attr('id'));
 										}
@@ -297,6 +300,13 @@ echo("
 									$.each(expanded_items, function(key, value) {
 										$('#'+value).addClass('in');
 									});
+									if(!$('#showplan .panel-primary').length) {
+										$.each($('#showplan .panel'), function(key, value) {
+											if($.inArray($(this).attr('data-item-id'), previous_items) == -1) {
+												$(this).dblclick();
+											}
+										});
+									}
 									if(!$('[data-item-id='+current_audio+']').hasClass('panel-primary')) {
 										$('[data-item-id='+current_audio+']').next('.showplan-audio').dblclick();
 									}
@@ -342,7 +352,7 @@ echo("
 										url: 'functions.php?'+key+'&action=showplan-append&id='+$(this).attr('data-track-id'),
 										dataType: 'json'
 									}).done(function(data) {
-										reloadShowplan();
+										if(!connection) reloadShowplan();
 									});
 								});
 
