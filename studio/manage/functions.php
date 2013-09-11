@@ -171,8 +171,8 @@ switch($_REQUEST["action"]) {
 		foreach($items as $item) {
 			if($audio = $item->get_audio()) {
 				$current = false;
-				if(Configs::get(NULL,$location,"current_showplan_id")->get_val() == $item->get_id())
-					if(Configs::get(NULL,$location,"next_on_showplan")->get_val() == $audio->get_md5())
+				if($location->get_config("current_showitems_id")->get_val() == $item->get_id())
+					if($location->get_config("next_on_showplan")->get_val() == $audio->get_md5())
 						$current = true;
 				$return .= "<div class=\"showplan-audio panel ".($current? "panel-primary" : "panel-default")."\" data-item-id=\"".$item->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\">
@@ -209,7 +209,7 @@ switch($_REQUEST["action"]) {
 		echo $return;
 		break;
 	case "showplan-append":
-		$showplan = Showplans::get_by_name("location_".$location->get_id());
+		$showplan = Showplans::get_by_id($location->get_config("default_showplan")->get_val());
 		$item = new ShowplanItem();
 		$audio = Audio::get_by_id($_REQUEST["id"]);
 		if(!$audio) exit(json_encode(array("response"=>"invalid")));
@@ -227,19 +227,19 @@ switch($_REQUEST["action"]) {
 	case "set-current":
 		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
 		$item = ShowplanItems::get_by_id($_REQUEST["id"]);
-		Configs::get(NULL,$location,"next_on_showplan")->set_val($item->get_audio()->get_md5());
-		Configs::get(NULL,$location,"current_showplan_id")->set_val($item->get_id());
+		$location->get_config("next_on_showplan")->set_val($item->get_audio()->get_md5());
+		$location->get_config("current_showitems_id")->set_val($item->get_id());
 		echo(json_encode(array("response" => "success", "id" => $item->get_id())));
 		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
 		if(!Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"invalid")));
-		Configs::get(NULL,$location,"user_aw_set")->set_val(Session::get_user()->get_config_var("default_aw_set"));
+		$location->get_config("user_aw_set")->set_val(Session::get_user()->get_config_var("default_aw_set"));
 		echo(json_encode(array("response"=>"success")));
 		break;
 	case "logout":
 		Session::logout();
-		Configs::get(NULL,$location,"user_aw_set")->set_val(0);
+		$location->get_config("user_aw_set")->set_val(0);
 		break;
 }
 ?>

@@ -18,16 +18,96 @@ if(isset($_REQUEST["key"])) {
 
 echo("
 		<script>
-			var key;
-			".(isset($key)? "key = 'key=".$key."&';" : "")."
+			var key = 'key=".$key."&';
+			var timers = [];
+			var connect_timeout;
+			var websocket;
+			var connection = false;
+
+			function startWebsocket() {
+				console.log('Starting websocket...');
+				websocket = new WebSocket('".Configs::get_system_param("websocket_uri")."');
+				websocket.onopen = function(e) { onOpen(e) };
+				websocket.onclose = function(e) { onClose(e) };
+				websocket.onmessage = function(e) { onMessage(e) };
+				websocket.onerror = function(e) { onError(e) };
+			}
+
+			function onOpen(e) {
+				connection = true;
+				console.log('Websocket connection established.');
+				websocket.send(JSON.stringify([{'ident':'".$key."'}]));
+				clearTimeout(connect_timeout);
+				$.each(timers, function(i, v) { clearInterval(v); });
+				timers = [];
+			}
+
+			function onClose(e) {
+				connection = false;
+				console.log('Websocket connection lost.');
+				connect_timeout = setTimeout('setIntervals()', 5000);
+				setTimeout('startWebsocket()',5000);
+			}
+
+			function onMessage(e) {
+				data = JSON.parse(e.data);
+				console.log(data);
+				switch(data.channel) {
+					case 't_log':
+						reloadLog();
+						break;
+					case 't_email':
+						reloadMessages();
+						break;
+					case 't_playlists':
+						reloadPlaylists();
+						break;
+					case 't_configuration':
+						switch(data.payload.parameter) {
+							case 'current_showitems_id':
+								$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
+								$('[data-item-id='+data.payload.val+']').removeClass('panel-default panel-info').addClass('panel-primary');
+								break;
+							case 'next_on_showplan':
+								if(data.payload.val == '') {
+									$('#showplan .panel-primary').removeClass('.panel-primary').next('.showplan-audio').dblclick();
+								}
+								break;
+						}
+						break;
+					case 't_audiowall':
+						break;
+					case 't_showitems':
+						reloadShowplan();
+						break;
+				}
+			}
+
+			function onError(e) {
+				console.log(e);
+			}
+
+			function setIntervals() {
+				if(timers.length == 0) {
+					console.log('Setting manual refresh intervals.');
+					timers.push(setInterval('reloadShowplan()', 5000));
+					timers.push(setInterval('reloadInfo()', 60000));
+					timers.push(setInterval('reloadMessages()', 30000));
+					timers.push(setInterval('reloadPlaylists()', 60000));
+					timers.push(setInterval('reloadLog()', 30000));
+				}
+			}
 
 			$(function() {
+				connect_timeout = setTimeout('setIntervals()', 5000);
+				startWebsocket();
 				window.oncontextmenu = function(event) {
   					event.preventDefault();
     				event.stopPropagation();
     				return false;
-				};				
+				};
 			});
+
 		</script>
 		<div class=\"wrap\">
 			<nav class=\"navbar navbar-default navbar-fixed-top\" id=\"header\">
@@ -51,7 +131,9 @@ echo("
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
 								<script>
-									$(function() { setInterval(function() { $('#info-content').load('functions.php?'+key+'action=info-content') }, 60000) })
+									function reloadInfo() {
+										$('#info-content').load('functions.php?'+key+'action=info-content');
+									};
 								</script>
 								<div id=\"info-content\">
 									".Configs::get_system_param("info-content")."
@@ -97,18 +179,18 @@ echo("
 							</div>
 							<div class=\"tab-pane\" id=\"messages\">
 								<script>
-									$(function() { 
-										setInterval(function() { 
-											var active_message;
-											$.ajax('functions.php?'+key+'action=messages').done(function(data) {
-												$('#message-list tr').each(function() { 
-													if($(this).hasClass('selected')) active_message = $(this).attr('data-message-id');
-													$('#message-list').html(data);
-													$('[data-message-id='+active_message+']').addClass('selected');
-												});
+									function reloadMessages() {
+										var active_message;
+										$.ajax('functions.php?'+key+'action=messages').done(function(data) {
+											$('#message-list tr').each(function() { 
+												if($(this).hasClass('selected')) active_message = $(this).attr('data-message-id');
+												$('#message-list').html(data);
+												$('[data-message-id='+active_message+']').addClass('selected');
 											});
-										}, 30000); 
+										});
+									}
 
+									$(function() { 
 										$('#message-list').load('functions.php?'+key+'action=messages');
 
 										$(document).on('click', '#message-list tbody tr', function() { 
@@ -130,22 +212,22 @@ echo("
 							</div>
 							<div class=\"tab-pane\" id=\"playlists\">
 								<script>
-									$(function() { 
-										setInterval(function() {
-											var active_playlists = [];
-											$.ajax('functions.php?'+key+'action=playlists').done(function(data) {
-												$('#playlists-list .panel-collapse').each(function() { 
-													if($(this).hasClass('in')) {
-														active_playlists.push($(this).attr('id'));
-													}
-												});
-												$('#playlists-list').html(data);
-												$.each(active_playlists, function(key, value) {
-													$('#'+value).addClass('in');
-												});
+									function reloadPlaylists() {
+										var active_playlists = [];
+										$.ajax('functions.php?'+key+'action=playlists').done(function(data) {
+											$('#playlists-list .panel-collapse').each(function() { 
+												if($(this).hasClass('in')) {
+													active_playlists.push($(this).attr('id'));
+												}
 											});
-										}, 60000);
+											$('#playlists-list').html(data);
+											$.each(active_playlists, function(key, value) {
+												$('#'+value).addClass('in');
+											});
+										});
+									}
 
+									$(function() { 
 										$('#playlists-list').load('functions.php?'+key+'action=playlists', function() {
 											$('#playlists-list .panel-collapse:first').addClass('in');
 										});
@@ -160,6 +242,10 @@ echo("
 							</div>
 							<div class=\"tab-pane\" id=\"logging\">
 								<script>
+									function reloadLog() {
+										$('#log').load('functions.php?'+key+'action=log');
+									}
+
 									$(function() { 
 										$('#logging-form').submit(function(e) { 
 											e.preventDefault();
@@ -171,9 +257,8 @@ echo("
 											})
 										});
 
-										$(function() { setInterval(function() { $('#log').load('functions.php?'+key+'action=log') }, 30000) })
 										$('#log').load('functions.php?'+key+'action=log');
-									})
+									});
 								</script>
 								<form class=\"form-inline\" id=\"logging-form\">
 									<div class=\"form-group\">
@@ -222,17 +307,20 @@ echo("
 							}
 
 							$(function() { 
-								setInterval('reloadShowplan()', 5000);
 								$('#showplan').load('functions.php?'+key+'action=showplan');
 
 								$(document).on('dblclick', '#showplan .showplan-audio', function() {
+									$(this).find('.controls').hide();
+									$(this).find('.duration').show();
 									$.ajax({
 										url: 'functions.php?'+key+'action=set-current&id='+$(this).attr('data-item-id'),
 										dataType: 'json'
 									}).done(function(data) {
 										if(data.response == 'success') {
-											$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
-											$('[data-item-id='+data.id+']').removeClass('panel-default panel-info').addClass('panel-primary');
+											if(!connection) {
+												$('#showplan .panel').removeClass('panel-primary').addClass('panel-default');
+												$('[data-item-id='+data.id+']').removeClass('panel-default panel-info').addClass('panel-primary');
+											}
 										}
 									});
 								});
