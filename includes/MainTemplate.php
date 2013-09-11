@@ -62,10 +62,10 @@ class MainTemplate{
 		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js\"></script>
-		<script type=\"text/javascript\" src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js\"></script>
+		<script type=\"text/javascript\" src=\"".LINK_ABS."js/bootstrap.min.js\"></script>
 		";
 	if(isset($_REQUEST["theme"])) $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootswatch/3.0.0/".$_REQUEST["theme"]."/bootstrap.min.css\">\n";
-	else $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css\">\n";
+	else $return .= "<link rel=\"stylesheet\" href=\"".LINK_ABS."css/bootstrap.min.css\">\n";
 
 	if(count(Output::get_stylesheets())>0) foreach(Output::get_stylesheets() AS $src) $return .= "<link href=\"".$src."\" rel=\"stylesheet\" type=\"text/css\">\n";
 	if(count(Output::get_scripts())>0) foreach(Output::get_scripts() AS $src) $return .= "<script src=\"".$src."\" type=\"text/javascript\"></script>\n";
