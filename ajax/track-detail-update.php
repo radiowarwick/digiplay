@@ -28,7 +28,6 @@ if(Session::is_group_user('Music Admin')){
 	if($_REQUEST["reclibid"] != $track->get_reclibid()) $track->set_reclibid($_REQUEST["reclibid"]);
 
 	$track->set_censored($_REQUEST["censored"]);
-	$track->set_sustainer($_REQUEST["sustainer"]);
 
 	if($_REQUEST["notes"] != $track->get_notes()) $track->set_notes($_REQUEST["notes"]);
 	if($_REQUEST["new_keyword"]) $track->add_keywords($_REQUEST["new_keyword"]);
@@ -54,7 +53,6 @@ if(Session::is_group_user('Music Admin')){
 		"length" => $new_track->get_length(),
 		"origin" => $new_track->get_origin(),
 		"censored" => $new_track->is_censored(),
-		"sustainer" => $new_track->is_sustainer(),
 		"notes" => $new_track->get_notes()
 		);
 
