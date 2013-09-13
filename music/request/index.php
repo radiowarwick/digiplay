@@ -47,7 +47,6 @@ if($requested = Requests::get_all()) {
 			<th class=\"date nowrap\">Date Requested</th>
 			<th class=\"requester nowrap\">Requester</th>
 			".(Session::is_group_user("Music Admin")? "
-			<th class=\"icon\"></th>
 			<th class=\"icon\"></th>" : "")."
 		</tr>
 	</thead>");
@@ -57,9 +56,8 @@ if($requested = Requests::get_all()) {
 		<td class=\"artist\">".$request->get_artist_name()."</td>
 		<td class=\"title\">".$request->get_name()."</td>
 		<td class=\"date nowrap\">".date("d/m/Y H:i",$request->get_date())."</td>
-		<td class=\"requester nowrap\">".$request->get_user()->get_username()."</td>".(Session::is_group_user("Music Admin")? "
-		<td class=\"icon\"><a href=\"".LINK_ABS."music/upload/file?title=".$request->get_name()."&artist=".$request->get_artist_name()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\">".Bootstrap::glyphicon("upload")."</td>
-		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</td>" : "") : "")."
+		<td class=\"requester nowrap\">".$request->get_user()->get_username()."</td>
+		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</td>" : "")."
 	</tr>");
 	}
 	echo("

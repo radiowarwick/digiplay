@@ -126,7 +126,6 @@ echo("
 					<th class=\"icon\"></th>
 					<th class=\"artist\">Artist</th>
 					<th class=\"title\">Title</th>".(Session::is_group_user("Music Admin")? "
-					<th class=\"icon\"></th>
 					<th class=\"icon\"></th>" : "")."
 				</tr>
 			</thead>");
@@ -145,9 +144,8 @@ echo("
 					</div>
 				</td>
 				<td class=\"artist\">".$request->get_artist_name()."</td>
-				<td class=\"title\">".$request->get_name()."</td>".(Session::is_group_user("Music Admin")? "
-				<td class=\"icon\"><a href=\"".LINK_ABS."music/request/upload?id=".$request->get_id()."\" class=\"request-upload\" title=\"Upload this track\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</i></td>
-				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("minus-sign")."</td>" : "") : "")."
+				<td class=\"title\">".$request->get_name()."</td>
+				".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("minus-sign")."</td>" : "")."
 			</tr>");
 			}
 			echo("
