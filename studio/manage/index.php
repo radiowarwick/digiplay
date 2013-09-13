@@ -2,6 +2,7 @@
 Output::set_title("Studio Management");
 Output::add_script(LINK_ABS."js/moment.min.js");
 Output::add_stylesheet(LINK_ABS."css/studio.css");
+MainTemplate::set_body_class('manage');
 
 if(isset($_REQUEST["key"])) {
 	$location = Locations::get_by_key($_REQUEST["key"]);

@@ -6,6 +6,7 @@ class MainTemplate{
 	protected static $feature_image;
 	protected static $feature_html;
 	protected static $barebones = false;
+	protected static $body_class;
 
 	public static function set_subtitle($subtitle){
 		self::$subtitle = $subtitle;
@@ -24,6 +25,9 @@ class MainTemplate{
 	}
 	public static function set_barebones($barebones) {
 		self::$barebones = $barebones;
+	}
+	public static function set_body_class($class) {
+		self::$body_class = $class;
 	}
 	public static function print_page($content){
 		if(strlen(LINK_PATH)>0){
@@ -79,7 +83,7 @@ class MainTemplate{
 	}
 
 	$return .= "	</head>
-	<body>";
+	<body".(self::$body_class? " class=\"".self::$body_class."\"" : "").">";
 	if(self::$barebones == false) {
 		$return .= "
 		<div id=\"wrap\">

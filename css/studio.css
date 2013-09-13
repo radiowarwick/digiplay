@@ -1,5 +1,5 @@
 html, body { height: 100% !important; overflow: hidden; cursor: default; -webkit-user-select: none; }
-body { padding-bottom: 80px; padding-top: 60px; }
+body.manage { padding-bottom: 80px; padding-top: 60px; }
 * { -webkit-user-drag: none; }
 
 .wrap {
@@ -50,7 +50,7 @@ tbody tr:hover { cursor: pointer; }
 #footer { height: 70px; }
 #logo { float: left !important; padding: 17px 10px; }
 #footer .navbar-brand { padding: 5px 0px; white-space: nowrap; }
-.time { font-size: 1.8em; font-weight: bold; line-height: 37px; }
+#footer .time { font-size: 1.8em; font-weight: bold; line-height: 37px; }
 #contact { text-align: right; margin-top: 5px; white-space: nowrap; }
 #footer a { margin: 12.5px 0px; }
 
@@ -62,10 +62,10 @@ tbody tr:hover { cursor: pointer; }
 #search-form { height: 70px; margin-top: -70px;}
 #search-results { height: 100% !important; overflow-y: scroll; }
 
-.artist { width: 25%; }
-.title { width: auto; }
-.album { width: 20%; }
-.length { width: 15%; }
+#search .artist { width: 25%; }
+#search .title { width: auto; }
+#search .album { width: 20%; }
+#search .length { width: 15%; }
 
 /* Messages tab */
 #message-list { height: 30%; overflow-y: scroll; }
@@ -76,9 +76,9 @@ tbody tr:hover { cursor: pointer; }
 #message-content .panel-body { margin-top: -60px; padding: 65px 5px 5px 5px; }
 #message-content iframe { border: 0; margin: 0; }
 
-.from { width: 20%; }
-.subject { width: auto; }
-.datetime { width: 20%; }
+#messages .from { width: 20%; }
+#messages .subject { width: auto; }
+#messages .datetime { width: 20%; }
 
 /* Playlists tab */
 #playlists-list { height: 100%; overflow-y: scroll; }
