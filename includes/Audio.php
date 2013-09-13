@@ -70,7 +70,7 @@ class Audio {
 		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
 
 		$html = "
-		<script> $(function () { wv_create('".$this->get_id()."', '".LINK_ABS."audio/preview.php?id=".$this->get_id()."'); }); </script>
+		<script> $(function () { wv_create('".$this->get_id()."', '".LINK_ABS."audio/preview/".$this->get_id().".mp3'); }); </script>
 		<div class=\"row audio-player\">
 			<div class=\"col-xs-12\">
 				<div class=\"well well-sm\">

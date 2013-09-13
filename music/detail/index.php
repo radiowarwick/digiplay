@@ -196,7 +196,7 @@ echo("
 					</div>
 					<hr />					
 					<a href=\"#\" id=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\">".Bootstrap::glyphicon("warning-sign censor-flag")." Flag for censorship</a>
-					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."audio/download.php?id=".$track->get_id()."\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt")." Download FLAC</a>" : "")."
+					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."audio/get/".$track->get_id().".flac\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt")." Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>
