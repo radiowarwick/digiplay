@@ -12,7 +12,7 @@ WaveSurfer.Drawer = {
         this.lastPos = 0;
 
         this.createElements();
-        this.bindClick();
+        this.bindDrag();
 
         if (this.params.fillParent) {
             var my = this;
@@ -35,15 +35,27 @@ WaveSurfer.Drawer = {
         });
     },
 
-    bindClick: function () {
+    bindDrag: function () {
         var my = this;
-        this.container.addEventListener('click', function (e) {
+        this.mousedown = false;
+        this.playing = false;
+
+        this.container.addEventListener('mousedown', function (e) { my.mousedown = true; }, false);
+        this.container.addEventListener('mouseup', function (e) {
+            if(my.mousedown) my.dragSeek(e);
+            my.mousedown = false;
+        }, false);
+        this.container.addEventListener('mousemove', function (e) { my.dragSeek(e); }, false);
+    },
+
+    dragSeek: function(e) {
+        if(this.mousedown && !this.playing) {
             var relX = e.offsetX;
             if (null == relX) { relX = e.layerX; }
-            var progress = relX / my.scrollWidth;
+            var progress = relX / this.scrollWidth;
 
-            my.fireEvent('click', progress);
-        }, false);
+            this.fireEvent('drag', progress);
+        }
     },
 
     addScroll: function () {

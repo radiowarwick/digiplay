@@ -28,7 +28,7 @@ var WaveSurfer = {
         this.markers = {};
 
         this.createBackend();
-        this.bindClick();
+        this.bindDrag();
 
         // Used to save the current volume when muting so we can
         // restore once unmuted
@@ -63,10 +63,12 @@ var WaveSurfer = {
 
     play: function () {
         this.backend.play();
+        this.drawer.playing = true;
     },
 
     pause: function () {
         this.backend.pause();
+        this.drawer.playing = false;
     },
 
     playPause: function () {
@@ -252,11 +254,11 @@ var WaveSurfer = {
     },
 
     /**
-     * Click to seek.
+     * Click & drag to seek.
      */
-    bindClick: function () {
+    bindDrag: function () {
         var my = this;
-        this.drawer.on('click', function (progress) {
+        this.drawer.on('drag', function (progress) {
             my.seekTo(progress);
         });
     },
