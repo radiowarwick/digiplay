@@ -44,8 +44,10 @@ var WaveSurfer = {
 
         this.backend.on('audioprocess', function (progress) {
             // Pause when finished
-            if (progress >= 1.0) {
-                my.pause();
+
+                console.log(progress);
+            if (progress >= 0.9999) {
+                my.stop();
             }
             my.fireEvent('progress');
         });
@@ -63,11 +65,13 @@ var WaveSurfer = {
 
     play: function () {
         this.backend.play();
+        this.fireEvent('play');
         this.drawer.playing = true;
     },
 
     pause: function () {
         this.backend.pause();
+        this.fireEvent('pause');
         this.drawer.playing = false;
     },
 
@@ -104,6 +108,7 @@ var WaveSurfer = {
         this.playAt(0);
         this.pause();
         this.drawer.progress(0);
+        this.fireEvent('stop');
     },
 
     /**

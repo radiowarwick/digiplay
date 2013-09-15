@@ -100,3 +100,28 @@ tbody tr:hover { cursor: pointer; }
 #showplan .controls { display: none; text-align: right; margin-top: -1px; }
 #showplan .controls span { margin-left: 5px; }
 #showplan .duration { text-align: right; }
+
+
+/* Playout */
+body.playout, .playout .row, #players, #players .col-xs-12 { margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; }
+.playout .container>.row, #players, .audio-player { height: 100%; }
+.playout .container { padding: 10px; }
+#players>div { padding: 5px 0px; }
+#players>div:first-child { padding: 0px 0px 5px 0px; }
+#players>div:last-child { padding: 5px 0px 0px 0px; }
+#players .player { height: 30%; }
+.player .panel { height: 100%; }
+#players .sustainer { height: 10%; }
+#players .panel-heading { padding: 0.2vh 10px; font-size: 1.5vh; height: 10%; }
+#players .panel-body { padding: 10px; height: 90%; }
+.audio-player>.col-xs-12 { height: 100%; }
+.meta { height: 45%; }
+.transport { height: 35%; }
+.waveform { height: 20%; }
+.waveform .progress { height: 100%; }
+.transport { padding-top: 5px; }
+.transport .col-xs-4 button { height: 100%; width: 48%; font-size: 3.8vh; }
+
+.meta .title { font-size: 4vh; }
+.meta .artist { font-size: 2vh; }
+.transport .time { font-size: 4vh; }
