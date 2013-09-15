@@ -1,7 +1,9 @@
 <?php
 Output::set_template();
 
-$audio = Tracks::get($_GET["id"]);
+if(is_numeric($_GET["id"])) $audio = Audio::get_by_id($_GET["id"]);
+else $audio = Audio::get_by_md5($_GET["id"]);
+
 $filetypes = array(
 	"mp3" => "audio/mpeg",
 	"flac" => "audio/flac",
@@ -31,8 +33,10 @@ $md5 = $audio->get_md5();
 $fl = substr($md5, 0, 1);
 
 if($filetype == "flac") $command = "cat ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac";
-if($filetype == "mp3") $command = "flac -c -d ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac | lame --silent -m s --bitwidth 16 -s 44.1 -b 256 -q 9 -c --id3v1-only --tt \"".$audio->get_title()."\" --ta \"".$audio->get_artists_str()."\" --tl \"".$audio->get_album()->get_name()."\" - -";
-if($filetype == "wav") $command = "flac -c -d ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac";
+if($filetype == "mp3") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t mp3 -C 256.2 - trim ".$audio->get_start()." ".$audio->get_end();
+if($filetype == "wav") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t wav - trim ".$audio->get_start()." ".$audio->get_end();
+
+//echo $command;
 
 $handle = popen($command, 'r');
 while($read = fread($handle, 8192)) echo $read;

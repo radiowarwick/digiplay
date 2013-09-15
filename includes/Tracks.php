@@ -12,6 +12,13 @@ class Tracks{
 		} else return false;
 	}
 
+	public function get_by_md5($md5) {
+		$result = DigiplayDB::query("SELECT * FROM audio WHERE md5 = '".$md5."';");
+		if(pg_num_rows($result)) {
+			return pg_fetch_object($result,NULL,"Track");
+		} else return false;
+	}
+
 	public function get_total_tracks() {
 		$type = AudioTypes::get("music")->get_id();
 		$type = $type["id"];

@@ -42,7 +42,7 @@ if(session_id()) session_write_close();
 $md5 = $audio->get_md5();
 $fl = substr($md5, 0, 1);
 
-if($filetype == "mp3") $command = "flac -c -d ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac | lame --silent -m s --bitwidth 16 -s 44.1 -b ".$bitrate." -q 9 -c --id3v1-only --tt \"Track Preview\" --ta \"Digiplay\" --tl \"Digiplay Music Database\" - -";
+if($filetype == "mp3") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t mp3 -C ".$bitrate.".5 - trim ".$audio->get_start()." ".$audio->get_end();
 
 $handle = popen($command, 'r');
 while($read = fread($handle, 8192)) echo $read;

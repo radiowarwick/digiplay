@@ -4,6 +4,8 @@ class Audio {
 	protected $md5;
 	protected $archive;
 	protected $length_smpl;
+	protected $start_smpl;
+	protected $end_smpl;
 	protected $type;
 	protected $creator;
 	protected $creation_date;
@@ -17,7 +19,9 @@ class Audio {
 	public function get_id() { return $this->id; }
 	public function get_md5() { return $this->md5; }
 	public function get_archive() { return Archives::get($this->archive); }
-	public function get_length() { return $this->length_smpl / 44100; }
+	public function get_length() { return ($this->end_smpl - $this->start_smpl) / 44100; }
+	public function get_start() { return $this->start_smpl / 44100; }
+	public function get_end() { return $this->end_smpl / 44100; }
 	public function get_type() { return AudioTypes::get_by_id($this->type); }
 	public function get_creator() { return Users::get_by_id($this->creator); }
 	public function get_creation_date() { return $this->creation_date; }
@@ -104,6 +108,17 @@ class Audio {
 			else if($type == 2) return Jingles::get_by_id($id);
 			else if($type == 3) return Adverts::get_by_id($id);
 			else if($type == 4) return Prerecs::get_by_id($id);
+		}
+	}
+
+	public function get_by_md5($md5) {
+		$result = DigiplayDB::query("SELECT type FROM audio WHERE md5 = '".$md5."';");
+		if(pg_num_rows($result)) {
+			$type = pg_fetch_result($result,NULL,"type");
+			if($type == 1) return Tracks::get_by_md5($md5);
+			else if($type == 2) return Jingles::get_by_md5($md5);
+			else if($type == 3) return Adverts::get_by_md5($md5);
+			else if($type == 4) return Prerecs::get_by_md5($md5);
 		}
 	}
 }
