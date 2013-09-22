@@ -12,11 +12,8 @@ class Album {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE albums SET name = '".pg_escape_string($this->name)."' WHERE id = ".$this->id.";");
-		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO albums (name) VALUES ('".pg_escape_string($this->name)."') RETURNING id;"));
-			$this->id = $return["id"];
-		}
+		if($this->id) DigiplayDB::update("albums", get_object_vars($this), "id = ".$this->id);
+		else $this->id = DigiplayDB::insert("albums", get_object_vars($this));
 		return $this->id;
 	}
 }

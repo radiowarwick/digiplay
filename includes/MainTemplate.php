@@ -30,6 +30,7 @@ class MainTemplate{
 		self::$body_class = $class;
 	}
 	public static function print_page($content){
+		$start_time = microtime(true);
 		if(strlen(LINK_PATH)>0){
 			$sitePathArray = explode("/",LINK_PATH);
 			for($i = 0; $i < count($sitePathArray); $i++){
@@ -187,6 +188,7 @@ class MainTemplate{
 	}
 
 	$return .= "
+	<!-- Page generated in ".(microtime(true) - START_TIME)." seconds. ".DigiplayDB::get_querycount()." database queries ran in ".DigiplayDB::get_querytime()." seconds. -->
 	</body> 
 </html>";
 	return $return;

@@ -1,4 +1,5 @@
 <?php
+define('START_TIME', microtime(true));
 function __autoload($class_name) { require_once ($class_name . ".php"); }
 ini_set("session.use_only_cookies",true);
 

@@ -135,12 +135,6 @@ if($tracks) {
 	</thead>");
 	foreach($tracks as $track_id) {
 		$track = Tracks::get($track_id);
-		$artists = Artists::get_by_audio_id($track->get_id());
-		$artist_str = "";
-		foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
-		$artist_str = substr($artist_str,0,-2);
-		$album = Albums::get_by_audio_id($track->get_id());
-		$album = $album->get_name();
 		echo("
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
@@ -148,7 +142,7 @@ if($tracks) {
 					".Bootstrap::glyphicon("info-sign")."
 				</a>
 				<div class=\"hover-info\">
-					<strong>Artist:</strong> ".$artist_str."<br />
+					<strong>Artist:</strong> ".$track->get_artists_str()."<br />
 					<strong>Album:</strong> ".$track->get_album()->get_name()."<br />
 					<strong>Year:</strong> ".$track->get_year()."<br />
 					<strong>Length:</strong> ".Time::format_succinct($track->get_length())."<br />
@@ -157,9 +151,9 @@ if($tracks) {
 					<strong>Censored:</strong> ".($track->is_censored()? "Yes" : "No")."<br /> 
 				</div>
 			</td>
-			<td class=\"artist\">".$artist_str."</td>
+			<td class=\"artist\">".$track->get_artists_str()."</td>
 			<td class=\"title\">".$track->get_title()."</td>
-			<td class=\"album\">".$album."</td>
+			<td class=\"album\">".$track->get_album()->get_name()."</td>
 			<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>");
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();

@@ -28,10 +28,10 @@ class Showplan {
 
     public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE showplans SET name = '".pg_escape_string($this->name)."', userid = ".$this->userid.", creationdate = ".$this->creationdate.", showdate = ".$this->showdate.", completed = '".($this->completed? "t":"f")."' WHERE id = ".$this->id.";");
+		if($this->id) DigiplayDB::update("showplans", get_object_vars($this), "id = ".$this->id);
 		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO showplans (name, userid, creationdate, showdate, completed) VALUES ('".pg_escape_string($this->name)."',".$this->creationdate.",".$this->showdate.",'".($this->completed? "t":"f")."' RETURNING id;"));
-			$this->id = $return["id"];
+			if(!$this->creationdate) $this->creationdate = date();
+			$this->id = DigiplayDB::insert("showplans", get_object_vars($this), "id");
 		}
 		return $this->id;
 	}
@@ -40,8 +40,8 @@ class Showplan {
 	public function add_item($item) { $item->set_showplan($this); }
 
 	public function get_end_position() { 
-		$result = DigiplayDB::query("SELECT MAX(position) AS max FROM showitems WHERE showplanid = ".$this->id);
-		if(pg_num_rows($result)) return pg_fetch_result($result,NULL,"max")+1;
+		$result = DigiplayDB::select("MAX(position) AS max FROM showitems WHERE showplanid = ".$this->id);
+		if($result) return $result + 1;
 		else return 1;
 	}
 }

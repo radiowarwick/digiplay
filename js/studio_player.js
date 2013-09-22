@@ -20,6 +20,7 @@ function wv_create(id) {
 	});
 	wavesurfer[id].on('stop', function() {
 		$(wavesurfer[id].container).find('.playpause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
+		wv_progress(wavesurfer[id]);
 	});
 
 	var lastFire = 0;

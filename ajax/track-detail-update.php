@@ -3,10 +3,7 @@
 
 if(Session::is_group_user('Music Admin')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);
-	if(!$_REQUEST["title"]) {
-		http_response_code(400);
-		exit(json_encode(array("error" => "You did not specify a title.")));
-	};
+	if(!$_REQUEST["title"]) exit(json_encode(array("error" => "You did not specify a title.")));
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
 
 	$curr_artists_obj = $track->get_artists();
@@ -15,14 +12,14 @@ if(Session::is_group_user('Music Admin')){
 	$track->del_artists(array_diff($curr_artists_arr,$_REQUEST["artist"]));
 	$track->add_artists(array_diff($_REQUEST["artist"],$curr_artists_arr));
 	
-	if($_REQUEST["new_artist"]) $track->add_artists($_REQUEST["new_artist"]);
+	if($_REQUEST["new-artist"]) $track->add_artists($_REQUEST["new-artist"]);
 
 	if(!$_REQUEST["album"]) $_REQUEST["album"] = "(none)";
 	if($_REQUEST["album"] != $track->get_album()->get_name()) $track->set_album($_REQUEST["album"]);
 
 	if($_REQUEST["year"] != $track->get_year()) $track->set_year($_REQUEST["year"]);
 
-	if(!$_REQUEST["origin"]) exit("You must specify an origin");
+	if(!$_REQUEST["origin"]) exit(json_encode(array("error" => "You did not specify an origin.")));
 	if($_REQUEST["origin"] != $track->get_origin()) $track->set_origin($_REQUEST["origin"]);
 
 	if($_REQUEST["reclibid"] != $track->get_reclibid()) $track->set_reclibid($_REQUEST["reclibid"]);
@@ -62,7 +59,7 @@ if(Session::is_group_user('Music Admin')){
 	$json["artists"] = $artists_return;
 	$json["keywords"] = $keywords_return;
 
-	exit(json_encode($json));
+	echo(json_encode($json));
 
 } else {
 	http_response_code(403);

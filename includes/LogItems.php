@@ -1,7 +1,7 @@
 <?php
 Class LogItems {
 	public function get($location = NULL,$sort = NULL, $limit = NULL, $offset = NULL) {
-		$sql = "SELECT * FROM log";
+		$sql = "* FROM log";
 
 		if(!is_null($location)) $sql .= " WHERE location = ".(is_numeric($location)? $location : $location->get_id());
 		if(!is_null($sort)) $sql .= " ORDER BY ".$sort;
@@ -10,13 +10,7 @@ Class LogItems {
 			if ( !is_null($offset) && is_numeric($offset) ) $sql .= " OFFSET ". $offset;
 		}
 		
-		$result = DigiplayDB::query($sql);
-		$return = array();
-		while ($logitem = pg_fetch_object($result, NULL, 'LogItem')) {
-			$return[] = $logitem;
-		}
-
-		return $return;
+		return DigiplayDB::select($sql, "LogItem");
 	}
 	
 	public function get_by_id($id) {

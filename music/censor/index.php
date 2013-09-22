@@ -147,7 +147,6 @@ if($censored = Tracks::get_censored($limit,(($page-1)*$limit))) {
 				<strong>Length:</strong> ".Time::format_succinct($censor->get_length())."<br />
 				<strong>Origin:</strong> ".$censor->get_origin()."<br />
 				".($censor->get_reclibid()? "<strong>Reclib ID:</strong> ".$censor->get_reclibid()."<br />" : "")."
-				<strong>On Sue:</strong> ".($censor->is_sustainer()? "Yes" : "No")."<br />
 			</div>
 		</td>
 		<td class=\"artist\">".$censor->get_artists_str()."</td>

@@ -38,10 +38,7 @@ class Audio {
 	public function set_origin($origin) { $this->origin = $origin; }
 	public function set_notes($notes) { $this->notes = $notes; }
 
-	public function save_audio() {
-		$sql = "UPDATE audio SET (type,creator,title,origin,notes) = (".pg_escape_string($this->type).",".pg_escape_string($this->creator).",'".pg_escape_string($this->title)."','".pg_escape_string($this->origin)."','".pg_escape_string($this->notes)."') WHERE id = ".$this->id.";";
-		return (bool) DigiplayDB::query($sql);
-	}
+	public function save_audio() { return DigiplayDB::update("audio", array("type" => $this->type, "creator" => $this->creator, "title" => $this->title, "origin" => $this->origin, "notes" => $this->notes), "id = ".$this->id); }
 
 	/* Extended functions */
 	public function get_length_formatted() {
@@ -53,17 +50,8 @@ class Audio {
 		return $time_str;
 	}
 	
-	public function move_to_trash() {
-		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 3 WHERE audioid = ".$this->id.";");
-		if($sql) return true;
-		return false;
-	}
-
-	public function fetch_from_trash() {
-		$sql = DigiplayDB::query("UPDATE audiodir SET dirid = 2 WHERE audioid = ".$this->id.";");
-		if($sql) return true;
-		return false;
-	}
+	public function move_to_trash() { return DigiplayDB::update("audiodir", array("dirid" => 3), "audioid = ".$this->id); }
+	public function fetch_from_trash() { return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id); }
 
 	public function player() {
 		Output::add_script(LINK_ABS."js/observer.js");
@@ -101,9 +89,8 @@ class Audio {
 	}
 
 	public function get_by_id($id) {
-		$result = DigiplayDB::query("SELECT type FROM audio WHERE id = ".$id);
-		if(pg_num_rows($result)) {
-			$type = pg_fetch_result($result,NULL,"type");
+		$type = DigiplayDB::select("type FROM audio WHERE id = ".$id);
+		if($type) {
 			if($type == 1) return Tracks::get_by_id($id);
 			else if($type == 2) return Jingles::get_by_id($id);
 			else if($type == 3) return Adverts::get_by_id($id);
@@ -112,9 +99,8 @@ class Audio {
 	}
 
 	public function get_by_md5($md5) {
-		$result = DigiplayDB::query("SELECT type FROM audio WHERE md5 = '".$md5."';");
-		if(pg_num_rows($result)) {
-			$type = pg_fetch_result($result,NULL,"type");
+		$type = DigiplayDB::query("type FROM audio WHERE md5 = '".$md5."'");
+		if($type) {
 			if($type == 1) return Tracks::get_by_md5($md5);
 			else if($type == 2) return Jingles::get_by_md5($md5);
 			else if($type == 3) return Adverts::get_by_md5($md5);

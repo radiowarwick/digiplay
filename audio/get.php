@@ -17,7 +17,8 @@ else exit(http_response_code(400));
 
 if(!Session::is_group_user("Music Admin")) {
 	parse_str(substr($_SERVER["HTTP_REFERER"],strpos($_SERVER["HTTP_REFERER"],"?") +1),$parameters);
-	if(is_null(Locations::get_by_key($_REQUEST["key"]))) exit(http_response_code(401));
+	exit(var_dump($parameters));
+	//if(is_null(Locations::get_by_key($parameters["key"]))) exit(http_response_code(401));
 }
 
 header("Content-type: ".$filetype);
@@ -35,8 +36,6 @@ $fl = substr($md5, 0, 1);
 if($filetype == "flac") $command = "cat ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac";
 if($filetype == "mp3") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t mp3 -C 256.2 - trim ".$audio->get_start()." ".$audio->get_end();
 if($filetype == "wav") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t wav - trim ".$audio->get_start()." ".$audio->get_end();
-
-//echo $command;
 
 $handle = popen($command, 'r');
 while($read = fread($handle, 8192)) echo $read;

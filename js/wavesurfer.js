@@ -44,8 +44,6 @@ var WaveSurfer = {
 
         this.backend.on('audioprocess', function (progress) {
             // Pause when finished
-
-                console.log(progress);
             if (progress >= 0.9999) {
                 my.stop();
             }

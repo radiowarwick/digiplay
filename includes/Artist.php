@@ -12,27 +12,21 @@ class Artist {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE artists SET name = '".pg_escape_string($this->name)."' WHERE id = ".$this->id.";");
-		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO artists (name) VALUES ('".pg_escape_string($this->name)."') RETURNING id;"));
-			$this->id = $return["id"];
-		}
+		if($this->id) DigiplayDB::update("artists", get_object_vars($this), "id = ".$this->id);
+		else $this->id = DigiplayDB::insert("artists", get_object_vars($this), "id");
 		return $this->id;
 	}
 
 	/* Extended functions */
 	public function add_to_track($track_id) {
 		if(!$this->id) $this->save();
-		$sql = "INSERT INTO audioartists (audioid,artistid) VALUES (".$track_id.",".$this->id.");";
-		$result = DigiplayDB::query($sql);
-		return (bool) $result;
+		return DigiplayDB::insert("audioartists", array("audioid" => $track_id, "artistid" => $this->id));
 	}
 
 	public function del_from_track($track_id) {
-		$sql = "DELETE FROM audioartists WHERE audioid = ".$track_id." AND artistid = ".$this->id.";";
-		$result = DigiplayDB::query($sql);
-		$remaining = DigiplayDB::query("SELECT * FROM audioartists WHERE artistid = ".$this->id.";");
-		if(!pg_fetch_array($remaining)) DigiplayDB::query("DELETE FROM artists WHERE id = ".$this->id.";");
+		$result = DigiplayDB::delete("audioartists", "audioid = ".$track_id." AND artistid = ".$this->id);
+		$remaining = DigiplayDB::select("* FROM audioartists WHERE artistid = ".$this->id.";");
+		if(!$remaining) $result = DigiplayDB::delete("artists", "id = ".$this->id);
 		return (bool) $result;
 	}
 }

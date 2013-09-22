@@ -29,10 +29,12 @@ echo("
 						submit.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-save');
 						$('h3').after('".Bootstrap::alert_message_basic("success","Track details altered.","Success!",false)."');
 						$('[id=new_artist]').val('');
-						$('[id=artist\\\\[\\\\]]').remove();
+						$('[id=artist\\\\[\\\\]]').parent('.col-md-10').remove();
 						artists_str = '';
+						first = true;
 						$.each(values.artists, function(i, val) {
-							artists_str += '<div class=\"col-md-10\"><input type=\"text\" id=\"artist[]\" name=\"artist[]\" class=\"form-control".$disabled."\" value=\"'+val+'\"></div>';
+							artists_str += '<div class=\"col-md-10'+(first? '' : ' col-md-offset-2')+'\"><input type=\"text\" id=\"artist[]\" name=\"artist[]\" class=\"form-control".$disabled."\" value=\"'+val+'\"></div>';
+							first = false;
 						});
 						$('[for=artist]').after(artists_str);
 						$('[id=new_keyword]').val('');

@@ -1,5 +1,5 @@
 <?php
-class Track extends Audio{
+class Track extends Audio {
 	protected $music_album;
 	protected $music_track;
 	protected $music_released;
@@ -21,14 +21,11 @@ class Track extends Audio{
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
 
-	public function save() {
-		$sql = "UPDATE audio SET (music_album,music_track,music_released,reclibid,flagged,censor) = (".pg_escape_string($this->music_album).",".pg_escape_string($this->music_track).",".pg_escape_string($this->music_released).",'".pg_escape_string($this->reclibid)."','".$this->flagged."','".$this->censor."') WHERE id = ".$this->id.";";
-		return (bool) DigiplayDB::query($sql);
-	}
+	public function save() { return DigiplayDB::update("audio", array("music_album" => $this->music_album, "music_track" => $this->music_track, "music_released" => $this->music_released, "reclibid" => $this->reclibid, "flagged" => $this->flagged, "censor" => $this->censor), "id = ".$this->id); }
 
 	/* Extended functions */
-	public function get_artists() { return Artists::get_by_audio_id($this->id); }
-	public function get_keywords() { return Keywords::get_by_audio_id($this->id); }
+	public function get_artists() { return Artists::get_by_audio($this); }
+	public function get_keywords() { return Keywords::get_by_audio($this); }
 
 	public function set_album($album_str) { 
 		if(!Albums::get_by_name($album_str)) {
@@ -49,18 +46,15 @@ class Track extends Audio{
 	}
 
 	public function add_artists($artists) {
-		if(!is_array($artists)) {
-			$tmp = $artists;
-			$artists = array($tmp);
-		}
+		if(!is_array($artists)) $artists = array($artists);
 		foreach($artists as $artist) {
-			if($artist == "") return false;
+			if($artist == "") continue;
 			$exists = Artists::get_by_name($artist);
-			if($exists) $exists->add_to_track($this->id);
+			if($exists) $exists->add_to_track($this);
 			else {
 				$object = new Artist;
 				$object->set_name($artist);
-				$object->add_to_track($this->id);
+				$object->add_to_track($this);
 			}
 		}
 	}
@@ -72,7 +66,7 @@ class Track extends Audio{
 		}
 		foreach($artists as $artist) {
 			$object = Artists::get_by_name($artist);
-			$object->del_from_track($this->id);
+			$object->del_from_track($this);
 		}
 	}
 		
@@ -84,18 +78,15 @@ class Track extends Audio{
 	}
 
 	public function add_keywords($keywords) {
-		if(!is_array($keywords)) {
-			$tmp = $keywords;
-			$keywords = array($tmp);
-		}
+		if(!is_array($keywords)) $keywords = array($keywords);
 		foreach($keywords as $keyword) {
 			if($keyword == "") return false;
 			$exists = Keywords::get_by_text($keyword);
-			if($exists) $exists->add_to_track($this->id);
+			if($exists) $exists->add_to_track($this);
 			else {
 				$object = new Keyword;
 				$object->set_text($keyword);
-				$object->add_to_track($this->id);
+				$object->add_to_track($this);
 			}
 		}
 	}
@@ -107,7 +98,7 @@ class Track extends Audio{
 		}
 		foreach($keywords as $keyword) {
 			$object = Keywords::get_by_text($keyword);
-			$object->del_from_track($this->id);
+			$object->del_from_track($this);
 		}
 	}
 

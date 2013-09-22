@@ -52,6 +52,7 @@ $feature = "
 				</div>
 			</div>
 		";
+MainTemplate::set_feature_html($feature);
 		echo("<div class=\"row\">
 			<div class=\"col-sm-4\">
 				<h2>Music Library</h2>
@@ -80,10 +81,6 @@ $feature = "
 				$tracks = Tracks::get_newest(4);
 				echo("<table class=\"table table-striped table-hover table-condensed\" cellspacing=\"0\">");
 				foreach($tracks as $track) {
-					$artists = Artists::get_by_audio_id($track->get_id());
-					$artist_str = "";
-					foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
-					$artist_str = substr($artist_str,0,-2);
 					echo("
 					<tr>
 						<td class=\"icon\">
@@ -91,7 +88,7 @@ $feature = "
 								".Bootstrap::glyphicon("info-sign")."
 							</a>
 						</td>
-						<td class=\"title\">".$track->get_title()." by ".$artist_str."</td>
+						<td class=\"title\">".$track->get_title()." by ".$track->get_artists_str()."</td>
 					</tr>");
 				}
 				echo("
@@ -99,8 +96,6 @@ $feature = "
 				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."music/\">".Bootstrap::glyphicon("chevron-right")."More</a>
 			</div>
 		</div>");
-
-	MainTemplate::set_feature_html($feature);
 
 	if(Session::is_user()) {
 		$lastlogin = Session::get_lastlogin();

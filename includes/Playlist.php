@@ -13,35 +13,19 @@ class Playlist {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE playlists SET name = '".pg_escape_string($this->name)."', sortorder = ".$this->sortorder." WHERE id = ".$this->id.";");
-		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO playlists (name) VALUES ('".pg_escape_string($this->name)."') RETURNING id;"));
-			$this->id = $return["id"];
-		}
+		if($this->id) DigiplayDB::update("playlists", get_object_vars($this), "id = ".$this->id);
+		else $this->id = DigiplayDB::insert("playlists", get_object_vars($this), "id");
 		return $this->id;
 	}
 
 	public function delete() {
 		foreach($this->get_tracks() as $track) $this->del_track($track);
-		$query = DigiplayDB::query("DELETE FROM playlists WHERE id = ".$this->id.";");
-		return ($query? true : false);
+		return DigiplayDB::delete("playlists", "id = ".$this->id);
 	}
 	
-	public function get_tracks($limit = 0, $offset = 0){
-		return Tracks::get_playlisted($this,$limit,$offset);
-	}
+	public function get_tracks($limit = 0, $offset = 0) { return Tracks::get_playlisted($this,$limit,$offset); }
+	public function count_tracks() { return DigiplayDB::select("count(audioid) FROM audioplaylists WHERE playlistid = ".$this->id); }
 
-	public function count_tracks() {
-		return pg_fetch_result(DigiplayDB::query("SELECT COUNT(audioid) FROM audioplaylists WHERE playlistid = ".$this->id.";"),NULL,0);
-	}
-
-	public function add_track($track) {
-		$query = DigiplayDB::query("INSERT INTO audioplaylists (audioid,playlistid) VALUES (".$track->get_id().",".$this->id.");");
-		return ($query? true : false);
-	}
-
-	public function del_track($track) {
-		$query = DigiplayDB::query("DELETE FROM audioplaylists WHERE audioid = ".$track->get_id()." AND playlistid = ".$this->id.";");
-		return ($query? true : false);
-	}
+	public function add_track($track) {	return DigiplayDB::insert("audioplaylists", array("audioid" => $track->get_id(), "playlistid" => $this->id)); }
+	public function del_track($track) { return DigiplayDB::delete("audioplaylists", "audioid = ".$track->get_id()." AND playlistid = ".$this->id); }
 }

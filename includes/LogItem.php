@@ -25,12 +25,11 @@ Class LogItem {
 
 	public function save() {
 		if(!$this->track_title) return false;
-		if($this->id) DigiplayDB::query("UPDATE log SET location = ".$this->location->get_id().", track_title = '".pg_escape_string($this->track_title)."', track_artist = '".pg_escape_string($this->track_artist).", audioid = ".($this->audioid ? $this->audioid : "NULL")." WHERE id = ".$this->id.";");
+		if($this->id) DigiplayDB::update("log", get_object_vars($this), "id = ".$this->id.";");
 		else {
 			$this->datetime = time();
 			if($this->userid == NULL) $this->userid = 0;
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO log (location,userid,datetime,track_title,track_artist,audioid) VALUES (".$this->location->get_id().",".$this->userid.",".$this->datetime.",'".pg_escape_string($this->track_title)."','".pg_escape_string($this->track_artist)."',".($this->audioid ? $this->audioid : "NULL").") RETURNING id;"));
-			$this->id = $return["id"];
+			$this->id = DigiplayDB::insert("log", get_object_vars($this), "id");
 		}
 		return $this->id;
 	}

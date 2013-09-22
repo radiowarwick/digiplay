@@ -23,10 +23,10 @@ class Script {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE scripts SET name = '".pg_escape_string($this->name)."', contents = '".pg_escape_string($this->contents)."', length = ".$this->length.", userid = ".$this->userid.", creationdate = ".$this->creationdate." WHERE id = ".$this->id.";");
+		if($this->id) DigiplayDB::update("scripts", get_object_vars($this), "id = ".$this->id.";");
 		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO showitems (name,contents,length,userid,creationdate) VALUES ('".pg_escape_string($this->name)."', '".pg_escape_string($this->contents)."', ".$this->length.",".$this->userid.",".$this->creationdate." RETURNING id;"));
-			$this->id = $return["id"];
+			if(!$this->creationdate) $this->creationdate = time();
+			$this->id = DigiplayDB::insert("showitems", get_object_vars($this), "id");
 		}
 		return $this->id;
 	}

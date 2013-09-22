@@ -18,16 +18,14 @@ class Request {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::query("UPDATE requests SET name = '".pg_escape_string($this->name)."', artistname = '".pg_escape_string($this->artistname)."', date = ".time().", userid = ".$this->userid." WHERE id = ".$this->id.";");
+		if($this->id) DigiplayDB::update("requests", get_object_vars($this), "id = ".$this->id.";");
 		else {
-			$return = pg_fetch_array(DigiplayDB::query("INSERT INTO requests (name,artistname,date,userid) VALUES ('".pg_escape_string($this->name)."','".pg_escape_string($this->artistname)."',".time().",".$this->userid.") RETURNING id;"));
-			$this->id = $return["id"];
+			$this->date = time();
+			$this->id = DigiplayDB::insert("requests", get_object_vars($this), "id");
 		}
 		return $this->id;
 	}
 
-	public function delete() {
-		return pg_fetch_result(DigiplayDB::query("DELETE FROM requests WHERE id = ".$this->id));
-	}
+	public function delete() { return DigiplayDB::delete("requests", "id = ".$this->id); }
 }
 ?>

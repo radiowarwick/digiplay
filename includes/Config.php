@@ -10,19 +10,19 @@ Class Config {
 	public function get_parameter() { return $this->parameter; }
 	public function get_val() { return $this->val; }
 
-	public function set_location($location) {
-		$result = DigiplayDB::query("UPDATE configuration SET location = '".$location->get_id()."' WHERE id = ".$this->id);
-		if((bool)$result) return ($this->location = $location->get_id());			
+	public function set_location($location) { 
+		$result = DigiplayDB::update("configuration", array("location" => $location->get_id(), "id = ".$this->id));
+		if($result) return ($this->location = $location->get_id());
 	}
 
 	public function set_parameter($parameter) {
-		$result = DigiplayDB::query("UPDATE configuration SET parameter = '".$parameter."' WHERE id = ".$this->id);
-		if((bool)$result) return ($this->parameter = $parameter);			
+		$result = DigiplayDB::update("configuration", array("parameter" => $parameter, "id = ".$this->id));
+		if($result) return ($this->parameter = $parameter);
 	}
 
 	public function set_val($val) {
-		$result = DigiplayDB::query("UPDATE configuration SET val = '".$val."' WHERE id = ".$this->id);
-		if((bool)$result) return ($this->val = $val);			
+		$result = DigiplayDB::update("configuration", array("val" => $val, "id = ".$this->id));
+		if($result) return ($this->val = $val);
 	}
 
 }
