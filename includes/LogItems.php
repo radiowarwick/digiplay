@@ -13,9 +13,5 @@ Class LogItems {
 		return DigiplayDB::select($sql, "LogItem");
 	}
 	
-	public function get_by_id($id) {
-		$result = DigiplayDB::query("SELECT * FROM log WHERE id = ".$id);
-		if(pg_num_rows($result)) return pg_fetch_object($result,NULL,"LogItem");
-		else return false;
-	}
+	public function get_by_id($id) { return DigiplayDB::select("* FROM log WHERE id = ".$id); }
 }
