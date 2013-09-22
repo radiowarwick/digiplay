@@ -46,7 +46,7 @@ class DigiplayDB{
 		}
 
 		$return = array();
-		while ($item = pg_fetch_object($results,NULL,$return_class)) $return[] = $item;
+		while ($item = ($return_class? pg_fetch_object($results,NULL,$return_class) : pg_fetch_assoc($results,NULL))) $return[] = $item;
 		return $return;
 	}
 
