@@ -32,7 +32,7 @@ if(Session::is_group_user('Music Admin')){
 	$result = $track->save();
 	if(!$result) { 
 		http_response_code(400);
-		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!")));
+		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => $result)));
 	}
 
 	$result = $track->save_audio();
