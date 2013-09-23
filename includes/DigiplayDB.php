@@ -52,6 +52,7 @@ class DigiplayDB{
 
 	public static function insert($table, $data, $return_field = NULL) {
 		foreach($data as $key => $val) {
+			if($key == "id" && $val == NULL) continue;
 			$fields .= "\"".$key."\", ";
 			if(isset($val) && (is_bool($val) || (strlen($val) > 0))) {
 				if(is_bool($val)) $vars .= "'".($val? "t" : "f")."', ";
