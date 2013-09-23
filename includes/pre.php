@@ -31,10 +31,11 @@ define("DATABASE_DPS_USER", $local_config["DB_USER"]);
 session_start();
 
 if (!function_exists('http_response_code')) {
-    function http_response_code($code = NULL) {
-        header(':', true, $code);
-    }
+	function http_response_code($code = NULL) {
+		header(':', true, $code);
+	}
 }
+
 
 if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != "ajax/login.php"))) {
 	http_response_code(403);
@@ -42,23 +43,20 @@ if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != 
 }
 
 if(substr(LINK_FILE,0,6) == "studio") {
-    MainTemplate::set_barebones(true);
-    if(isset($_REQUEST["key"])) {
-        if(is_null(Locations::get_by_key($_REQUEST["key"]))) exit("Sorry, you provided an invalid security key.");
-    } else {
-        Output::require_user();
-    }
+	MainTemplate::set_barebones(true);
+	if(isset($_REQUEST["key"])) if(is_null(Locations::get_by_key($_REQUEST["key"]))) exit("Sorry, you provided an invalid security key.");
+	else Output::require_user();
 }
 
 if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php") && (substr(LINK_FILE,0,6) != "studio")) Output::require_user();
 
 if (Session::is_developer()) {
-    ini_set ( "display_errors", "1");
-    ini_set ( "display_startup_errors", "1");
-    ini_set ( "html_errors", "1");
-    ini_set ( "docref_root", "http://www.php.net/");
-    ini_set ( "error_prepend_string", "<div class=\"alert alert-error\">");
-    ini_set ( "error_append_string", "</div>");
+	ini_set ( "display_errors", "1");
+	ini_set ( "display_startup_errors", "1");
+	ini_set ( "html_errors", "1");
+	ini_set ( "docref_root", "http://www.php.net/");
+	ini_set ( "error_prepend_string", "<div class=\"alert alert-error\">");
+	ini_set ( "error_append_string", "</div>");
 }
 
 if(substr(LINK_FILE,0,4) != "ajax") Output::set_template("MainTemplate");
