@@ -11,17 +11,17 @@ Class Config {
 	public function get_val() { return $this->val; }
 
 	public function set_location($location) { 
-		$result = DigiplayDB::update("configuration", array("location" => $location->get_id(), "id = ".$this->id));
+		$result = DigiplayDB::update("configuration", array("location" => $location->get_id()), "id = ".$this->id);
 		if($result) return ($this->location = $location->get_id());
 	}
 
 	public function set_parameter($parameter) {
-		$result = DigiplayDB::update("configuration", array("parameter" => $parameter, "id = ".$this->id));
+		$result = DigiplayDB::update("configuration", array("parameter" => $parameter), "id = ".$this->id);
 		if($result) return ($this->parameter = $parameter);
 	}
 
 	public function set_val($val) {
-		$result = DigiplayDB::update("configuration", array("val" => $val, "id = ".$this->id));
+		$result = DigiplayDB::update("configuration", array("val" => $val), "id = ".$this->id);
 		if($result) return ($this->val = $val);
 	}
 

@@ -228,6 +228,7 @@ switch($_REQUEST["action"]) {
 		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
 		$item = ShowplanItems::get_by_id($_REQUEST["id"]);
 		$location->get_config("next_on_showplan")->set_val($item->get_audio()->get_md5());
+		var_dump($item->get_audio()->get_md5());
 		$location->get_config("current_showitems_id")->set_val($item->get_id());
 		echo(json_encode(array("response" => "success", "id" => $item->get_id())));
 		break;
