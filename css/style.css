@@ -41,6 +41,7 @@ footer img { margin: 12px 0; }
 table .icon { width: 16px; }
 .hover-info { display: none; white-space: nowrap;}
 table .nowrap { white-space: nowrap; }
+.panel-collapse table { margin-bottom: 0px; }
 
 .keyword a i { float: right; margin-right: 6px; margin-top: 6px; display: inline;}
 .panel [data-toggle=collapse] { cursor: pointer; }

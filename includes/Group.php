@@ -27,6 +27,7 @@ class Group{
 	}
 
 	public function get_users() { return DigiplayDB::select("users.* FROM usersgroups INNER JOIN users USING users.id ON usersgroups.userid WHERE usersgroups.groupid = '".$this->groupid."'", "User"); }
+	public function get_children() { return Groups::get_by_parent($this); }
 
 	public function add_user($user){
 		if(!(Session::is_group_user("Group Admin"))) throw new UserError("You are not a groups administrator");
