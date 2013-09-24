@@ -23,7 +23,8 @@ function connectDB() {
 	listener.query('LISTEN t_log; LISTEN t_email; LISTEN t_playlists; LISTEN t_configuration; LISTEN t_audiowall; LISTEN t_showitems;');
 	listener.on('notification', function(msg) { 
 		console.log(msg);
-		wss.broadcast(msg.channel, (msg.payload.length > 0 && JSON.parse(msg.payload))); 
+		try { wss.broadcast(msg.channel, (msg.payload.length > 0 && JSON.parse(msg.payload.replace(/(\r\n|\n|\r)/gm,'')))); }
+		catch(err) { console.error(err); }
 	});
 
 	client = new pg.Client(connString);
