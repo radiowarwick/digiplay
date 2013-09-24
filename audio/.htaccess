@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^preview\/([a-z0-9]+)\.([a-z0-9]+)/?$ preview.php?id=$1&filetype=$2 [L]
+RewriteRule ^get\/([a-z0-9]+)\.([a-z0-9]+)/?$ get.php?id=$1&filetype=$2 [L]
+RewriteRule ^embed\/([a-z0-9]+)\.([a-z0-9]+)/?$ get.php?id=$1&filetype=$2 [L]
