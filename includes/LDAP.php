@@ -50,18 +50,34 @@ class LDAP{
 		return $this->login;
 	}
 
-	function userdetails() {
-		if(!$this->login) trigger_error("Not logged into LDAP", E_USER_ERROR);
+	function userdetails($uid = NULL) {
+		if(!$uid) {
+			if(!$this->login) trigger_error("Not logged into LDAP", E_USER_ERROR);
+			
+			if(!$this->member){
+				$member_data = ldap_get_attributes($this->link_identifier,$this->result_entry_identifier);
+				$this->member = array();
+				$this->member['username']		= $member_data['uid'][0];
+				$this->member['first_name']		= ucwords(strtolower($member_data['givenName'][0]));
+				$this->member['surname'] 			= ucwords(strtolower($member_data['sn'][0]));
+			}
 		
-		if(!$this->member){
-			$member_data = ldap_get_attributes($this->link_identifier,$this->result_entry_identifier);
-			$this->member = array();
-			$this->member['username']		= $member_data['uid'][0];
-			$this->member['first_name']		= ucwords(strtolower($member_data['givenName'][0]));
-			$this->member['surname'] 			= ucwords(strtolower($member_data['sn'][0]));
+			return $this->member;
+		} else {
+			$result_identifier = ldap_search($this->link_identifier,$this->ldap_dn,"(&(uid=".$uid.")".$this->ldap_filter.")",array("uid","givenName","sn"));
+			if(!$result_identifier) return false;	
+			if (ldap_count_entries($this->link_identifier, $result_identifier) != 1) return false;
+
+			$result_entry_identifier = ldap_first_entry($this->link_identifier, $result_identifier);
+			if(!$result_entry_identifier) return false;
+
+			$member_data = ldap_get_attributes($this->link_identifier,$result_entry_identifier);
+			$member = array();
+			$member['username']		= $member_data['uid'][0];
+			$member['first_name']		= ucwords(strtolower($member_data['givenName'][0]));
+			$member['surname'] 			= ucwords(strtolower($member_data['sn'][0]));
+			return $member;
 		}
-		
-		return $this->member;
 	}
 }
 ?>
