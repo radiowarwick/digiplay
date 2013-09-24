@@ -213,8 +213,10 @@ switch($_REQUEST["action"]) {
 		$item = new ShowplanItem();
 		$audio = Audio::get_by_id($_REQUEST["id"]);
 		if(!$audio) exit(json_encode(array("response"=>"invalid")));
+		$item->set_title($audio->get_title());
 		$item->set_audio($audio);
 		$item->set_position($showplan->get_end_position());
+		$item->set_length(round($audio->get_length()));
 		$item->set_showplan($showplan);
 		$item->save();
 		echo(json_encode(array("response"=>"success")));
@@ -224,11 +226,17 @@ switch($_REQUEST["action"]) {
 		$item->delete();
 		echo(json_encode(array("response"=>"success")));
 		break;
+	case "showplan-clear":
+		$location->get_config("next_on_showplan")->set_val("");
+		$location->get_config("current_showitems_id")->set_val("");
+		$showplan = Showplans::get_by_id($location->get_config("default_showplan")->get_val());
+		$showplan->clear();
+		echo(json_encode(array("response" => "success")));
+		break;
 	case "set-current":
 		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
 		$item = ShowplanItems::get_by_id($_REQUEST["id"]);
 		$location->get_config("next_on_showplan")->set_val($item->get_audio()->get_md5());
-		var_dump($item->get_audio()->get_md5());
 		$location->get_config("current_showitems_id")->set_val($item->get_id());
 		echo(json_encode(array("response" => "success", "id" => $item->get_id())));
 		break;

@@ -37,7 +37,10 @@ class Showplan {
 	}
 
 	public function get_items() { return ShowplanItems::get_by_showplan($this); }
+	public function clear() { foreach($this->get_items() as $item) $item->delete(); }
+
 	public function add_item($item) { $item->set_showplan($this); }
+	public function del_item($item) { $item->delete(); }
 
 	public function get_end_position() { 
 		$result = DigiplayDB::select("MAX(position) AS max FROM showitems WHERE showplanid = ".$this->id);

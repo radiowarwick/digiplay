@@ -350,7 +350,7 @@ echo("
 
 								$(document).on('dblclick', '.track', function() {
 									$.ajax({
-										url: 'functions.php?'+key+'&action=showplan-append&id='+$(this).attr('data-track-id'),
+										url: 'functions.php?'+key+'action=showplan-append&id='+$(this).attr('data-track-id'),
 										dataType: 'json'
 									}).done(function(data) {
 										if(!connection) reloadShowplan();
@@ -377,7 +377,8 @@ echo("
 								});
 							})
 						</script>
-						<h2 id=\"showplan-title\">Showplan</h2>
+
+						<h2 id=\"showplan-title\"><span>Showplan</span><div class=\"pull-right clear-showplan\" data-toggle=\"modal\" data-target=\"#clear-showplan-modal\">".Bootstrap::glyphicon("trash")."</div></h2>
 						<div class=\"list-group\" id=\"showplan\">
 							<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
 						</div>
@@ -465,8 +466,21 @@ echo("
 							$('#logout-modal').modal('hide');
 						});
 					});
+
+					$(document).on('click', '#yes-clear-showplan', function() {
+						$.ajax({
+							url: 'functions.php?'+key+'action=showplan-clear',
+							dataType: 'json'
+						}).done(function(data) {
+							reloadShowplan();
+							$('#clear-showplan-modal').modal('hide');
+						});
+					});
 				});
 			</script>
+			".Bootstrap::modal("clear-showplan-modal","<h1>".Bootstrap::glyphicon("trash")."Clear showplan?</h1>",NULL,"
+				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-clear-showplan\">Yes</a>
+				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-clear-showplan\" data-dismiss=\"modal\">No</a>")."
 			".Bootstrap::modal("logout-modal","<h1>".Bootstrap::glyphicon("remove-circle")." Log out?</h1>",NULL,"
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-logout\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-logout\" data-dismiss=\"modal\">No</a>")."
