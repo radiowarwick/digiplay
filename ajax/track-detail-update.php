@@ -1,7 +1,7 @@
 <?php
 
 
-if(Session::is_group_user('Music Admin')){
+if(Session::is_group_user('Librarian')){
 	$track = Tracks::get_by_id($_REQUEST["id"]);
 	if(!$_REQUEST["title"]) exit(json_encode(array("error" => "You did not specify a title.")));
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);

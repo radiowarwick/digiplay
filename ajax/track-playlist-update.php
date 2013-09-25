@@ -1,7 +1,7 @@
 <?php
 
 
-if(Session::is_group_user('Playlist Admin')){
+if(Session::is_group_user('Playlist Editor')){
 	$track = Tracks::get($_REQUEST['trackid']);
 	$playlist = Playlists::get($_REQUEST['playlistid']);
 	$result = false;

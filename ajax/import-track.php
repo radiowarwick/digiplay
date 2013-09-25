@@ -1,6 +1,6 @@
 <?php 
-if(!Session::is_group_user("Music Admin")) {
-	Output::http_error(401);
+if(!Session::is_group_user("Importer")) {
+	Output::http_error(403);
 } else {
 	$current_archive = Archives::get_playin();
 	$path = (is_dir($current_archive->get_localpath())? $current_archive->get_localpath() : (is_dir($current_archive->get_remotepath()) ? $current_archive->get_remotepath() : die(json_encode(array('error'=>'Playin archive inaccessible')))));

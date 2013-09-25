@@ -1,7 +1,7 @@
 <?php
 
 
-if(Session::is_group_user('Music Admin')){
+if(Session::is_group_user('Librarian')){
 	if($_REQUEST["id"]) {
 		$track = Tracks::get_by_id($_REQUEST["id"]);
 		if($track->move_to_trash()) {

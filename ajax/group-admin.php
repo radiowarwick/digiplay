@@ -1,5 +1,8 @@
 <?php
-
+if(!Session::is_group_user("Group Admin")) {
+	http_response_code(403);
+	exit();
+}
 switch($_REQUEST["action"]) {
 	case "members":
 		$members = array();
