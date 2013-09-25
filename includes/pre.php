@@ -44,8 +44,9 @@ if((!Session::is_user()) && ((substr(LINK_FILE,0,4) == "ajax") && (LINK_FILE != 
 
 if(substr(LINK_FILE,0,6) == "studio") {
 	MainTemplate::set_barebones(true);
-	if(isset($_REQUEST["key"])) if(is_null(Locations::get_by_key($_REQUEST["key"]))) exit("Sorry, you provided an invalid security key.");
-	else Output::require_user();
+	if(isset($_REQUEST["key"])) { 
+		if(is_null(Locations::get_by_key($_REQUEST["key"]))) exit("Sorry, you provided an invalid security key.");
+	} else Output::require_user();
 }
 
 if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php") && (substr(LINK_FILE,0,6) != "studio")) Output::require_user();
