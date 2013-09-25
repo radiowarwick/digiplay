@@ -20,16 +20,43 @@ echo("
 		$(document).on('click', '#groups li', function() {
 			$('#group-info h3').html($(this).html());
 			$('#group-description').html($(this).attr('data-description'));
+			$('#group-info').attr('data-group-id',$(this).attr('data-group-id'));
+			$('#group-members ul').html('');
 			$.ajax({
 				url: '".LINK_ABS."ajax/group-admin.php?action=members&group='+$(this).attr('data-group-id'),
 				dataType: 'json'
 			}).done(function(data) {
-				$('#group-members ul').html('');
 				$.each(data, function(id,user) {
-					$('#group-members ul').append('<li class=\"list-group-item\">'+user+'</li>');
+					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::glyphicon("remove pull-right")."</li>');
 				})
 			})
-		})
+		});
+
+		$(document).on('click', '.glyphicon-remove', function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/group-admin.php?action=del-user&user='+$(this).parent().attr('data-user-id')+'&group='+$(this).parents('#group-info').attr('data-group-id'),
+				dataType: 'json'
+			}).done(function(data) {
+				$.each(data, function(id,user) {
+					$('[data-user-id='+id+']').remove();
+				})
+			})
+		});
+
+		$(document).on('submit', '.form-horizontal', function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/group-admin.php?action=add-user&user='+$(this).find('input').val()+'&group='+$(this).parents('#group-info').attr('data-group-id'),
+				dataType: 'json'
+			}).done(function(data) {
+				$('input').val('');
+				$.each(data, function(id,user) {
+					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::glyphicon("remove pull-right")."</li>');
+				})
+			});
+			return false;
+		});
+
+		$('#groups').find('li:first').click();
 	});
 	</script>
 
@@ -59,7 +86,7 @@ echo("
 					<div class=\"col-xs-9\">
 						<input type=\"text\" id=\"add-user\" class=\"form-control\" placeholder=\"Add user...\" />
 					</div>
-					<button class=\"btn btn-primary col-xs-3\" id=\"add-user-submit\">Add</button>
+					<button type=\"submit\" class=\"btn btn-primary col-xs-3\" id=\"add-user-submit\">Add</button>
 				</div>
 			</div>
 		</div>

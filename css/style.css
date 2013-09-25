@@ -77,3 +77,6 @@ table .nowrap { white-space: nowrap; }
 .fileupload-progress { text-align: right; }
 .files tr td { vertical-align: middle !important; }
 .files .progress { margin-bottom: 0px !important; }
+
+/* Group admin */
+#groups li:hover, #group-members .glyphicon-remove:hover { cursor: pointer; }
