@@ -62,8 +62,8 @@ class Audio {
 		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
 
 		$html = "
-		<script> $(function () { wv_create('".$this->get_id()."', '".LINK_ABS."audio/preview/".$this->get_id().".mp3'); }); </script>
-		<div class=\"row audio-player\">
+		<script> $(function () { wv_create('".$this->id."'); wavesurfer[".$this->id."].load('".LINK_ABS."audio/preview/".$this->id.".mp3') }); </script>
+		<div class=\"row audio-player\" id=\"".$this->id."\">
 			<div class=\"col-xs-12\">
 				<div class=\"well well-sm\">
 					<div>
@@ -71,7 +71,7 @@ class Audio {
 							<button class=\"btn btn-primary playpause\" id=\"playpause\" disabled>
 								".Bootstrap::glyphicon("play")."
 							</button>
-							<h6><small id=\"timings\">00:00 / 00:00</small></h6>
+							<h6><small><span class=\"elapsed\">00:00</span> / <span class=\"duration\">00:00</span></small></h6>
 						</div>
 						<div>
 							<div id=\"waveform".$this->get_id()."\">

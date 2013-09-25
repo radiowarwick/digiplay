@@ -39,7 +39,6 @@ function wv_loading(wv, percent) {
 	$(wv.container).find('.progress').find('.progress-bar').css('width', percent*100+'%');
   	if(Math.round(percent * 10) == 0) {
   		$(wv.container).find('button').attr('disabled', 'disabled');
-  		$(wv.container).find('small').html('00:00.00 / 00:00.00');
 		$(wv.container).find('svg').fadeTo('fast', 0, function() { $(wv.container).find('.progress').removeClass('active').fadeIn('fast'); });
   	} else if (percent == 1) {
   		$(wv.container).find('.progress').addClass('active');
