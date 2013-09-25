@@ -2,6 +2,8 @@
 Output::set_title("Group Administration");
 MainTemplate::set_subtitle("View and edit groups");
 
+Output::require_group("Group Admin");
+
 function print_groups($group) {
 	$groups = Groups::get_by_parent($group);
 	if($groups) {
