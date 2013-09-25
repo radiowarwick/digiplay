@@ -26,18 +26,11 @@ class Group{
 		return false;
 	}
 
-	public function get_users() { return DigiplayDB::select("users.* FROM usersgroups INNER JOIN users USING users.id ON usersgroups.userid WHERE usersgroups.groupid = '".$this->groupid."'", "User"); }
+	public function get_users() { return DigiplayDB::select("users.* FROM users INNER JOIN usersgroups ON usersgroups.userid = users.id WHERE usersgroups.groupid = ".$this->id, "User"); }
 	public function get_children() { return Groups::get_by_parent($this); }
 
-	public function add_user($user){
-		if(!(Session::is_group_user("Group Admin"))) throw new UserError("You are not a groups administrator");
-		return DigiplayDB::insert("usersgroups", array("username" => $user->get_id(), "groupid" => $this->id));
-	}
-
-	public function remove_user($user) {
-		if(!(Session::is_group_user("Group Admin"))) throw new UserError("You are not a groups administrator");
-		return DigiplayDB::delete("usersgroups", "userid = '".$user->get_id()."' AND groupid = '".$this->id."'");
-	}
+	public function add_user($user){ return DigiplayDB::insert("usersgroups", array("username" => $user->get_id(), "groupid" => $this->id)); }
+	public function remove_user($user) { return DigiplayDB::delete("usersgroups", "userid = '".$user->get_id()."' AND groupid = '".$this->id."'"); }
 
 	public function save() {
 		if(!$this->name) return false;

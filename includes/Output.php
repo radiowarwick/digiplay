@@ -99,12 +99,6 @@ class Output{
 			self::http_error(401);
 		}
 	}
-	public static function require_group_admin($group){
-		self::require_user();
-	        if(!Session::is_group_admin($group)){
-	        	self::http_error(401);
-	        }
-	}
 }
 Output::start();
 ?>
