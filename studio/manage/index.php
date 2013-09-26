@@ -434,6 +434,7 @@ echo("
 								$('[data-target=#login-modal]').hide();
 								$('#login-modal').modal('hide');
 								$('#yes-login').button('reset');
+								$('#login-modal input').val('');
 							} else {
 								$('#login-modal').find('h1').append(' <small>invalid username or password</small>');
 								$('#username').parent().addClass('has-error');
