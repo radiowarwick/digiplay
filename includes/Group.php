@@ -19,7 +19,7 @@ class Group{
 
 	public function is_user($user) {
 		if(is_null($user)) $user = Session::get_user();
-		$parent = Groups::get($this->get_parentid());
+		if($this->get_parentid()) $parent = Groups::get($this->get_parentid());
 		$result = DigiplayDB::select("* FROM usersgroups WHERE (groupid = ".$this->get_id().") AND userid = '".$user->get_id()."'");
 		if($result) return true;
 		else if($parent) return $parent->is_user($user);
