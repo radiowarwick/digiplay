@@ -52,7 +52,6 @@ echo("
 
 			function onMessage(e) {
 				data = JSON.parse(e.data);
-				console.log(data);
 				switch(data.channel) {
 					case 't_log':
 						reloadLog();
