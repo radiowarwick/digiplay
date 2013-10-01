@@ -102,7 +102,7 @@ if($tracks) {
 
 		$('.yes-definitely-delete').click(function() {
 			$.ajax({
-				url: '".LINK_ABS."ajax/delete-track',
+				url: '".LINK_ABS."ajax/delete-track.php',
 				data: 'id='+trackid,
 				type: 'POST',
 				error: function(xhr,text,error) {
