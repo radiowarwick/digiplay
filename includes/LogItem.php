@@ -16,7 +16,7 @@ Class LogItem {
 	public function get_track_artist() { return $this->track_artist; }
 	public function get_audio() { return Audio::get_by_id($audioid); }
 
-	public function set_location($location) { $this->location = $location; }
+	public function set_location($location) { $this->location = $location->get_id(); }
 	public function set_user($user) { $this->userid = $user->get_id(); }
 	public function set_datetime($datetime) { $this->datetime = $datetime; }
 	public function set_track_title($track_title) { $this->track_title = $track_title; }
