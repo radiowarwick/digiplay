@@ -1,15 +1,15 @@
 <?php
 class Tracks{
 
-	public function get($id) { return self::get_by_id($id); }
+	public static function get($id) { return self::get_by_id($id); }
 
-	public function get_by_id($id) { return DigiplayDB::select("* FROM audio WHERE id = ".$id, "Track"); }
-	public function get_by_md5($md5) { return DigiplayDB::select("* FROM audio WHERE md5 = '".$md5."'", "Track"); }
+	public static function get_by_id($id) { return DigiplayDB::select("* FROM audio WHERE id = ".$id, "Track"); }
+	public static function get_by_md5($md5) { return DigiplayDB::select("* FROM audio WHERE md5 = '".$md5."'", "Track"); }
 
-	public function get_total_tracks() { return DigiplayDB::select("COUNT(id) FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()); }
-	public function get_total_length() { return DigiplayDB::select("SUM(length_smpl) FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()) / 44100; }
+	public static function get_total_tracks() { return DigiplayDB::select("COUNT(id) FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()); }
+	public static function get_total_length() { return DigiplayDB::select("SUM(length_smpl) FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()) / 44100; }
 
-	public function get_playlisted($playlist = NULL,$limit = 0,$offset = 0) {
+	public static function get_playlisted($playlist = NULL,$limit = 0,$offset = 0) {
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		$tracks = array();
@@ -17,18 +17,18 @@ class Tracks{
 		else return DigiplayDB::select("audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid)".$limit.$offset, "Track", true);
 	}
 
-	public function get_newest($num=10) { return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." ORDER BY id DESC LIMIT ".$num.";", "Track", true); }
-	public function get_flagged() { return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." AND flagged = 't' ORDER BY import_date DESC;", "Track", true); }
+	public static function get_newest($num=10) { return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." ORDER BY id DESC LIMIT ".$num.";", "Track", true); }
+	public static function get_flagged() { return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." AND flagged = 't' ORDER BY import_date DESC;", "Track", true); }
 
-	public function get_censored($limit = 0,$offset = 0) {
+	public static function get_censored($limit = 0,$offset = 0) {
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
 		return DigiplayDB::select("id FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." AND censor = 't' ORDER BY id DESC".$limit.$offset, "Track", true);
 	}
 
-	public function count_censored() { return DigiplayDB::select("COUNT(id) FROM audio WHERE censor = 't';"); }
+	public static function count_censored() { return DigiplayDB::select("COUNT(id) FROM audio WHERE censor = 't';"); }
 	
-	public function get_tracks_of_the_day($count = 1) {
+	public static function get_tracks_of_the_day($count = 1) {
 		$today = mktime(0, 0, 0, (int)date("n"),(int)date("j"), (int)date("Y"));
 		srand($today/pi());
 		$trackcount = DigiplayDB::select("count(*) FROM audio INNER JOIN audiodir ON audio.id=audiodir.audioid WHERE audio.import_date < ".$today." AND audio.type = 1 AND audiodir.dirid = 2;");

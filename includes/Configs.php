@@ -1,6 +1,6 @@
 <?php
 class Configs {
-	public function get($id = NULL, $location = NULL, $parameter = NULL, $val = NULL) { 
+	public static function get($id = NULL, $location = NULL, $parameter = NULL, $val = NULL) { 
 		if(isset($id)) return $this->get_by_id($id);
 
 		$sql = "* FROM configuration WHERE id IS NOT NULL";
@@ -11,12 +11,12 @@ class Configs {
 		return DigiplayDB::select($sql,"Config");
 	}
 
-	public function get_by_id($id) { return DigiplayDB::select("* FROM configuration WHERE id = ".$id, "Config"); }
-	public function get_by_location($location) { return DigiplayDB::select("* FROM configuration WHERE location = ".$location->get_id(), "Config", true); }
+	public static function get_by_id($id) { return DigiplayDB::select("* FROM configuration WHERE id = ".$id, "Config"); }
+	public static function get_by_location($location) { return DigiplayDB::select("* FROM configuration WHERE location = ".$location->get_id(), "Config", true); }
 
-	public function get_system_param($parameter) { return self::get(NULL,-1,$parameter)->get_val(); }
+	public static function get_system_param($parameter) { return self::get(NULL,-1,$parameter)->get_val(); }
 
-	public function key_generator() {
+	public static function key_generator() {
 		$fp = @fopen('/dev/urandom','rb');
 		if ($fp !== FALSE) {
     		$pr_bits .= @fread($fp,16);

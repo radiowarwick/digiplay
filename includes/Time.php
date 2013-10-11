@@ -1,6 +1,6 @@
 <?php
 class Time {
-	public function seconds_to_dhms($input) {
+	public static function seconds_to_dhms($input) {
 		$unit_day = 86400; $unit_hour = 3600; $unit_minute = 60;
 
 		$days = intval($input / $unit_day);
@@ -16,7 +16,7 @@ class Time {
 		return array_filter($return);
 	}
 
-	public function format_pretty($time) {
+	public static function format_pretty($time) {
 		$time_arr = Time::seconds_to_dhms($time);
 		$time_str = ($time_arr["days"])? $time_arr["days"]." days, " : "";
 		$time_str .= ($time_arr["hours"])? $time_arr["hours"]." hours, " : "";
@@ -25,7 +25,7 @@ class Time {
 		return $time_str;
 	}
 
-	public function format_succinct($time) {
+	public static function format_succinct($time) {
 		$time_arr = Time::seconds_to_dhms($time);
 		$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
 		$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";

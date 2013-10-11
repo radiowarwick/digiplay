@@ -1,6 +1,6 @@
 <?php
 Class LogItems {
-	public function get($location = NULL,$sort = NULL, $limit = NULL, $offset = NULL) {
+	public static function get($location = NULL,$sort = NULL, $limit = NULL, $offset = NULL) {
 		$sql = "* FROM log";
 
 		if(!is_null($location)) $sql .= " WHERE location = ".(is_numeric($location)? $location : $location->get_id());
@@ -13,5 +13,5 @@ Class LogItems {
 		return DigiplayDB::select($sql, "LogItem");
 	}
 	
-	public function get_by_id($id) { return DigiplayDB::select("* FROM log WHERE id = ".$id); }
+	public static function get_by_id($id) { return DigiplayDB::select("* FROM log WHERE id = ".$id); }
 }

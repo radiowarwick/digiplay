@@ -1,6 +1,6 @@
 <?php
 class Search {
-    public function tracks($query,$fields="title,artist,album",$limit=0,$offset=0) {
+    public static function tracks($query,$fields="title,artist,album",$limit=0,$offset=0) {
         // make the query safe
         $query = pg_escape_string($query);
 
@@ -39,7 +39,7 @@ class Search {
         return ((count($results) > 0)? $return : NULL);
     }
 
-    public function artists($query, $limit=0, $offset=0) {
+    public static function artists($query, $limit=0, $offset=0) {
         $query = pg_escape_string($query);
         $query_str = "SELECT id, count(*) OVER() AS full_count FROM artists WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
 
@@ -61,7 +61,7 @@ class Search {
         return ((count($results) > 0)? $return : NULL);
     }
 
-    public function albums($query, $limit=0, $offset=0) {
+    public static function albums($query, $limit=0, $offset=0) {
         $query = pg_escape_string($query);
         $query_str = "SELECT id, count(*) OVER() AS full_count FROM albums WHERE to_tsvector(name)::tsvector @@ plainto_tsquery('".$query."')::tsquery ORDER BY id DESC";
 
