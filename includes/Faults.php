@@ -15,9 +15,9 @@ class Faults {
 
 	public function get_total_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults"); }
 
-	public function get_open_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status <> '1'"); }
+	public function get_open_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status <> '4'"); }
 
-	public function get_closed_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status = '1'"); }
+	public function get_closed_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status = '4'"); }
 
 }
 ?>
