@@ -107,6 +107,10 @@ echo("
     				event.stopPropagation();
     				return false;
 				};
+
+				$(document).keydown(function(e) {
+					if((111 < e.which) && (e.which < 123)) e.preventDefault();
+				});
 			});
 
 		</script>
