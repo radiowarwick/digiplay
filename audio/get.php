@@ -21,6 +21,10 @@ if(!Session::is_group_user("Music Admin")) {
 	//if(is_null(Locations::get_by_key($parameters["key"]))) exit(http_response_code(401));
 }
 
+
+$md5 = $audio->get_md5();
+$fl = substr($md5, 0, 1);
+
 header("Content-type: ".$filetype);
 header("accept-ranges: bytes");
 if($filetype == "flac") header("Content-Length: ".filesize($audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac"));
@@ -29,9 +33,6 @@ if($filetype == "wav") header("Content-Length: ". 176426*$audio->get_length());
 
 ob_end_flush();
 if(session_id()) session_write_close();
-
-$md5 = $audio->get_md5();
-$fl = substr($md5, 0, 1);
 
 if($filetype == "flac") $command = "cat ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac";
 if($filetype == "mp3") $command = "sox ".$audio->get_archive()->get_localpath()."/".$fl."/".$md5.".flac -t mp3 -C 256.2 - trim ".$audio->get_start()." ".$audio->get_end();
