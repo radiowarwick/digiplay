@@ -12,11 +12,12 @@ Class Fault {
 	public function get_status() { return $this->status; }
 	public function get_assignedto() { return $this->assignedto; }
 	public function get_content() { return $this->content; }
-	public function get_postdate() { return $this->postdate; }
+	public function get_postdate() { return date('jS F Y, g:ia', $this->postdate); }
 
 	public function set_author($author) { $this->author = $author; }
 	public function set_content($content) { $this->content = $content; }
 	public function set_status($status) { $this->status = $status; }
+	public function set_postdate($postdate) { $this->postdate = $postdate; }
 
 	public function save() {
 		if(!$this->content) return false;
@@ -31,6 +32,14 @@ Class Fault {
 		if ($this->status == 3) return "Work in progress";
 		if ($this->status == 4) return "Fault complete";
 		return "NULL";
+	}
+
+	public function get_panel_class() {
+		if ($this->status == 1) return "default";
+		if ($this->status == 2) return "danger";
+		if ($this->status == 3) return "warning";
+		if ($this->status == 4) return "success";
+		return "default";
 	}
 
 	/*public function set_location($location) { 
