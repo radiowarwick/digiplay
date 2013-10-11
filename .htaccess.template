@@ -2,6 +2,7 @@
 php_value include_path /usr/share/dps/www/includes
 php_value auto_prepend_file pre.php
 
+Options -MultiViews
 RewriteEngine  on
 RewriteBase /
 
