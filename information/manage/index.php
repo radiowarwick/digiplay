@@ -10,7 +10,7 @@ foreach($faults as $fault){
 	<a href=\"#\" class=\"btn btn-warning btn-xs\">Assign Fault</a> 
 	<a href=\"../../ajax/delete-fault.php?id=".$fault->get_id()."\" class=\"btn btn-danger btn-xs\">Delete</a>
 	<span class=\"pull-right\">".Bootstrap::glyphicon("plus")."</span> ";
-	$body = "<p><i>Submitted by: <b>".$fault->get_author()."</b> on: <b>".$fault->get_postdate()."</b></i><hr></p>
+	$body = "<p><i>Submitted by: <b>".$fault->get_real_author($fault->get_author())."</b> on: <b>".$fault->get_postdate()."</b></i><hr></p>
 	<p>".$fault->get_content()."</p>";
 	echo( Bootstrap::panel($fault->get_panel_class(), $body, $title, $footer) );
 }

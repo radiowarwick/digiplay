@@ -34,6 +34,13 @@ Class Fault {
 		return "NULL";
 	}
 
+	public function get_real_author($id) {
+		$user = Users::get_by_id($id);
+		$user_information = $user->get_ldap_attributes();
+		$user_fullname = $user_information['first_name']." ".$user_information['surname'];
+		return $user_fullname;
+	}
+
 	public function get_panel_class() {
 		if ($this->status == 1) return "default";
 		if ($this->status == 2) return "danger";
