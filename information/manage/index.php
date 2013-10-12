@@ -8,7 +8,7 @@ foreach($faults as $fault){
 	$footer = "<a href=\"#\" class=\"btn btn-primary btn-xs\">Add Comment</a> 
 	<a href=\"#\" class=\"btn btn-success btn-xs\">Change Status</a> 
 	<a href=\"#\" class=\"btn btn-warning btn-xs\">Assign Fault</a> 
-	<a href=\"#\" class=\"btn btn-danger btn-xs\">Delete</a>
+	<a href=\"../../ajax/delete-fault.php?id=".$fault->get_id()."\" class=\"btn btn-danger btn-xs\">Delete</a>
 	<span class=\"pull-right\">".Bootstrap::glyphicon("plus")."</span> ";
 	$body = "<p><i>Submitted by: <b>".$fault->get_author()."</b> on: <b>".$fault->get_postdate()."</b></i><hr></p>
 	<p>".$fault->get_content()."</p>";

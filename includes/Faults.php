@@ -11,7 +11,7 @@ class Faults {
 		return DigiplayDB::select($sql,"Fault",true);
 	}
 
-	public function get_by_id($id) { return DigiplayDB::select("* FROM info_faults WHERE id = ".$id, "Fault", true); }
+	public function get_by_id($id) { return DigiplayDB::select("* FROM info_faults WHERE id = ".$id, "Fault"); }
 
 	public function get_total_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults"); }
 

@@ -42,6 +42,8 @@ Class Fault {
 		return "default";
 	}
 
+	public function delete() { return DigiplayDB::delete("info_faults", "id = ".$this->id); }
+
 	/*public function set_location($location) { 
 		$result = DigiplayDB::update("configuration", array("location" => $location->get_id()), "id = ".$this->id);
 		if($result) return ($this->location = $location->get_id());
