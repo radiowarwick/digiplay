@@ -9,7 +9,20 @@ foreach($faults as $fault){
 	<a data-toggle=\"modal\" href=\"#".$fault->get_id()."-status\" class=\"btn btn-success btn-xs\">Change Status</a> 
 	<a data-toggle=\"modal\" href=\"#".$fault->get_id()."-assign\" class=\"btn btn-warning btn-xs\">Assign Fault</a> 
 	<a data-toggle=\"modal\" href=\"#".$fault->get_id()."-delete\" class=\"btn btn-danger btn-xs\">Delete</a>
-	<span class=\"pull-right\">".Bootstrap::glyphicon("plus")."</span> ";
+	<span class=\"pull-right\"><a class=\"accordion-toggle\" data-toggle=\"collapse\" href=\"#collapse-".$fault->get_id()."\">".Bootstrap::glyphicon("plus")."</a></span> ";
+	$footer .= "</div><div id=\"collapse-".$fault->get_id()."\" class=\"panel-collapse collapse\"><div class=\"panel-body\">
+    <div class=\"row\">
+		<div class=\"col-md-7\">".Bootstrap::alert_message_basic("info","Comment from user","Matt Greenham:<br>", false)."</div>
+  		<div class=\"col-md-5\">&nbsp;</div>
+    </div>
+    <div class=\"row\">
+  		<div class=\"col-md-5\">&nbsp;</div>
+		<div class=\"col-md-7\">".Bootstrap::alert_message_basic("success","Response from devleoper","Jonathan Sewell:<br>", false)."</div>
+    </div> 
+    <div class=\"row\">
+		<div class=\"col-md-12\">".Bootstrap::alert_message_basic("warning",NULL,"SYSTEM: Changed status to on hold.", false)."</div>
+    </div> 
+    </div>";
 	$body = "<p><i>Submitted by: <b>".$fault->get_real_author($fault->get_author())."</b> on: <b>".$fault->get_postdate()."</b></i><hr></p>
 	<p>".$fault->get_content()."</p>";
 	echo( Bootstrap::panel($fault->get_panel_class(), $body, $title, $footer) );
