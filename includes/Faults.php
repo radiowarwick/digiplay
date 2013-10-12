@@ -7,6 +7,7 @@ class Faults {
 		$sql = "* FROM info_faults WHERE id IS NOT NULL";
 		if(isset($author)) $sql .= " AND author = ".$author;
 		if(isset($assignedto)) $sql .= " AND assignedto = '".$assignedto."'";
+		$sql .= " ORDER BY postdate DESC";
 
 		return DigiplayDB::select($sql,"Fault",true);
 	}
