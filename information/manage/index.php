@@ -14,7 +14,7 @@ foreach($faults as $fault){
 	<p>".$fault->get_content()."</p>";
 	echo( Bootstrap::panel($fault->get_panel_class(), $body, $title, $footer) );
 	$title = "Change the status of fault DIGI_".$fault->get_id();
-	$body = "<form role=\"form\" method=\"post\" action=\"../../ajax/fault-status-update.php?id=".$fault->get_id()."\">
+	$body = "<form role=\"form\" method=\"post\" action=\"../../ajax/fault-admin.php?action=update-status&id=".$fault->get_id()."\">
 	  <div class=\"form-group\">
 	    <select class=\"form-control\" name=\"status\">
 		  <option value=\"1\">Not yet read</option>
@@ -30,13 +30,16 @@ foreach($faults as $fault){
 	</form>";
 	echo( Bootstrap::modal($fault->get_id()."-status", $body, $title) );
 	$title = "Change the status of fault DIGI_".$fault->get_id();
-	$body = "<form role=\"form\" method=\"post\" action=\"\">
+	$body = "<form role=\"form\" method=\"post\" action=\"../../ajax/fault-admin.php?action=assign-fault&id=".$fault->get_id()."\">
 	  <div class=\"form-group\">
 	    <select class=\"form-control\" name=\"assign\">";
 	$group = Groups::get_by_name("Developers");
 	$developers = $group->get_users();
 	foreach($developers as $developer) {
-		$body .= "<option value=".$developer->get_id().">".$developer->get_id()."</option>";
+		$user = Users::get_by_id($developer->get_id());
+		$user_information = $user->get_ldap_attributes();
+		$user_fullname = $user_information['first_name']." ".$user_information['surname'];
+		$body .= "<option value=".$developer->get_id().">".$user_fullname."</option>";
 	}
 	$body .= "</select>
 	  </div>
@@ -47,7 +50,7 @@ foreach($faults as $fault){
 	</form>";
 	echo( Bootstrap::modal($fault->get_id()."-assign", $body, $title) );
 	$title = "Are you sure you want to delete fault DIGI_".$fault->get_id();
-	$body = "<a href=\"../../ajax/delete-fault.php?id=".$fault->get_id()."\" class=\"btn btn-danger\">Delete</a> <a href=\"#\" data-dismiss=\"modal\" class=\"btn btn-default\">Cancel</a>";
+	$body = "<a href=\"../../ajax/fault-admin.php?action=del-fault&id=".$fault->get_id()."\" class=\"btn btn-danger\">Delete</a> <a href=\"#\" data-dismiss=\"modal\" class=\"btn btn-default\">Cancel</a>";
 	echo( Bootstrap::modal($fault->get_id()."-delete", $body, $title) );
 }
 ?>

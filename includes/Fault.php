@@ -18,6 +18,7 @@ Class Fault {
 	public function set_content($content) { $this->content = $content; }
 	public function set_status($status) { $this->status = $status; }
 	public function set_postdate($postdate) { $this->postdate = $postdate; }
+	public function set_assignedto($assignedto) { $this->assignedto = $assignedto; }
 
 	public function save() {
 		if(!$this->content) return false;
