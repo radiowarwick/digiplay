@@ -7,7 +7,7 @@
 
 		// Get the current users ID for the submission
 		// If it is a system message, use -1
-		if (!isset($_REQUEST['system'])) {
+		if (isset($_REQUEST['system'])) {
 			$comment->set_author(-1);
 		} else {
 			$comment->set_author(Session::get_id());
@@ -27,6 +27,6 @@
 			}
 		}
 
-		
+		// if (is developer and isnt author) show in blue!!!!
 
 ?>
