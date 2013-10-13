@@ -7,7 +7,7 @@ foreach($faults as $fault){
 	$title = "<b>Fault ID: DIGI_".$fault->get_id()." </b><small>Assigned to: ".$fault->get_real_assignedto($fault->get_assignedto())."</small><span class=\"pull-right label label-".$fault->get_panel_class()."\">".$fault->get_real_status()."</span>";
 	$footer = "<a href=\"#\" class=\"btn btn-primary btn-xs\">Add Comment</a> 
 	<a data-toggle=\"modal\" href=\"#update-status\" class=\"btn btn-success btn-xs change-status\" data-dps-id=".$fault->get_id().">Change Status</a> 
-	<a data-toggle=\"modal\" href=\"#assign-fault\" class=\"btn btn-warning btn-xs\">Assign Fault</a> 
+	<a data-toggle=\"modal\" href=\"#assign-fault\" class=\"btn btn-warning btn-xs assign-fault\" data-dps-id=".$fault->get_id().">Assign Fault</a> 
 	<a data-toggle=\"modal\" href=\"#delete-fault\" class=\"btn btn-danger btn-xs delete-fault\" data-dps-id=".$fault->get_id().">Delete</a>
 	<span class=\"pull-right\"><a class=\"accordion-toggle\" data-toggle=\"collapse\" href=\"#collapse-".$fault->get_id()."\">".Bootstrap::glyphicon("plus")."</a></span> ";
 	$footer .= "</div><div id=\"collapse-".$fault->get_id()."\" class=\"panel-collapse collapse\"><div class=\"panel-body\">
@@ -44,10 +44,11 @@ $body = "<form role=\"form\">
   </div>
 </form>";
 echo( Bootstrap::modal("update-status", $body, $title) );
-$title = "Change the status of fault DIGI_";
-$body = "<form role=\"form\" method=\"post\" action=\"../../ajax/fault-admin.php?action=assign-fault&id=\">
+$title = "<span id=\"assign-status-title\">Assign fault DIGI_</span>";
+$body = "<form role=\"form\">
   <div class=\"form-group\">
-    <select class=\"form-control\" name=\"assign\">";
+  	<input type=\"hidden\" class=\"fault-assign-id\">
+    <select class=\"form-control fault-assign-value\" name=\"assign\">";
 $group = Groups::get_by_name("Developers");
 $developers = $group->get_users();
 foreach($developers as $developer) {
@@ -59,7 +60,7 @@ foreach($developers as $developer) {
 $body .= "</select>
   </div>
   <div class=\"form-group\">
-  <button type=\"submit\" class=\"btn btn-warning\">Assign Fault</button>
+  <button type=\"submit\" class=\"btn btn-warning confirm-fault-assign\">Assign Fault</button>
   <a href=\"#\" data-dismiss=\"modal\" class=\"btn btn-default\">Cancel</a>
   </div>
 </form>";
@@ -80,6 +81,11 @@ echo( "<script>
 		$('#delete-status-title').append($(this).attr('data-dps-id'));
 		$('.fault-delete-id').val($(this).attr('data-dps-id'));
 	});
+	$('.assign-fault').click(function() {
+		$('#assign-status-title').html('Assign fault DIGI_');
+		$('#assign-status-title').append($(this).attr('data-dps-id'));
+		$('.fault-assign-id').val($(this).attr('data-dps-id'));
+	});
 	$('.confirm-fault-update').click(function() {
 		$.ajax({
 			url: '".LINK_ABS."ajax/fault-admin.php',
@@ -98,6 +104,20 @@ echo( "<script>
 		$.ajax({
 			url: '".LINK_ABS."ajax/fault-admin.php',
 			data: 'action=del-fault&id='+$('.fault-delete-id').val(),
+			type: 'POST',
+			error: function(xhr,text,error) {
+				value = $.parseJSON(xhr.responseText);
+				alert(value.error);
+			},
+			success: function(data,text,xhr) {
+				window.location.reload(true); 
+			}
+		});
+	});
+	$('.confirm-fault-assign').click(function() {
+		$.ajax({
+			url: '".LINK_ABS."ajax/fault-admin.php',
+			data: 'action=assign-fault&id='+$('.fault-assign-id').val()+'&assign='+$('.fault-assign-value').val(),
 			type: 'POST',
 			error: function(xhr,text,error) {
 				value = $.parseJSON(xhr.responseText);
