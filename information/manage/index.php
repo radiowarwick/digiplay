@@ -8,7 +8,7 @@ foreach($faults as $fault){
 	$footer = "<a href=\"#\" class=\"btn btn-primary btn-xs\">Add Comment</a> 
 	<a data-toggle=\"modal\" href=\"#update-status\" class=\"btn btn-success btn-xs change-status\" data-dps-id=".$fault->get_id().">Change Status</a> 
 	<a data-toggle=\"modal\" href=\"#assign-fault\" class=\"btn btn-warning btn-xs\">Assign Fault</a> 
-	<a data-toggle=\"modal\" href=\"#delete-fault\" class=\"btn btn-danger btn-xs\">Delete</a>
+	<a data-toggle=\"modal\" href=\"#delete-fault\" class=\"btn btn-danger btn-xs delete-fault\" data-dps-id=".$fault->get_id().">Delete</a>
 	<span class=\"pull-right\"><a class=\"accordion-toggle\" data-toggle=\"collapse\" href=\"#collapse-".$fault->get_id()."\">".Bootstrap::glyphicon("plus")."</a></span> ";
 	$footer .= "</div><div id=\"collapse-".$fault->get_id()."\" class=\"panel-collapse collapse\"><div class=\"panel-body\">
     <div class=\"row\">
@@ -64,26 +64,49 @@ $body .= "</select>
   </div>
 </form>";
 echo( Bootstrap::modal("assign-fault", $body, $title) );
-$title = "Are you sure you want to delete fault DIGI_";
-$body = "<a href=\"../../ajax/fault-admin.php?action=del-fault&id=\" class=\"btn btn-danger\">Delete</a> <a href=\"#\" data-dismiss=\"modal\" class=\"btn btn-default\">Cancel</a>";
+$title = "<span id=\"delete-status-title\">Are you sure you want to delete fault DIGI_</span>";
+$body = "<input type=\"hidden\" class=\"fault-delete-id\">
+		<a href=\"#\" class=\"btn btn-danger confirm-fault-delete\">Delete</a> 
+		<a href=\"#\" data-dismiss=\"modal\" class=\"btn btn-default\">Cancel</a>";
 echo( Bootstrap::modal("delete-fault", $body, $title) );
-echo( "<script>$('.change-status').click(function() {
-	$('#update-status-title').html('Change the status of fault DIGI_');
-	$('#update-status-title').append($(this).attr('data-dps-id'));
-	$('.fault-update-id').val($(this).attr('data-dps-id'));
-});
-$('.confirm-fault-update').click(function() {
-	$.ajax({
-		url: '".LINK_ABS."ajax/fault-admin.php',
-		data: 'action=update-status&id='+$('.fault-update-id').val()+'&status='+$('.fault-update-value').val(),
-		type: 'POST',
-		error: function(xhr,text,error) {
-			value = $.parseJSON(xhr.responseText);
-			alert(value.error);
-		},
-		success: function(data,text,xhr) {
-			window.location.reload(true); 
-		}
+echo( "<script>
+	$('.change-status').click(function() {
+		$('#update-status-title').html('Change the status of fault DIGI_');
+		$('#update-status-title').append($(this).attr('data-dps-id'));
+		$('.fault-update-id').val($(this).attr('data-dps-id'));
 	});
-});</script>" );
+	$('.delete-fault').click(function() {
+		$('#delete-status-title').html('Are you sure you want to delete fault DIGI_');
+		$('#delete-status-title').append($(this).attr('data-dps-id'));
+		$('.fault-delete-id').val($(this).attr('data-dps-id'));
+	});
+	$('.confirm-fault-update').click(function() {
+		$.ajax({
+			url: '".LINK_ABS."ajax/fault-admin.php',
+			data: 'action=update-status&id='+$('.fault-update-id').val()+'&status='+$('.fault-update-value').val(),
+			type: 'POST',
+			error: function(xhr,text,error) {
+				value = $.parseJSON(xhr.responseText);
+				alert(value.error);
+			},
+			success: function(data,text,xhr) {
+				window.location.reload(true); 
+			}
+		});
+	});
+	$('.confirm-fault-delete').click(function() {
+		$.ajax({
+			url: '".LINK_ABS."ajax/fault-admin.php',
+			data: 'action=del-fault&id='+$('.fault-delete-id').val(),
+			type: 'POST',
+			error: function(xhr,text,error) {
+				value = $.parseJSON(xhr.responseText);
+				alert(value.error);
+			},
+			success: function(data,text,xhr) {
+				window.location.reload(true); 
+			}
+		});
+	});
+</script>" );
 ?>
