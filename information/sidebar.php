@@ -41,7 +41,7 @@ function sidebar() {
     	"Total Faults" => Faults::get_total_faults(),
     	"Open Faults" => Faults::get_open_faults(),
     	"Closed Faults" => Faults::get_closed_faults(),
-    	"Replies" => $meminfo["Cached"]);
+    	"Total Comments" => Comments::get_total_comments());
 
 	$return .= "
 

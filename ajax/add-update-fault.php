@@ -6,7 +6,7 @@
 		// Grab content
 		$fault->set_content($_REQUEST['content']);
 		// Set default status to unread
-		$fault->set_status(4);
+		$fault->set_status(1);
 		// Current time and date added to record
 		$fault->set_postdate(time());
 
