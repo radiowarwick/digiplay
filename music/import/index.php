@@ -55,7 +55,7 @@ $(function() {
 		if(closest.hasClass('btn-warning')) closest.removeClass('btn-warning').addClass('btn-primary');
 	});
 
-	$('.import').click(function() {
+	$('.import').click(function(event) {
 		event.preventDefault();
 		elem = $(this);
 		elem.button('loading');
@@ -136,7 +136,7 @@ foreach($files as $file) {
 					<div class=\"warnings\">".$warnings."</div>
 					<div class=\"row\">
 						<div class=\"col-sm-8\">
-							<form class=\"form-horizontal\" action=\"".LINK_ABS."ajax/file-import.php\" method=\"POST\" enctype=\"multipart/form-data\">
+							<form class=\"form-horizontal\" action=\"#\" method=\"POST\" enctype=\"multipart/form-data\">
 									<input class=\"form-control\" type=\"hidden\" name=\"filename\" value=\"".$file."\" />
 									<input class=\"form-control\" type=\"hidden\" name=\"origin\" value=\"".$origin."\" />
 									<div class=\"form-group\">
