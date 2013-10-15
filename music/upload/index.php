@@ -16,7 +16,7 @@ $(function () {
 	$('#fileupload').fileupload();
 
 	$('#fileupload').fileupload('option', {
-		acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma)$/i,
+		acceptFileTypes: /(\.|\/)(wav|mp3|aac|flac|m4a|ogg|pcm|wma|aif)$/i,
 		url: '".LINK_ABS."ajax/file-upload.php',
 		limitConcurrentUploads: 3
 	});
