@@ -23,7 +23,7 @@ class Tracks{
 	public static function get_censored($limit = 0,$offset = 0) {
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
-		return DigiplayDB::select("id FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." AND censor = 't' ORDER BY id DESC".$limit.$offset, "Track", true);
+		return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Music")->get_id()." AND censor = 't' ORDER BY id DESC".$limit.$offset, "Track", true);
 	}
 
 	public static function count_censored() { return DigiplayDB::select("COUNT(id) FROM audio WHERE censor = 't';"); }
