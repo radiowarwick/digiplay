@@ -11,7 +11,7 @@ class Bootstrap {
 	}
 
 	public static function alert($class="info",$text="",$title="",$close=true) { 
-		return self::alert_message_basic($class="info",$text="",$title="",$close=true);
+		return self::alert_message_basic($class,$text,$title,$close);
 	}
 
 	public static function alert_message_basic($class="info",$text="",$title="",$close=true) {
