@@ -13,9 +13,9 @@ if($_REQUEST["flag"]) {
 }
 	
 $result = $track->save();
-if(!$result) {
+if(Errors::occured()) { 
 	http_response_code(400);
-	exit(json_encode(array("error" => "Something is incorrect.  You may have discovered a bug!")));
+	exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => Errors::report("array"))));
 }
 
 exit(json_encode(array("response"=>$response)));

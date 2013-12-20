@@ -30,6 +30,7 @@ class DigiplayDB{
 	}
 
 	public static function select($query, $return_class = NULL, $as_array = false, $parameters = NULL) {
+		if(isset($parameters) && !is_array($parameters )) $parameters = (array) $parameters;
 		$results = self::query("SELECT ".$query, $parameters);
 		if($results->rowCount() == 0 && $as_array == false) return NULL;
 		if($results->rowCount() == 0 && $as_array == true) return array();
