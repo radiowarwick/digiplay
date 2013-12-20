@@ -88,7 +88,7 @@ class Audio {
 		return $html;
 	}
 
-	public function get_by_id($id) {
+	public static function get_by_id($id) {
 		$type = DigiplayDB::select("type FROM audio WHERE id = ".$id);
 		if($type) {
 			if($type == 1) return Tracks::get_by_id($id);
@@ -98,7 +98,7 @@ class Audio {
 		}
 	}
 
-	public function get_by_md5($md5) {
+	public static function get_by_md5($md5) {
 		$type = DigiplayDB::query("type FROM audio WHERE md5 = '".$md5."'");
 		if($type) {
 			if($type == 1) return Tracks::get_by_md5($md5);

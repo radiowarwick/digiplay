@@ -29,11 +29,10 @@ switch($_REQUEST["action"]) {
 		if ($_REQUEST["search-title"] == "on") $index[] = "title";
 		if ($_REQUEST["search-artist"] == "on") $index[] = "artist";
 		if ($_REQUEST["search-album"] == "on") $index[] = "album";
-		$index = implode($index," ");
 
 		if($query) $search = Search::tracks($query,$index,50);
 
-		if($search["results"]) {
+		if(isset($search)) {
 			$return = "<table class=\"table table-striped table-hover\" cellspacing=\"0\">
 				<thead>
 					<tr>

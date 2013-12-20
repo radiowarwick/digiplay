@@ -14,8 +14,8 @@ class ShowplanItem {
 	public function get_showplan() { return Showplans::get_by_id($showplanid); }
 	public function get_position() { return $this->position; }
 	public function get_title() { return $this->title; }
-	public function get_audio() { return Audio::get_by_id($this->audioid); }
-	public function get_script() { return Scripts::get_by_id($this->scriptid); }
+	public function get_audio() { if(!is_null($this->audioid)) return Audio::get_by_id($this->audioid); }
+	public function get_script() { if(!is_null($this->scriptid)) return Scripts::get_by_id($this->scriptid); }
 	public function get_comment() { return $this->comment; }
 	public function get_length() { return $this->length; }
 
