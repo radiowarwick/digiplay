@@ -29,6 +29,7 @@ define("DATABASE_DPS_USER", $local_config["DB_USER"]);
 @define("DATABASE_DPS_PASS", $local_config["DB_PASS"]);
 
 session_start();
+Errors::start();
 
 if (!function_exists('http_response_code')) {
 	function http_response_code($code = NULL) {

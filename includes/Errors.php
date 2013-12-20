@@ -28,7 +28,10 @@ class Errors {
 	public static function occured() { return (self::total()>0); }
 	public static function total() { return count(self::$errors); }
 	public static function clear() { self::$errors = array(); }
-	private static function log_error($type, $string, $file, $line) { self::$errors[] = new Error($type, $string, $file, $line); }
+	private static function log_error($type, $string, $file, $line) { 
+		self::$errors[] = new Error($type, $string, $file, $line);
+		if(Session::is_developer()) echo end(self::$errors);
+	}
 	public static function report() { return implode("\n\n",self::$errors); }
 }
 
@@ -45,7 +48,7 @@ class Error {
 		$this->line		= $line;
 	}
 
-	public function __toString() { return "[".$this->error_type()."] Error on line ".$this->line." in file ".$this->file.":\n".$this->string; }
+	public function __toString() { return Bootstrap::alert_message_basic("danger", "Error on line ".$this->line." in file ".$this->file.":\n".$this->string, "[".$this->error_type()."]"); }
 	
 	private function error_type() {
 		switch($this->type){
