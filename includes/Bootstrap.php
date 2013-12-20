@@ -1,5 +1,7 @@
 <?php
 class Bootstrap {
+	public static function icon($icon) { return self::glyphicon($icon); }
+
 	public static function glyphicon($icon) {
 		return "<span class=\"glyphicon glyphicon-".$icon."\"></span> ";
 	}
@@ -8,17 +10,12 @@ class Bootstrap {
 		return "<span class=\"badge".($pull_right? " pull-right\"" : "\"").">".$num."</span>";
 	}
 
+	public static function alert($class="info",$text="",$title="",$close=true) { 
+		return self::alert_message_basic($class="info",$text="",$title="",$close=true);
+	}
+
 	public static function alert_message_basic($class="info",$text="",$title="",$close=true) {
 		$return = "<div class=\"alert alert-".$class.($close? " fade in" : "")."\">";
-		if($close) $return .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
-		if($title) $return .= "<strong>".$title."</strong> ";
-		$return .= $text;
-		$return .= "</div>";
-		return $return;
-	}	
-
-	public static function alert_message_block($class="info",$text="",$title="",$close=false) {
-		$return = "<div class=\"alert-block alert-".$class.($close? " fade in" : "")."\">";
 		if($close) $return .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
 		if($title) $return .= "<strong>".$title."</strong> ";
 		$return .= $text;
