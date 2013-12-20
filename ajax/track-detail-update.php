@@ -22,23 +22,16 @@ if(Session::is_group_user('Librarian')){
 	if(!$_REQUEST["origin"]) exit(json_encode(array("error" => "You did not specify an origin.")));
 	if($_REQUEST["origin"] != $track->get_origin()) $track->set_origin($_REQUEST["origin"]);
 
-	if($_REQUEST["reclibid"] != $track->get_reclibid()) $track->set_reclibid($_REQUEST["reclibid"]);
-
 	$track->set_censored($_REQUEST["censored"]);
 
 	if($_REQUEST["notes"] != $track->get_notes()) $track->set_notes($_REQUEST["notes"]);
 	if($_REQUEST["new_keyword"]) $track->add_keywords($_REQUEST["new_keyword"]);
 
 	$result = $track->save();
-	if(!$result) { 
+	if(Errors::occured()) { 
 		http_response_code(400);
-		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => $result)));
-	}
-
-	$result = $track->save_audio();
-	if(!$result) { 
-		http_response_code(400);
-		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!")));
+		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => Errors::report("array"))));
+		Errors::clear();
 	}
 
 	$new_track = Tracks::get_by_id($_REQUEST["id"]);

@@ -21,7 +21,7 @@ class Track extends Audio {
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
 
-	public function save() { return DigiplayDB::update("audio", array("music_album" => $this->music_album, "music_track" => $this->music_track, "music_released" => $this->music_released, "reclibid" => $this->reclibid, "flagged" => $this->flagged, "censor" => $this->censor), "id = ".$this->id); }
+	public function save() { return DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id); }
 
 	/* Extended functions */
 	public function get_artists() { return Artists::get_by_audio($this); }

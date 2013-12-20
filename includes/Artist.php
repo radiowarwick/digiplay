@@ -18,13 +18,13 @@ class Artist {
 	}
 
 	/* Extended functions */
-	public function add_to_track($track_id) {
+	public function add_to_track($track) {
 		if(!$this->id) $this->save();
-		return DigiplayDB::insert("audioartists", array("audioid" => $track_id, "artistid" => $this->id));
+		return DigiplayDB::insert("audioartists", array("audioid" => $track->get_id(), "artistid" => $this->id));
 	}
 
-	public function del_from_track($track_id) {
-		$result = DigiplayDB::delete("audioartists", "audioid = ".$track_id." AND artistid = ".$this->id);
+	public function del_from_track($track) {
+		$result = DigiplayDB::delete("audioartists", "audioid = ".$track->get_id()." AND artistid = ".$this->id);
 		$remaining = DigiplayDB::select("* FROM audioartists WHERE artistid = ".$this->id.";");
 		if(!$remaining) $result = DigiplayDB::delete("artists", "id = ".$this->id);
 		return (bool) $result;

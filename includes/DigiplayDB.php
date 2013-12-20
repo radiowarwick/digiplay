@@ -22,7 +22,7 @@ class DigiplayDB{
 			$result = self::$connection->prepare($query);
 			$result->execute($parameters);
 		} catch(PDOException $e) {
-			trigger_error("Database error: ".$e->getMessage(), E_USER_WARNING);
+			trigger_error("Database error: ".$e->getMessage(). "\n". $query, E_USER_WARNING);
 		}
 		self::$querytime += microtime(true) - $time1;
 		self::$querycount++;
@@ -64,10 +64,9 @@ class DigiplayDB{
 	}
 
 	public static function update($table, $data, $where) {
+		$fields = "";
 		foreach($data as $key => $val) {
-			if(isset($val) && (is_bool($val) || (strlen($val) > 0))) {
-				$fields .= "\"".$key."\" = :".$val.", ";
-			}
+			$fields .= "\"".$key."\" = :".$key.", ";
 		}
 
 		$sql = "UPDATE \"".$table."\" SET ".rtrim($fields,", ")." WHERE ".$where;

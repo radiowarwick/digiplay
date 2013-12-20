@@ -6,6 +6,7 @@ MainTemplate::set_subtitle("View and edit track metadata");
 if(!isset($_GET['id'])) exit("<h3>No track specified</h3><h4>You must access this via another page, to get metadata for a specified track.</h4>");
 if(!$track = Tracks::get($_GET["id"])) exit("<h3>Invalid track ID</h3><h4>If you got to this page via a link from somewhere else on the site, there may be a bug.  A bug you should bug the techies about!</h4>");
 if(!Session::is_group_user("Music Admin")) $disabled = " disabled";
+else $disabled = "";
 
 echo("
 	<script>
@@ -22,6 +23,7 @@ echo("
 						value = $.parseJSON(xhr.responseText);
 						submit.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-save');
 						$('h3').after('".Bootstrap::alert_message_basic("danger","'+value.error+'","Error!")."');
+						console.error(value.detail);
 						$('.alert-message').alert();
 					},
 					success: function(data,text,xhr) {

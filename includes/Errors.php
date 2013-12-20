@@ -30,9 +30,20 @@ class Errors {
 	public static function clear() { self::$errors = array(); }
 	private static function log_error($type, $string, $file, $line) { 
 		self::$errors[] = new Error($type, $string, $file, $line);
-		if(Session::is_developer()) echo end(self::$errors);
+		if(substr(LINK_FILE,0,4) != "ajax") echo end(self::$errors);
 	}
-	public static function report() { return implode("\n\n",self::$errors); }
+	public static function report($format = "html") { 
+		switch($format) {
+			case "html":
+				return implode("\n", self::$errors);
+				break;
+			case "array":
+				$array = array();
+				foreach(self::$errors as $error) $array[] = $error->to_array();
+				return $array;
+				break;
+		}
+	}
 }
 
 class Error {
@@ -50,6 +61,15 @@ class Error {
 
 	public function __toString() { 
 		return Bootstrap::alert_message_basic("danger", (Session::is_developer()? "Error on line ".$this->line." in file ".$this->file.":\n" : "").$this->string, $this->error_type().":");
+	}
+
+	public function to_array() {
+		return array(
+			"type" => $this->error_type(),
+			"string" => $this->string,
+			"file" => $this->file,
+			"line" => $this->line 
+		);
 	}
 	
 	private function error_type() {
