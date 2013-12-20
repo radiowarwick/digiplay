@@ -26,7 +26,7 @@ class Script {
 		if($this->id) DigiplayDB::update("scripts", get_object_vars($this), "id = ".$this->id.";");
 		else {
 			if(!$this->creationdate) $this->creationdate = time();
-			$this->id = DigiplayDB::insert("showitems", get_object_vars($this), "id");
+			$this->id = DigiplayDB::insert("scripts", get_object_vars($this), "id");
 		}
 		return $this->id;
 	}
