@@ -2,10 +2,10 @@
 
 Output::set_title("Library Search");
 
-$query = $_REQUEST['q'];
-$index = (isset($_REQUEST['i'])? $_REQUEST["i"] : "title artist album");
-$limit = (isset($_GET['n']))? $_GET['n'] : 10;
-$page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
+$query = $_REQUEST["q"];
+$index = (isset($_REQUEST["i"])? explode(",",$_REQUEST["i"]) : array("title","artist","album"));
+$limit = (isset($_GET["n"]) && is_numeric($_REQUEST["n"])? $_GET["n"] : 10);
+$page = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])? $_REQUEST["p"] : 1);
 
 MainTemplate::set_subtitle("Find a track in the database, edit track details");
 if($query) $search = Search::tracks($query,$index,$limit,(($page-1)*$limit));
@@ -15,7 +15,7 @@ if($tracks) {
 	$pages = new Paginator;
 	$pages->items_per_page = $limit;
 	$pages->querystring = $query;
-	$pages->index = $index;
+	$pages->index = implode(",",$index);
 	$pages->mid_range = 5;
 	$pages->items_total = $search["total"];
 	$pages->paginate();
@@ -118,7 +118,7 @@ if($tracks) {
 "		});
 	</script>");
 
-	$indexes = implode(", ", explode(" ", $index));
+	$indexes = implode(", ", $index);
 	echo("<h3>".$search["total"]." results for ".$query."<small> searching in ".$indexes."</small></h3>");
 	echo("<div class=\"row\"><div class=\"col-lg-5\"><h5>Showing results ".$low." to ".$high."</h5></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 	echo("<table class=\"table table-striped\" cellspacing=\"0\">

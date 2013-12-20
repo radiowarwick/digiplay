@@ -40,6 +40,7 @@ class Track extends Audio {
 	
 	public function get_artists_str() {
 		$artists = $this->get_artists();
+		$artist_str = "";
 		foreach($artists as $artist) $artist_str .= $artist->get_name()."; ";
 		$artist_str = substr($artist_str,0,-2);
 		return $artist_str;

@@ -29,8 +29,8 @@ class DigiplayDB{
 		return $result;
 	}
 
-	public static function select($query, $return_class = NULL, $as_array = false) {
-		$results = self::query("SELECT ".$query);
+	public static function select($query, $return_class = NULL, $as_array = false, $parameters = NULL) {
+		$results = self::query("SELECT ".$query, $parameters);
 		if($results->rowCount() == 0 && $as_array == false) return NULL;
 		if($results->rowCount() == 0 && $as_array == true) return array();
 		if($results->rowCount() == 1 && $as_array == false) {
@@ -40,8 +40,9 @@ class DigiplayDB{
 			}
 			else return $results->fetchAll(PDO::FETCH_CLASS,$return_class)[0];
 		}
-
-		return $results->fetchAll(PDO::FETCH_CLASS, $return_class);
+		
+		if(isset($return_class)) return $results->fetchAll(PDO::FETCH_CLASS, $return_class);
+		else return $results->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	public static function insert($table, $data, $return_field = NULL) {

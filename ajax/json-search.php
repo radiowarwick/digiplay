@@ -4,7 +4,7 @@ Output::set_template();
 
 $query = $_REQUEST['q'];
 
-if($query) $search = Search::tracks(str_replace(" ", " | ", $query),"title",5);
+if($query) $search = Search::tracks(str_replace(" ", " | ", $query),array("title"),5);
 $tracks = $search["results"];
 $tracks_array = array();
 

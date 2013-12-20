@@ -6,7 +6,7 @@ Output::add_script(LINK_ABS."js/bootstrap-popover.js");
 
 MainTemplate::set_subtitle("Want to play a track, but it's not in the database? Request it here");
 
-if($_REQUEST["name"] && $_REQUEST["artistname"]) {
+if(isset($_REQUEST["name"]) && isset($_REQUEST["artistname"])) {
 	$request = new Request();
 	$request->set_name($_REQUEST["name"]);
 	$request->set_artist_name($_REQUEST["artistname"]);
@@ -14,7 +14,7 @@ if($_REQUEST["name"] && $_REQUEST["artistname"]) {
 	$request->save();
 }
 
-if($_REQUEST["delete"]) {
+if(isset($_REQUEST["delete"])) {
 	if(!Session::is_group_user("Music Admin")) {
 		echo Bootstrap::alert_message_basic("error","You are trying to delete a request, but you do not have the requred privelidges!","Error!");
 	} else {
