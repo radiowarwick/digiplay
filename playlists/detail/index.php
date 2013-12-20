@@ -4,7 +4,7 @@ Output::set_title("Playlist Detail");
 
 $playlist = Playlists::get_by_id($_REQUEST['q']);
 $limit = (isset($_GET['n']))? $_REQUEST['n'] : 10;
-$page = ($_REQUEST['p']? $_REQUEST['p'] : 1);
+$page = (isset($_REQUEST['p'])? $_REQUEST['p'] : 1);
 
 MainTemplate::set_subtitle("List tracks on a playlist, remove tracks");
 
@@ -13,7 +13,6 @@ if($tracks) {
 	$pages = new Paginator;
 	$pages->items_per_page = $limit;
 	$pages->querystring = $playlist->get_id();
-	$pages->index = $index;
 	$pages->mid_range = 5;
 	$pages->items_total = $playlist->count_tracks();
 	$pages->paginate();
@@ -54,7 +53,6 @@ if($tracks) {
 "		});
 	</script>");
 
-	$indexes = implode(", ", explode(" ", $index));
 	echo("<h3>Tracks on playlist '".$playlist->get_name()."'</h3>");
 	echo("<div class=\"row\"><div class=\"col-lg-5\"><h5>Showing results ".$low." to ".$high."</h5></div><div class=\"pull-right\">".$pages->display_jump_menu().$pages->display_items_per_page()."</div></div>");
 	echo("<table class=\"table table-striped\" cellspacing=\"0\">
