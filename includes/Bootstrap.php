@@ -1,14 +1,14 @@
 <?php
 class Bootstrap {
-	public function glyphicon($icon) {
+	public static function glyphicon($icon) {
 		return "<span class=\"glyphicon glyphicon-".$icon."\"></span> ";
 	}
 
-	public function badge($num, $pull_right = false) {
+	public static function badge($num, $pull_right = false) {
 		return "<span class=\"badge".($pull_right? " pull-right\"" : "\"").">".$num."</span>";
 	}
 
-	public function alert_message_basic($class="info",$text="",$title="",$close=true) {
+	public static function alert_message_basic($class="info",$text="",$title="",$close=true) {
 		$return = "<div class=\"alert alert-".$class.($close? " fade in" : "")."\">";
 		if($close) $return .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
 		if($title) $return .= "<strong>".$title."</strong> ";
@@ -17,7 +17,7 @@ class Bootstrap {
 		return $return;
 	}	
 
-	public function alert_message_block($class="info",$text="",$title="",$close=false) {
+	public static function alert_message_block($class="info",$text="",$title="",$close=false) {
 		$return = "<div class=\"alert-block alert-".$class.($close? " fade in" : "")."\">";
 		if($close) $return .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
 		if($title) $return .= "<strong>".$title."</strong> ";
@@ -26,7 +26,7 @@ class Bootstrap {
 		return $return;
 	}
 
-	public function list_group($items) {
+	public static function list_group($items) {
 		if(function($items) { foreach($items as $item) if(array_key_exists("url",$item)) return true; }) $div = true;		
 		$return = "<".($div? "div" : "ul")." class=\"list-group\">";
 		
@@ -42,7 +42,7 @@ class Bootstrap {
 		return $return;
 	}
 
-	public function modal($id, $content, $header = NULL, $footer = NULL) {
+	public static function modal($id, $content, $header = NULL, $footer = NULL) {
 		$return = "
 		<div class=\"modal fade\" id=\"".$id."\">
 			<div class=\"modal-dialog\">
@@ -63,7 +63,7 @@ class Bootstrap {
 		return $return;
 	}
 
-	public function panel($class="info", $content, $header = NULL, $footer = NULL) {
+	public static function panel($class="info", $content, $header = NULL, $footer = NULL) {
 		$return = "
 		<div class=\"panel panel-".$class."\">
 		  ".(!is_null($header)? "<div class=\"panel-heading\">
