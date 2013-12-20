@@ -1,89 +1,86 @@
 <?php
 class DigiplayDB{
-	protected static $pgresource;
+	protected static $connection;
 	protected static $querycount;
 	protected static $querytime;
 
-	public static function connect() {;
-		self::$pgresource = pg_connect("host=". DATABASE_DPS_HOST ." port=". DATABASE_DPS_PORT ." dbname=". DATABASE_DPS_NAME ." user=". DATABASE_DPS_USER);
-		self::is_connected();
-		return self::$pgresource;
-	}
-
-	protected static function is_connected() {
-		if(!self::$pgresource) {
-				trigger_error("No Connection to database", E_USER_ERROR);
-				return false;
-		} else if (pg_connection_status(self::$pgresource) == PGSQL_CONNECTION_BAD) {
-				trigger_error("Database connection bad",E_USER_ERROR);
-				return false;
+	public static function connect() {
+		try {
+			self::$connection = new PDO("pgsql:host=". DATABASE_DPS_HOST .";port=". DATABASE_DPS_PORT .";dbname=". DATABASE_DPS_NAME .";user=". DATABASE_DPS_USER);
+			self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} catch(PDOException $e) {
+			trigger_error("Database error: ".$e->getMessage(), E_USER_ERROR);
 		}
-		return true;
 	}
 
 	public static function get_querycount() { return self::$querycount; }
 	public static function get_querytime() { return self::$querytime; }
 
-	public static function query($query) {
-		if(self::is_connected()) { 
-			$time1 = microtime(true);
-			$result = pg_query(self::$pgresource,$query);
-			self::$querytime += microtime(true) - $time1;
-			self::$querycount++;
-			return $result;
+	public static function query($query, $parameters = NULL) {
+		$time1 = microtime(true);
+		try {
+			$result = self::$connection->prepare($query);
+			$result->execute($parameters);
+		} catch(PDOException $e) {
+			trigger_error("Database error: ".$e->getMessage(), E_USER_WARNING);
 		}
+		self::$querytime += microtime(true) - $time1;
+		self::$querycount++;
+		return $result;
 	}
 
 	public static function select($query, $return_class = NULL, $as_array = false) {
 		$results = self::query("SELECT ".$query);
-		if(pg_num_rows($results) == 0) return NULL;
-		if(pg_num_rows($results) == 1 && $as_array == false) {
+		if($results->rowCount() == 0 && $as_array == false) return NULL;
+		if($results->rowCount() == 0 && $as_array == true) return array();
+		if($results->rowCount() == 1 && $as_array == false) {
 			if($return_class == NULL) {
-				if(pg_num_fields($results) == 1) return pg_fetch_result($results,0,0);
-				else return pg_fetch_assoc($results,0);
+				if($results->columnCount() == 1) return $results->fetchColumn(0);
+				else return $results->fetch(PDO::FETCH_ASSOC);
 			}
-			else return pg_fetch_object($results,0,$return_class);
+			else return $results->fetchAll(PDO::FETCH_CLASS,$return_class)[0];
 		}
 
-		$return = array();
-		while ($item = ($return_class? pg_fetch_object($results,NULL,$return_class) : pg_fetch_assoc($results,NULL))) $return[] = $item;
-		return $return;
+		return $results->fetchAll(PDO::FETCH_CLASS, $return_class);
 	}
 
 	public static function insert($table, $data, $return_field = NULL) {
 		foreach($data as $key => $val) {
-			if($key == "id" && $val == NULL) continue;
-			$fields .= "\"".$key."\", ";
-			if(isset($val) && (is_bool($val) || (strlen($val) > 0))) {
-				if(is_bool($val)) $vars .= "'".($val? "t" : "f")."', ";
-				else $vars .= "'".pg_escape_string($val)."', ";
-			} else {
-				$vars .= "NULL, ";
-			}
+			if($key == "id" && $val == NULL) unset($data[$key]);
+			else if(!(isset($val) && (is_bool($val) || (strlen($val) > 0)))) $data[$key] = NULL;
 		}
 
-		$sql = "INSERT INTO \"".$table."\" (".rtrim($fields,", ").") VALUES(".rtrim($vars,", ").")".(isset($return_field)? " RETURNING \"".$return_field."\"" : "");
-		$result = self::query($sql);
-		if(isset($return_field)) return pg_fetch_result($result, 0, 0);
+		$sql = "INSERT INTO \"".$table."\" (\"".implode("\", \"",array_keys($data))."\") VALUES(:".implode(", :", array_keys($data)).")".(isset($return_field)? " RETURNING \"".$return_field."\"" : "");
+
+		foreach($data as $key => $val) {
+			$data[":".$key] = $val;
+			unset($data[$key]);
+		}
+
+		$result = self::query($sql, $data);
+		if(isset($return_field)) return $result->fetchColumn(0);
 		else return (bool) $result;
 	}
 
 	public static function update($table, $data, $where) {
 		foreach($data as $key => $val) {
 			if(isset($val) && (is_bool($val) || (strlen($val) > 0))) {
-				$fields .= "\"".$key."\" = ";
-				if(is_bool($val)) $fields .= "'".($val? "t" : "f")."', ";
-				else $fields .= "'".pg_escape_string($val)."', ";
+				$fields .= "\"".$key."\" = :".$val.", ";
 			}
 		}
 
 		$sql = "UPDATE \"".$table."\" SET ".rtrim($fields,", ")." WHERE ".$where;
-		return self::query($sql);
+		foreach($data as $key => $val) {
+			$data[":".$key] = $val;
+			unset($data[$key]);
+		}
+
+		$result = self::query($sql, $data);
+		return (bool) $result;
 	}
 
-	public function delete($table, $where) {
-		$query = self::query("DELETE FROM \"".$table."\" WHERE ".$where);
-		return ($query? true : false);
+	public static function delete($table, $where) {
+		return (bool) self::query("DELETE FROM \"".$table."\" WHERE ".$where);
 	}
 
 }
