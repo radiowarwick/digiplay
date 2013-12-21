@@ -22,7 +22,7 @@ if(Session::is_group_user('Librarian')){
 	if(!$_REQUEST["origin"]) exit(json_encode(array("error" => "You did not specify an origin.")));
 	if($_REQUEST["origin"] != $track->get_origin()) $track->set_origin($_REQUEST["origin"]);
 
-	$track->set_censored($_REQUEST["censored"]);
+	$track->set_censored(isset($_REQUEST["censored"]));
 
 	if($_REQUEST["notes"] != $track->get_notes()) $track->set_notes($_REQUEST["notes"]);
 	if($_REQUEST["new_keyword"]) $track->add_keywords($_REQUEST["new_keyword"]);
