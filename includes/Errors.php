@@ -60,7 +60,7 @@ class Error {
 	}
 
 	public function __toString() { 
-		return Bootstrap::alert_message_basic("danger", (Session::is_developer()? "Error on line ".$this->line." in file ".$this->file.":\n" : "").$this->string, $this->error_type().":");
+		return Bootstrap::alert_message_basic("danger", (Session::is_developer()? "Error on line ".$this->line." in file ".$this->file.":\n" : "Error: Please contact a developer!\n ").$this->string, $this->error_type().":");
 	}
 
 	public function to_array() {

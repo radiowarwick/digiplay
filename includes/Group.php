@@ -22,7 +22,7 @@ class Group{
 		if($this->get_parentid()) $parent = Groups::get($this->get_parentid());
 		$result = DigiplayDB::select("* FROM usersgroups WHERE (groupid = ".$this->get_id().") AND userid = '".$user->get_id()."'");
 		if($result) return true;
-		else if($parent) return $parent->is_user($user);
+		else if(isset($parent)) return $parent->is_user($user);
 		return false;
 	}
 
