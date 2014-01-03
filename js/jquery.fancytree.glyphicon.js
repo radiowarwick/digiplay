@@ -35,7 +35,7 @@ $.ui.fancytree.registerExtension("glyphicon", {
 			prerec: "registration-mark",
 			script: "file",
 			music: "music",
-			loading: "refresh rotate"
+			loading: "refresh"
 			// loading: "icon-spinner icon-spin"
 		},
 		icon: null // TODO: allow callback here
