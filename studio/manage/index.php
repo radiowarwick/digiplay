@@ -2,6 +2,11 @@
 Output::set_title("Studio Management");
 Output::add_script(LINK_ABS."js/moment.min.js");
 Output::add_stylesheet(LINK_ABS."css/studio.css");
+Output::add_stylesheet(LINK_ABS."css/ui.fancytree.css");
+Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
+Output::add_script(LINK_ABS."js/jquery.fancytree.js");
+Output::add_script(LINK_ABS."js/jquery.fancytree.glyphicon.js");
+
 MainTemplate::set_body_class('manage');
 
 if(isset($_REQUEST["key"])) {
@@ -100,6 +105,7 @@ echo("
 			}
 
 			$(function() {
+				$('#yes-login').button();
 				connect_timeout = setTimeout('setIntervals()', 5000);
 				startWebsocket();
 				window.oncontextmenu = function(event) {
@@ -243,7 +249,35 @@ echo("
 								</div>
 							</div>
 							<div class=\"tab-pane\" id=\"files\">
-								<h4>File manager coming soon <br/>(When i've written one)</h4>
+									<script>
+										function createFileBrowser() {
+											$('#files').append('<div id=\"file-browser\"></div>');
+											$('#file-browser').fancytree({ 
+												source: { url: '".LINK_ABS."ajax/file-tree.php?id=1', cache: false },
+												extensions: ['glyphicon'],
+												lazyload: function(event, data) {
+													var node = data.node;
+													data.result = {	url: '".LINK_ABS."ajax/file-tree.php?id='+node.data.id }
+												}
+											});
+
+											$('#file-browser').bind('fancytreedblclick', function(event, data) {
+												if(data.node.data.type == 'jingle' || data.node.data.type == 'advert' || data.node.data.type == 'music') {
+													addToShowplan(data.node.data.id);
+												}
+												if(data.node.data.type == 'script') {
+													addScriptToShowplan(data.node.data.id);
+												}
+											})
+										}
+
+										function destroyFileBrowser() {
+											$('#file-browser').remove();
+										}
+
+										".(Session::is_user()? "$(function() { createFileBrowser(); }); " : "")."
+									</script>
+
 							</div>
 							<div class=\"tab-pane\" id=\"logging\">
 								<script>
@@ -320,6 +354,24 @@ echo("
 								});
 							}
 
+							function addToShowplan(id) {
+								$.ajax({
+									url: 'functions.php?'+key+'action=showplan-append&id='+id,
+									dataType: 'json'
+								}).done(function(data) {
+									if(!connection) reloadShowplan();
+								});
+							}
+
+							function addScriptToShowplan(id) {
+								$.ajax({
+									url: 'functions.php?'+key+'action=showplan-append-script&id='+id,
+									dataType: 'json'
+								}).done(function(data) {
+									if(!connection) reloadShowplan();
+								});
+							}
+
 							$(function() { 
 								$('#showplan').load('functions.php?'+key+'action=showplan');
 
@@ -352,12 +404,7 @@ echo("
 								});
 
 								$(document).on('dblclick', '.track', function() {
-									$.ajax({
-										url: 'functions.php?'+key+'action=showplan-append&id='+$(this).attr('data-track-id'),
-										dataType: 'json'
-									}).done(function(data) {
-										if(!connection) reloadShowplan();
-									});
+									addToShowplan($(this).attr('data-track-id'));
 								});
 
 								$(document).on('mouseenter', '#showplan .panel:not(.panel-primary)', function() {
@@ -433,6 +480,7 @@ echo("
 							$('#login-modal').find('h1').find('span').removeClass('glyphicon-refresh rotate').addClass('glyphicon-play-circle');
 							if(data.response == 'success') {
 								$('li.disabled').removeClass('disabled').find('a').attr('data-toggle','tab');
+								createFileBrowser();
 								$('[data-target=#logout-modal]').show();
 								$('[data-target=#login-modal]').hide();
 								$('#login-modal').modal('hide');
@@ -465,6 +513,7 @@ echo("
 							$('[href=#info]').tab('show');
 							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
+							destroyFileBrowser();
 							$('[data-target=#logout-modal]').hide();
 							$('[data-target=#login-modal]').show();
 							$('#logout-modal').modal('hide');
@@ -501,7 +550,7 @@ echo("
 						<input type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\" id=\"password\" autocomplete=\"off\">
 					</div>
 				</div>
-				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-login\" data-loading-text=\"Log in\">Log in</a>
+				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-login\" data-role=\"button\" data-loading-text=\"Log in\">Log in</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-login\" data-dismiss=\"modal\">Cancel</a>")."
 		</div>
 	");

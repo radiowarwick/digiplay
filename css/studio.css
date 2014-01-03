@@ -85,6 +85,11 @@ tbody tr:hover { cursor: pointer; }
 #playlists-list .panel-heading { cursor: pointer; }
 #playlists-list .panel-heading:hover { background: #eee; }
 
+/* Files tab */
+#file-browser { height: 100%; overflow-y: scroll; }
+#file-browser .panel-heading { cursor: pointer; }
+#file-browser .panel-heading:hover { background: #eee; }
+
 /* Logging tab */
 #logging { padding-top: 35px; }
 #logging-form { height: 35px; margin-top: -35px; }

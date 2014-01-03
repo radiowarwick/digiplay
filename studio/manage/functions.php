@@ -173,6 +173,20 @@ switch($_REQUEST["action"]) {
 		foreach($items as $item) {
 			if($audio = $item->get_audio()) {
 				$current = false;
+				switch($audio->get_type()->get_name()) {
+					case "Music":
+						$type = "music";
+						break;
+					case "Jingle":
+						$type = "volume-up";
+						break;
+					case "Advert":
+						$type = "bullhorn";
+						break;
+					case 0:
+						$type = "music";
+						break;
+				}
 				if($location->get_config("current_showitems_id")->get_val() == $item->get_id())
 					if($location->get_config("next_on_showplan")->get_val() == $audio->get_md5())
 						$current = true;
@@ -182,7 +196,7 @@ switch($_REQUEST["action"]) {
 							<div class=\"pull-right\">
 								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
 								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
-							".Bootstrap::glyphicon("music").$audio->get_artists_str()." - ".$audio->get_title()."
+							".Bootstrap::glyphicon($type).$audio->get_artists_str()." - ".$audio->get_title()."
 						</h4>
 					</div>
 				</div>";
@@ -219,6 +233,19 @@ switch($_REQUEST["action"]) {
 		$item->set_audio($audio);
 		$item->set_position($showplan->get_end_position());
 		$item->set_length(round($audio->get_length()));
+		$item->set_showplan($showplan);
+		$item->save();
+		echo(json_encode(array("response"=>"success")));
+		break;
+	case "showplan-append-script":
+		$showplan = Showplans::get_by_id($location->get_config("default_showplan")->get_val());
+		$item = new ShowplanItem();
+		$script = Scripts::get_by_id($_REQUEST["id"]);
+		if(!$script) exit(json_encode(array("response"=>"invalid")));
+		$item->set_title($script->get_name());
+		$item->set_script($script);
+		$item->set_position($showplan->get_end_position());
+		$item->set_length($script->get_length());
 		$item->set_showplan($showplan);
 		$item->save();
 		echo(json_encode(array("response"=>"success")));
