@@ -28,12 +28,14 @@ $artists_array = array();
 if($artists) {	
 	foreach ($artists as $artist) {
 		$artist_object = Artists::get_by_id($artist);
-		$artist = array(
-				'id' => $artist_object->get_id(),
-				'title' => $artist_object->get_name(),
-				'href' => LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
-				);
-		array_push($artists_array, $artist);
+		if($artist_object) {
+			$artist = array(
+					'id' => $artist_object->get_id(),
+					'title' => $artist_object->get_name(),
+					'href' => LINK_ABS."music/search/?q=%22".urlencode($artist_object->get_name())."%22&i=artist"
+					);
+			array_push($artists_array, $artist);
+		}
 	}
 }
 
@@ -45,12 +47,14 @@ $albums_array = array();
 if($albums) {	
 	foreach($albums as $album) {
 		$album_object = Albums::get_by_id($album);
-		$album = array(
-			'id' => $album_object->get_id(),
-			'title' => $album_object->get_name(),
-			'href' => LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
-			);
-		array_push($albums_array, $album);
+		if($album_object) {
+			$album = array(
+				'id' => $album_object->get_id(),
+				'title' => $album_object->get_name(),
+				'href' => LINK_ABS."music/search/?q=%22".urlencode($album_object->get_name())."%22&i=album"
+				);
+			array_push($albums_array, $album);
+		}
 	}
 }
 
