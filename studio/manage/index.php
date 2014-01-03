@@ -268,6 +268,9 @@ echo("
 												if(data.node.data.type == 'script') {
 													addScriptToShowplan(data.node.data.id);
 												}
+												if(data.node.data.type == 'aw_set') {
+													loadAudiowall(data.node.data.id);
+												}
 											})
 										}
 
@@ -369,6 +372,15 @@ echo("
 									dataType: 'json'
 								}).done(function(data) {
 									if(!connection) reloadShowplan();
+								});
+							}
+
+							function loadAudiowall(id) {
+								$.ajax({
+									url: 'functions.php?'+key+'action=set-user-audiowall&id='+id,
+									dataType: 'json'
+								}).done(function(data) {
+									
 								});
 							}
 

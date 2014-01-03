@@ -269,6 +269,12 @@ switch($_REQUEST["action"]) {
 		$location->get_config("current_showitems_id")->set_val($item->get_id());
 		echo(json_encode(array("response" => "success", "id" => $item->get_id())));
 		break;
+	case "set-user-audiowall":
+		if(!is_numeric($_REQUEST["id"])) exit(json_encode(array("response" => "error")));
+		// *TODO* check for actual valid audiowall when james adds the classes
+		$location->get_config("user_aw_set")->set_val($_REQUEST["id"]);
+		echo(json_encode(array("response"=>"success")));
+		break;
 	case "login":
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
 		if(!Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"invalid")));
