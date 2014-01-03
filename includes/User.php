@@ -15,7 +15,11 @@ class User{
 	public function set_enabled($enabled) { $this->enabled = (bool) $enabled; }
 	public function set_ghost($ghost) { $this->ghost = (bool) $ghost; }
 
-	public function save() { return DigiplayDB::update("users", get_object_vars($this), "id = ".$this->id); }
+	public function save() { 
+		if(!$this->enabled) $this->enabled = TRUE;
+		if(!$this->ghost) $this->ghost = FALSE;
+		return DigiplayDB::update("users", get_object_vars($this), "id = ".$this->id); 
+	}
 
 	public function get_ldap_attributes() {
 		$ldap = new LDAP;

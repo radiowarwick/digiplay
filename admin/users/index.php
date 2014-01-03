@@ -73,16 +73,18 @@ if(isset($_REQUEST["update_ex_members"])) {
 
 			$folder = $user->get_user_folder();
 
-			$year = $ex_members->find($ldap["yearDisabled"][0]);
-			if(!$year) {
-				$year = new DBDirectory;
-				$year->set_name($ldap["yearDisabled"][0]);
-				$year->set_parent($ex_members);
-				$year->save();
-			}
+			if($folder) {
+				$year = $ex_members->find($ldap["yearDisabled"][0]);
+				if(!$year) {
+					$year = new DBDirectory;
+					$year->set_name($ldap["yearDisabled"][0]);
+					$year->set_parent($ex_members);
+					$year->save();
+				}
 
-			$folder->set_parent($year);
-			$folder->save();
+				$folder->set_parent($year);
+				$folder->save();
+			}
 		}
 	}
 
