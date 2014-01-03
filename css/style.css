@@ -80,3 +80,23 @@ table .nowrap { white-space: nowrap; }
 
 /* Group admin */
 #groups li:hover, #group-members .glyphicon-remove:hover { cursor: pointer; }
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotateZ(0deg) translate3d( 0, 0, 0);
+    
+  }
+  to { 
+    -webkit-transform: rotateZ(359deg) translate3d( 0, 0, 0);
+
+  }
+}
+
+.rotate {
+  -webkit-transform-style: preserve-3d; 
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         1s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-filter: blur(0);
+}
