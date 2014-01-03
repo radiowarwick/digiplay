@@ -114,7 +114,7 @@ foreach($files as $file) {
 	$title = isset($tags["comments"]["title"]) ? implode(";", $tags["comments"]["title"]) : "";
 	$artist = isset($tags["comments"]["artist"]) ? implode(";", $tags["comments"]["artist"]) : "";
 	$album = isset($tags["comments"]["album"]) ? implode(";", $tags["comments"]["album"]) : "";
-	$year = (strlen($tags["comments"]["recording_time"]) == 4)? $tags["comments"]["recording_time"][0] : date("Y");
+	$year = isset($tags["comments"]["recording_time"]) && (strlen($tags["comments"]["recording_time"]) == 4)? $tags["comments"]["recording_time"][0] : date("Y");
 	$length = isset($tags["playtime_string"])? $tags["playtime_string"] : "Unknown";
 	$origin = (strlen(Session::get_name()) > 0) ? Session::get_name() : Session::get_username();
 	$filetype = isset($tags["audio"]["dataformat"])? $tags["audio"]["dataformat"] : "Unknown";
