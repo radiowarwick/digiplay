@@ -196,7 +196,7 @@ switch($_REQUEST["action"]) {
 							<div class=\"pull-right\">
 								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
 								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
-							".Bootstrap::glyphicon($type).$audio->get_artists_str()." - ".$audio->get_title()."
+							".Bootstrap::glyphicon($type).($audio->get_artists()? $audio->get_artists_str()." - " : "").$audio->get_title()."
 						</h4>
 					</div>
 				</div>";
