@@ -283,7 +283,9 @@ switch($_REQUEST["action"]) {
 		break;
 	case "logout":
 		Session::logout();
-		$location->get_config("user_aw_set")->set_val(0);
+		$secondary_aw = $location->get_config("secondary_aw_set");
+		if(isset($secondary_aw)) $location->get_config("user_aw_set")->set_val($secondary_aw->get_val());
+		else $location->get_config("user_aw_set")->set_val(0);
 		break;
 }
 ?>
