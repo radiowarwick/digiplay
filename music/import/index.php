@@ -114,9 +114,9 @@ foreach($files as $file) {
 	$title = isset($tags["comments"]["title"]) ? implode(";", $tags["comments"]["title"]) : "";
 	$artist = isset($tags["comments"]["artist"]) ? implode(";", $tags["comments"]["artist"]) : "";
 	$album = isset($tags["comments"]["album"]) ? implode(";", $tags["comments"]["album"]) : "";
-	$year = isset($tags["comments"]["recording_time"]) && (strlen($tags["comments"]["recording_time"]) == 4)? $tags["comments"]["recording_time"][0] : date("Y");
+	$year = isset($tags["comments"]["recording_time"]) && (strlen(implode($tags["comments"]["recording_time"])) == 4)? $tags["comments"]["recording_time"][0] : date("Y");
 	$length = isset($tags["playtime_string"])? $tags["playtime_string"] : "Unknown";
-	$origin = isset(Session::get_name()) ? Session::get_name() : Session::get_username();
+	$origin = (Session::get_name()) ? Session::get_name() : Session::get_username();
 	$filetype = isset($tags["audio"]["dataformat"])? $tags["audio"]["dataformat"] : "Unknown";
 	$codec = isset($tags["audio"]["codec"])? $tags["audio"]["codec"] : "Unknown";
 	$bitrate = isset($tags["audio"]["bitrate"])? round($tags["audio"]["bitrate"] / 1000) : "Unknown";
