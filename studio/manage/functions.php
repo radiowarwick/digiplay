@@ -26,9 +26,9 @@ switch($_REQUEST["action"]) {
 	case "search":
 		$index = array();
 		$query = $_REQUEST["search-text"];
-		if ($_REQUEST["search-title"] == "on") $index[] = "title";
-		if ($_REQUEST["search-artist"] == "on") $index[] = "artist";
-		if ($_REQUEST["search-album"] == "on") $index[] = "album";
+		if (isset($_REQUEST["search-title"]) && $_REQUEST["search-title"] == "on") $index[] = "title";
+		if (isset($_REQUEST["search-artist"]) && $_REQUEST["search-artist"] == "on") $index[] = "artist";
+		if (isset($_REQUEST["search-album"]) && $_REQUEST["search-album"] == "on") $index[] = "album";
 
 		if($query) $search = Search::tracks($query,$index,50);
 
