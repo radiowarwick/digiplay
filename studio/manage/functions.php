@@ -30,7 +30,7 @@ switch($_REQUEST["action"]) {
 		if (isset($_REQUEST["search-artist"]) && $_REQUEST["search-artist"] == "on") $index[] = "artist";
 		if (isset($_REQUEST["search-album"]) && $_REQUEST["search-album"] == "on") $index[] = "album";
 
-		if($query) $search = Search::tracks($query,$index,50);
+		if($query && (count($index) >= 1)) $search = Search::tracks($query,$index,50);
 
 		if(isset($search)) {
 			$return = "<table class=\"table table-striped table-hover\" cellspacing=\"0\">
