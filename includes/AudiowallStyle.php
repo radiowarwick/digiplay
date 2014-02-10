@@ -24,7 +24,14 @@ class AudiowallStyle {
 		$g = round( ( $this->background >> 8 ) & 255 );
 		$b = round( $this->background & 255 );
 		return "rgb(".$r.",".$g.",".$b.")";
-	}	
+	}
+
+	public function get_accent_rgb(){
+		$r = round( ( $this->background >> 16 ) & 255 );
+		$g = round( ( $this->background >> 8 ) & 255 );
+		$b = round( $this->background & 255 );
+		return "rgb(".($r-40).",".($g-40).",".($b-40).")";
+	}
 
 }
 ?>

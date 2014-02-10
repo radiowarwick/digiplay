@@ -5,31 +5,25 @@ class AudiowallSet {
 	protected $description;
 	protected $walls = NULL;
 	
-	public function get_id(){ return $this->id; }
-	public function get_name(){ return $this->name; }
-	public function get_description(){ return $this->description; }
+	public function get_id() { return $this->id; }
+	public function get_name() { return $this->name; }
+	public function get_description() { return $this->description; }
 	
-	public function set_name($name){
-		$this->name = $name;
-	}
-	public function set_description($description){
-		$this->description = $description;
-	}
+	public function set_name($name) { $this->name = $name; }
+	public function set_description($description) { $this->description = $description; }
 	
 	/* Extended Functions */
-	public function get_walls(){
-		if ($this->walls == NULL) {
-			$this->walls = DigiplayDB::select("* FROM aw_walls WHERE set_id = :set_id ORDER BY page ASC;", "Audiowall", true, array(":set_id" => $this->id));
-        }
-    	return $this->walls;
+	public function get_walls() {
+		if ($this->walls == NULL) $this->walls = Audiowalls::get_by_set($this);
+		return $this->walls;
 	}
 	
 	public function empty_set() {
 		$this->walls = array();
 	}
 	
-	public function add_wall($Audiowall){
-		$this->walls[] = $Audiowall;
+	public function add_wall($audiowall) {
+		$this->walls[] = $audiowall;
 	}
 	
 	public function save() {

@@ -21,10 +21,8 @@ class Audiowall {
 	
 	/* Extended Functions */
 	public function get_items(){
-		if ($this->items == NULL) {
-			$this->items = DigiplayDB::select("* FROM aw_items WHERE wall_id = :wall_id ORDER BY item ASC;", "AudiowallItem", true, array(":wall_id" => $this->id));
-		}	
-    		return $this->items;
+		if ($this->items == NULL) $this->items = AudiowallItems::get_by_wall($this);
+   		return $this->items;
 	}
 	
 	public function empty_wall() {
