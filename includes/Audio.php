@@ -43,10 +43,10 @@ class Audio {
 	/* Extended functions */
 	public function get_length_formatted() {
 		$time_arr = Time::seconds_to_dhms($this->get_length());
-		$time_str = ($time_arr["days"])? $time_arr["days"]."d " : "";
-		$time_str .= ($time_arr["hours"])? $time_arr["hours"]."h " : "";
-		$time_str .= ($time_arr["minutes"])? $time_arr["minutes"]."m " : "0m ";
-		$time_str .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
+		$time_str = (isset($time_arr["days"]))? $time_arr["days"]."d " : "";
+		$time_str .= (isset($time_arr["hours"]))? $time_arr["hours"]."h " : "";
+		$time_str .= (isset($time_arr["minutes"]))? $time_arr["minutes"]."m " : "0m ";
+		$time_str .= (isset($time_arr["seconds"]))? sprintf('%02d',$time_arr["seconds"])."s " : "00s ";
 		return $time_str;
 	}
 	
@@ -99,7 +99,7 @@ class Audio {
 	}
 
 	public static function get_by_md5($md5) {
-		$type = DigiplayDB::query("type FROM audio WHERE md5 = '".$md5."'");
+		$type = DigiplayDB::select("type FROM audio WHERE md5 = '".$md5."'");
 		if($type) {
 			if($type == 1) return Tracks::get_by_md5($md5);
 			else if($type == 2) return Jingles::get_by_md5($md5);
