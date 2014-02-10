@@ -1,0 +1,10 @@
+html, body, .col-xs-4, .btn, .well { height: 100%; margin: 0; padding: 0; }
+* { -webkit-user-drag: none; }
+
+.row { margin: 0; padding: 0; height: 25%; }
+.btn { 
+  display: -webkit-box; display: -moz-box; display: -ms-flexbox; display:box;
+  -webkit-box-align: center; -moz-box-align: center; -ms-flex-align: center; box-align: center;
+  -webkit-box-pack: center; -moz-box-pack: center; -ms-flex-pack: center; box-pack: center;
+  font-size: 2.5vw;
+}
