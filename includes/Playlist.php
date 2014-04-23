@@ -13,7 +13,7 @@ class Playlist {
 
 	public function save() {
 		if(!$this->name) return false;
-		if($this->id) DigiplayDB::update("playlists", get_object_vars($this), "id = ".$this->id);
+		if(isset($this->id)) DigiplayDB::update("playlists", get_object_vars($this), "id = ".$this->id);
 		else $this->id = DigiplayDB::insert("playlists", get_object_vars($this), "id");
 		return $this->id;
 	}

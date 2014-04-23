@@ -1,6 +1,6 @@
 <?php
 if(Session::is_group_user('Playlist Admin')){
-	if(is_null($_REQUEST['id'])) {
+	if(!isset($_REQUEST['id'])) {
 		if(!is_null($_REQUEST['name'])) {
 			$playlist = new Playlist();
 			$playlist->set_name($_REQUEST['name']);
