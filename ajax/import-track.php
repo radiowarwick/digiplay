@@ -3,7 +3,9 @@
 if(!Session::is_group_user("Importer")) {
 	Output::http_error(403);
 } else {
-	if(!isset($_REQUEST["filename"]) || !is_file(FILE_ROOT."uploads/".$_REQUEST["filename"])) die(json_encode(array("error" => "invalid input file")));
+	if(!isset($_REQUEST["filename"])) die(json_encode(array("error" => "invalid input file")));
+	$uploaded_file = utf8_decode(FILE_ROOT."uploads/".$_REQUEST["filename"]);
+
 	if(!isset($_REQUEST["type"])) $_REQUEST["type"] = "music";
 
 	if(!isset($_REQUEST["title"]) || $_REQUEST["title"] === "") die(json_encode(array("error" => "You must specify a title")));
@@ -13,9 +15,8 @@ if(!Session::is_group_user("Importer")) {
 
 	if(!is_writable($path)) die(json_encode(array("error" => "Audio archive is not writable")));
 
-
-	$tempfile = tempnam(sys_get_temp_dir(), 'dps');
-	copy(FILE_ROOT."uploads/".$_REQUEST["filename"], $tempfile);
+	$tempfile = tempnam(sys_get_temp_dir(), 'dps').".".pathinfo($uploaded_file, PATHINFO_EXTENSION);
+	copy($uploaded_file, $tempfile);
 
 	$md5 = md5_file($tempfile);
 	$output = array();
@@ -78,7 +79,7 @@ if(!Session::is_group_user("Importer")) {
 	}
 
 	unlink($tempfile);
-	$output = unlink(FILE_ROOT."uploads/".$_REQUEST["filename"]);
+	$output = unlink($uploaded_file);
 	if($output === false) die(json_encode(array("error" => "could not remove uploaded file")));
 
 	$audio->update_metadata();
