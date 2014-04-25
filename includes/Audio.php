@@ -40,6 +40,7 @@ class Audio {
 	public function set_title($title) { $this->title = $title; }
 	public function set_origin($origin) { $this->origin = $origin; }
 	public function set_notes($notes) { $this->notes = $notes; }
+	public function set_filetype($filetype) { $this->filetype = $filetype; }
 
 	public function save() {
 		if(isset($this->id)) DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id);
