@@ -27,7 +27,7 @@ if(!Session::is_group_user("Importer")) {
 	switch($_REQUEST["type"]) {
 		case "music":
 			$audio = new Track();
-			if(isset($_REQUEST["album"]) || $_REQUEST["album"] != "") $audio->set_album($_REQUEST["album"]);
+			if(isset($_REQUEST["album"]) && $_REQUEST["album"] != "") $audio->set_album($_REQUEST["album"]);
 			else $audio->set_album("(none)");
 
 			break;
