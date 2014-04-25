@@ -13,7 +13,11 @@ if(!Session::is_group_user("Importer")) {
 
 	if(!is_writable($path)) die(json_encode(array("error" => "Audio archive is not writable")));
 
-	$md5 = md5_file(FILE_ROOT."uploads/".$_REQUEST["filename"]);
+
+	$tempfile = tempnam(sys_get_temp_dir(), 'dps');
+	copy(FILE_ROOT."uploads/".$_REQUEST["filename"], $tempfile);
+
+	$md5 = md5_file($tempfile);
 	$output = array();
 
 	# Execute SoX to convert our audio
@@ -21,8 +25,11 @@ if(!Session::is_group_user("Importer")) {
 	# Convert to 44.1kHz 16-bit stereo for consistency
 	# Normalise to -0.1dB
 	# Save as flac in inbox
-	exec("sox \"".FILE_ROOT."uploads/".$_REQUEST["filename"]."\" -b 16 \"".$path."/inbox/".$md5.".flac\" silence 1 0.1 1% reverse silence 1 0.1 1% reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
-	if(strpos(implode($output), "FAIL")) die(json_encode(array("error" => "SoX could not convert file", "debug" => $output)));
+	exec("sox \"".$tempfile."\" -b 16 \"".$path."/inbox/".$md5.".flac\" silence 1 0.1 1% reverse silence 1 0.1 1% reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
+	if(strpos(implode($output), "FAIL")) {
+		unlink($tempfile);
+		die(json_encode(array("error" => "SoX could not convert file", "debug" => $output)));
+	}
 
 	switch($_REQUEST["type"]) {
 		case "music":
@@ -57,13 +64,20 @@ if(!Session::is_group_user("Importer")) {
 	$audio->set_archive($current_archive);
 	$audio->set_filetype("flac");
 
-	if(!$audio->save()) die(json_encode(array("error" => "Failed to save audio entry to database.", "debug" => Errors::report("array"))));
+	if(!$audio->save()) {
+		unlink($tempfile);
+		die(json_encode(array("error" => "Failed to save audio entry to database.", "debug" => Errors::report("array"))));
+	}
 
 	if(isset($_REQUEST["artist"])) $audio->add_artists(explode(";",$_REQUEST["artist"]));
 
 	$output = rename($path."/inbox/".$md5.".flac", $path."/".substr($md5, 0, 1)."/".$md5.".flac");
-	if($output === false) die(json_encode(array("error" => "could not import file to audio archive", "debug" => Errors::report("array"))));
+	if($output === false) {
+		unlink($tempfile);
+		die(json_encode(array("error" => "could not import file to audio archive", "debug" => Errors::report("array"))));
+	}
 
+	unlink($tempfile);
 	$output = unlink(FILE_ROOT."uploads/".$_REQUEST["filename"]);
 	if($output === false) die(json_encode(array("error" => "could not remove uploaded file")));
 
