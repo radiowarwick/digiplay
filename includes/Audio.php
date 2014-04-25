@@ -32,13 +32,28 @@ class Audio {
 	public function get_rip_result() { return $this->rip_result; }
 	public function get_filetype() { return $this->filetype; }
 
+	public function set_length_smpl($length_smpl) { $this->length_smpl = $length_smpl; }
+	public function set_start_smpl($start_smpl) { $this->start_smpl = $start_smpl; }
+	public function set_end_smpl($end_smpl) { $this->end_smpl = $end_smpl; }
 	public function set_type($audiotype) { $this->type = $audiotype->get_id(); }
 	public function set_creator($user) { $this->creator = $user->get_id(); }
 	public function set_title($title) { $this->title = $title; }
 	public function set_origin($origin) { $this->origin = $origin; }
 	public function set_notes($notes) { $this->notes = $notes; }
 
-	public function save_audio() { return DigiplayDB::update("audio", array("type" => $this->type, "creator" => $this->creator, "title" => $this->title, "origin" => $this->origin, "notes" => $this->notes), "id = ".$this->id); }
+	public function save() {
+		if(isset($this->id)) DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id);
+		else {
+			if(!isset($this->md5) || !isset($this->archive) || !isset($this->filetype)) return false;
+			if(!isset($this->end_smpl)) $this->end_smpl = $this->length_smpl;
+			if(!isset($this->start_smpl)) $this->start_smpl = 0;
+			if(!isset($this->import_date)) $this->import_date = time();
+			if(!isset($this->type)) $this->set_type(AudioTypes::get_by_name(get_class()));
+
+			$this->id = DigiplayDB::insert("audio", get_object_vars($this), "id");
+		}
+		return $this->id;
+	}
 
 	/* Extended functions */
 	public function get_length_formatted() {
@@ -86,6 +101,24 @@ class Audio {
 			</div>
 		</div>";
 		return $html;
+	}
+
+	public function get_filename() {
+		$archive = $this->get_archive();
+		$path = (is_dir($archive->get_localpath())? $archive->get_localpath() : (is_dir($archive->get_remotepath()) ? $archive->get_remotepath() : ""));
+		return $path."/".substr($this->md5, 0, 1)."/".$this->md5.".flac";
+	}
+
+	public function update_metadata() {
+		$output = shell_exec("metaflac --remove-all-tags ".$this->get_filename()." --set-tag=\"TITLE=".$this->title."\" --set-tag=\"ARTIST=".$this->get_artists_str()."\" ".(isset($this->album)? "--set-tag=\"ALBUM=".$this->get_album()->get_name()."\" " : "")."--set-tag=\"ENCODED-BY=Digiplay\"");
+		if($output === false) return false;
+		else return true;
+	}
+
+	public function calculate_replaygain() {
+		$output = shell_exec("metaflac --add_replay_gain ".$this->get_filename());
+		if($output === false) return false;
+		else return true;
 	}
 
 	public static function get_by_id($id) {

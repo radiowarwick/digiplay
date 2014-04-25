@@ -1,7 +1,6 @@
 <?php
 class Advert extends Audio {
-	public function save() { return DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id); }
-
+	
 	/* Extended functions */
 	public function get_artists() { return Artists::get_by_audio($this); }
 	public function get_keywords() { return Keywords::get_by_audio($this); }

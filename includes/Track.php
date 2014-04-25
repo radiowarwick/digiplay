@@ -15,13 +15,11 @@ class Track extends Audio {
 	public function is_flagged() { return (($this->flagged == "t")? TRUE : FALSE); }
 	public function is_censored(){ return (($this->censor == "t")? TRUE : FALSE); }
 
-	public function set_track($track) { $this->track = $track; }
+	public function set_track($track) { $this->music_track = $track; }
 	public function set_year($year) { $this->music_released = (is_numeric($year))? $year : 0; }
 	public function set_reclibid($reclibid) { $this->reclibid = $reclibid; }
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
-
-	public function save() { return DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id); }
 
 	/* Extended functions */
 	public function get_artists() { return Artists::get_by_audio($this); }
