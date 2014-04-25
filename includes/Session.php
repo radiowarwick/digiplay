@@ -51,7 +51,13 @@ class Session{
 				if($ldap_instance->login_status()) {
 					self::$data = $ldap_instance->userdetails();
 					self::$data["user"] = true;
-					self::$user_object = DigiplayDB::select("* FROM users WHERE username = '".self::$data["username"]."';", "User");
+
+					# Get the user's info, or insert them as a new user if there isn't any
+					self::$user_object = Users::get_by_username(self::$data["username"]);
+					if(!self::$user_object) {
+						$id = DigiplayDB::insert("users", array("username" => self::$data["username"], "password" => NULL, "enabled" => TRUE, "ghost" => FALSE), "id");
+						self::$user_object = Users::get_by_id($id);
+					}
 				} else return false;
 			}
 		}
