@@ -119,13 +119,13 @@ class Audio {
 	}
 
 	public function update_metadata() {
-		$output = shell_exec("metaflac --remove-all-tags ".$this->get_filename()." --set-tag=\"TITLE=".$this->title."\" --set-tag=\"ARTIST=".$this->get_artists_str()."\" ".(isset($this->album)? "--set-tag=\"ALBUM=".$this->get_album()->get_name()."\" " : "")."--set-tag=\"ENCODED-BY=Digiplay\"");
+		$output = shell_exec("metaflac --remove-all-tags \"".$this->get_filename()."\" --set-tag=\"TITLE=".$this->title."\" --set-tag=\"ARTIST=".$this->get_artists_str()."\" ".(isset($this->album)? "--set-tag=\"ALBUM=".$this->get_album()->get_name()."\" " : "")."--set-tag=\"ENCODED-BY=Digiplay\"");
 		if($output === false) return false;
 		else return true;
 	}
 
 	public function calculate_replaygain() {
-		$output = shell_exec("metaflac --add-replay-gain ".$this->get_filename());
+		$output = shell_exec("metaflac --add-replay-gain \"".$this->get_filename()."\"");
 		if($output === false) return false;
 		else return true;
 	}

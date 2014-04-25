@@ -21,7 +21,7 @@ if(!Session::is_group_user("Importer")) {
 	# Convert to 44.1kHz 16-bit stereo for consistency
 	# Normalise to -0.1dB
 	# Save as flac in inbox
-	exec("sox ".FILE_ROOT."uploads/".$_REQUEST["filename"]." -b 16 ".$path."/inbox/".$md5.".flac silence 1 0.1 1% reverse silence 1 0.1 1% reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
+	exec("sox \"".FILE_ROOT."uploads/".$_REQUEST["filename"]."\" -b 16 \"".$path."/inbox/".$md5.".flac\" silence 1 0.1 1% reverse silence 1 0.1 1% reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
 	if(strpos(implode($output), "FAIL")) die(json_encode(array("error" => "SoX could not convert file", "debug" => $output)));
 
 	switch($_REQUEST["type"]) {
@@ -52,7 +52,7 @@ if(!Session::is_group_user("Importer")) {
 
 	$audio->set_title($_REQUEST["title"]);
 
-	$audio->set_length_smpl(shell_exec("soxi -s ".$path."/inbox/".$md5.".flac"));
+	$audio->set_length_smpl(shell_exec("soxi -s \"".$path."/inbox/".$md5.".flac\""));
 	$audio->set_md5($md5);
 	$audio->set_archive($current_archive);
 	$audio->set_filetype("flac");
