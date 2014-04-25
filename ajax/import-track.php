@@ -49,10 +49,12 @@ if(!Session::is_group_user("Importer")) {
 	if(isset($_REQUEST["year"])) $audio->set_year($_REQUEST["year"]);
 
 	$audio->set_length_smpl(shell_exec("soxi -s ".$path."/inbox/".$md5.".flac"));
+	$audio->set_md5($md5);
+	$audio->set_archive($current_archive);
 	$audio->set_filetype("flac");
 
 	if(!$audio->save()) die(json_encode(array("error" => "Failed to save audio entry to database.")));
-	
+
 	if(isset($_REQUEST["artist"])) $audio->add_artists(explode(";",$_REQUEST["artist"]));
 
 	$output = rename($path."/inbox/".$md5.".flac", $path."/".substr($md5, 0, 1)."/".$md5.".flac");
