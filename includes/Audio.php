@@ -48,10 +48,16 @@ class Audio {
 		if(isset($this->id)) DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id);
 		else {
 			if(!isset($this->md5) || !isset($this->archive) || !isset($this->filetype)) return false;
+			if(!isset($this->sustainer)) $this->sustainer = false;
+			if(!isset($this->censor)) $this->censor = false;
+			if(!isset($this->creation_date)) $this->creation_date = time();
+			if(!isset($this->creator)) $this->creator = 1;
+			if(!isset($this->intro_smpl)) $this->intro_smpl = 0;
+			if(!isset($this->extro_smpl)) $this->extro_smpl = $this->length_smpl;
 			if(!isset($this->end_smpl)) $this->end_smpl = $this->length_smpl;
 			if(!isset($this->start_smpl)) $this->start_smpl = 0;
 			if(!isset($this->import_date)) $this->import_date = time();
-			if(!isset($this->type)) $this->set_type(AudioTypes::get_by_name(get_class()));
+			if(!isset($this->type)) $this->set_type(AudioTypes::get_by_name("Track"));
 
 			$this->id = DigiplayDB::insert("audio", get_object_vars($this), "id");
 		}

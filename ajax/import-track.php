@@ -27,6 +27,7 @@ if(!Session::is_group_user("Importer")) {
 		case "music":
 			$audio = new Track();
 			if(isset($_REQUEST["album"])) $audio->set_album($_REQUEST["album"]);
+			else $audio->set_album("");
 
 			break;
 
@@ -47,6 +48,8 @@ if(!Session::is_group_user("Importer")) {
 
 	if(isset($_REQUEST["origin"])) $audio->set_origin($_REQUEST["origin"]);
 	if(isset($_REQUEST["year"])) $audio->set_year($_REQUEST["year"]);
+
+	$audio->set_title($_REQUEST["title"]);
 
 	$audio->set_length_smpl(shell_exec("soxi -s ".$path."/inbox/".$md5.".flac"));
 	$audio->set_md5($md5);
