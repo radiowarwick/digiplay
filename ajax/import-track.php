@@ -1,3 +1,4 @@
+
 <?php 
 if(!Session::is_group_user("Importer")) {
 	Output::http_error(403);
@@ -27,7 +28,7 @@ if(!Session::is_group_user("Importer")) {
 		case "music":
 			$audio = new Track();
 			if(isset($_REQUEST["album"])) $audio->set_album($_REQUEST["album"]);
-			else $audio->set_album("");
+			else $audio->set_album("(none)");
 
 			break;
 

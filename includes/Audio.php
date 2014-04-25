@@ -48,8 +48,8 @@ class Audio {
 		if(isset($this->id)) DigiplayDB::update("audio", get_object_vars($this), "id = ".$this->id);
 		else {
 			if(!isset($this->md5) || !isset($this->archive) || !isset($this->filetype)) return false;
-			if(!isset($this->sustainer)) $this->sustainer = false;
-			if(!isset($this->censor)) $this->censor = false;
+			if(!isset($this->sustainer)) $this->sustainer = 'f';
+			if(!isset($this->censor)) $this->censor = 'f';
 			if(!isset($this->creation_date)) $this->creation_date = time();
 			if(!isset($this->creator)) $this->creator = 1;
 			if(!isset($this->intro_smpl)) $this->intro_smpl = 0;
@@ -125,7 +125,7 @@ class Audio {
 	}
 
 	public function calculate_replaygain() {
-		$output = shell_exec("metaflac --add_replay_gain ".$this->get_filename());
+		$output = shell_exec("metaflac --add-replay-gain ".$this->get_filename());
 		if($output === false) return false;
 		else return true;
 	}
