@@ -32,6 +32,7 @@ class Audio {
 	public function get_rip_result() { return $this->rip_result; }
 	public function get_filetype() { return $this->filetype; }
 
+	public function set_md5($md5) { $this->md5 = $md5; }
 	public function set_length_smpl($length_smpl) { $this->length_smpl = $length_smpl; }
 	public function set_start_smpl($start_smpl) { $this->start_smpl = $start_smpl; }
 	public function set_end_smpl($end_smpl) { $this->end_smpl = $end_smpl; }
