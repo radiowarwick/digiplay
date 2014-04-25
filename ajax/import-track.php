@@ -57,12 +57,12 @@ if(!Session::is_group_user("Importer")) {
 	$audio->set_archive($current_archive);
 	$audio->set_filetype("flac");
 
-	if(!$audio->save()) die(json_encode(array("error" => "Failed to save audio entry to database.")));
+	if(!$audio->save()) die(json_encode(array("error" => "Failed to save audio entry to database.", "debug" => Errors::report("array"))));
 
 	if(isset($_REQUEST["artist"])) $audio->add_artists(explode(";",$_REQUEST["artist"]));
 
 	$output = rename($path."/inbox/".$md5.".flac", $path."/".substr($md5, 0, 1)."/".$md5.".flac");
-	if($output === false) die(json_encode(array("error" => "could not import file to audio archive")));
+	if($output === false) die(json_encode(array("error" => "could not import file to audio archive", "debug" => Errors::report("array"))));
 
 	$output = unlink(FILE_ROOT."uploads/".$_REQUEST["filename"]);
 	if($output === false) die(json_encode(array("error" => "could not remove uploaded file")));
