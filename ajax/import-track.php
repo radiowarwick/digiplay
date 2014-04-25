@@ -69,5 +69,7 @@ if(!Session::is_group_user("Importer")) {
 
 	$audio->update_metadata();
 	$audio->calculate_replaygain();
+
+	echo(json_encode(array("response"=>"success", "id" => $audio->get_id())));
 }
 ?>
