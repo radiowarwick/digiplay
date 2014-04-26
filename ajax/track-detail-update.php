@@ -35,6 +35,7 @@ if(Session::is_group_user('Librarian')){
 	}
 
 	$new_track = Tracks::get_by_id($_REQUEST["id"]);
+	$new_track->update_metadata();
 	http_response_code(200);
 	$json = array(
 		"title" => $new_track->get_title(),
