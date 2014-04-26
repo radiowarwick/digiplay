@@ -23,7 +23,7 @@ class Track extends Audio {
 
 	public function move_to_music_folder() { 
 		DigiplayDB::delete("audiodir", "audioid = ".$this->id);
-		return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id);
+		return DigiplayDB::insert("audiodir", array("dirid" => 2, "audioid" => $this->id));
 	}
 
 	/* Extended functions */
