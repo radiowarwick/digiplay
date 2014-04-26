@@ -21,6 +21,11 @@ class Track extends Audio {
 	public function set_flagged($flagged) { $this->flagged = $flagged? "t":"f"; }
 	public function set_censored($censor) { $this->censor = $censor? "t":"f";}
 
+	public function move_to_music_folder() { 
+		DigiplayDB::delete("audiodir", "audioid = ".$this->id);
+		return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id);
+	}
+
 	/* Extended functions */
 	public function get_artists() { return Artists::get_by_audio($this); }
 	public function get_keywords() { return Keywords::get_by_audio($this); }
