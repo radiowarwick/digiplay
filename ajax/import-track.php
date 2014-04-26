@@ -70,6 +70,7 @@ if(!Session::is_group_user("Importer")) {
 		die(json_encode(array("error" => "Failed to save audio entry to database.", "debug" => Errors::report("array"))));
 	}
 
+	$audio->move_to_music_folder();
 	if(isset($_REQUEST["artist"])) $audio->add_artists(explode(";",$_REQUEST["artist"]));
 
 	$output = rename($path."/inbox/".$md5.".flac", $path."/".substr($md5, 0, 1)."/".$md5.".flac");
