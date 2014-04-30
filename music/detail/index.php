@@ -100,6 +100,64 @@ echo("
 					}
 				});
 			});
+".(Session::is_group_user("Playlist Editor") ? "
+			var item;
+			$('.playlist-add').click(function() {
+				item = $(this);
+				playlists = $(this).attr('data-playlists-in').split(',');
+				$('.playlist-select').parent().removeClass('active');
+				$('.playlist-select').find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+				$('.playlist-select').each(function() {
+					if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
+						$(this).find('span').removeClass('icon-plus').addClass('glyphicon-minus');
+						$(this).parent().addClass('active');
+					}
+				})
+			});
+
+			$('.playlist-select').click(function() {
+				obj = $(this);
+				if($(this).parent().hasClass('active')) {
+					$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-refresh');
+					$.ajax({
+						url: '".LINK_ABS."ajax/track-playlist-update.php',
+						data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
+						type: 'POST',
+						error: function(xhr,text,error) {
+							value = $.parseJSON(xhr.responseText);
+							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+							alert(value.error);
+						},
+						success: function(data,text,xhr) {
+							values = $.parseJSON(data);
+							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+							obj.parent().removeClass('active');
+							item.attr('data-playlists-in',values.playlists.join(','));
+						}
+					});
+				} else {
+					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-refresh');
+					$.ajax({
+						url: '".LINK_ABS."ajax/track-playlist-update.php',
+						data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
+						type: 'POST',
+						error: function(xhr,text,error) {
+							value = $.parseJSON(xhr.responseText);
+							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+							alert(value.error);
+						},
+						success: function(data,text,xhr) {
+							values = $.parseJSON(data);
+							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+							obj.parent().addClass('active');
+							item.attr('data-playlists-in',values.playlists.join(','));
+						}
+					});
+					$(this).parent().addClass('active');
+					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+				}
+			});		
+" : "")."
 		});
 	</script>
 	<h3>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h3>
@@ -198,12 +256,25 @@ echo("
 							<input type=\"text\" id=\"new_keyword\" name=\"new_keyword\" class=\"form-control\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
-					<hr />					
+					<hr />
+					");
+					if(Session::is_group_user("Playlist Editor")) {
+						$playlists = array();
+						foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
+						echo("<a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" id=\"playlists\" class=\"playlist-add btn btn-primary btn-block\">".Bootstrap::glyphicon("th-list")." Playlists</a>");
+					}
+					echo("
 					<a href=\"#\" id=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\">".Bootstrap::glyphicon("warning-sign censor-flag")." Flag for censorship</a>
-					".(Session::is_group_user("Music Admin")? "<a href=\"".LINK_ABS."audio/get/".$track->get_id().".flac\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt")." Download FLAC</a>" : "")."
+					".(Session::is_group_user("Music Admin")? "<hr /><a href=\"".LINK_ABS."audio/get/".$track->get_id().".flac\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt")." Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>
 	</form>
 ");
+if(Session::is_group_user("Playlist Editor")) {
+	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
+	$playlist_modal_content .= "</ul>";
+	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
+}
 ?>
