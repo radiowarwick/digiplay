@@ -26,7 +26,7 @@ if(!Session::is_group_user("Importer")) {
 	# Convert to 44.1kHz 16-bit stereo for consistency
 	# Normalise to -0.1dB
 	# Save as flac in inbox
-	exec("sox \"".$tempfile."\" -b 16 \"".$path."/inbox/".$md5.".flac\" silence 1 0.1 1% reverse silence 1 0.1 1% reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
+	exec("sox \"".$tempfile."\" -b 16 \"".$path."/inbox/".$md5.".flac\" silence 1 0.1 -72d reverse silence 1 0.1 -72d reverse channels 2 rate 44100 gain -n -0.1 2>&1", $output);
 	if(strpos(implode($output), "FAIL")) {
 		unlink($tempfile);
 		die(json_encode(array("error" => "SoX could not convert file", "debug" => $output)));
