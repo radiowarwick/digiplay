@@ -19,11 +19,11 @@ if(!isset($_REQUEST["u"])) {
 	var_dump($user->get_groups());
 }
 
-echo("<p><a href=\"?purge_expired_users\" class=\"btn btn-primary\">Purge expired users (those not in LDAP)</a></p>");
+//echo("<p><a href=\"?purge_expired_users\" class=\"btn btn-primary\">Purge expired users (those not in LDAP)</a></p>");
 
 if(isset($_REQUEST["purge_expired_users"])) {
 	$count = 0;
-	$expired_users = DBDirectories::get_by_id(2624);
+	$expired_users = Files::get_by_id(2624, 'dir');
 
 	foreach(Users::get_enabled() as $user) {
 
@@ -47,8 +47,8 @@ if(isset($_REQUEST["purge_expired_users"])) {
 
 if(isset($_REQUEST["update_ex_members"])) {
 	$count = 0;
-	$expired_users = DBDirectories::get_by_id(2624);
-	$ex_members = DBDirectories::get_by_id(2625);
+	$expired_users = Files::get_by_id(2624, 'dir');
+	$ex_members = Files::get_by_id(2625, 'dir');
 
 	foreach(Users::get_enabled() as $user) {
 
@@ -76,7 +76,8 @@ if(isset($_REQUEST["update_ex_members"])) {
 			if($folder) {
 				$year = $ex_members->find($ldap["yearDisabled"][0]);
 				if(!$year) {
-					$year = new DBDirectory;
+					$year = new File;
+					$year->set_itemtype('dir');
 					$year->set_name($ldap["yearDisabled"][0]);
 					$year->set_parent($ex_members);
 					$year->save();

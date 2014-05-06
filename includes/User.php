@@ -30,6 +30,9 @@ class User{
 
 	public function get_config_var($param) { return DigiplayDB::select("val FROM usersconfigs INNER JOIN configs ON configs.id = usersconfigs.configid WHERE userid = ".$this->id." AND configs.name = '".$param."'"); }
 
-	public function get_user_folder() { return DBDirectories::get_user_folder($this); }
+	public function get_user_folder() { 
+		$users_folder = Files::get_by_id(7, 'dir');
+		return Files::find_in_dir($users_folder, $this->username);
+	}
 }
 ?>
