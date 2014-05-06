@@ -44,10 +44,13 @@ switch($_REQUEST["action"]) {
 					</tr>
 				</thead>
 				<tbody>";
+
+			if((Configs::get_system_param("censor_start") < date("H")) && (date("H") < Configs::get_system_param("censor_end"))) $censor_time = true;
+			else $censor_time = false;
+
 			foreach($search["results"] as $track) {
 				$track = Tracks::get($track);
-				if((Configs::get_system_param("censor_start") < date("H")) && (date("H") < Configs::get_system_param("censor_end"))) $censor_time = true;
-				else $censor_time = false;
+
 				if($censor_time && $track->is_censored()) continue;
 				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track\">
 					<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
