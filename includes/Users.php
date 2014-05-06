@@ -7,5 +7,7 @@ class Users{
 
 	public static function get_all() { return DigiplayDB::select("* FROM users WHERE id > 4", "User", true); }
 	public static function get_enabled() { return DigiplayDB::select("* FROM users WHERE id > 4 AND enabled = 't'", "User", true); }
+
+	public static function count() { return DigiplayDB::select("COUNT(id) FROM users WHERE id > 4", NULL, false); }
 }	
 ?>

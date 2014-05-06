@@ -100,3 +100,7 @@ table .nowrap { white-space: nowrap; }
   -webkit-animation-timing-function: linear;
   -webkit-filter: blur(0);
 }
+
+.icon-huge { font-size: 72px; }
+.dashboard-stamp h4 { margin-top: -5px; }
+.dashboard-stamp h2 { margin-top: 15px; }

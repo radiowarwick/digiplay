@@ -19,6 +19,8 @@ class Emails {
 	}
 	
 	public static function get_by_id($id) {	return DigiplayDB::select("* FROM email WHERE id = ". $id, "Email"); }
+
+	public static function count_unread() { return DigiplayDB::select("COUNT(id) FROM email WHERE new_flag = 't'", NULL, False); }
 }
 ?>
 	
