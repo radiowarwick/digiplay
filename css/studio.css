@@ -32,7 +32,7 @@ body.manage { padding-bottom: 80px; padding-top: 60px; }
 #main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane, #right-panel { height: 100% !important; }
 #left-panel { padding-top: 50px; }
 #right-panel { padding-top: 50px; padding-left: 0px; }
-#tabs { margin-top:-50px; margin-bottom: 10px; height: 40px; }
+#tabs { margin-top:-50px; margin-bottom: 10px; }
 
 table { table-layout: fixed; margin-bottom: 0px !important; }
 tbody tr:hover { cursor: pointer; }
