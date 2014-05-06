@@ -20,16 +20,18 @@ class Email {
 	public function get_body() { return $this->body; }
 
 
-	public function get_body_formatted() {
+	public function get_body_formatted($images = true) {
 		// Strip links, format plaintext/HTML appropriately
 		$body = $this->body;
 		if(substr($body, 0, 1) != "<") $body = nl2br($body);
-		$body = strip_tags($body, "<div><p><br><hr><img><span><style><table><thead><tbody><tr><td>");
+		$tags = "<div><p><br><hr><span><style><table><thead><tbody><tr><td>";
+		if($images) $tags .= "<img>";
+		$body = strip_tags($body, $tags);
 		return $body;
 	}
 
 	public function mark_as_read() {
-		$query = DigiplayDB::update("email", array("new_flag" => false), "id = ".$this->id);
+		$query = DigiplayDB::update("email", array("new_flag" => 'f'), "id = ".$this->id);
 		if($query) $this->new_flag = FALSE;
 		return $query;
 	}
