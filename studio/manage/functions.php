@@ -30,7 +30,8 @@ switch($_REQUEST["action"]) {
 		if (isset($_REQUEST["search-artist"]) && $_REQUEST["search-artist"] == "on") $index[] = "artist";
 		if (isset($_REQUEST["search-album"]) && $_REQUEST["search-album"] == "on") $index[] = "album";
 
-		if($query && (count($index) >= 1)) $search = Search::tracks($query,$index,50);
+		$search_limit = Configs::get_system_param("search_limit");
+		if($query && (count($index) >= 1)) $search = Search::tracks($query,$index,$search_limit);
 
 		if(isset($search)) {
 			$return = "<table class=\"table table-striped table-hover\" cellspacing=\"0\">
@@ -61,7 +62,7 @@ switch($_REQUEST["action"]) {
 				</tr>";
 			}
 			$return .= "</tbody></table>";
-			if($search["total"] > 50) $return .= "<span class=\"result-limit\">Only showing top 50 results out of ".$search["total"]." total.  Try a more specific search.</span>";
+			if($search["total"] > $search_limit) $return .= "<span class=\"result-limit\">Only showing top ".$search_limit." results out of ".$search["total"]." total.  Try a more specific search.</span>";
 			echo($return);
 		} else {
 			echo("<h3>No results found, or your search term was too generic.  <br />Try a different search query.</h3>");
