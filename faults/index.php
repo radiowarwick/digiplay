@@ -1,5 +1,5 @@
 <?php
-Output::set_title("System Information");
+Output::set_title("Fault Reporting");
 MainTemplate::set_subtitle("View updates and report faults");
 echo Bootstrap::alert_message_basic("info","1.0.4","Current Version:", false);
 echo(

@@ -6,7 +6,7 @@ function menu() {
 
 		$menu = array(
 			array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Information", "icon" => "home"),
-			array("url" => LINK_ABS.$site_path_array[0]."/faults", "text" => "My Fault Reports", "icon" => "list"),
+			array("url" => LINK_ABS.$site_path_array[0]."/fault.php", "text" => "My Fault Reports", "icon" => "list"),
 			array("url" => LINK_ABS.$site_path_array[0]."/report", "text" => "Report a Fault", "icon" => "flash"),
 			array("url" => LINK_ABS.$site_path_array[0]."/manage", "text" => "View Faults", "icon" => "inbox"),
 		);

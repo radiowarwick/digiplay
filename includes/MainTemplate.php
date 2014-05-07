@@ -50,8 +50,7 @@ class MainTemplate{
 			array("playlists","Playlists","th-list"),
 			array("audiowalls","Audiowalls","th"),
 			array("files","Files","folder-open"),
-			array("showplans","Show Planning","tasks"),
-			array("information","Information","book"));
+			array("showplans","Show Planning","tasks"));
 	if(Session::is_admin()) $main_menu->add("admin","Admin","cog");
 	
 	$site_path_array = explode("/",LINK_PATH);
