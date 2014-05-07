@@ -26,6 +26,10 @@ class File {
 		return DigiplayDB::select("true FROM v_tree WHERE parent = :parent AND userid = :userid", NULL, false, array(":parent" => $this->id, ":userid" => Session::get_user()->get_id()));
 		//else return false;
 	}
+
+	public function count() {
+		return DigiplayDB::select("count(*) from v_tree where parent = :parent AND userid = :userid", null, false, array("parent" => $this->id, ":userid" => Session::get_user()->get_id()));
+	}
 }
 
 ?>

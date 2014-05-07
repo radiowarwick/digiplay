@@ -2,6 +2,8 @@
 Output::set_title("Administration");
 MainTemplate::set_subtitle("Control every aspect of the Digiplay system");
 
+$trash = Files::get_by_id(3, "dir");
+
 echo("
 <div class=\"row\">
 	<div class=\"col-sm-4\">
@@ -100,7 +102,7 @@ echo("
 							".Bootstrap::glyphicon("trash icon-huge")."
 						</div>
 						<div class=\"col-xs-7\">
-							<h2>999</h2>
+							<h2>".$trash->count()."</h2>
 							<h4>in trash</h4>
 						</div>
 					</div>
