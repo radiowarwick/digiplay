@@ -14,13 +14,6 @@ function menu() {
 	return Bootstrap::list_group($menu);
 }
 function sidebar() {
-
-	foreach(Playlists::get_all(false) as $playlist) {
-		foreach ($playlist->get_tracks() as $track) {
-			$tracks++;
-			$total_length += $track->get_length();
-		}
-	}
 	
 	$load = sys_getloadavg();
 	$data = explode("\n", file_get_contents("/proc/meminfo"));
