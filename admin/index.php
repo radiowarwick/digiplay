@@ -86,7 +86,7 @@ echo("
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".Emails::count_unread()."</h2>
-							<h4>new e-mails</h4>
+							<h4>e-mails</h4>
 						</div>
 					</div>
 				</div>
