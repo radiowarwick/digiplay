@@ -3,7 +3,6 @@ var pg = require('pg'), listener, client, connString = 'postgres://digiplay_user
 var in_use_keys = [];
 
 wss.broadcast = function(channel, payload) {
-	console.log(this.clients.length);
 	for(var i in this.clients) {
 		if(payload) {
 			if(payload.location == this.clients[i].location) {
@@ -20,7 +19,7 @@ wss.broadcast = function(channel, payload) {
 function connectDB() {
 	listener = new pg.Client(connString);
 	listener.connect();
-	listener.query('LISTEN t_log; LISTEN t_email; LISTEN t_playlists; LISTEN t_configuration; LISTEN t_audiowall; LISTEN t_showitems;');
+	listener.query('LISTEN t_log; LISTEN t_playlists; LISTEN t_configuration; LISTEN t_audiowall; LISTEN t_showitems; LISTEN t_messages;');
 	listener.on('notification', function(msg) { 
 		console.log(msg);
 		try { wss.broadcast(msg.channel, (msg.payload.length > 0 && JSON.parse(msg.payload.replace(/(\r\n|\n|\r)/gm,'')))); }
