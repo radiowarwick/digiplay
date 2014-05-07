@@ -57,12 +57,14 @@ echo("
 
 			function onMessage(e) {
 				data = JSON.parse(e.data);
+				console.debug(data);
 				switch(data.channel) {
 					case 't_log':
 						reloadLog();
 						break;
-					case 't_email':
+					case 't_messages':
 						reloadMessages();
+						newMessage();
 						break;
 					case 't_playlists':
 						reloadPlaylists();
@@ -201,6 +203,11 @@ echo("
 										});
 									}
 
+									function newMessage() {
+										console.debug('lol message');
+										$('[href=#messages]').addClass('btn-primary new-message');
+									}
+
 									$(function() { 
 										$('#message-list').load('functions.php?'+key+'action=messages');
 
@@ -209,6 +216,8 @@ echo("
 											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('data-message-id')); 
 											$(this).find('span').removeClass('glyphicon-envelope');
 										});
+
+										$(document).on('click', '[href=#messages]', function() { $(this).removeClass('btn-primary new-message'); });
 									})
 								</script>
 								<div id=\"message-list\">

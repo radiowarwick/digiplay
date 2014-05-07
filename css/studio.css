@@ -17,6 +17,19 @@ body.manage { padding-bottom: 80px; padding-top: 60px; }
   }
 }
 
+
+@keyframes blink {
+  to { visibility: hidden; }
+}
+@-webkit-keyframes blink {
+  to { visibility: hidden; }
+}
+
+.new-message span { 
+  animation: blink 1s steps(5, start) infinite;
+  -webkit-animation: blink 1s steps(5, start) infinite;
+}
+
 .rotate {
   -webkit-animation-name:             rotate; 
   -webkit-animation-duration:         2s; 
