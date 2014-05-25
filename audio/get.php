@@ -16,9 +16,7 @@ if(array_key_exists($_GET["filetype"],$filetypes)) {
 else exit(http_response_code(400));
 
 if(!Session::is_group_user("Music Admin")) {
-	parse_str(substr($_SERVER["HTTP_REFERER"],strpos($_SERVER["HTTP_REFERER"],"?") +1),$parameters);
-	exit(var_dump($parameters));
-	//if(is_null(Locations::get_by_key($parameters["key"]))) exit(http_response_code(401));
+	if(is_null(Locations::get_by_key($parameters["key"]))) exit(http_response_code(401));
 }
 
 
