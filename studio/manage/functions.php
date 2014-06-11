@@ -283,11 +283,16 @@ switch($_REQUEST["action"]) {
 		if(($_POST["username"] == "") || ($_POST["password"] == "")) exit(json_encode(array("response"=>"error")));
 		if(!Session::login($_POST["username"],$_POST["password"])) exit(json_encode(array("response"=>"invalid")));
 		$location->get_config("user_aw_set")->set_val(Session::get_user()->get_config_var("default_aw_set"));
+		$location->get_config("userid")->set_val(Session::get_user()->get_id());
+		if(Session::is_group_user("Music Admin")) $location->get_config("can_update")->set_val("true");
+		else $location->get_config("can_update")->set_val("false");
 		echo(json_encode(array("response"=>"success")));
 		break;
 	case "logout":
 		Session::logout();
 		$location->get_config("user_aw_set")->set_val(0);
+                $location->get_config("userid")->set_val(0);
+                $location->get_config("can_update")->set_val("false");
 		break;
 }
 ?>
