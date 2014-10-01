@@ -82,7 +82,7 @@ class Audio {
 		Output::add_script(LINK_ABS."js/wavesurfer.js");
 		Output::add_script(LINK_ABS."js/webaudio.js");
 		Output::add_script(LINK_ABS."js/drawer.js");
-		Output::add_script(LINK_ABS."js/drawer.svg.js");
+		Output::add_script(LINK_ABS."js/drawer.canvas.js");
 		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
 
 		$html = "

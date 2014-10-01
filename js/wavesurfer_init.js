@@ -4,7 +4,7 @@ function wv_create(id) {
 	wavesurfer[id] = Object.create(WaveSurfer);
 	var options = {
 		container	: document.querySelector('#waveform'+id),
-		renderer	: 'SVG'
+		renderer	: 'Canvas'
 	};
 
 	wavesurfer[id].init(options);
@@ -49,7 +49,7 @@ function wv_loading(wv, percent) {
 
 function wv_ready(wv) {
 	wv.fireEvent('progress');
-	$(wv.container).find('.duration').html(formatTime(wv.timings()[1]));
+	$(wv.container).find('.duration').html(formatTime(wv.getDuration()[1]));
 	$(wv.container).find('button').removeAttr('disabled');
 	$(wv.container).find('.playpause').click(function() { 
 		wv.playPause();
@@ -62,7 +62,7 @@ function wv_ready(wv) {
 }
 
 function wv_progress(wv) {
-	t = wv.timings(); 
+	t = wv.getDuration(); 
 	$(wv.container).find('.elapsed').html(formatTime(t[0]));
 	$(wv.container).find('.remain').html(formatTime(t[1] - t[0]));
 }

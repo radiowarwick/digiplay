@@ -2,75 +2,134 @@
 
 var WaveSurfer = {
     defaultParams: {
+        height        : 128,
         waveColor     : '#999',
-        progressColor : '#333',
-        cursorColor   : '#ddd',
+        progressColor : '#555',
+        cursorColor   : '#333',
         cursorWidth   : 1,
-        markerWidth   : 1,
         skipLength    : 2,
-        minPxPerSec   : 1,
-        pixelRatio    : 1, // devicePixelRatio is slower
+        minPxPerSec   : 50,
+        pixelRatio    : window.devicePixelRatio,
         fillParent    : true,
         scrollParent  : false,
-        AudioContext  : null,
+        hideScrollbar : false,
+        normalize     : false,
+        audioContext  : null,
         container     : null,
-        renderer      : 'Canvas'
+        dragSelection : true,
+        loopSelection : true,
+        audioRate     : 1,
+        interact      : true,
+        renderer      : 'Canvas',
+        backend       : 'WebAudio'
     },
 
     init: function (params) {
         // Extract relevant parameters (or defaults)
         this.params = WaveSurfer.util.extend({}, this.defaultParams, params);
 
-        this.drawer = Object.create(WaveSurfer.Drawer[this.params.renderer]);
-        this.drawer.init(this.params);
-        this.drawer.on('redraw', this.drawBuffer.bind(this));
+        this.container = 'string' == typeof params.container ?
+            document.querySelector(this.params.container) :
+            this.params.container;
 
-        this.markers = {};
-
-        this.createBackend();
-        this.bindDrag();
+        if (!this.container) {
+            throw new Error('Container element not found');
+        }
 
         // Used to save the current volume when muting so we can
         // restore once unmuted
-        this.savedVolume = -1;
+        this.savedVolume = 0;
         // The current muted state
         this.isMuted = false;
+
+        this.createDrawer();
+        this.createBackend();
+    },
+
+    createDrawer: function () {
+        var my = this;
+
+        this.drawer = Object.create(WaveSurfer.Drawer[this.params.renderer]);
+        this.drawer.init(this.container, this.params);
+
+        this.drawer.on('redraw', function () {
+            my.drawBuffer();
+            my.drawer.progress(my.backend.getPlayedPercents());
+        });
+
+        this.on('progress', function (progress) {
+            my.drawer.progress(progress);
+        });
+
+        // Click-to-seek
+        this.drawer.on('click', function (e, progress) {
+            setTimeout(function () {
+                my.seekTo(progress);
+            }, 0);
+        });
+
+        // Relay the scroll event from the drawer
+        this.drawer.on('scroll', function (e) {
+            my.fireEvent('scroll', e);
+        });
     },
 
     createBackend: function () {
         var my = this;
 
-        this.backend = Object.create(WaveSurfer.WebAudio);
+        if (this.backend) {
+            this.backend.destroy();
+        }
 
-        this.backend.on('audioprocess', function (progress) {
-            // Pause when finished
-            if (progress >= 0.9999) {
-                my.stop();
+        this.backend = Object.create(WaveSurfer[this.params.backend]);
+
+        this.backend.on('play', function () {
+            my.fireEvent('play');
+            my.restartAnimationLoop();
+        });
+
+        this.backend.on('finish', function () {
+            my.fireEvent('finish');
+        });
+
+        try {
+            this.backend.init(this.params);
+        } catch (e) {
+            if (e.message == "Your browser doesn't support Web Audio") {
+                this.params.backend = 'AudioElement';
+                this.backend = null;
+                this.createBackend();
             }
-            my.fireEvent('progress');
-        });
-
-        this.on('progress', function () {
-            my.drawer.progress(my.backend.getPlayedPercents());
-        });
-
-        this.backend.init(this.params);
+        }
     },
 
-    playAt: function (percents) {
-        this.backend.play(this.backend.getDuration() * percents);
+    restartAnimationLoop: function () {
+        var my = this;
+        var requestFrame = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame;
+        var frame = function () {
+            if (!my.backend.isPaused()) {
+                my.fireEvent('progress', my.backend.getPlayedPercents());
+                requestFrame(frame);
+            }
+        };
+        frame();
     },
 
-    play: function () {
-        this.backend.play();
-        this.fireEvent('play');
-        this.drawer.playing = true;
+    getDuration: function () {
+        return this.backend.getDuration();
+    },
+
+    getCurrentTime: function () {
+        return this.backend.getCurrentTime();
+    },
+
+    play: function (start, end) {
+        this.backend.play(start, end);
     },
 
     pause: function () {
         this.backend.pause();
-        this.fireEvent('pause');
-        this.drawer.playing = false;
     },
 
     playPause: function () {
@@ -86,33 +145,46 @@ var WaveSurfer = {
     },
 
     skip: function (offset) {
-        var timings = this.timings(offset);
-        var progress = timings[0] / timings[1];
+        var position = this.getCurrentTime() || 0;
+        var duration = this.getDuration() || 1;
+        position = Math.max(0, Math.min(duration, position + (offset || 0)));
+        this.seekTo(position / duration);
+    },
 
+    seekAndCenter: function (progress) {
         this.seekTo(progress);
+        this.drawer.recenter(progress);
     },
 
     seekTo: function (progress) {
         var paused = this.backend.isPaused();
-        this.playAt(progress);
+        // avoid small scrolls while paused seeking
+        var oldScrollParent = this.params.scrollParent;
+        if (paused) {
+            this.params.scrollParent = false;
+            // avoid noise while seeking
+            this.savedVolume = this.backend.getVolume();
+            this.backend.setVolume(0);
+        }
+        this.play((progress * this.drawer.width) / this.realPxPerSec);
         if (paused) {
             this.pause();
-            this.fireEvent('progress');
+            this.backend.setVolume(this.savedVolume);
         }
+        this.params.scrollParent = oldScrollParent;
         this.fireEvent('seek', progress);
     },
 
     stop: function () {
-        this.playAt(0);
         this.pause();
+        this.seekTo(0);
         this.drawer.progress(0);
-        this.fireEvent('stop');
     },
 
     /**
      * Set the playback volume.
      *
-     * @param {Number} newVolume A value between -1 and 1, -1 being no
+     * @param {Number} newVolume A value between 0 and 1, 0 being no
      * volume and 1 being full volume.
      */
     setVolume: function (newVolume) {
@@ -130,186 +202,227 @@ var WaveSurfer = {
             // If currently muted then restore to the saved volume
             // and update the mute properties
             this.backend.setVolume(this.savedVolume);
-            this.savedVolume = -1;
             this.isMuted = false;
         } else {
             // If currently not muted then save current volume,
             // turn off the volume and update the mute properties
             this.savedVolume = this.backend.getVolume();
-            this.backend.setVolume(-1);
+            this.backend.setVolume(0);
             this.isMuted = true;
         }
     },
 
-    mark: function (options) {
-        var my = this;
-        var timings = this.timings(0);
-        var opts = WaveSurfer.util.extend({
-            id: WaveSurfer.util.getId(),
-            position: timings[0],
-            width: this.params.markerWidth
-        }, options);
-
-        opts.percentage = opts.position / timings[1];
-
-        var marker = Object.create(WaveSurfer.Mark);
-
-        marker.on('update', function () {
-            my.drawer.addMark(marker);
-            my.markers[marker.id] = marker;
-        });
-
-        marker.on('remove', function () {
-            my.drawer.removeMark(marker);
-            delete my.markers[marker.id];
-        });
-
-        return marker.update(opts);
-    },
-
-    clearMarks: function () {
-        Object.keys(this.markers).forEach(function (id) {
-            this.markers[id].remove();
-        }, this);
-    },
-
-    timings: function (offset) {
-        var position = this.backend.getCurrentTime() || 0;
-        var duration = this.backend.getDuration() || 1;
-        position = Math.max(0, Math.min(duration, position + (offset || 0)));
-        return [ position, duration ];
+    toggleScroll: function () {
+        this.params.scrollParent = !this.params.scrollParent;
+        this.drawBuffer();
     },
 
     drawBuffer: function () {
-        // Update percentage on any markers added before the audio loaded.
-        var duration = this.backend.getDuration() || 1;
-        Object.keys(this.markers).forEach(function (id) {
-            var marker = this.markers[id];
-            marker.update({ percentage: marker.position / duration });
-        }, this);
+        if (this.params.fillParent && !this.params.scrollParent) {
+            var length = this.drawer.getWidth();
+        } else {
+            length = Math.round(this.getDuration() * this.params.minPxPerSec * this.params.pixelRatio);
+        }
+        this.realPxPerSec = length / this.getDuration();
 
-        var pixels = this.drawer.getPixels(duration);
-        var peaks = this.backend.getPeaks(pixels);
-        var max = this.backend.getMaxPeak();
-
-        this.drawer.drawPeaks(peaks, max);
+        this.drawer.drawPeaks(this.backend.getPeaks(length), length);
+        this.fireEvent('redraw');
     },
 
     /**
-     * Loads an audio file via XHR.
+     * Internal method.
      */
-    load: function (url) {
+    loadArrayBuffer: function (arraybuffer) {
         var my = this;
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer';
-
-        xhr.addEventListener('progress', function (e) {
-            var percentComplete;
-            if (e.lengthComputable) {
-                percentComplete = e.loaded / e.total;
-            } else {
-                // TODO
-                // for now, approximate progress with an asymptotic
-                // function, and assume downloads in the 1-3 MB range.
-                percentComplete = e.loaded / (e.loaded + 1000000);
-            }
-            my.fireEvent('loading', percentComplete);
-        }, false);
-
-        xhr.addEventListener('load', function (e) {
-            my.fireEvent('loading', 1);
-            my.backend.loadBuffer(
-                e.target.response,
-                function () {
-                    my.fireEvent('loading', 100);
-                    my.drawBuffer();
-                    my.fireEvent('ready');
-                }
-            );
-        }, false);
-
-        xhr.open('GET', url, true);
-        xhr.send();
+        this.backend.decodeArrayBuffer(arraybuffer, function (data) {
+            my.loadDecodedBuffer(data);
+        }, function () {
+            my.fireEvent('error', 'Error decoding audiobuffer');
+        });
     },
 
     /**
-     * Listens to drag'n'drop.
-     * @param {HTMLElement} dropTarget
+     * Directly load an externally decoded AudioBuffer.
      */
-    bindDragNDrop: function (dropTarget) {
+    loadDecodedBuffer: function (buffer) {
+        this.empty();
+        this.backend.load(buffer);
+        this.drawBuffer();
+        this.fireEvent('ready');
+    },
+
+    /**
+     * Loads audio data from a Blob or File object.
+     *
+     * @param {Blob|File} blob Audio data.
+     */
+    loadBlob: function (blob) {
         var my = this;
+        // Create file reader
         var reader = new FileReader();
+        reader.addEventListener('progress', function (e) {
+            my.onProgress(e);
+        });
         reader.addEventListener('load', function (e) {
-            my.backend.loadBuffer(
-                e.target.result,
-                function () {
-                    my.drawBuffer();
-                    my.fireEvent('ready');
-                }
-            );
-        }, false);
-
-        (dropTarget || document).addEventListener('drop', function (e) {
-            e.preventDefault();
-            var file = e.dataTransfer.files[0];
-            file && reader.readAsArrayBuffer(file);
-        }, false);
+            my.empty();
+            my.loadArrayBuffer(e.target.result);
+        });
+        reader.addEventListener('error', function () {
+            my.fireEvent('error', 'Error reading file');
+        });
+        reader.readAsArrayBuffer(blob);
     },
 
     /**
-     * Click & drag to seek.
+     * Loads audio and rerenders the waveform.
      */
-    bindDrag: function () {
-        var my = this;
-        this.drawer.on('drag', function (progress) {
-            my.seekTo(progress);
-        });
+    load: function (url, peaks) {
+        switch (this.params.backend) {
+            case 'WebAudio': return this.loadBuffer(url);
+            case 'AudioElement': return this.loadAudioElement(url, peaks);
+        }
     },
 
-    bindMarks: function () {
-        var my = this;
-        var markers = this.markers;
-
-        this.on('progress', function () {
-            Object.keys(markers).forEach(function (id) {
-                var marker = markers[id];
-                var position = marker.position.toPrecision(3);
-                var time = my.backend.getCurrentTime().toPrecision(3);
-                if (position == time) {
-                    my.fireEvent('mark', marker);
-                    marker.fireEvent('reached');
-                }
-            });
-        });
+    /**
+     * Loads audio using Web Audio buffer backend.
+     */
+    loadBuffer: function (url) {
+        this.empty();
+        // load via XHR and render all at once
+        return this.downloadArrayBuffer(url, this.loadArrayBuffer.bind(this));
     },
 
+    loadAudioElement: function (url, peaks) {
+        this.empty();
+        this.backend.load(url, peaks, this.container);
+        this.backend.once('canplay', (function () {
+            this.drawBuffer();
+            this.fireEvent('ready');
+        }).bind(this));
+        this.backend.once('error', (function (err) {
+            this.fireEvent('error', err);
+        }).bind(this));
+    },
+
+    downloadArrayBuffer: function (url, callback) {
+        var my = this;
+        var ajax = WaveSurfer.util.ajax({
+            url: url,
+            responseType: 'arraybuffer'
+        });
+        ajax.on('progress', function (e) {
+            my.onProgress(e);
+        });
+        ajax.on('success', callback);
+        ajax.on('error', function (e) {
+            my.fireEvent('error', 'XHR error: ' + e.target.statusText);
+        });
+        return ajax;
+    },
+
+    onProgress: function (e) {
+        if (e.lengthComputable) {
+            var percentComplete = e.loaded / e.total;
+        } else {
+            // Approximate progress with an asymptotic
+            // function, and assume downloads in the 1-3 MB range.
+            percentComplete = e.loaded / (e.loaded + 1000000);
+        }
+        this.fireEvent('loading', Math.round(percentComplete * 100), e.target);
+    },
+
+    /**
+     * Display empty waveform.
+     */
     empty: function () {
-        this.stop();
-        this.backend.loadEmpty();
+        if (this.drawFrame) {
+            this.un('progress', this.drawFrame);
+            this.drawFrame = null;
+        }
+
+        if (this.backend && !this.backend.isPaused()) {
+            this.stop();
+            this.backend.disconnectSource();
+        }
+        this.drawer.setWidth(0);
         this.drawer.drawPeaks({ length: this.drawer.getWidth() }, 0);
+    },
+
+    /**
+     * Remove events, elements and disconnect WebAudio nodes.
+     */
+    destroy: function () {
+        this.fireEvent('destroy');
+        this.unAll();
+        this.backend.destroy();
+        this.drawer.destroy();
+    },
+
+    enableInteraction: function () {
+        this.params.interact = true;
+    },
+
+    disableInteraction: function () {
+        this.params.interact = false;
+    },
+
+    toggleInteraction: function () {
+        this.params.interact = !this.params.interact;
     }
 };
 
 
-/* Mark */
-WaveSurfer.Mark = {
-    id: null,
-    percentage: 0,
-    position: 0,
+/* Observer */
+WaveSurfer.Observer = {
+    on: function (event, fn) {
+        if (!this.handlers) { this.handlers = {}; }
 
-    getTitle: function () {
-        var d = new Date(this.position * 1000);
-        return d.getMinutes() + ':' + d.getSeconds();
+        var handlers = this.handlers[event];
+        if (!handlers) {
+            handlers = this.handlers[event] = [];
+        }
+        handlers.push(fn);
     },
 
-    update: function (options) {
-        WaveSurfer.util.extend(this, options);
-        this.fireEvent('update');
-        return this;
+    un: function (event, fn) {
+        if (!this.handlers) { return; }
+
+        var handlers = this.handlers[event];
+        if (handlers) {
+            if (fn) {
+                for (var i = handlers.length - 1; i >= 0; i--) {
+                    if (handlers[i] == fn) {
+                        handlers.splice(i, 1);
+                    }
+                }
+            } else {
+                handlers.length = 0;
+            }
+        }
     },
 
-    remove: function () {
-        this.fireEvent('remove');
+    unAll: function () {
+        this.handlers = null;
+    },
+
+    once: function (event, handler) {
+        var my = this;
+        var fn = function () {
+            handler();
+            setTimeout(function () {
+                my.un(event, fn);
+            }, 0);
+        };
+        this.on(event, fn);
+    },
+
+    fireEvent: function (event) {
+        if (!this.handlers) { return; }
+        var handlers = this.handlers[event];
+        var args = Array.prototype.slice.call(arguments, 1);
+        handlers && handlers.forEach(function (fn) {
+            fn.apply(null, args);
+        });
     }
 };
 
@@ -318,19 +431,60 @@ WaveSurfer.util = {
     extend: function (dest) {
         var sources = Array.prototype.slice.call(arguments, 1);
         sources.forEach(function (source) {
-            if (source != null) {
-                Object.keys(source).forEach(function (key) {
-                    dest[key] = source[key];
-                });
-            }
+            Object.keys(source).forEach(function (key) {
+                dest[key] = source[key];
+            });
         });
         return dest;
     },
 
     getId: function () {
         return 'wavesurfer_' + Math.random().toString(32).substring(2);
+    },
+
+    max: function (values, min) {
+        var max = -Infinity;
+        for (var i = 0, len = values.length; i < len; i++) {
+            var val = values[i];
+            if (min != null) {
+                val = Math.abs(val - min);
+            }
+            if (val > max) { max = val; }
+        }
+        return max;
+    },
+
+    ajax: function (options) {
+        var ajax = Object.create(WaveSurfer.Observer);
+        var xhr = new XMLHttpRequest();
+        var fired100 = false;
+        xhr.open(options.method || 'GET', options.url, true);
+        xhr.responseType = options.responseType;
+        xhr.addEventListener('progress', function (e) {
+            ajax.fireEvent('progress', e);
+            if (e.lengthComputable && e.loaded == e.total) {
+                fired100 = true;
+            }
+        });
+        xhr.addEventListener('load', function (e) {
+            if (!fired100) {
+                ajax.fireEvent('progress', e);
+            }
+            ajax.fireEvent('load', e);
+
+            if (200 == xhr.status || 206 == xhr.status) {
+                ajax.fireEvent('success', xhr.response, e);
+            } else {
+                ajax.fireEvent('error', e);
+            }
+        });
+        xhr.addEventListener('error', function (e) {
+            ajax.fireEvent('error', e);
+        });
+        xhr.send();
+        ajax.xhr = xhr;
+        return ajax;
     }
 };
 
-WaveSurfer.util.extend(WaveSurfer, Observer);
-WaveSurfer.util.extend(WaveSurfer.Mark, Observer);
+WaveSurfer.util.extend(WaveSurfer, WaveSurfer.Observer);

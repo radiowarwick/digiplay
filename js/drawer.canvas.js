@@ -4,100 +4,117 @@ WaveSurfer.Drawer.Canvas = Object.create(WaveSurfer.Drawer);
 
 WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
     createElements: function () {
-        var waveCanvas = document.createElement('canvas');
-        this.style(waveCanvas, {
-            position: 'absolute',
-            zIndex: 1
-        });
-        var waveCc = waveCanvas.getContext('2d');
+        var waveCanvas = this.wrapper.appendChild(
+            this.style(document.createElement('canvas'), {
+                position: 'absolute',
+                zIndex: 1
+            })
+        );
 
-        var progressWave = document.createElement('wave');
-        this.style(progressWave, {
-            position: 'absolute',
-            zIndex: 2,
-            overflow: 'hidden',
-            width: '0',
-            borderRight: [
-                this.params.cursorWidth + 'px',
-                'solid',
-                this.params.cursorColor
-            ].join(' ')
-        });
+        this.progressWave = this.wrapper.appendChild(
+            this.style(document.createElement('wave'), {
+                position: 'absolute',
+                zIndex: 2,
+                overflow: 'hidden',
+                width: '0',
+                height: this.params.height + 'px',
+                borderRight: [
+                    this.params.cursorWidth + 'px',
+                    'solid',
+                    this.params.cursorColor
+                ].join(' ')
+            })
+        );
 
-        var progressCanvas = document.createElement('canvas');
-        var progressCc = progressCanvas.getContext('2d');
-        progressWave.appendChild(progressCanvas);
+        var progressCanvas = this.progressWave.appendChild(
+            document.createElement('canvas')
+        );
 
-        var marksCanvas = document.createElement('canvas');
-        this.style(marksCanvas, {
-            position: 'absolute',
-            zIndex: 3
-        });
-        var marksCc = marksCanvas.getContext('2d');
+        var selectionZIndex = 0;
 
-        var wrapper = document.createElement('wave');
-        this.style(wrapper, {
-            position: 'relative'
-        });
-        wrapper.appendChild(waveCanvas);
-        wrapper.appendChild(progressWave);
-        wrapper.appendChild(marksCanvas);
+        if (this.params.selectionForeground) {
+            selectionZIndex = 3;
+        }
 
-        this.container.appendChild(wrapper);
+        var selectionCanvas = this.wrapper.appendChild(
+            this.style(document.createElement('canvas'), {
+                position: 'absolute',
+                zIndex: selectionZIndex
+            })
+        );
 
-        this.canvases = [ waveCanvas, progressCanvas, marksCanvas ];
-
-        this.waveCc = waveCc;
-        this.progressCc = progressCc;
-        this.progressWave = progressWave;
-        this.marksCc = marksCc;
+        this.waveCc = waveCanvas.getContext('2d');
+        this.progressCc = progressCanvas.getContext('2d');
+        this.selectionCc = selectionCanvas.getContext('2d');
     },
 
     updateWidth: function () {
-        this.canvases.forEach(function (canvas) {
-            canvas.width = this.width;
-            canvas.height = this.height;
-
-            if (this.params.fillParent && !this.params.scrollParent) {
-                this.style(canvas, {
-                    width: this.container.clientWidth + 'px',
-                    height: this.container.clientHeight + 'px'
-                });
-            } else {
-                this.style(canvas, {
-                    width: Math.round(this.width / this.pixelRatio) + 'px',
-                    height: Math.round(this.height / this.pixelRatio) + 'px'
-                });
-            }
+        var width = Math.round(this.width / this.params.pixelRatio);
+        [
+            this.waveCc,
+            this.progressCc,
+            this.selectionCc
+        ].forEach(function (cc) {
+            cc.canvas.width = this.width;
+            cc.canvas.height = this.height;
+            this.style(cc.canvas, { width: width + 'px'});
         }, this);
+
+        this.clearWave();
+    },
+
+    clearWave: function () {
+        this.waveCc.clearRect(0, 0, this.width, this.height);
+        this.progressCc.clearRect(0, 0, this.width, this.height);
     },
 
     drawWave: function (peaks, max) {
-        for (var i = 0; i < this.width; i++) {
-            var h = max > 0 ? Math.round(peaks[i] * (this.height / max)) : 1;
-            var y = Math.round((this.height - h) / 2);
-            this.waveCc.fillStyle = this.params.waveColor;
-            this.waveCc.fillRect(i, y, 1, h);
-            this.progressCc.fillStyle = this.params.progressColor;
-            this.progressCc.fillRect(i, y, 1, h);
+        // A half-pixel offset makes lines crisp
+        var $ = 0.5 / this.params.pixelRatio;
+        this.waveCc.fillStyle = this.params.waveColor;
+        this.progressCc.fillStyle = this.params.progressColor;
+
+        var halfH = this.height / 2;
+        var coef = halfH / max;
+        var scale = 1;
+        if (this.params.fillParent && this.width > peaks.length) {
+            scale = this.width / peaks.length;
         }
+        var length = peaks.length;
+
+        this.waveCc.beginPath();
+        this.waveCc.moveTo($, halfH);
+        this.progressCc.beginPath();
+        this.progressCc.moveTo($, halfH);
+        for (var i = 0; i < length; i++) {
+            var h = Math.round(peaks[i] * coef);
+            this.waveCc.lineTo(i * scale + $, halfH + h);
+            this.progressCc.lineTo(i * scale + $, halfH + h);
+        }
+        this.waveCc.lineTo(this.width + $, halfH);
+        this.progressCc.lineTo(this.width + $, halfH);
+
+        this.waveCc.moveTo($, halfH);
+        this.progressCc.moveTo($, halfH);
+        for (var i = 0; i < length; i++) {
+            var h = Math.round(peaks[i] * coef);
+            this.waveCc.lineTo(i * scale + $, halfH - h);
+            this.progressCc.lineTo(i * scale + $, halfH - h);
+        }
+
+        this.waveCc.lineTo(this.width + $, halfH);
+        this.waveCc.fill();
+        this.progressCc.lineTo(this.width + $, halfH);
+        this.progressCc.fill();
+
+        // Always draw a median line
+        this.waveCc.fillRect(0, halfH - $, this.width, $);
     },
 
     updateProgress: function (progress) {
         var pos = Math.round(
             this.width * progress
-        ) / this.pixelRatio;
-        this.progressWave.style.width = pos + 'px';
-    },
-
-    addMark: function (mark) {
-        this.marksCc.fillStyle = mark.color;
-        var x = Math.round(mark.percentage * this.width - mark.width / 2);
-        this.marksCc.fillRect(x, 0, mark.width, this.height);
-    },
-
-    removeMark: function (mark) {
-        var x = Math.round(mark.percentage * this.width - mark.width / 2);
-        this.marksCc.clearRect(x, 0, mark.width, this.height);
+        ) / this.params.pixelRatio;
+        this.style(this.progressWave, { width: pos + 'px' });
     }
 });
