@@ -15,6 +15,9 @@ class Audio {
 	protected $notes;
 	protected $rip_result;
 	protected $filetype;
+	protected $lastmodified;
+	protected $vocal_start;
+	protected $vocal_end;
 
 	public function get_id() { return $this->id; }
 	public function get_md5() { return $this->md5; }
@@ -31,6 +34,9 @@ class Audio {
 	public function get_notes() { return $this->notes; }
 	public function get_rip_result() { return $this->rip_result; }
 	public function get_filetype() { return $this->filetype; }
+	public function get_lastmodified() { return $this->lastmodified; }
+	public function get_vocal_start() { return $this->vocal_start / 44100; }
+	public function get_vocal_end() { return $this->vocal_end / 44100; }
 
 	public function set_md5($md5) { $this->md5 = $md5; }
 	public function set_length_smpl($length_smpl) { $this->length_smpl = $length_smpl; }
@@ -77,14 +83,15 @@ class Audio {
 	public function move_to_trash() { return DigiplayDB::update("audiodir", array("dirid" => 3), "audioid = ".$this->id); }
 	public function fetch_from_trash() { return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id); }
 
-	public function player() {
+	public function player($vocal_markers = true) {
 		Output::add_script(LINK_ABS."js/wavesurfer.min.js");
 		Output::add_script(LINK_ABS."js/wavesurfer.timeline.js");
 		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
+		if($vocal_markers) Output::add_script(LINK_ABS."js/wavesurfer.regions.js");
 
 		$html = "
 		<script> $(function () { wv_create('".$this->id."'); wavesurfer[".$this->id."].load('".LINK_ABS."audio/preview/".$this->id.".mp3') }); </script>
-		<div class=\"row audio-player\" id=\"".$this->id."\">
+		<div class=\"row audio-player\" id=\"".$this->id."\" ".($vocal_markers? "data-vocal-start=\"".$this->get_vocal_start()."\" data-vocal-end=\"".$this->get_vocal_end()."\"" : "").">
 			<div class=\"col-xs-12\">
 				<div class=\"well well-sm\">
 					<div>

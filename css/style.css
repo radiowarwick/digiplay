@@ -57,6 +57,12 @@ table .nowrap { white-space: nowrap; }
 .audio-player button.btn-sm { padding: 2px 5px; }
 .audio-player .progress { position: absolute; width: 100%; top: 30px; }
 .audio-player h6 { margin-top: 7px; margin-bottom: 7px; }
+.wavesurfer-region {
+  background: rgba(200,100,100,0.1);
+  border-left: 1px solid rgba(200,100,100,0.4);
+  border-right: 1px solid rgba(200,100,100,0.4);
+  cursor: default;
+}
 
 /* ============== Uploader =============== */
 .fileinput-button {
