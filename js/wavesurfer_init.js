@@ -3,8 +3,14 @@ var wavesurfer = Array();
 function wv_create(id) {
 	wavesurfer[id] = Object.create(WaveSurfer);
 	var options = {
+		id			: id,
 		container	: document.querySelector('#waveform'+id),
-		renderer	: 'SVG'
+		waveColor	: '#ccc',
+		progressColor: '#555',
+		loaderColor	: 'green',
+		cursorcolor	: 'navy',
+		hideScrollbar: true,
+		height: 95
 	};
 
 	wavesurfer[id].init(options);
@@ -18,7 +24,7 @@ function wv_create(id) {
 	wavesurfer[id].on('pause', function() {
 		$(wavesurfer[id].container).find('.playpause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
 	});
-	wavesurfer[id].on('stop', function() {
+	wavesurfer[id].on('finish stop', function() {
 		$(wavesurfer[id].container).find('.playpause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
 		wv_progress(wavesurfer[id]);
 	});
@@ -30,41 +36,49 @@ function wv_create(id) {
 			lastFire = Date.now();
 		}
 	});
-	$('#waveform'+id).find('svg').css('opacity', '0');
+	$('#waveform'+id).find('wave').css('opacity', '0');
 
 	return wavesurfer[id];
 }
 
 function wv_loading(wv, percent) {
-	$(wv.container).find('.progress').find('.progress-bar').css('width', percent*100+'%');
+	$(wv.container).find('.progress').find('.progress-bar').css('width', percent+'%');
   	if(Math.round(percent * 10) == 0) {
   		$(wv.container).find('button').attr('disabled', 'disabled');
-		$(wv.container).find('svg').fadeTo('fast', 0, function() { $(wv.container).find('.progress').removeClass('active').fadeIn('fast'); });
-  	} else if (percent == 1) {
+		$(wv.container).find('wave').fadeTo('fast', 0, function() { $(wv.container).find('.progress').removeClass('active').fadeIn('fast'); });
+  	} else  {
   		$(wv.container).find('.progress').addClass('active');
-  	} else if (percent >= 100) {
-  		$(wv.container).find('.progress').removeClass('active').fadeOut('fast', function() { $(wv.container).find('svg').fadeTo('fast', 1); });  		
   	}
 }
 
 function wv_ready(wv) {
 	wv.fireEvent('progress');
-	$(wv.container).find('.duration').html(formatTime(wv.timings()[1]));
+	$(wv.container).find('.progress').removeClass('active').fadeOut('fast', function() { $(wv.container).find('wave').fadeTo('fast', 1); }); 
+	$(wv.container).find('.duration').html(formatTime(wv.getDuration()));
 	$(wv.container).find('button').removeAttr('disabled');
-	$(wv.container).find('.playpause').click(function() { 
+	$(wv.container).find('.playpause').on('click', function() { 
 		wv.playPause();
 	});
-	$(wv.container).find('.stop').click(function() { 
+	$(wv.container).find('.stop').on('click', function() { 
 		wv.stop();
 		$(wv.container).find('.glyphicon-pause').removeClass('glyphicon-pause').addClass('glyphicon-play');
 		wv_progress(wv);
 	});
+	$(wv.container).find('.zoom').on('click', function() {
+		wv.toggleScroll();
+	})
+
+	wv.timeline = Object.create(WaveSurfer.Timeline);
+    wv.timeline.init({
+        wavesurfer: wv,
+        container: wv.params.container
+    });
+	wv.setVolume(1);
 }
 
 function wv_progress(wv) {
-	t = wv.timings(); 
-	$(wv.container).find('.elapsed').html(formatTime(t[0]));
-	$(wv.container).find('.remain').html(formatTime(t[1] - t[0]));
+	$(wv.container).find('.elapsed').html(formatTime(wv.getCurrentTime()));
+	$(wv.container).find('.remain').html(formatTime(wv.getDuration() - wv.getCurrentTime()));
 }
 
 function formatTime(sec) {

@@ -78,11 +78,8 @@ class Audio {
 	public function fetch_from_trash() { return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id); }
 
 	public function player() {
-		Output::add_script(LINK_ABS."js/observer.js");
-		Output::add_script(LINK_ABS."js/wavesurfer.js");
-		Output::add_script(LINK_ABS."js/webaudio.js");
-		Output::add_script(LINK_ABS."js/drawer.js");
-		Output::add_script(LINK_ABS."js/drawer.svg.js");
+		Output::add_script(LINK_ABS."js/wavesurfer.min.js");
+		Output::add_script(LINK_ABS."js/wavesurfer.timeline.js");
 		Output::add_script(LINK_ABS."js/wavesurfer_init.js");
 
 		$html = "
@@ -96,6 +93,13 @@ class Audio {
 								".Bootstrap::glyphicon("play")."
 							</button>
 							<h6><small><span class=\"elapsed\">00:00</span> / <span class=\"duration\">00:00</span></small></h6>
+							<div class=\"row\">
+								<div class=\"col-xs-6\">
+									<button class=\"btn btn-sm btn-info zoom\">
+										".Bootstrap::glyphicon("search")."
+									</button>
+								</div>
+							</div>
 						</div>
 						<div>
 							<div id=\"waveform".$this->get_id()."\">
