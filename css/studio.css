@@ -41,7 +41,7 @@ body.manage { padding-bottom: 80px; padding-top: 60px; }
 
 #header {}
 
-.container { max-width: 100% !important; height: 100% !important; }
+.container { width: 100% !important; height: 100% !important; }
 #main-panel, #left-panel, #left-panel-content, #left-panel-content .tab-pane, #right-panel { height: 100% !important; }
 #left-panel { padding-top: 50px; }
 #right-panel { padding-top: 50px; padding-left: 0px; }

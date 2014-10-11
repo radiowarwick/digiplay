@@ -61,6 +61,7 @@ echo("
 				switch(data.channel) {
 					case 't_log':
 						reloadLog();
+						reloadPlaylists();
 						break;
 					case 't_messages':
 						reloadMessages();

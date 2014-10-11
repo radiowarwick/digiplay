@@ -14,4 +14,6 @@ Class LogItems {
 	}
 	
 	public static function get_by_id($id) { return DigiplayDB::select("* FROM log WHERE id = ".$id); }
+
+	public static function get_by_audioid($id) { return DigiplayDB::select("* FROM log WHERE audioid = ".$id." AND location = 1 ORDER BY datetime DESC LIMIT 1", "LogItem"); }
 }

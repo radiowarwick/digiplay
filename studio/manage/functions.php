@@ -34,7 +34,7 @@ switch($_REQUEST["action"]) {
 		if($query && (count($index) >= 1)) $search = Search::tracks($query,$index,$search_limit);
 
 		if(isset($search)) {
-			$return = "<table class=\"table table-striped table-hover\" cellspacing=\"0\">
+			$return = "<table class=\"table table-hover\" cellspacing=\"0\">
 				<thead>
 					<tr>
 						<th class=\"icon\"></th>
@@ -52,9 +52,24 @@ switch($_REQUEST["action"]) {
 			foreach($search["results"] as $track) {
 				$track = Tracks::get($track);
 
+				$lastLogged = LogItems::get_by_audioid($track->get_id());
+
+				$trackHotness = ""; // default at 0
+
+				if (isset($lastLogged)) {
+					$lastPlay = $lastLogged->get_datetime();
+
+					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1
+					if ($lastPlay > (time() - 172800)) $trackHotness = "info"; // 1
+					if ($lastPlay > (time() - 43200)) $trackHotness = "success"; // 2
+					if ($lastPlay > (time() - 21600)) $trackHotness = "warning"; // 3
+					if ($lastPlay > (time() - 7200)) $trackHotness = "danger"; // 4
+					
+				}
+
 				if($censor_time && $track->is_censored()) continue;
-				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track\">
-					<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
+				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track ".$trackHotness."\">
+					<td class=\"icon\">".($track->is_censored() ? "<span style=\"color: rgb(219, 53, 53);\">".Bootstrap::glyphicon("exclamation-sign")."</span>" : Bootstrap::glyphicon("music"))."</td>
 					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 					<td class=\"title nowrap\">".$track->get_title()."</td>
 					<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
@@ -118,8 +133,23 @@ switch($_REQUEST["action"]) {
 							</thead>
 							<tbody>";
 			foreach($playlist->get_tracks() as $track) {
+
+				$lastLogged = LogItems::get_by_audioid($track->get_id());
+
+				$trackHotness = ""; // default at 0
+
+				if (isset($lastLogged)) {
+					$lastPlay = $lastLogged->get_datetime();
+
+					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1
+					if ($lastPlay > (time() - 172800)) $trackHotness = "info"; // 1
+					if ($lastPlay > (time() - 43200)) $trackHotness = "success"; // 2
+					if ($lastPlay > (time() - 21600)) $trackHotness = "warning"; // 3
+					if ($lastPlay > (time() - 7200)) $trackHotness = "danger"; // 4
+				}
+
 				$return .= "
-								<tr data-track-id=\"".$track->get_id()."\" class=\"track\">
+								<tr data-track-id=\"".$track->get_id()."\" class=\"track ".$trackHotness."\">
 									<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
 									<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 									<td class=\"title nowrap\">".$track->get_title()."</td>
