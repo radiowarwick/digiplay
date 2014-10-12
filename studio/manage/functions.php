@@ -59,11 +59,11 @@ switch($_REQUEST["action"]) {
 				if (isset($lastLogged)) {
 					$lastPlay = $lastLogged->get_datetime();
 
-					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1
-					if ($lastPlay > (time() - 172800)) $trackHotness = "info"; // 1
-					if ($lastPlay > (time() - 43200)) $trackHotness = "success"; // 2
-					if ($lastPlay > (time() - 21600)) $trackHotness = "warning"; // 3
-					if ($lastPlay > (time() - 7200)) $trackHotness = "danger"; // 4
+					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1 week
+					if ($lastPlay > (time() - 86400)) $trackHotness = "info"; // 24 hours
+					if ($lastPlay > (time() - 10800)) $trackHotness = "success"; // 3 hours
+					if ($lastPlay > (time() - 7200)) $trackHotness = "warning"; // 2 hours
+					if ($lastPlay > (time() - 3600)) $trackHotness = "danger"; // 1 hour
 					
 				}
 
@@ -141,11 +141,11 @@ switch($_REQUEST["action"]) {
 				if (isset($lastLogged)) {
 					$lastPlay = $lastLogged->get_datetime();
 
-					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1
-					if ($lastPlay > (time() - 172800)) $trackHotness = "info"; // 1
-					if ($lastPlay > (time() - 43200)) $trackHotness = "success"; // 2
-					if ($lastPlay > (time() - 21600)) $trackHotness = "warning"; // 3
-					if ($lastPlay > (time() - 7200)) $trackHotness = "danger"; // 4
+					if ($lastPlay > (time() - 604800)) $trackHotness = "active"; // 1 week
+					if ($lastPlay > (time() - 86400)) $trackHotness = "info"; // 24 hours
+					if ($lastPlay > (time() - 10800)) $trackHotness = "success"; // 3 hours
+					if ($lastPlay > (time() - 7200)) $trackHotness = "warning"; // 2 hours
+					if ($lastPlay > (time() - 3600)) $trackHotness = "danger"; // 1 hour
 				}
 
 				$return .= "
