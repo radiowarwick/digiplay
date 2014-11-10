@@ -533,7 +533,7 @@ echo("
 								window.location('".LINK_ABS."?refer=studio/manage/');
 							}
 							$('[href=#info]').tab('show');
-							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
+							//$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
 							destroyFileBrowser();
 							$('[data-target=#logout-modal]').hide();
