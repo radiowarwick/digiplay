@@ -68,6 +68,7 @@ class Session{
 				DigiplayDB::query("UPDATE usersconfigs SET val = '".time()."' WHERE userid = ".self::$user_object->get_id()." AND configid = 3;");
 			}else{
 				DigiplayDB::query("INSERT INTO usersconfigs (userid,configid,val) VALUES (".self::$user_object->get_id().",3,'".time()."');");
+				DigiplayDB::query("INSERT INTO usersconfigs (userid,configid,val) VALUES (".self::$user_object->get_id().",1,'');");
 			}
 			return true;
 		} else {
