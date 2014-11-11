@@ -55,7 +55,7 @@ class Session{
 					# Get the user's info, or insert them as a new user if there isn't any
 					self::$user_object = Users::get_by_username(self::$data["username"]);
 					if(!self::$user_object) {
-						$id = DigiplayDB::insert("users", array("username" => self::$data["username"], "password" => NULL, "enabled" => TRUE, "ghost" => FALSE), "id");
+						$id = DigiplayDB::insert("users", array("username" => self::$data["username"], "password" => NULL), "id");
 						self::$user_object = Users::get_by_id($id);
 					}
 				} else return false;
