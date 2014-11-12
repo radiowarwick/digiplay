@@ -138,7 +138,7 @@ echo("
 							<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
 							<li><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
 							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
-							<li><a href=\"#playlists\" data-toggle=\"tab\">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
+							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
 							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
 							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
 						</ul>
@@ -533,7 +533,7 @@ echo("
 								window.location('".LINK_ABS."?refer=studio/manage/');
 							}
 							$('[href=#info]').tab('show');
-							//$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
+							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
 							destroyFileBrowser();
 							$('[data-target=#logout-modal]').hide();
