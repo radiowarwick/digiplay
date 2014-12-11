@@ -1,6 +1,6 @@
 <?php
 
-Output::set_title("Playlists");
+Output::set_title("Sustainer Playlists");
 Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 
 MainTemplate::set_subtitle("View and edit music playlists");
