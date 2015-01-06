@@ -84,10 +84,6 @@ class DigiplayDB{
 		return (bool) self::query("DELETE FROM \"".$table."\" WHERE ".$where);
 	}
 
-	public static function get_last_error() { 
-		return self::$connection->errorInfo();
-	}
-
 }
 DigiplayDB::connect();
 ?>

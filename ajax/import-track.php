@@ -67,8 +67,7 @@ if(!Session::is_group_user("Importer")) {
 
 	if(!$audio->save()) {
 		unlink($tempfile);
-		$error_message = DigiplayDB::get_last_error();
-		die(json_encode(array("error" => "Failed to save audio entry to database.".$error_message["string"], "debug" => Errors::report("array"))));
+		die(json_encode(array("error" => "Failed to save audio entry to database.", "debug" => Errors::report("array"))));
 	}
 
 	if(!isset($_REQUEST["dir"])) $audio->move_to_music_folder();
