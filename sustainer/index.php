@@ -22,6 +22,10 @@ if ($_POST['trackid'] || $_GET['trackid']) {
 		$query = "UPDATE sustschedule SET audioid=:trackid, trim_start_smpl=0, trim_end_smpl = :tracklength, fade_in = 0, fade_out = :tracklength WHERE id = :scheduleslot";
 		$parameters = array(':trackid' => $track['id'], ':tracklength' => $track['length_smpl'], ':scheduleslot' => $scheduleslot['id']);
 		DigiplayDB::query($query, $parameters);
+		$query = "INSERT INTO sustlog (audioid,userid,timestamp) VALUES (:audioid,:userid,:timestamp)";
+		date_default_timezone_set("Europe/London");
+		$parameters = array(':audioid' => $track['id'], ':userid' => Session::get_id(), ':timestamp' => time());
+		DigiplayDB::query($query, $parameters);
 		echo(Bootstrap::alert_message_basic("info","Track Scheduled"));       
 	}
 }
@@ -59,5 +63,32 @@ echo("<p>You can use this tool to schedule the next audio track to be played on 
 echo("<form action=\"\" method=\"post\">");
 echo("Track ID: <input type=\"text\" name=\"trackid\" /><input type=\"submit\" name=\"submit\" value=\"Schedule\" />");
 echo("</form>");
+
+$currentLog = Sustainer::get_log();
+$i = 0;
+
+echo("<h3>Scheduler log:</h3>");
+
+echo("<table class=\"table table-striped table-bordered\">
+	<thead>
+	<tr>
+	<th>Date</th>
+	<th>Title</th>
+	<th>Artist</th>
+	<th>Scheduled By</th>
+	</tr>
+	</thead>
+	<tbody>");
+foreach ($currentLog as $row) {
+	$i++;
+	echo("<tr>
+		<td>".date('d/m/y H:i', $row['timestamp'])."</td>
+	<td>".$row['title']."</td>
+	<td>".$row['artist']."</td>
+	<td>".$row['username']."</td>
+	</tr>");
+}
+echo("</tbody>
+	</table>");
 
 ?>
