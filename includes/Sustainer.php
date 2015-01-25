@@ -12,5 +12,7 @@ class Sustainer {
 		$time_str .= ($time_arr["seconds"])? sprintf('%02d',$time_arr["seconds"])." seconds " : "00s ";
 		return $time_str;
 	}
+
+	public static function get_queue() { return DigiplayDB::select("sustschedule.id, sustschedule.audioid, audio.title, artists.name AS artist, albums.name AS album FROM sustschedule INNER JOIN audio ON sustschedule.audioid = audio.id INNER JOIN audioartists ON audio.id = audioartists.audioid INNER JOIN artists ON audioartists.artistid = artists.id INNER JOIN albums ON audio.music_album = albums.id ORDER BY sustschedule.id ASC LIMIT 10"); }
 }
 ?>
