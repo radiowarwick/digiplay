@@ -19,14 +19,18 @@ if ($_POST['trackid'] || $_GET['trackid']) {
 		$query = "SELECT * FROM sustschedule order by id asc limit 1";
 		$result = DigiplayDB::query($query);
 		$scheduleslot = $result->fetch();
-		$query = "UPDATE sustschedule SET audioid=:trackid, trim_start_smpl=0, trim_end_smpl = :tracklength, fade_in = 0, fade_out = :tracklength WHERE id = :scheduleslot";
-		$parameters = array(':trackid' => $track['id'], ':tracklength' => $track['length_smpl'], ':scheduleslot' => $scheduleslot['id']);
-		DigiplayDB::query($query, $parameters);
-		$query = "INSERT INTO sustlog (audioid,userid,timestamp) VALUES (:audioid,:userid,:timestamp)";
-		date_default_timezone_set("Europe/London");
-		$parameters = array(':audioid' => $track['id'], ':userid' => Session::get_id(), ':timestamp' => time());
-		DigiplayDB::query($query, $parameters);
-		echo(Bootstrap::alert_message_basic("info","Track Scheduled"));       
+		if ($track['id'] != $scheduleslot['audioid']) {
+			$query = "UPDATE sustschedule SET audioid=:trackid, trim_start_smpl=0, trim_end_smpl = :tracklength, fade_in = 0, fade_out = :tracklength WHERE id = :scheduleslot";
+			$parameters = array(':trackid' => $track['id'], ':tracklength' => $track['length_smpl'], ':scheduleslot' => $scheduleslot['id']);
+			DigiplayDB::query($query, $parameters);
+			$query = "INSERT INTO sustlog (audioid,userid,timestamp) VALUES (:audioid,:userid,:timestamp)";
+			date_default_timezone_set("Europe/London");
+			$parameters = array(':audioid' => $track['id'], ':userid' => Session::get_id(), ':timestamp' => time());
+			DigiplayDB::query($query, $parameters);
+			echo(Bootstrap::alert_message_basic("info","Track Scheduled."));      
+		} else {
+		 	echo(Bootstrap::alert_message_basic("warning","This track is already at the top of the queue."));
+		}
 	}
 }
 
