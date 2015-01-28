@@ -17,6 +17,13 @@ $i = 0;
 
 echo("<h3>Sustainer schedule:</h3>");
 
+echo("<select id=\"genre-selector\">");
+foreach ($colours as $colour) {
+	$i++;
+	echo("<option value=\"".$colour."\">".$i."</option>");
+}
+echo("</select>");
+
 echo("<table class=\"table table-striped table-bordered\">
 	<thead>
 	<tr>
@@ -41,5 +48,13 @@ foreach ($timeslots as $timeslot) {
 }
 echo("</tbody>
 	</table>");
+
+echo("<form>");
+foreach ($timeslots as $timeslot) {
+	foreach ($days as $day) {
+		echo("<input type=\"hidden\" id=\"field-slot-".$day."-".$timeslot."\" name=\"field-slot-".$day."-".$timeslot."\" value=\"2ecc71\">");
+	}
+}
+echo("</form>");
 
 ?>

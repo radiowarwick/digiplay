@@ -1,9 +1,16 @@
 $( document ).ready(function() {
 
-    $( ".timeslot" ).click(function() {
+    $( '.timeslot' ).click(function() {
 
-      alert( "Handler for .click() called." );
-      console.log($(this));
+      //console.log($(this).attr('id'));
+
+      // Update colours for the table
+      $(this).css('background-color', '#'+$('#genre-selector').val());
+
+      //console.log( '#field-' + $(this).attr('id') );
+
+      // Update corresponding hidden values
+      $( '#field-' + $(this).attr('id') ).val( $('#genre-selector').val() );
     
     });
 
