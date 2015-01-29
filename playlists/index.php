@@ -194,6 +194,71 @@ echo("
 </form>
 ");
 
+if(Session::is_group_user("Sustainer Admin")) {
+
+	echo("<h3>Sustainer playlists:</h3>");
+
+	echo("
+	<div class=\"table-responsive\">
+	<table class=\"table table-striped\">
+		<thead>
+			<tr>
+				<th class=\"icon\"></th>
+				<th>Title</th>
+				<th class=\"icon\">Items</th>
+				<th class=\"icon\"></th>
+				<th class=\"icon\"></th>
+				<th class=\"icon\"></th>
+			</tr>
+		</thead>
+		<tbody>
+	");
+
+	foreach (Playlists::get_sustainer() as $playlist) {
+		echo("
+			<tr>
+				<td>
+					<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" class=\"info\">
+						".Bootstrap::glyphicon("info-sign")."
+						<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
+					</a>
+					<div class=\"hover-info\">
+					");
+		$count = $playlist->count_tracks();
+		foreach($playlist->get_tracks(10) as $track) {
+			echo("<strong>".$track->get_title()."</strong> by ".$track->get_artists_str()."<br />");
+		}
+		if($count > 10) echo("<br />and <strong>".($count - 10)." more...<br />");
+		echo("
+					</div>
+				</td>
+				<td class=\"title\">".$playlist->get_name()."</td>
+				<td>".count($playlist->get_tracks())."</td>
+				<td>
+					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
+						".Bootstrap::glyphicon("pencil")."
+					</a>
+				</td>
+				<td>
+					<a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"delete-playlist\" title=\"Delete this playlist\" rel=\"twipsy\">
+						".Bootstrap::glyphicon("remove-sign")."
+					</a>
+				</td>
+				<td>
+					<a href=\"#\" class=\"move\">
+						".Bootstrap::glyphicon("move move")."
+					</a>
+				</td>
+			</tr>");
+	}
+	echo("
+		</tbody>
+	</table>
+	</div>
+	");
+
+}
+
 if(Session::is_group_user("Playlist Admin")) {
 	echo("<a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" id=\"add\">Add a new playlist &raquo;</a>".
 	Bootstrap::modal("addnew-modal", "

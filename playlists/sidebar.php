@@ -5,7 +5,6 @@ function menu() {
 	$menu = array(
 		array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Playlists Overview", "icon" => "home"),
 		array("url" => LINK_ABS.$site_path_array[0]."/index.php#add", "text" => "Add a new playlist", "icon" => "plus-sign"),
-		array("url" => LINK_ABS.$site_path_array[0]."/detail/0", "text" => "Edit sustainer playlist", "icon" => "edit"),
 		array("url" => LINK_ABS.$site_path_array[0]."/sustainer/", "text" => "Sustainer settings", "icon" => "edit")
 	);
 
