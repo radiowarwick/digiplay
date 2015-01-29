@@ -194,7 +194,7 @@ echo("
 </form>
 ");
 
-if(Session::is_group_user("Sustainer Admin")) {
+if(Session::is_group_user("Playlist Admin")) {
 
 	echo("<h3>Sustainer playlists:</h3>");
 

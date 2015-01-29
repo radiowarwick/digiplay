@@ -18,9 +18,9 @@ $i = 0;
 echo("<h3>Sustainer schedule:</h3>");
 
 echo("<select id=\"genre-selector\">");
-foreach ($colours as $colour) {
+foreach (Playlists::get_sustainer() as $playlist) {
 	$i++;
-	echo("<option value=\"".$colour."\">".$i."</option>");
+	echo("<option value=\"".$colours[$i]."\">".$playlist->get_name()." - ".$colours[$i]."</option>");
 }
 echo("</select>");
 
