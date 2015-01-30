@@ -20,7 +20,7 @@ echo("<h3>Sustainer schedule:</h3>");
 echo("<select id=\"genre-selector\">");
 foreach (Playlists::get_sustainer() as $playlist) {
 	$i++;
-	echo("<option value=\"".$playlist->get_id()."\">".$playlist->get_name()." - ".$colours[$i]."</option>");
+	echo("<option value=\"".$playlist->get_id()."\" data-colour=\"".$colours[$i]."\">".$playlist->get_name()." - ".$colours[$i]."</option>");
 }
 echo("</select>");
 

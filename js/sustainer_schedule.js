@@ -5,7 +5,7 @@ $( document ).ready(function() {
       //console.log($(this).attr('id'));
 
       // Update colours for the table
-      $(this).css('background-color', '#'+$('#genre-selector').val());
+      $(this).css('background-color', '#'+$('#genre-selector option:selected').data('colour'));
 
       //console.log( '#field-' + $(this).attr('id') );
 
