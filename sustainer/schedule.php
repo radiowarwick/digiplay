@@ -8,6 +8,27 @@ Output::require_group("Sustainer Admin");
 
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
+/*echo("<script type=\"text/javascript\">
+$(function() {
+
+		$('#save-schedule').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/add-update-playlist.php',
+				data: 'id='+$('.update-id').val()+'&name='+$('.playlist-edit-name').val(),
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+});
+</script>");*/
+
 $colours = array('2ecc71', 'e67e22', '3498db', 'e74c3c', '9b59b6', '34495e', '1abc9c', 'f1c40f');
 $timeslots = array('00', '01', '02','03','04','05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
 $days = array('m', 'tu', 'w', 'th', 'f', 'sa', 'su');
@@ -55,9 +76,16 @@ echo("</tbody>
 	</table>");
 
 echo("<form>");
+
 foreach ($slots as $slot) {
 	echo("<input type=\"hidden\" id=\"field-slot-".$slot->get_day()."-".$slot->get_time()."\" name=\"field-slot-".$slot->get_day()."-".$slot->get_time()."\" value=\"".$slot->get_playlist_id()."\">");
 }
+
+echo("<button type=\"submit\" id=\"save-schedule\" class=\"btn btn-primary btn-block\">
+		".Bootstrap::glyphicon("save save")."
+		Save
+	</button>");
+
 echo("</form>");
 
 ?>

@@ -16,12 +16,13 @@ class SustainerSlot {
 	
 	/* Extended functions */
 	/*public function get_style() { return AudiowallStyles::get_by_id($this->style_id); }
-	public function get_audio() { return Audio::get_by_id($this->audio_id); }
+	public function get_audio() { return Audio::get_by_id($this->audio_id); }*/
 
 	public function save() {
-		$query = "INSERT INTO aw_items (audio_id, style_id, item, wall_id, text) VALUES ('".$this->audio_id."', '".$this->style_id."', '".$this->item."', '".$this->wall_id."', '".pg_escape_string($this->text)."')";
-		$result = DigiplayDB::query($query);
-	}*/
+		if(isset($this->id)) DigiplayDB::update("sustslots", get_object_vars($this), "id = ".$this->id);
+		else $this->id = DigiplayDB::insert("sustslots", get_object_vars($this), "id");
+		return $this->id;
+	}
 
 }
 ?>
