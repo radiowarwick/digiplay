@@ -92,12 +92,17 @@ class MainTemplate{
 				<div class=\"container\">
 				<div class=\"navbar-header\">
 					<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-dps-collapse\">
-      					<span class=\"sr-only\">Toggle navigation</span>
-      					<span class=\"icon-bar\"></span>
-      					<span class=\"icon-bar\"></span>
-      					<span class=\"icon-bar\"></span>
-    				</button>
-    				<a class=\"navbar-brand hidden-sm\" href=\"".LINK_ABS."\">Digiplay</a>
+      						<span class=\"sr-only\">Toggle navigation</span>
+      						<span class=\"icon-bar\"></span>
+      						<span class=\"icon-bar\"></span>
+      						<span class=\"icon-bar\"></span>
+    					</button>
+	    				<a class=\"navbar-brand hidden-sm\" href=\"".LINK_ABS."\">Digiplay</a>
+					<div class=\"navbar-spinner hidden\">
+						<svg class=\"spinner\" width=\"25px\" height=\"25px\" viewBox=\"0 0 66 66\" xmlns=\"http://www.w3.org/2000/svg\">
+							<circle class=\"path\" fill=\"none\" stroke-width=\"8\" stroke-linecap=\"round\" cx=\"33\" cy=\"33\" r=\"29\"></circle>
+						</svg>
+					</div>
 				</div>
 				<div class=\"navbar-collapse collapse navbar-dps-collapse\">"
 					.$main_menu->output(LINK_ABS,6,"nav navbar-nav");
