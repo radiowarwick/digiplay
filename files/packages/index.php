@@ -4,6 +4,8 @@ MainTemplate::set_subtitle("Create and manage groups of jingles");
 Output::add_script(LINK_ABS.'js/bootbox.min.js');
 Output::add_script(LINK_ABS.'js/bootstrap.typeahead.min.js');
 
+Output::require_group("Files Admin");
+
 if(isset($_GET['archive']) && ($package = JinglePackages::get_by_id($_GET['archive']))) {
 	if($package->get_archived() == false) $package->set_archived(true);
 	else $package->set_archived(false);
