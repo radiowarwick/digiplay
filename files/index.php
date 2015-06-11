@@ -1,6 +1,6 @@
 <?php
 
-Output::set_title("Files");
+Output::set_title("My Files");
 MainTemplate::set_subtitle("Browse and manage files in the database");
 
 Output::add_stylesheet(LINK_ABS."css/ui.fancytree.css");
@@ -8,7 +8,7 @@ Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 Output::add_script(LINK_ABS."js/jquery.fancytree.js");
 Output::add_script(LINK_ABS."js/jquery.fancytree.glyphicon.js");
 
-echo("
+/*echo("
 	<script>
 		$().ready(function() {
 			$('#files').fancytree({ 
@@ -23,6 +23,8 @@ echo("
 	</script>
 
 	<div id=\"files\"></div>"
-);
+);*/
 
 ?>
+
+<em>Coming soon!</em>

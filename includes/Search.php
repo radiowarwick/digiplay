@@ -74,6 +74,32 @@ class Search {
         $return = array("results" => $results, "total" => $total);
         return ((count($results) > 0)? $return : NULL);
     }
+
+    public static function jingles($query, $limit=0, $offset=0) {
+        $query_str = "id, count(*) OVER() AS full_count FROM v_audio_jingles WHERE to_tsvector(title)::tsvector @@ plainto_tsquery(:query)::tsquery ORDER BY id DESC";
+
+        if($limit > 0) $query_str .= " LIMIT ".$limit;
+        if($offset > 0) $query_str .= " OFFSET ".$offset;
+
+        $result = DigiplayDB::select($query_str, NULL, true, array(":query" => $query));
+        if ($result === false) throw new UserError("Query failed: $query_str");
+
+        $results = array();
+        $total = 0;
+        if(count($result) > 0) {
+            foreach($result as $res) {
+                $results[] = $res["id"];
+                $total = $res["full_count"];
+            }
+        }
+
+        $return = array(
+            "results" => $results,
+            "total" => $total);
+
+        return ((count($results) > 0)? $return : NULL);
+    }
+
 }
 
 ?>
