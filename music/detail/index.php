@@ -2,6 +2,8 @@
 
 Output::set_title("Track Detail");
 MainTemplate::set_subtitle("View and edit track metadata");
+Output::add_stylesheet(LINK_ABS."css/bootstrap-select.css");
+Output::add_script(LINK_ABS."js/bootstrap-select.js");
 
 if(!isset($_GET['id'])) exit("<h3>No track specified</h3><h4>You must access this via another page, to get metadata for a specified track.</h4>");
 if(!$track = Tracks::get($_GET["id"])) exit("<h3>Invalid track ID</h3><h4>If you got to this page via a link from somewhere else on the site, there may be a bug.  A bug you should bug the techies about!</h4>");
@@ -255,6 +257,19 @@ echo("
 							<span class=\"input-group-addon\">".Bootstrap::glyphicon("tag")."</span>
 							<input type=\"text\" id=\"new_keyword\" name=\"new_keyword\" class=\"form-control\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
+					</div>
+					<div class=\"form-group\">
+						<label for=\"type\">Audio Type</label>
+						<select class=\"selectpicker\" id=\"type\" name=\"type\" data-width=\"100%\" ".$disabled.">");
+						foreach(AudioTypes::get_all() as $audiotype) {
+							if ($audiotype->get_id() == $track->get_type()->get_id()) {
+								echo("<option value=\"".$audiotype->get_id()."\" selected=\"selected\">".$audiotype->get_name()."</option>");
+							} 
+							else {
+								echo("<option value=\"".$audiotype->get_id()."\">".$audiotype->get_name()."</option>");
+							}
+						}
+					echo("</select>
 					</div>
 					<hr />
 					");
