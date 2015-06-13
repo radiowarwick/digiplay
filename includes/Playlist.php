@@ -31,4 +31,8 @@ class Playlist {
 
 	public function add_track($track) {	return DigiplayDB::insert("audioplaylists", array("audioid" => $track->get_id(), "playlistid" => $this->id)); }
 	public function del_track($track) { return DigiplayDB::delete("audioplaylists", "audioid = ".$track->get_id()." AND playlistid = ".$this->id); }
+
+	public function get_colour() {
+		return DigiplayDB::select("colour FROM playlistcolours WHERE playlistid = ".$this->id);
+	}
 }

@@ -12,7 +12,7 @@ class SustainerSlot {
 
 	public function set_day($day){ $this->day = $day; }
 	public function set_time($time){ $this->time = $time; }
-	public function set_playlist_id($playlist_id){ $this->playlist_id = $playlistid; }
+	public function set_playlist_id($playlist_id){ $this->playlistid = $playlist_id; }
 	
 	/* Extended functions */
 	/*public function get_style() { return AudiowallStyles::get_by_id($this->style_id); }
