@@ -20,6 +20,14 @@ class Tracks{
 	public static function get_newest($num=10) { return DigiplayDB::select("audio.* FROM audio INNER JOIN audiodir ON audio.id=audiodir.audioid WHERE audio.type = ".AudioTypes::get("Track")->get_id()." AND audiodir.dirid = 2 ORDER BY audio.id DESC LIMIT ".$num.";", "Track", true); }
 	public static function get_flagged() { return DigiplayDB::select("* FROM audio WHERE type = ".AudioTypes::get("Track")->get_id()." AND flagged = 't' ORDER BY import_date DESC;", "Track", true); }
 
+	public static function get_deleted($limit=0,$offset=0) {
+		$limit = ($limit > 0)? " LIMIT ".$limit : "";
+		$offset = ($offset > 0)? " OFFSET ".$offset : "";
+		return DigiplayDB::select("audio.* FROM audio INNER JOIN audiodir ON audio.id = audiodir.audioid WHERE audiodir.dirid = 3 ORDER BY audio.id DESC".$limit.$offset, "Track", true); 
+	}
+
+	public static function count_deleted() { return DigiplayDB::select("COUNT(audio.id) FROM audio INNER JOIN audiodir ON audio.id = audiodir.audioid WHERE audiodir.dirid = 3"); }
+
 	public static function get_censored($limit = 0,$offset = 0) {
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
