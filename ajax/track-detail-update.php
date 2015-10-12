@@ -2,6 +2,7 @@
 
 
 if(Session::is_group_user('Librarian')){
+
 	$track = Tracks::get_by_id($_REQUEST["id"]);
 	if(!$_REQUEST["title"]) exit(json_encode(array("error" => "You did not specify a title.")));
 	if($_REQUEST["title"] != $track->get_title()) $track->set_title($_REQUEST["title"]);
@@ -11,6 +12,8 @@ if(Session::is_group_user('Librarian')){
 	foreach($curr_artists_obj as $artist) $curr_artists_arr[] = $artist->get_name();
 	$track->del_artists(array_diff($curr_artists_arr,$_REQUEST["artist"]));
 	$track->add_artists(array_diff($_REQUEST["artist"],$curr_artists_arr));
+
+	if($_REQUEST["type"]) $track->set_type(AudioTypes::get_by_id($_REQUEST["type"]));
 	
 	if($_REQUEST["new-artist"]) $track->add_artists($_REQUEST["new-artist"]);
 
