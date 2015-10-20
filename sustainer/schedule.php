@@ -3,12 +3,19 @@
 Output::set_title("Sustainer");
 Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 Output::add_script(LINK_ABS."js/sustainer_schedule.js");
+Output::add_stylesheet(LINK_ABS."css/select2.min.css");
+Output::add_script(LINK_ABS."js/select2.min.js");
 
 Output::require_group("Sustainer Admin");
 
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
-echo("<script type=\"text/javascript\">
+echo("<style type=\"text/css\">
+	td.timeslot { text-align: center; }
+  </style>
+
+
+	<script type=\"text/javascript\">
 $(function() {
 
 		$('#save-schedule').click(function() {
@@ -25,6 +32,56 @@ $(function() {
 				}
 			});
 		});
+
+		$('#save-prerecord').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/add-update-prerecord.php',
+				data: { updateid: $('.update-id').val(), prerecordid: $('#prerecord-id').val() },
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('#prerecord-id').select2({
+		  ajax: {
+		    url: '".LINK_ABS."ajax/prerecord-search.php',
+		    dataType: 'json',
+		    delay: 250,
+		    data: function (params) {
+		      return {
+		        q: params.term
+		      };
+		    },
+		    processResults: function (data, page) {
+		      // parse the results into the format expected by Select2.
+		      // since we are using custom formatting functions we do not need to
+		      // alter the remote JSON data
+		      return {
+		        results: data.data
+		      };
+		    },
+		    cache: true
+		  },
+		  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+		  minimumInputLength: 1,
+		  templateResult: formatRepo, // omitted for brevity, see the source of this page
+		  templateSelection: formatRepoSelection
+		});
+
+		function formatRepo (repo) {
+			if (repo.loading) return repo.title;
+		    return repo.title + ' by <i>' + repo.by + '</i>';
+		  }
+
+	  function formatRepoSelection (repo) {
+	  	return repo.title;
+	  }
 
 });
 </script>");
@@ -66,7 +123,9 @@ foreach ($slots as $slot) {
 	}
 	$thisPlaylist = Playlists::get_by_id($slot->get_playlist_id());
 	$thisPlaylistColour = ($thisPlaylist->get_colour() == "" ? 'FFFFFF' : $thisPlaylist->get_colour());
-	echo("<td class='timeslot' id='slot-".$slot->get_day()."-".$slot->get_time()."' style='background-color: #".$thisPlaylistColour.";'></td>");
+	echo("<td class='timeslot' id='slot-".$slot->get_day()."-".$slot->get_time()."' style='background-color: #".$thisPlaylistColour.";'>");
+	echo($slot->get_audio_id() == NULL ? '' : "<span class=\"glyphicon glyphicon-time\" aria-hidden=\"true\"></span>");
+	echo("</td>");
 	$i++;
 	if ($i > 6) {
 		echo("</tr>");
@@ -88,5 +147,36 @@ echo("<button type=\"submit\" id=\"save-schedule\" class=\"btn btn-primary btn-b
 	</button>");
 
 echo("</form>");
+
+// one modal
+// js any box with class box can trigger modal
+// get id on box (time,day) and pop that in modal
+// modal has text input for id
+// submit by javascript
+// bordered or some shit to indicate prerec
+
+echo(Bootstrap::modal("update-modal", "
+		<form class=\"form-horizontal\" action=\"".LINK_ABS."ajax/add-update-prerecord.php\" method=\"POST\">
+			<fieldset>
+				<div class=\"control-group\">
+					<label class=\"control-label\" for=\"audioid\">Audio ID</label>
+					<div class=\"controls\">
+						<input type=\"hidden\"class=\"update-id\" name=\"updateid\">
+						<select id=\"prerecord-id\" name=\"prerecord-id\" data-width=\"100%\">
+						</select>
+						<p class=\"help-block\">Enter a prerecord's audio id to schedule.</p>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	", "Schedule Prerecorded Content", "<a class=\"btn btn-primary update-playlist\" id=\"save-prerecord\" href=\"#\">Schedule</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
+
+"<script type=\"text/javascript\">
+		boxes = $('.timeslot');
+		boxes.dblclick(function(){
+			$('#update-modal').modal('show');
+			$('.update-id').val($(this).attr('id'));
+		});
+</script>");
 
 ?>
