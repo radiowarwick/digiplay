@@ -3,8 +3,8 @@ function menu() {
 	$site_path_array = explode("/",LINK_FILE);
 
 	$menu = array(
-		array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Sustainer Overview", "icon" => "home"),
-		array("url" => LINK_ABS.$site_path_array[0]."/timer.php", "text" => "More coming soon...", "icon" => "edit")
+		array("url" => LINK_ABS.$site_path_array[0]."/index.php", "text" => "Sustainer Control Centre", "icon" => "home"),
+		array("url" => LINK_ABS.$site_path_array[0]."/schedule.php", "text" => "Sustainer Schedule", "icon" => "music")
 	);
 
 	foreach($menu as &$item) if($site_path_array[1] == array_pop(explode("/",$item["url"]))) $item["active"] = true;

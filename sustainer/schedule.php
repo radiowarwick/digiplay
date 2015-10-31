@@ -1,14 +1,13 @@
 <?php
 
-Output::set_title("Sustainer");
+Output::set_title("Sustainer Schedule");
 Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
-Output::add_script(LINK_ABS."js/sustainer_schedule.js");
 Output::add_stylesheet(LINK_ABS."css/select2.min.css");
 Output::add_script(LINK_ABS."js/select2.min.js");
 
 Output::require_group("Sustainer Admin");
 
-MainTemplate::set_subtitle("Perform common sustainer tasks");
+MainTemplate::set_subtitle("Change the schedule of the sustainer service");
 
 echo("<style type=\"text/css\">
 	td.timeslot { text-align: center; }
@@ -18,10 +17,10 @@ echo("<style type=\"text/css\">
 	<script type=\"text/javascript\">
 $(function() {
 
-		$('#save-schedule').click(function() {
+		$('#update-playlist').click(function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/update-sustainer-slots.php',
-				data: $('.field-slots').serialize(),
+				data: { updateid: $('.update-id').val(), playlistid: $('#playlist-id').val() },
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -37,6 +36,21 @@ $(function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/add-update-prerecord.php',
 				data: { updateid: $('.update-id').val(), prerecordid: $('#prerecord-id').val() },
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('#delete-prerecord').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/add-update-prerecord.php',
+				data: { updateid: $('.update-id').val(), prerecordid: 0 },
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -83,6 +97,8 @@ $(function() {
 	  	return repo.title;
 	  }
 
+	  $('#playlist-id').select2()
+
 });
 </script>");
 
@@ -91,15 +107,6 @@ $timeslots = array('00', '01', '02','03','04','05','06', '07', '08', '09', '10',
 
 $slots = SustainerSlots::get_all();
 $i = 0;
-
-echo("<h3>Sustainer schedule:</h3>");
-
-echo("<select id=\"genre-selector\">");
-foreach (Playlists::get_sustainer() as $playlist) {
-	$i++;
-	echo("<option value=\"".$playlist->get_id()."\" data-colour=\"".($playlist->get_colour() == "" ? 'FFFFFF' : $playlist->get_colour())."\">".$playlist->get_name()."</option>");
-}
-echo("</select>");
 
 echo("<table class=\"table table-striped table-bordered\">
 	<thead>
@@ -141,41 +148,61 @@ foreach ($slots as $slot) {
 	echo("<input type=\"hidden\" class=\"field-slots\" id=\"field-slot-".$slot->get_day()."-".$slot->get_time()."\" name=\"field-slot-".$slot->get_day()."-".$slot->get_time()."\" value=\"".$slot->get_playlist_id()."\">");
 }
 
-echo("<button type=\"submit\" id=\"save-schedule\" class=\"btn btn-primary btn-block\">
-		".Bootstrap::glyphicon("save save")."
-		Save
-	</button>");
-
 echo("</form>");
 
-// one modal
-// js any box with class box can trigger modal
-// get id on box (time,day) and pop that in modal
-// modal has text input for id
-// submit by javascript
-// bordered or some shit to indicate prerec
+$playlistOptions = "";
+
+foreach (Playlists::get_sustainer() as $playlist) {
+	$playlistOptions .= "<option value=\"".$playlist->get_id()."\">".$playlist->get_name()."</option>";
+}
 
 echo(Bootstrap::modal("update-modal", "
-		<form class=\"form-horizontal\" action=\"".LINK_ABS."ajax/add-update-prerecord.php\" method=\"POST\">
+		<p id=\"slot-info\">Current slot information is unavailable.</p>
+		<hr>
+		<form class=\"form-horizontal\" action=\"?\" method=\"POST\">
 			<fieldset>
 				<div class=\"control-group\">
-					<label class=\"control-label\" for=\"audioid\">Audio ID</label>
+					<label class=\"control-label\" for=\"playlist-id\">New Playlist</label>
 					<div class=\"controls\">
-						<input type=\"hidden\"class=\"update-id\" name=\"updateid\">
-						<select id=\"prerecord-id\" name=\"prerecord-id\" data-width=\"100%\">
+						<select id=\"playlist-id\" name=\"playlist-id\" data-width=\"100%\">
+							".$playlistOptions."
 						</select>
-						<p class=\"help-block\">Enter a prerecord's audio id to schedule.</p>
+						<p class=\"help-block\">Select the playlist to be scheduled for <hh>.</p>
 					</div>
 				</div>
 			</fieldset>
+			<fieldset>
+				<div class=\"control-group\">
+					<label class=\"control-label\" for=\"prerecord-id\">Prerecorded File</label>
+					<div class=\"controls\">
+						<select id=\"prerecord-id\" name=\"prerecord-id\" data-width=\"100%\">
+						</select>
+						<p class=\"help-block\">Select the prerecorded content to be played out at <hh>.</p>
+					</div>
+				</div>
+			</fieldset>
+			<input type=\"hidden\"class=\"update-id\" name=\"updateid\">
 		</form>
-	", "Schedule Prerecorded Content", "<a class=\"btn btn-primary update-playlist\" id=\"save-prerecord\" href=\"#\">Schedule</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
+	", "Schedule Prerecorded Content", "<a class=\"btn btn-success\" id=\"update-playlist\" href=\"#\">Update Playlist</a><a class=\"btn btn-primary\" id=\"save-prerecord\" href=\"#\">Schedule Prerecord</a><a class=\"btn btn-danger\" id=\"delete-prerecord\" href=\"#\">Unschedule Prerecord</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
 
 "<script type=\"text/javascript\">
 		boxes = $('.timeslot');
 		boxes.dblclick(function(){
 			$('#update-modal').modal('show');
 			$('.update-id').val($(this).attr('id'));
+			$.ajax({
+				url: '".LINK_ABS."ajax/get-slot-status.php',
+				data: { updateid: $('.update-id').val() },
+				type: 'POST',
+				dataType: 'json',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					$('#slot-info').html(data.status);
+				}
+			});
 		});
 </script>");
 

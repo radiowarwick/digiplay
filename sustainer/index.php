@@ -1,6 +1,6 @@
 <?php
 
-Output::set_title("Sustainer");
+Output::set_title("Sustainer Control Centre");
 Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 
 Output::require_group("Sustainer Admin");
@@ -8,7 +8,7 @@ Output::require_group("Sustainer Admin");
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
 
-if ($_POST['trackid'] || $_GET['trackid']) {
+if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 	$query = "SELECT * FROM audio WHERE id=:trackid";
 	$parameters = array(':trackid' => $_REQUEST['trackid']);
 	$result = DigiplayDB::query($query, $parameters);

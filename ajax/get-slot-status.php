@@ -10,21 +10,13 @@ if(Session::is_group_user('Sustainer Admin')){
 
 		if ($compareValue == $_REQUEST["updateid"]) {
 
-			if((int) $_REQUEST["prerecordid"] == 0) {
-				$slot->set_audio_id((int) $_REQUEST["prerecordid"]);
-				$slot->save();
-				break;
-			}
+			$prerecordText = "Currently this hour is scheduled with the <b>".Playlists::get_by_id($slot->get_playlist_id())->get_name()."</b> playlist";
 
-			if(!($audioid = Audio::get_by_id((int) $_REQUEST["prerecordid"]))) {
-				exit(json_encode(array('error' => 'Invalid audio ID.')));
-			} 
-			
-			if ((int) $_REQUEST["prerecordid"] != $slot->get_audio_id()) {
-				$slot->set_audio_id((int) $_REQUEST["prerecordid"]);
-				$slot->save();
+			if ($slot->get_audio_id() != NULL) {
+				$prerecordText .= " <i>AND</i> the prerecord <b>".Prerecs::get_by_id($slot->get_audio_id())->get_title()."</b> is scheduled.";
+			} else {
+				$prerecordText .=" <b>AND</b> there is no prerecord scheduled.";
 			}
-			
 			break;
 		}
 
@@ -38,7 +30,7 @@ if(Session::is_group_user('Sustainer Admin')){
 
 	} else {
 
-		exit(json_encode(array('response' => 'success', 'id' => $audioid->get_id())));
+		exit(json_encode(array('response' => 'success', 'status' => $prerecordText)));
 
 	}
 

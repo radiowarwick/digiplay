@@ -6,13 +6,16 @@ if(Session::is_group_user('Sustainer Admin')){
 
 	foreach ($slots as $slot) {
 
-		$slotIdentifier = "field-slot-".$slot->get_day()."-".$slot->get_time();
+		$compareValue = "slot-".$slot->get_day()."-".$slot->get_time();
 
-		if(!($playlist = Playlists::get_by_id($_REQUEST["$slotIdentifier"]))) exit(json_encode(array('error' => 'Invalid playlist ID.')));
-		
-		if ($_REQUEST["$slotIdentifier"] != $slot->get_playlist_id()) {
-			$slot->set_playlist_id($_REQUEST["$slotIdentifier"]);
-			$slot->save();
+		if ($compareValue == $_REQUEST["updateid"]) {
+			if(!($audioid = Audio::get_by_id((int) $_REQUEST["playlistid"]))) exit(json_encode(array('error' => 'Invalid playlist ID.')));
+			
+			if ((int) $_REQUEST["playlistid"] != $slot->get_playlist_id()) {
+				$slot->set_playlist_id((int) $_REQUEST["playlistid"]);
+				$slot->save();
+			}
+			break;
 		}
 
 	}

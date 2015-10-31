@@ -15,7 +15,11 @@ class SustainerSlot {
 	public function set_day($day){ $this->day = $day; }
 	public function set_time($time){ $this->time = $time; }
 	public function set_playlist_id($playlist_id){ $this->playlistid = $playlist_id; }
-	public function set_audio_id($audio_id){ $this->audioid = $audio_id; }
+	
+	public function set_audio_id($audio_id){
+		if ($audio_id == 0) $audio_id = NULL;
+		$this->audioid = $audio_id;
+	}
 
 	public function save() {
 		if(isset($this->id)) DigiplayDB::update("sustslots", get_object_vars($this), "id = ".$this->id);
