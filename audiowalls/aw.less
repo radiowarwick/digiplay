@@ -1,0 +1,27 @@
+<?php 
+require_once("pre.php");
+Output::set_template();
+
+$styles = AudiowallStyles::get_all();
+
+foreach ($styles as $style) {
+?>
+@dps-aw-style-<?=$style->get_id(); ?>: <?=$style->get_background_rgb(); ?>;
+@dps-aw-style-<?=$style->get_id(); ?>-light: darken(@dps-aw-style-<?=$style->get_id(); ?>, 15%);
+
+.dps-aw-item.dps-aw-style-<?=$style->get_id(); ?> {
+  color:<?=$style->get_foreground_rgb(); ?>;
+  background-repeat: no-repeat;
+  background-color: @dps-aw-style-<?=$style->get_id(); ?>;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@dps-aw-style-<?=$style->get_id(); ?>), to(@dps-aw-style-<?=$style->get_id(); ?>-light));
+  background-image: -webkit-linear-gradient(@dps-aw-style-<?=$style->get_id(); ?>, @dps-aw-style-<?=$style->get_id(); ?>-light);
+  background-image: -moz-linear-gradient(@dps-aw-style-<?=$style->get_id(); ?>, @dps-aw-style-<?=$style->get_id(); ?>-light);
+  background-image: -o-linear-gradient(top, @dps-aw-style-<?=$style->get_id(); ?>, @dps-aw-style-<?=$style->get_id(); ?>-light);
+  background-image: -ms-linear-gradient(top, @dps-aw-style-<?=$style->get_id(); ?>, @dps-aw-style-<?=$style->get_id(); ?>-light);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(@dps-aw-style-<?=$style->get_id(); ?>), to(@dps-aw-style-<?=$style->get_id(); ?>-light));
+}
+option.dps-aw-style-<?=$style->get_id(); ?> {
+  color:<?=$style->get_foreground_rgb(); ?>;
+  background-color: @dps-aw-style-<?=$style->get_id(); ?>;
+}
+<?php } ?>

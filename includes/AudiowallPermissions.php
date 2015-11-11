@@ -13,10 +13,6 @@ class AudiowallSets{
 		return DigiplayDB::select("* FROM aw_sets ORDER BY upper(name) ASC", "AudiowallSet", true);
 	}
 
-	public static function count_by_user() {
-		return DigiplayDB::select("count(set_id) FROM aw_sets_owner WHERE user_id = :user_id", null, false, array(':user_id' => Session::get_id()));
-	}
-
 	public static function count() { return DigiplayDB::select("count(id) from aw_sets", null, false); }
 }
 ?>

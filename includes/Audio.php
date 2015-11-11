@@ -12,6 +12,7 @@ class Audio {
 	protected $import_date;
 	protected $title;
 	protected $origin;
+	protected $sustainer;
 	protected $notes;
 	protected $rip_result;
 	protected $filetype;
@@ -31,6 +32,7 @@ class Audio {
 	public function get_import_date() { return $this->import_date; }
 	public function get_title() { return $this->title; }
 	public function get_origin() { return $this->origin; }
+	public function get_sustainer() { return $this->sustainer; }
 	public function get_notes() { return $this->notes; }
 	public function get_rip_result() { return $this->rip_result; }
 	public function get_filetype() { return $this->filetype; }
@@ -46,6 +48,7 @@ class Audio {
 	public function set_creator($user) { $this->creator = $user->get_id(); }
 	public function set_title($title) { $this->title = $title; }
 	public function set_origin($origin) { $this->origin = $origin; }
+	public function set_sustainer($sustainer) { $this->sustainer = $sustainer; }
 	public function set_notes($notes) { $this->notes = $notes; }
 	public function set_filetype($filetype) { $this->filetype = $filetype; }
 	public function set_archive($archive) { $this->archive = $archive->get_id(); }

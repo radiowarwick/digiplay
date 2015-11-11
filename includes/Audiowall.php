@@ -55,6 +55,18 @@ class Audiowall {
 		$result = DigiplayDB::query($query);
 		$query = "DELETE FROM aw_walls WHERE id = '".$this->id."'";
 		$result = DigiplayDB::query($query);
+
+		$wallsInSet = DigiplayDB::select("* FROM aw_walls WHERE set_id = ".$this->get_set_id()." ORDER BY page ASC", "Audiowall", true);
+
+		foreach ($wallsInSet as $aw) {
+			if ($aw->get_page() > $this->page) {
+				$newValue = $aw->get_page() - 1;
+				$newPage = array(
+					"page" => $newValue
+				);
+				DigiplayDB::update("aw_walls", $newPage, "set_id = ".$aw->get_set_id()." AND id =".$aw->get_id());
+			}
+		}
 	}
 }
 ?>
