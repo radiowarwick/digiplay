@@ -14,7 +14,6 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 	Output::add_script("../aw.js");
 	Output::set_title("Audiowall Users");
 	MainTemplate::set_subtitle("<span style=\"margin-right:20px;\">Set: ".$aw->get_name()."</span><span style=\"margin-right:20px;\">Owner: ".$username."</span><span id=\"editor_edit_buttons\"><a href=\"#\" class=\"btn btn-success\">Add Viewer</a></span>");
-
 	echo("<style type=\"text/css\">
 	table { font-size:1.2em; }
 	thead { display:none; }
@@ -97,7 +96,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#add-user-modal .btn-primary').click(function(){
 				$.ajax({
 					url: '../../ajax/add-user-permissions.php',
-					data: { username: $('#text').val(), setid: ".$_REQUEST['setid'].", val: 'viewer' },
+					data: { username: $('#text').val().replace(\"'\", \"''\"), setid: ".$_REQUEST['setid'].", val: 'viewer' },
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);

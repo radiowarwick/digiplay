@@ -138,18 +138,23 @@ echo("<script type=\"text/javascript\">
 		});
 
 		$('#create-audiowall').click(function() {
-			$.ajax({
-				url: '".LINK_ABS."ajax/add-audiowall-set.php',
-				data: { awname: $('#audiowall-name').val(), awdescription: $('#audiowall-description').val() },
-				type: 'POST',
-				error: function(xhr,text,error) {
-					value = $.parseJSON(xhr.responseText);
-					alert(value.error);
-				},
-				success: function(data,text,xhr) {
-					window.location.reload(true); 
-				}
-			});
+			if ($('#audiowall-description').val() == \"\" || $('#audiowall-name').val() == \"\") {
+				alert(\"Audiowalls must have both name and description!\");
+				return false;
+			} else {
+				$.ajax({
+					url: '".LINK_ABS."ajax/add-audiowall-set.php',
+					data: { awname: $('#audiowall-name').val().replace(\"'\", \"''\"), awdescription: $('#audiowall-description').val().replace(\"'\", \"''\") },
+					type: 'POST',
+					error: function(xhr,text,error) {
+						value = $.parseJSON(xhr.responseText);
+						alert(value.error);
+					},
+					success: function(data,text,xhr) {
+						window.location.reload(true); 
+					}
+				});
+			}
 		});
 </script>");
 echo("<script type=\"text/javascript\">

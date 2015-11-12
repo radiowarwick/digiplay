@@ -97,7 +97,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#add-user-modal .btn-primary').click(function(){
 				$.ajax({
 					url: '../../ajax/add-user-permissions.php',
-					data: { username: $('#text').val(), setid: ".$_REQUEST['setid'].", val: 'admin' },
+					data: { username: $('#text').val().replace(\"'\", \"''\"), setid: ".$_REQUEST['setid'].", val: 'admin' },
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);

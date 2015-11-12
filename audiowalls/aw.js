@@ -165,15 +165,15 @@ $(function () {
 			});
 			walls.push({
 				'id': $(this).attr('data-dps-wall-id'),
-				'name': $('a[href$="'+$(this).attr('id')+'"]').text(),
+				'name': $('a[href$="'+$(this).attr('id')+'"]').text().replace("'", "''"),
 				'page': $(this).attr('data-dps-wall-page'),
 				'items': items
 			});
 		});
 		var data = {
 			'id':$('#wall-name').attr('data-dps-set-id'),
-			'name':$('#wall-name').html(),
-			'description':$('#wall-description').html(),
+			'name':$('#wall-name').html().replace("'", "''"),
+			'description':$('#wall-description').html().replace("'", "''"),
 			'walls':walls
 		};
 		$('#aw_edit_buttons .btn-success').html('<img src="../img/ajax-loader.gif" />');
@@ -238,7 +238,7 @@ $(function () {
 	$('#add-page-modal .btn-primary').click(function(){
 		$.ajax({
 			url: '../ajax/add-audiowall-page.php',
-			data: { setid: $('#wall-name').data('dps-set-id'), name: $('#new-page-name').val(), desc: $('#new-page-desc').val() },
+			data: { setid: $('#wall-name').data('dps-set-id'), name: $('#new-page-name').val().replace("'", "''"), desc: $('#new-page-desc').val().replace("'", "''") },
 			type: 'POST',
 			error: function(xhr,text,error) {
 				value = $.parseJSON(xhr.responseText);
