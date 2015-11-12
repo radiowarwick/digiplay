@@ -13,7 +13,9 @@ if(Session::is_user()){
 		} else $ownerid = 0;
 
 		if (!is_null($user)){
-			$current = DigiplayDB::select("permissions FROM aw_sets_permissions WHERE set_id = '".$a->get_id()."' AND user_id = '".$user->get_id()."'");
+			$query = "permissions FROM aw_sets_permissions WHERE set_id = :set_id AND user_id = :user_id";
+			$data = array('set_id' => $a->get_id(), 'user_id' => $user->get_id());
+			$current = DigiplayDB::select($query, $data);
 			if (!is_null($current)){
 				if ($_REQUEST['val'] == 'editor') {
 					if ($current[2] == '1') {
