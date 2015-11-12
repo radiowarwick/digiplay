@@ -6,7 +6,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 	$ownerid = DigiplayDB::select("user_id FROM aw_sets_owner WHERE set_id = '".$aw->get_id()."'");
 	if (isset($ownerid)) {
 		$user = Users::get_by_id($ownerid);
-		$username = $user->get_username();
+		$username = $user->get_display_name();
 	} else {
 		$username = "";
 	}
@@ -94,7 +94,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#add-user-modal .btn-danger').click(function(){
 				$('#add-user-modal').modal('hide');
 			});
-			$('#add-user-modal .btn-primary').click(function(){
+			function submit_add_user() {
 				$.ajax({
 					url: '../../ajax/add-user-permissions.php',
 					data: { username: $('#text').val().replace(\"'\", \"''\"), setid: ".$_REQUEST['setid'].", val: 'admin' },
@@ -108,6 +108,17 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 					}
 				});
 				return(false);
+			}
+
+			$('#add-user-modal .btn-primary').click(function(){
+				submit_add_user();
+			});
+			$('#text').on('keypress', function(e) {
+ 				var code = (e.keyCode ? e.keyCode : e.which);
+ 				if(code == 13) {
+   					submit_add_user();
+   					e.preventDefault();
+ 				}
 			});
 		</script>");
 		echo("<div id=\"delete-user-modal\" class=\"modal fade\">

@@ -6,7 +6,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 	$ownerid = DigiplayDB::select("user_id FROM aw_sets_owner WHERE set_id = '".$aw->get_id()."'");
 	if (isset($ownerid)) {
 		$user = Users::get_by_id($ownerid);
-		$username = $user->get_username();
+		$username = $user->get_display_name();
 	} else {
 		$username = "";
 	}
@@ -68,12 +68,14 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
           					</div>
           					<div class=\"row\">
           					<div class=\"col-md-12\">
-          						<form role=\"form\" class=\"form-horizontal\">
+          						<form role=\"form\" class=\"form-horizontal\" action=\"".LINK_ABS."ajax/add-user-permissions.php\" method=\"POST\">
           							<div class=\"form-group\">
             							<label for=\"text\" class=\"col-lg-2 control-label\">Username</label>
             							<div class=\"col-lg-10\">
-            								<input class=\"form-control\" id=\"text\" name=\"text\" type=\"text\">
+            								<input class=\"form-control\" id=\"text\" name=\"username\" type=\"text\">
             							</div>
+            							<input type=\"hidden\" name=\"setid\" value=\"".$_REQUEST['setid']."\">
+            							<input type=\"hidden\" name=\"val\" value=\"viewer\">
             						</div>
             					</form>
             				</div>
@@ -93,7 +95,8 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#add-user-modal .btn-danger').click(function(){
 				$('#add-user-modal').modal('hide');
 			});
-			$('#add-user-modal .btn-primary').click(function(){
+
+			function submit_add_user() {
 				$.ajax({
 					url: '../../ajax/add-user-permissions.php',
 					data: { username: $('#text').val().replace(\"'\", \"''\"), setid: ".$_REQUEST['setid'].", val: 'viewer' },
@@ -107,7 +110,19 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 					}
 				});
 				return(false);
+			}
+
+			$('#add-user-modal .btn-primary').click(function(){
+				submit_add_user();
 			});
+			$('#text').on('keypress', function(e) {
+ 				var code = (e.keyCode ? e.keyCode : e.which);
+ 				if(code == 13) {
+   					submit_add_user();
+   					e.preventDefault();
+ 				}
+			});
+			
 		</script>");
 			echo("<div id=\"delete-user-modal\" class=\"modal fade\">
 				<div class=\"modal-dialog\">

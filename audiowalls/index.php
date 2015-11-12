@@ -66,12 +66,12 @@ echo(Bootstrap::modal("add-audiowall-modal", "
 				<div class=\"control-group\">
 					<label class=\"control-label\" for=\"audiowall-name\">Audiowall Name</label>
 					<div class=\"controls\">
-						<input type=\"text\" class=\"form-control\" id=\"audiowall-name\" placeholder=\"Enter audiowall title.\">
+						<input type=\"text\" class=\"form-control add_aw_text\" id=\"audiowall-name\" placeholder=\"Enter audiowall title.\">
 					</div>
 					<br>
 					<label class=\"control-label\" for=\"audiowall-description\">Audiowall Description</label>
 					<div class=\"controls\">
-						<textarea class=\"form-control\" id=\"audiowall-description\" placeholder=\"Enter audiowall description.\"></textarea>
+						<textarea class=\"form-control add_aw_text\" id=\"audiowall-description\" placeholder=\"Enter audiowall description.\"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -114,6 +114,7 @@ echo(
 			$('#delete-audiowall-modal').modal('hide');
 		});
 		$('#delete-audiowall-modal .btn-primary').click(function(){
+			$('#delete-audiowall-modal .btn-primary').addClass(\"disabled\");
 			$.ajax({
 				url: '".LINK_ABS."ajax/delete-audiowall-set.php',
 				data: { setid: $('#wall-to-delete').attr('data-dps-aw-set') },
@@ -136,8 +137,8 @@ echo("<script type=\"text/javascript\">
 		boxes.click(function(){
 			$('#add-audiowall-modal').modal('show');
 		});
-
-		$('#create-audiowall').click(function() {
+		
+		function add_aw() {
 			if ($('#audiowall-description').val() == \"\" || $('#audiowall-name').val() == \"\") {
 				alert(\"Audiowalls must have both name and description!\");
 				return false;
@@ -155,7 +156,20 @@ echo("<script type=\"text/javascript\">
 					}
 				});
 			}
+			return false;
+		}
+
+		$('#create-audiowall').click(function() {
+			add_aw();
 		});
+
+		$('.add_aw_text').on('keypress', function(e) {
+ 				var code = (e.keyCode ? e.keyCode : e.which);
+ 				if(code == 13) {
+   					add_aw();
+   					e.preventDefault();
+ 				}
+			});	
 </script>");
 echo("<script type=\"text/javascript\">
 	$('.set-personal-audiowall').click(function(){

@@ -14,12 +14,6 @@ $(function () {
  		console.log("test");
 	}
 	makeDraggable();
-
-	$('html').bind('keypress', function(e){
-   		if(e.keyCode == 13){
-      		return false;
-   		}
-	});
 	
 	// Make empty spaces and tray droppable
 	function makeDroppable(){
@@ -132,6 +126,13 @@ $(function () {
 		$('#item-edit').modal('hide');
 		return false;
 	});
+
+	$('#item-edit .form-control').on('keypress', function(e) {
+		var code = (e.keyCode ? e.keyCode : e.which);
+		if(code == 13) {
+			e.preventDefault();
+		}
+	});
 	
 	//Edit Set Name and Description
 	$('#aw_edit_buttons .btn-primary').click(function(){
@@ -234,8 +235,7 @@ $(function () {
 		return(false);
 	});
 
-	//add page on confirm
-	$('#add-page-modal .btn-primary').click(function(){
+	function submit_add_page() {
 		$.ajax({
 			url: '../ajax/add-audiowall-page.php',
 			data: { setid: $('#wall-name').data('dps-set-id'), name: $('#new-page-name').val().replace("'", "''"), desc: $('#new-page-desc').val().replace("'", "''") },
@@ -249,8 +249,20 @@ $(function () {
 			}
 		});
 		return(false);
+	}
+
+	//add page on confirm
+	$('#add-page-modal .btn-primary').click(function(){
+		submit_add_page();
 	});
 
+	$('#add-page-modal .form-control').on('keypress', function(e) {
+		var code = (e.keyCode ? e.keyCode : e.which);
+		if(code == 13) {
+			submit_add_page();
+			e.preventDefault();
+		}
+	});
 	
 	// open a delete confirmation modal
 	function makeDeleteable(){

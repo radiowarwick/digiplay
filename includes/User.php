@@ -26,6 +26,11 @@ class User{
 		return $ldap->attributes($this->username);
 	}
 
+	public function get_display_name() {
+		$user = $this->get_ldap_attributes();
+		return $user['displayName'][0];
+	}
+
 	public function get_groups() { return Groups::get_by_user($this); }
 
 	public function get_config_var($param) { return DigiplayDB::select("val FROM usersconfigs INNER JOIN configs ON configs.id = usersconfigs.configid WHERE userid = ".$this->id." AND configs.name = '".$param."'"); }

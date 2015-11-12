@@ -87,7 +87,7 @@ class AudiowallSet {
 		$result = DigiplayDB::select($query);
 		if(isset($result)) {
 			return Users::get_by_id($result);
-		} else return 0;
+		} else return NULL;
 	}
 
 }

@@ -76,8 +76,7 @@ $group = Groups::get_by_name("Developers");
 $developers = $group->get_users();
 foreach($developers as $developer) {
 	$user = Users::get_by_id($developer->get_id());
-	$user_information = $user->get_ldap_attributes();
-	$user_fullname = $user_information['first_name']." ".$user_information['surname'];
+	$user_fullname = $user->get_display_name();
 	$body .= "<option value=".$developer->get_id().">".$user_fullname."</option>";
 }
 $body .= "</select>

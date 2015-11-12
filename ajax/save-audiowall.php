@@ -4,7 +4,7 @@ if(Session::is_user()){
 
 	$set = AudiowallSets::get($_REQUEST['id']);
 
-	if ($set->user_can_edit())) {
+	if ($set->user_can_edit()) {
 
 		$set->set_name($_REQUEST['name']);
 		$set->set_description($_REQUEST['description']);
