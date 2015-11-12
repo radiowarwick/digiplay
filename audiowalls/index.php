@@ -29,7 +29,11 @@ foreach($sets as $set) {
 
 	if (!$set->user_can_view() && !(Session::is_group_user('Audiowalls Admin'))) continue;
 
-	echo("<tr".($set->get_id() == $active?' class="success"':'')."><td class=\"wall-info\" ><a href=\"users/users-editors.php?setid=".$set->get_id()."\">".Bootstrap::glyphicon("info-sign")."</a></td><td><strong>".$set->get_name()."</strong><br /><span class=\"description\">".$set->get_description()."</span></td>");
+	echo("<tr".($set->get_id() == $active?' class="success"':'')."><td class=\"wall-info\" >");
+	if($set->user_can_delete()){
+		echo("<a href=\"users/users-viewers.php?setid=".$set->get_id()."\">".Bootstrap::glyphicon("info-sign")."</a>");
+	}
+	echo("</td><td><strong>".$set->get_name()."</strong><br /><span class=\"description\">".$set->get_description()."</span></td>");
 	$station_aw = DigiplayDB::select("val FROM configuration WHERE parameter = 'station_aw_set' AND location = '1'");
 	if (!($set->get_id() == (int)$station_aw)){
 		if ($set->user_can_delete() || (Session::is_group_user('Audiowalls Admin'))) {

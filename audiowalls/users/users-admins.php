@@ -13,7 +13,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 	require_once('pre.php');
 	Output::add_script("../aw.js");
 	Output::set_title("Audiowall Users");
-	MainTemplate::set_subtitle("<span style=\"margin-right:20px;\">Set: ".$aw->get_name()."</span><span style=\"margin-right:20px;\">Owner: ".$username."</span><span id=\"editor_edit_buttons\"><a href=\"#\" class=\"btn btn-success\">Add Editor</a></span>");
+	MainTemplate::set_subtitle("<span style=\"margin-right:20px;\">Set: ".$aw->get_name()."</span><span style=\"margin-right:20px;\">Owner: ".$username."</span><span id=\"editor_edit_buttons\"><a href=\"#\" class=\"btn btn-success\">Add Admin</a></span>");
 	echo("<style type=\"text/css\">
 	table { font-size:1.2em; }
 	thead { display:none; }
@@ -37,9 +37,11 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$userclass = Users::get_by_id($user->get_id());
 			$username = $userclass->get_username();
 			$permissions = $aw_set->get_user_permissions($user->get_id());				
-			if($permissions[1] == "1" && $permissions[2] == '0') {
+			if($permissions[2] == "1") {
 				echo("<tr><td><strong>".$username."</strong></td>");
-				echo("<td class=\"delete-aw-btn\" style=\"width:65px\"><a href=\"#\" class=\"btn btn-danger\">Delete</a></td>");
+				if ($ownerid != $user->get_id()){
+					echo("<td class=\"delete-aw-btn\" style=\"width:65px\"><a href=\"#\" class=\"btn btn-danger\">Delete</a></td>");
+				}
 				echo("</td></tr>");
 			}
 		}
@@ -48,9 +50,8 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 		$userclass = Users::get_by_id($users->get_id());
 		$username = $userclass->get_username();
 		$permissions = $aw_set->get_user_permissions($users->get_id());					
-		if($permissions[1] == "1" && $permissions[2] == '0') {
+		if($permissions[1] == "1") {
 			echo("<tr><td><strong>".$username."</strong></td>");
-			echo("<td class=\"delete-aw-btn\" style=\"width:65px\"><a href=\"#\" class=\"btn btn-danger\">Delete</a></td>");
 			echo("</td></tr>");
 		}
 	}
@@ -64,15 +65,15 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
       				</div>
       				<div class=\"modal-body\">
         				<div class=\"row\">
-          					<div class=\"col-md-12\">Search for the user you wish to add to editor</div>
+          					<div class=\"col-md-12\">Search for the user you wish to add to admin</div>
           					</div>
           					<div class=\"row\">
           					<div class=\"col-md-12\">
           						<form role=\"form\" class=\"form-horizontal\">
           							<div class=\"form-group\">
-            							<label for=\"text\" class=\"col-lg-2 control-label\">Username</label>
+            							<label class=\"col-lg-2 control-label\">Username</label>
             							<div class=\"col-lg-10\">
-            								<input class=\"form-control\" id=\"text\" name=\"text\" type=\"text\">
+            								<input class=\"form-control\" id=\"text\" type=\"text\">
             							</div>
             						</div>
             					</form>
@@ -96,7 +97,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#add-user-modal .btn-primary').click(function(){
 				$.ajax({
 					url: '../../ajax/add-user-permissions.php',
-					data: { username: $('#text').val(), setid: ".$_REQUEST['setid'].", val: 'editor' },
+					data: { username: $('#text').val(), setid: ".$_REQUEST['setid'].", val: 'admin' },
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
@@ -109,7 +110,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 				return(false);
 			});
 		</script>");
-			echo("<div id=\"delete-user-modal\" class=\"modal fade\">
+		echo("<div id=\"delete-user-modal\" class=\"modal fade\">
 				<div class=\"modal-dialog\">
     				<div class=\"modal-content\"> 
       					<div class=\"modal-header\">
@@ -139,7 +140,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 			$('#delete-user-modal .btn-primary').click(function(){
 				$.ajax({
 					url: '../../ajax/delete-user-permissions.php',
-					data: { username: $('#username-to-delete').html(), setid: ".$_REQUEST['setid'].", val: 'editor' },
+					data: { username: $('#username-to-delete').html(), setid: ".$_REQUEST['setid'].", val: 'admin' },
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);

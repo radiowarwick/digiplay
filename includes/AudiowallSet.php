@@ -82,5 +82,13 @@ class AudiowallSet {
 		else return 1;
 	}
 
+	public function get_owner() {
+		$query = "user_id FROM aw_sets_owner WHERE set_id = '".$this->get_id()."'";
+		$result = DigiplayDB::select($query);
+		if(isset($result)) {
+			return Users::get_by_id($result);
+		} else return 0;
+	}
+
 }
 ?>

@@ -26,10 +26,10 @@ if(Session::is_user()){
 
 		$table = "aw_walls";
 		$data = array('id' => NULL,
-					'name' => $name,
+					'name' => pg_escape_string($name),
 					'set_id' => $_REQUEST['setid'],
 					'page' => $w,
-					'description' => $desc);
+					'description' => pg_escape_string($desc));
 		DigiplayDB::insert($table, $data);
 
 		if(Errors::occured()) { 

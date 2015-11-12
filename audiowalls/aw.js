@@ -14,6 +14,12 @@ $(function () {
  		console.log("test");
 	}
 	makeDraggable();
+
+	$('html').bind('keypress', function(e){
+   		if(e.keyCode == 13){
+      		return false;
+   		}
+	});
 	
 	// Make empty spaces and tray droppable
 	function makeDroppable(){
