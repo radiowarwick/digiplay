@@ -13,6 +13,7 @@ if(Session::is_group_user('Sustainer Admin')){
 			if((int) $_REQUEST["prerecordid"] == 0) {
 				$slot->set_audio_id((int) $_REQUEST["prerecordid"]);
 				$slot->save();
+				$returnID = 0;
 				break;
 			}
 
@@ -24,6 +25,8 @@ if(Session::is_group_user('Sustainer Admin')){
 				$slot->set_audio_id((int) $_REQUEST["prerecordid"]);
 				$slot->save();
 			}
+
+			$returnID = $audioid->get_id();
 			
 			break;
 		}
@@ -38,7 +41,7 @@ if(Session::is_group_user('Sustainer Admin')){
 
 	} else {
 
-		exit(json_encode(array('response' => 'success', 'id' => $audioid->get_id())));
+		exit(json_encode(array('response' => 'success', 'id' => $returnID)));
 
 	}
 

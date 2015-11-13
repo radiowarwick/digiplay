@@ -10,11 +10,18 @@
 		// Current time and date added to record
 		$fault->set_postdate(time());
 
-		if ($fault->save()) {
-			header('Location: http://dev.radio.warwick.ac.uk/dps/jamesvh/information/faults/');
-			exit();		
+		$fault->save();
+
+		if(Errors::occured()) { 
+
+			http_response_code(400);
+			exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => Errors::report("array"))));
+			Errors::clear();
+
 		} else {
-			echo "error ".pg_last_error();
+
+			exit(json_encode(array('response' => 'success', 'id' => $fault->get_id())));
+
 		}
 
 		

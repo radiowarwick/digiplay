@@ -7,7 +7,7 @@ echo(
 	<form role=\"form\" method=\"post\" action=\"../../ajax/add-update-fault.php\">
 	  <div class=\"form-group\">
 	    <label for=\"author\">Your name:</label>
-	    <input type=\"email\" class=\"form-control\" id=\"author\" name=\"author\" placeholder=\"Enter email\" value=\"".Session::get_name()."\" readonly>
+	    <input type=\"text\" class=\"form-control\" id=\"author\" name=\"author\" placeholder=\"Enter email\" value=\"".Session::get_name()."\" readonly>
 	  </div>
 	  <div class=\"form-group\">
 	    <textarea class=\"form-control\" rows=\"3\" name=\"content\"></textarea>

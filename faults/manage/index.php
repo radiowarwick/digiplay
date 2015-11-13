@@ -1,7 +1,6 @@
 <?php
 Output::set_title("System Information");
 MainTemplate::set_subtitle("View updates and report faults");
-echo Bootstrap::alert_message_basic("info","1.0.4","Current Version:", false);
 $faults = Faults::get(NULL);
 foreach($faults as $fault){
 	$title = "<b>Fault ID: DIGI_".$fault->get_id()." </b><small>Assigned to: ".$fault->get_real_assignedto($fault->get_assignedto())."</small><span class=\"pull-right label label-".$fault->get_panel_class()."\">".$fault->get_real_status()."</span>";
