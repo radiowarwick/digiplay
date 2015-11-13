@@ -6,7 +6,7 @@ if(Session::is_user()){
 
 	$set = AudiowallSets::get_by_id($a->get_set_id());
 	
-	if ($set->user_can_edit())) {
+	if ($set->user_can_edit()) {
 
 		$a->delete();
 

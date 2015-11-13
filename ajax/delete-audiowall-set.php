@@ -24,7 +24,7 @@ if(Session::is_user()){
 			$data = array(
 				'userid' => $user['userid'],
 				'configid' => 1,
-				'val' => '');
+				'val' => " ");
 			DigiplayDB::insert("usersconfigs", $data);
 		}
 		
