@@ -39,27 +39,38 @@ $i = 0;
 
 echo("<h3>Current queue:</h3>");
 
-echo("<table class=\"table table-striped table-bordered\">
-	<thead>
-	<tr>
-	<th></th>
-	<th>Title</th>
-	<th>Artist</th>
-	<th>Album</th>
-	</tr>
-	</thead>
-	<tbody>");
-foreach ($currentQueue as $row) {
-	$i++;
-	echo("<tr>
-		<td>".$i."</td>
-	<td>".$row['title']."</td>
-	<td>".$row['artist']."</td>
-	<td>".$row['album']."</td>
-	</tr>");
+if (!is_null($currentQueue)) {
+
+	if (array_key_exists('id', $currentQueue)) {
+		$currentQueueTemp = array(0 => $currentQueue);
+		$currentQueue = $currentQueueTemp;
+	}
+
+	echo("<table class=\"table table-striped table-bordered\">
+		<thead>
+		<tr>
+		<th></th>
+		<th>Title</th>
+		<th>Artist</th>
+		<th>Album</th>
+		</tr>
+		</thead>
+		<tbody>");
+	foreach ($currentQueue as $row) {
+		$i++;
+		echo("<tr>
+			<td>".$i."</td>
+		<td>".$row['title']."</td>
+		<td>".$row['artist']."</td>
+		<td>".$row['album']."</td>
+		</tr>");
+	}
+	echo("</tbody>
+		</table>");
+
+} else {
+	Bootstrap::alert("warning","<b>Warning: </b>The current queue is empty","",false);
 }
-echo("</tbody>
-	</table>");
 
 echo("<h3>Schedule audio:</h3>");
 
