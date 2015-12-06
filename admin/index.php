@@ -7,7 +7,7 @@ $trash = Files::get_by_id(3, "dir");
 echo("
 <div class=\"row\">
 	<div class=\"col-sm-4\">
-		<a href=\"".LINK_ABS."music\">
+		<a href=\"".LINK_ABS."admin/music\">
 			<div class=\"panel panel-info\">
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
