@@ -1,6 +1,10 @@
 <?php
 
 if(Session::is_user()){
+	
+	if ($_REQUEST['setid'] == "198") {
+		exit(json_encode(array("error" => "Cannot delete the Station Audiowall!"));
+	}
 
 	$aw_set = AudiowallSets::get_by_id($_REQUEST['setid']);
 

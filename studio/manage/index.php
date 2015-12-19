@@ -141,6 +141,7 @@ echo("
 							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
 							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
 							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
+							<li id=\"reset\" class=\"btn btn-danger\">".Bootstrap::glyphicon("refresh")." Reset</li>
 						</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
@@ -148,6 +149,11 @@ echo("
 									function reloadInfo() {
 										$('#info-content').load('functions.php?'+key+'action=info-content');
 									};
+								</script>
+								<script>
+									$('#reset').click(function(){
+										$('#reset-modal').modal(\"show\");
+									});
 								</script>
 								<div id=\"info-content\">
 									".Configs::get_system_param("info-content")."
@@ -559,6 +565,11 @@ echo("
 			".Bootstrap::modal("logout-modal","<h1>".Bootstrap::glyphicon("remove-circle")." Log out?</h1>",NULL,"
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-logout\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-logout\" data-dismiss=\"modal\">No</a>")."
+			".Bootstrap::modal("reset-modal","
+				This will turn the touchscreen off and on again, stopping any currently playing audio! Only use as a last resort whilst talking!"
+				,"<span id=\"reset-icon\">".Bootstrap::glyphicon("refresh")."</span> Reset Playout ".$_REQUEST["location"]."?","
+				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-reset\">Yes</a>
+				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-reset\" data-dismiss=\"modal\">No</a>")."
 			".Bootstrap::modal("login-modal","<h1>".Bootstrap::glyphicon("play-circle")." Log In</h1>",NULL,"
 				<div class=\"form-group\">
 					<div class=\"input-group\">
@@ -575,6 +586,24 @@ echo("
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-login\" data-role=\"button\" data-loading-text=\"Log in\">Log in</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-login\" data-dismiss=\"modal\">Cancel</a>")."
 		</div>
+		<script type=\"text/javascript\">
+			$('#yes-reset').click(function(){
+				$.ajax({
+					url: '../../ajax/restart_playout".$_REQUEST['location'].".php',
+					beforeSend: function() {
+    					$('#yes-reset').html(\"Resetting...\");
+ 					},
+					error: function(xhr,text,error) {
+						value = $.parseJSON(xhr.responseText);
+						alert(value.error);
+					},
+					success: function(data,text,xhr) {
+						window.location.reload(true); 
+					}
+				});
+				return(false);
+			});
+		</script>
 	");
 
 ?>

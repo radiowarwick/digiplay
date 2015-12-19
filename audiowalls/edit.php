@@ -15,29 +15,29 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
 ?>
 <div class="row">
   <div class="col-md-12">
-      <ul id="walls-tabs" class="tabs nav nav-tabs">
-       <?php 
-        $w = 0; 
-        foreach ($aw_walls as $wall) {
-          echo("<li class=\"walls-tab"); 
+  </div>
+  <div class="col-md-5">
+    <div class="list-group" id="walls-tabs">
+       <?php
+        $w = 0;  
+        foreach ($aw_walls as $wall) { 
+          echo("<a id=\"walls-tab\" href=\"#page".$wall->get_page()."\" data-toggle=\"tab\" data-dps-wall-page=\"".$wall->get_page()."\" data-dps-wall-id=\"".$wall->get_id()."\" class=\"list-group-item");
           if ($w == 0) {
-            echo(" active");
-          } 
-          echo("\"><a id=\"tab\" href=\"#page".$wall->get_page()."\" data-toggle=\"tab\" data-dps-wall-page=\"".$wall->get_page()."\" data-dps-wall-id=\"".$wall->get_id()."\">"); 
+            echo(" list-group-item-info");
+          }
+          echo("\">");
           if ($wall->get_name() != "") {
             echo($wall->get_name());
           } 
           else {
             echo("Page ".$wall->get_page()+1);
           } 
-          echo("<span class=\"glyphicon glyphicon-remove\"></span></a></li>"); 
-          $w++; 
+          echo("<span class=\"glyphicon glyphicon-remove\"></span></a>");
+          $w++;
         }
         ?>
-        <li id="wall-new"><a href="#new" class="btn btn-primary">Add Page</a></li>
-       </ul>
-  </div>
-  <div class="col-md-5">
+        <a class="list-group-item active" id="wall-new" href="#new">Add Page</a>
+       </div>
     <div id="search" >
       <form id="search-form" style="width:100%">
         <div class="input-append">
@@ -46,7 +46,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
           <button type="submit" class="btn btn-primary search-for-music col-md-2">Search</button>
         </div>
       </form>
-      <div id="search-results" class="col-md-12" style="height:420px;"></div>
+      <div id="search-results" class="col-md-12" style="height:auto;"></div>
     </div>
   </div>
   <div class="col-md-7">

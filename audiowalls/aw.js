@@ -1,5 +1,4 @@
 $(function () {
-
 	// Make AW items drag/droppable.
 	function makeDraggable() {
 		$('.dps-aw-item').draggable({
@@ -14,6 +13,14 @@ $(function () {
  		console.log("test");
 	}
 	makeDraggable();
+
+	$('#walls-tabs').children().click(function(){
+		if ($(this).attr("id") != "wall-new") {
+    		$("#walls-tab.list-group-item-info").removeClass("list-group-item-info");
+    		$(this).addClass("list-group-item-info");
+    	}
+    	//alert("IT WAS CLICKED");
+  	});
 	
 	// Make empty spaces and tray droppable
 	function makeDroppable(){
@@ -101,10 +108,14 @@ $(function () {
 		$('#sample').attr('style', $('#style option:selected').attr('style'));
 		$('#item-edit').modal('show');
 	});
+
+	var count = 0;
+
 	// Update AW item preview
 	$('#text').keyup(function(){
 		$('#sample .text').html($(this).val());
 	});
+	
 	$('#style').change(function() { 
 		$('#sample').attr('class','dps-aw-item dps-aw-style-'+$(this).val());
 		$('#sample').attr('style', $('#style option:selected').attr('style'));
