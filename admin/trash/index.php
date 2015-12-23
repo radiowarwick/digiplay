@@ -100,8 +100,8 @@ if($tracks) {
 
 		$('.yes-definitely-delete').click(function() {
 			$.ajax({
-				url: '".LINK_ABS."ajax/delete-track.php',
-				data: 'id='+trackid,
+				url: '".LINK_ABS."ajax/remove-track.php',
+				data: { id: trackid },
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -116,7 +116,7 @@ if($tracks) {
 "		});
 	</script>");
 
-	echo("<a href=\"#\" id=\"flag\" class=\"btn btn-danger btn-block\">".Bootstrap::glyphicon("warning-sign")." Empty Trash</a>");
+	echo("<a href=\"#\" id=\"flag\" data-toggle=\"modal\" data-target=\"#empty-modal\" class=\"btn btn-danger btn-block\">".Bootstrap::glyphicon("warning-sign")." Empty Trash</a>");
 	echo("<p></p>");
 
 	echo("<h3>".Tracks::count_deleted()." results for deleted items.</small></h3>");
@@ -163,10 +163,27 @@ if($tracks) {
 		</tr>");
 	}
 	echo("</table>");
-	echo($pages->return);
-	
+	echo($pages->return);	
 }
 
-if(Session::is_group_user("Music Admin")) echo(Bootstrap::modal("delete-modal", "<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>", "Delete track", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
-
+if(Session::is_group_user("Music Admin")) {
+	echo(Bootstrap::modal("delete-modal", "<p>Are you sure you want to remove <span class=\"delete-track-title\">this track</span> completely?</p>", "Delete track", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
+	echo(Bootstrap::modal("empty-modal", "<p>Are you sure you want to empty the trash completely?</p>", "Empty Trash", "<div class=\"btn btn-primary\" id=\"flag-confirm\">Yes</div> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
+	echo("<script>
+			$('#flag-confirm').click(function(){
+				$.ajax({
+					url: '".LINK_ABS."ajax/empty-trash.php',
+					type: 'POST',
+					error: function(xhr,text,error) {
+						value = $.parseJSON(xhr.responseText);
+						alert(value.error);
+					},
+					success: function(data,text,xhr) {
+						window.location.reload(true); 
+					}
+				});
+			});
+		</script>
+	");
+}
 ?>
