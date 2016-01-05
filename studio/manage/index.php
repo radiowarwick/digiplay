@@ -567,7 +567,7 @@ echo("
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-logout\" data-dismiss=\"modal\">No</a>")."
 			".Bootstrap::modal("reset-modal","
 				This will turn the touchscreen off and on again, stopping any currently playing audio! Only use as a last resort whilst talking!"
-				,"<span id=\"reset-icon\">".Bootstrap::glyphicon("refresh")."</span> Reset Playout ".$location."?","
+				,"<span id=\"reset-icon\">".Bootstrap::glyphicon("refresh")."</span> Reset Playout ".$location->get_id()."?","
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-reset\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-reset\" data-dismiss=\"modal\">No</a>")."
 			".Bootstrap::modal("login-modal","<h1>".Bootstrap::glyphicon("play-circle")." Log In</h1>",NULL,"
@@ -589,7 +589,7 @@ echo("
 		<script type=\"text/javascript\">
 			$('#yes-reset').click(function(){
 				$.ajax({
-					url: '../../ajax/restart_playout".$location.".php',
+					url: '../../ajax/restart_playout".$location->get_id().".php',
 					beforeSend: function() {
     					$('#yes-reset').html(\"Resetting...\");
  					},
