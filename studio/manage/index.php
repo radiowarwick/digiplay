@@ -141,7 +141,7 @@ echo("
 							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
 							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
 							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
-							<li id=\"reset\" class=\"btn btn-danger\">".Bootstrap::glyphicon("refresh")." Reset</li>
+							<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::glyphicon("refresh")." Reset</li>
 						</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
@@ -541,6 +541,7 @@ echo("
 							$('[href=#info]').tab('show');
 							$('[href=#playlists]').removeAttr('data-toggle').parent().addClass('disabled');
 							$('[href=#files]').removeAttr('data-toggle').parent().addClass('disabled');
+							$('#reset').addClass('disabled');
 							destroyFileBrowser();
 							$('[data-target=#logout-modal]').hide();
 							$('[data-target=#login-modal]').show();
