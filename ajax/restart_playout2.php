@@ -1,24 +1,24 @@
 <?php
-if(Session::is_user()){
-	
-	shell_exec("/root/restart_po2_php");
+//if(Session::is_user()){
 
-	if(Errors::occured()) { 
+	shell_exec("/usr/scripts/restart_po2_php");
 
-		http_response_code(400);
-		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => Errors::report("array"))));
-		Errors::clear();
+//	if(Errors::occured()) { 
 
-	} else {
+//		http_response_code(400);
+//		exit(json_encode(array("error" => "Something went wrong. You may have discovered a bug!","detail" => Errors::report("array"))));
+//		Errors::clear();
 
-		exit(json_encode(array('response' => 'success', 'id' => 1)));
+//	} else {
 
-	}
+//		exit(json_encode(array('response' => 'success', 'id' => 1)));
 
-} else {
+//	}
 
-	http_response_code(403);
-	exit(json_encode(array('error' => 'Permission denied.')));
+//} else {
 
-}
+//	http_response_code(403);
+//	exit(json_encode(array('error' => 'Permission denied.')));
+
+//}
 ?>

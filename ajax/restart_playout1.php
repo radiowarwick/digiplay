@@ -1,6 +1,6 @@
 <?php
 if(Session::is_user()){
-	shell_exec("/root/restart_po1_php");
+	shell_exec("/usr/scripts/restart_po1_php");
 
 	if(Errors::occured()) { 
 
