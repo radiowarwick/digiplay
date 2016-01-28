@@ -140,9 +140,11 @@ echo("
 							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
 							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
 							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
-							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>
-							<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::glyphicon("refresh")." Reset</li>
-						</ul>
+							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>");
+							if($location->get_id() == 1 || $location->get_id() == 2){
+								echo("<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::glyphicon("refresh")." Reset</li>");
+							}
+						echo("</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
 							<div class=\"tab-pane active\" id=\"info\">
 								<script>
