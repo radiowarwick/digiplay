@@ -6,6 +6,9 @@ class AudiowallSets{
 	}
 
 	public static function get_by_id($id) {
+		if (!is_int($id)){
+		    return null;
+		}
 		return DigiplayDB::select("* FROM aw_sets WHERE id = :id", "AudiowallSet", false, array(':id' => $id));
 	}
 	

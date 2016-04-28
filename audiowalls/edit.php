@@ -6,10 +6,12 @@ Output::add_script("../js/jquery-ui-1.10.3.custom.min.js");
 Output::add_script("aw.js");
 Output::add_less_stylesheet("aw.less");
 Output::add_stylesheet("aw.css");
-$aw_set = AudiowallSets::get($_REQUEST['id']);
+$aw_set = AudiowallSets::get(pg_escape_string($_REQUEST['id']));
+if ($aw_set == null){
+    exit();
+}
 $aw_walls = $aw_set->get_walls();
 $styles = AudiowallStyles::get_all();
-
 Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
 MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
 ?>
