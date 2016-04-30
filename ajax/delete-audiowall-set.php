@@ -6,7 +6,7 @@ if(Session::is_user()){
 		exit(json_encode(array("error" => "Cannot delete the Station Audiowall!"));
 	}
 
-	$aw_set = AudiowallSets::get_by_id($_REQUEST['setid']);
+	$aw_set = AudiowallSets::get_by_id((int)$_REQUEST['setid']);
 
 	if(!$aw_set) {
 		http_response_code(400);

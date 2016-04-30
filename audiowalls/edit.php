@@ -10,7 +10,9 @@ $aw_set = AudiowallSets::get((int)$_REQUEST['id']);
 if ($aw_set == null){
     exit();
 }
+//var_dump($aw_set);
 $aw_walls = $aw_set->get_walls();
+//var_dump($aw_walls);
 $styles = AudiowallStyles::get_all();
 Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
 MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");

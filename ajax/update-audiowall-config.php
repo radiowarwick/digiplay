@@ -2,7 +2,7 @@
 
 if(Session::is_user()){
 
-	$set = AudiowallSets::get($_REQUEST['awid']);
+	$set = AudiowallSets::get((int)$_REQUEST['awid']);
 
 	if ($set->user_can_view()) {
 

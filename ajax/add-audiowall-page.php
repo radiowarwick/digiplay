@@ -2,7 +2,7 @@
 
 if(Session::is_user()){
 
-	$a = AudiowallSets::get_by_id($_REQUEST['setid']);
+	$a = AudiowallSets::get_by_id((int)$_REQUEST['setid']);
 
 	if($a->user_can_edit()) {
 
