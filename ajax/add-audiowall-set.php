@@ -20,7 +20,7 @@ if(Session::is_user()){
 	}
 
 	$aw_set = new AudiowallSet();
-	$aw_set->set_name(pg_escape_string($_REQUEST["awname")]);
+	$aw_set->set_name(pg_escape_string($_REQUEST["awname"]));
 	$aw_set->set_description(pg_escape_string($_REQUEST["awdescription"]));
 	$aw_set->save();
 
