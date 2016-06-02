@@ -221,7 +221,7 @@ echo("
 							<div class=\"checkbox\">
 								<label for=\"censored\">
 									<input type=\"checkbox\" id=\"censored\" name=\"censored\" ".$disabled." ".($track->is_censored()? "checked" : "").">
-									Censored
+									Explicit
 								</label>
 							</div>
 						</div>

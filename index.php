@@ -77,7 +77,7 @@ MainTemplate::set_feature_html($feature);
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
 				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."sustainer/\">".Bootstrap::glyphicon("headphones")."Now playing</a>
-				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."playlists/0\">".Bootstrap::glyphicon("list")."View playlist</a>
+				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."playlists/detail/0\">".Bootstrap::glyphicon("list")."View playlist</a>
 			</div>
 			<div class=\"col-sm-4\">
 				<h2>Newest Tracks</h2>");
