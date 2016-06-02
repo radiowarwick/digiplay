@@ -83,6 +83,10 @@ $(function() {
 	});
 
 	function importTrack(form,button) {
+		if ($('#artist').val() == ''){
+			alert('Artist is empty please put one in!');
+			button.button('reset');
+		} else {
 		$.ajax({
 			type: 'GET',
 			url: '".LINK_ABS."ajax/import-track.php',
@@ -101,6 +105,7 @@ $(function() {
 				button.button('reset');
 			}
 		});
+	}
 	}
 });
 </script>
@@ -148,7 +153,7 @@ foreach($files as $file) {
 									<div class=\"form-group\">
 										<label class=\"col-sm-2 control-label\" for=\"artist\">Artist</label>
 										<div class=\"col-sm-10\">
-											<input class=\"form-control\" type=\"text\" id=\"artist\" name=\"artist\" value=\"".$artist."\" />
+											<input class=\"form-control\" required type=\"text\" id=\"artist\" name=\"artist\" value=\"".$artist."\" />
 										</div>
 									</div>
 									<div class=\"form-group\">
