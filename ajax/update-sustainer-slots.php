@@ -9,9 +9,10 @@ if(Session::is_group_user('Sustainer Admin')){
 		$compareValue = "slot-".$slot->get_day()."-".$slot->get_time();
 
 		if ($compareValue == $_REQUEST["updateid"]) {
-			if(!($audioid = Audio::get_by_id((int) $_REQUEST["playlistid"]))) exit(json_encode(array('error' => 'Invalid playlist ID.')));
+			if(!($playlist = Playlists::get_by_id((int) $_REQUEST["playlistid"]))) exit(json_encode(array('error' => 'Invalid playlist ID.')));
 			
 			if ((int) $_REQUEST["playlistid"] != $slot->get_playlist_id()) {
+				//var_dump((int) $_REQUEST["playlistid"]);
 				$slot->set_playlist_id((int) $_REQUEST["playlistid"]);
 				$slot->save();
 			}
