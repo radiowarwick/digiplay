@@ -83,7 +83,8 @@ $(function() {
 	});
 
 	function importTrack(form,button) {
-		if ($('#artist').val() == ''){
+		console.log($(form).find('#artist').val());
+		if ($(form).find('#artist').val() == ''){
 			alert('Artist is empty please put one in!');
 			button.button('reset');
 		} else {
