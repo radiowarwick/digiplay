@@ -67,7 +67,9 @@ switch($_REQUEST["action"]) {
 					
 				}
 
-				if($censor_time && $track->is_censored()) continue;
+				$prerecord_location = Configs::get_system_param("prerecord_location");
+
+				if($censor_time && $track->is_censored() && ($location != $prerecord_location)) continue;
 				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track ".$trackHotness."\">
 					<td class=\"icon\">".($track->is_censored() ? "<span style=\"color: rgb(219, 53, 53);\">".Bootstrap::glyphicon("exclamation-sign")."</span>" : Bootstrap::glyphicon("music"))."</td>
 					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
