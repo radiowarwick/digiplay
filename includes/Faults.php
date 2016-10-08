@@ -18,6 +18,8 @@ class Faults {
 
 	public static function get_open_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status <> '4'"); }
 
+	public static function get_open_faults_user($assignedto) { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status <> '4' AND assignedto = '".$assignedto."'"); }
+
 	public static function get_closed_faults() { return DigiplayDB::select("COUNT(*) FROM info_faults WHERE status = '4'"); }
 
 }

@@ -1,0 +1,21 @@
+.status-circle {
+	border-radius:100%;
+	width:20px;
+	height:20px;
+	display:inline;
+	float:left;
+	margin-right:10px;
+	border:1px solid black;
+}
+
+.status-circle.danger {
+	background-color:#a94442;
+}
+
+.status-circle.warning {
+	background-color:#8a6d3b;
+}
+
+.status-circle.success {
+	background-color:#3c763d;
+}

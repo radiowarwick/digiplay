@@ -38,6 +38,7 @@ $feature = "
 					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
 					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
 					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
+					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">Report a Fault &raquo;</a>
 					".((Session::is_group_user("Studio Admin"))? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">Reset Playout Systems &raquo;</a>" : "")."
 				":"
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">

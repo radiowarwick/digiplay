@@ -1,7 +1,7 @@
 <?php
 Output::set_title("System Information");
 MainTemplate::set_subtitle("View updates and report faults");
-$faults = Faults::get(NULL);
+$faults = Faults::get(NULL, NULL, Session::get_id());
 foreach($faults as $fault){
 	$title = "<b>Fault ID: DIGI_".$fault->get_id()." </b><small>Assigned to: ".$fault->get_real_assignedto($fault->get_assignedto())."</small><span class=\"pull-right label label-".$fault->get_panel_class()."\">".$fault->get_real_status()."</span>";
 	$footer = "<a data-toggle=\"modal\" href=\"#add-comment\" class=\"btn btn-primary btn-xs new-comment\" data-dps-id=".$fault->get_id().">Add Comment</a> 

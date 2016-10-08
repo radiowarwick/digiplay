@@ -12,6 +12,11 @@ Class Comment {
 	public function get_postdate() { return date('jS F Y, g:ia', $this->postdate); }
 	public function get_faultid() { return $this->faultid; }
 
+	public function get_real_author($id) {
+		$user = Users::get_by_id($id);
+		return $user->get_display_name();
+	}
+
 	public function set_author($author) { $this->author = $author; }
 	public function set_comment($comment) { $this->comment = $comment; }
 	public function set_postdate($postdate) { $this->postdate = $postdate; }
