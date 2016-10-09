@@ -1,0 +1,242 @@
+html,
+body,
+p,
+ol,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    letter-spacing: 0;
+    vertical-align: baseline;
+    background: transparent;
+    font-weight: inherit;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+    display: block
+}
+object,
+embed {
+    max-width: 100%
+}
+ul {
+    list-style: none;
+}
+blockquote,
+q {
+    quotes: none
+}
+b,
+strong {
+    font-weight: bold
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none
+}
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent
+}
+del {
+    text-decoration: line-through
+}
+abbr[title],
+dfn[title] {
+    border-bottom: 1px dotted #000;
+    cursor: help
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+mark {
+    color: inherit
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0
+}
+input,
+select {
+    vertical-align: middle
+}
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    word-wrap: break-word
+}
+input[type="radio"] {
+    vertical-align: text-bottom
+}
+input[type="checkbox"] {
+    vertical-align: bottom;
+    *vertical-align: baseline
+}
+.ie6 input {
+    vertical-align: text-bottom
+}
+select,
+input,
+textarea {
+    font: 99% sans-serif
+}
+table {
+    font-size: inherit;
+    font: 100%
+}
+a:hover,
+a:active {
+    outline: none
+}
+small {
+    font-size: 85%
+}
+strong,
+th {
+    font-weight: bold
+}
+td,
+td img {
+    vertical-align: top
+}
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative
+}
+sup {
+    top: -0.5em
+}
+sub {
+    bottom: -0.25em
+}
+pre,
+code,
+kbd,
+samp {
+    font-family: monospace, sans-serif
+}
+.clickable,
+label,
+input[type=button],
+input[type=submit],
+button {
+    cursor: pointer
+}
+button,
+input,
+select,
+textarea {
+    margin: 0
+}
+button {
+    width: auto;
+    overflow: visible
+}
+.clearfix:before,
+.clearfix:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    overflow: hidden
+}
+.clearfix:after {
+    clear: both
+}
+.clearfix {
+    zoom: 1
+}
+select,
+input,
+textarea,
+a {
+    outline: none
+}
+a {
+    color: inherit
+}
+
+.button {
+    border-radius: 4px;
+    padding: 10px 20px;
+    background: #fff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: #888;
+    text-transform: uppercase;
+    font-size: 12px
+}
+.pagination {
+    text-align: center;
+    margin-top: 45px;
+    font-size: 12px
+}
+.serviceList {
+    border: 2px solid #bfc8d0;
+    border-radius: 6px;
+}
+.serviceList__item {
+    padding: 13px 15px;
+    border-bottom: 1px solid #d7e2eb
+}
+.serviceList__item:after {
+    content: " ";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both
+}
+.serviceList__item:nth-child(even) {
+    background: #f6fbff
+}
+.serviceList__item:last-child {
+    border-bottom: 0;
+    border-radius: 0 0 6px 6px
+}
+.serviceList__description {
+    display: inline-block;
+    text-indent: -40000px;
+    background: url(help.svg);
+    background-size: 14px;
+    height: 14px;
+    width: 14px;
+    vertical-align: -1px;
+    margin-left: 5px
+}
+.serviceList__description .ui-tooltip-group {
+    text-indent: 0;
+    opacity: 0.8
+}
+.serviceList__name {
+    float: left
+}
+.serviceList__status {
+    float: right
+}
