@@ -15,17 +15,14 @@ foreach($faults as $fault){
 		foreach($comments as $comment){
 			if ($comment->get_author() == -1) {
 				$footer .= "<div class=\"row\">
-						<div class=\"col-md-4 col-md-offset-4\"><hr></div>
-						</div>
-						<div class=\"row\">
-						<div class=\"col-md-4 col-md-offset-4\"><span class=\"label label-warning\">System Message</span></div>
+						<div class=\"col-md-6 col-md-offset-3\"><hr></div>
 						</div>
 						<div class=\"row\">
 							  
-							  <div class=\"col-md-6 col-md-offset-3 system-comment\">".$comment->get_comment()."<br><span>".$comment->get_postdate()."</span></div>	
+							  <div class=\"col-md-8 col-md-offset-2 system-comment\"><b style=\"color: #f0ad4e;\">System:</b> ".$comment->get_comment()."<br><span>".$comment->get_postdate()."</span></div>	
 				</div>
 				<div class=\"row\">
-						<div class=\"col-md-4 col-md-offset-4\"><hr></div>
+						<div class=\"col-md-6 col-md-offset-3\"><hr></div>
 						</div>";
 			} else if ($comment->get_author() == $fault->get_author()) {
 				$footer .= "
