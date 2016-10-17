@@ -1,5 +1,6 @@
 <?php
 Output::set_title("System Information");
+Output::add_stylesheet(LINK_ABS."faults/comment.css");
 MainTemplate::set_subtitle("View updates and report faults");
 $faults = Faults::get(NULL, NULL, Session::get_id());
 foreach($faults as $fault){
@@ -14,21 +15,34 @@ foreach($faults as $fault){
 		foreach($comments as $comment){
 			if ($comment->get_author() == -1) {
 				$footer .= "<div class=\"row\">
-			  		<div class=\"col-md-10\">".Bootstrap::alert_message_basic("warning",NULL,"SYSTEM: ".$comment->get_comment(), false)."</div>
-			  		<div class=\"col-md-2\">".$comment->get_postdate()."</div>
-		    	</div>";
+						<div class=\"col-md-4 col-md-offset-4\"><hr></div>
+						</div>
+						<div class=\"row\">
+						<div class=\"col-md-4 col-md-offset-4\"><span class=\"label label-warning\">System Message</span></div>
+						</div>
+						<div class=\"row\">
+							  
+							  <div class=\"col-md-6 col-md-offset-3 system-comment\">".$comment->get_comment()."<br><span>".$comment->get_postdate()."</span></div>	
+				</div>
+				<div class=\"row\">
+						<div class=\"col-md-4 col-md-offset-4\"><hr></div>
+						</div>";
 			} else if ($comment->get_author() == $fault->get_author()) {
-				$footer .= "<div class=\"row\">
-					<div class=\"col-md-6\">".Bootstrap::alert_message_basic("info",$comment->get_comment(),$comment->get_real_author($comment->get_author()).":<br>", false)."</div>
-			  		<div class=\"col-md-4\">&nbsp;</div>
-			  		<div class=\"col-md-2\">".$comment->get_postdate()."</div>
-		    	</div>";
+				$footer .= "
+		    	<div class=\"panel panel-default\">
+					<div class=\"panel-body\">
+						".$comment->get_comment()."
+					</div>
+					<div class=\"panel-footer\"><span class=\"glyphicon glyphicon-time fault-time\" aria-hidden=\"true\"></span>".$comment->get_postdate()."<span class=\"glyphicon glyphicon-user fault-user\" aria-hidden=\"true\"></span>".$comment->get_real_author($comment->get_author())."<span class=\"label label-success\">Customer</span></div>
+				</div>
+				";
 	    	} else {
-	    		$footer .= "<div class=\"row\">
-					<div class=\"col-md-4\">&nbsp;</div>
-					<div class=\"col-md-6\">".Bootstrap::alert_message_basic("success",$comment->get_comment(),$comment->get_real_author($comment->get_author()).":<br>", false)."</div>
-					<div class=\"col-md-2\">".$comment->get_postdate()."</div>
-		    	</div>";
+	    		$footer .= "		    	<div class=\"panel panel-default\">
+					<div class=\"panel-body\">
+						".$comment->get_comment()."
+					</div>
+					<div class=\"panel-footer\"><span class=\"glyphicon glyphicon-time fault-time\" aria-hidden=\"true\"></span>".$comment->get_postdate()."<span class=\"glyphicon glyphicon-user fault-user\" aria-hidden=\"true\"></span>".$comment->get_real_author($comment->get_author())."<span class=\"label label-danger\">Developer</span></div>
+				</div>";
 	    	}
 		}
 		$footer .= "</div>";

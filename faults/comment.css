@@ -1,0 +1,29 @@
+.glyphicon.fault-user {
+	margin-right: 4px;
+	margin-left: 10px;
+    font-size: 12px;
+    top: 1px;
+    color: #a7a7a7;
+}
+
+.glyphicon.fault-time {
+	margin-right: 2px;
+    font-size: 12px;
+    top: 1px;
+    color: #a7a7a7;
+}
+
+.panel-footer > .label {
+	margin-left: 6px;
+    position: relative;
+    top: -1px;
+}
+
+.system-comment {
+	text-align: center;
+}
+
+.system-comment > span {
+	text-align: center;
+	font-size: 10px;
+}
