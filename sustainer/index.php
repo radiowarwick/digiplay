@@ -7,8 +7,12 @@ Output::require_group("Sustainer Admin");
 
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
-if (isset($_POST["submit"])) {
+if (isset($_POST["restart-marceline"])) {
     system("sudo /etc/init.d/marceline restart");
+}
+
+if (isset($_POST["restart-javo"])) {
+    system("sudo /etc/init.d/javo restart");
 }
 
 if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
@@ -39,93 +43,96 @@ if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 
 $currentQueue = Sustainer::get_queue();
 $i = 0;
-
-echo("<div class=\"row\">
-	<table class=\"table table-striped table-hover\">
+?>
+<div class="row">
+	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th class=\"title\">Service</th>
-				<th class=\"title\">Status</th>
-				<th class=\"icon\">Restart</th>
+				<th class="title">Service</th>
+				<th class="title">Status</th>
+				<th class="icon">Restart</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>Marceline</td>
-				<td>" . system("sudo /etc/init.d/marceline status") . "</td>
-				<td><form method=\"POST\"><input name=\"submit\" type=\"submit\" class=\"btn btn-danger\" value=\"Restart\" /></form></td>
+				<td>
+          <?system("sudo /etc/init.d/marceline status");?>
+        </td>
+				<td><form method="POST"><input name="restart-marceline" type="submit" class="btn btn-danger" value="Restart" /></form></td>
 			</tr>
+      <tr>
+        <td>JAVO</td>
+        <td>
+          <?system("sudo /etc/init.d/javo status");?>
+        </td>
+        <td><form method="POST"><input name="restart-javo" type="submit" class="btn btn-danger" value="Restart" /></form></td>
+      </tr>
 		</tbody>
 	</table>
-</div>");
-
-echo("<h3>Current queue:</h3>");
-
+</div>
+<h3>Current queue:</h3>
+<?
 if (!is_null($currentQueue)) {
 
 	if (array_key_exists('id', $currentQueue)) {
 		$currentQueueTemp = array(0 => $currentQueue);
 		$currentQueue = $currentQueueTemp;
 	}
-
-	echo("<table class=\"table table-striped table-bordered\">
-		<thead>
-		<tr>
-		<th></th>
-		<th>Title</th>
-		<th>Artist</th>
-		<th>Album</th>
-		</tr>
-		</thead>
-		<tbody>");
-	foreach ($currentQueue as $row) {
-		$i++;
-		echo("<tr>
-			<td>".$i."</td>
-		<td>".$row['title']."</td>
-		<td>".$row['artist']."</td>
-		<td>".$row['album']."</td>
-		</tr>");
-	}
-	echo("</tbody>
-		</table>");
-
-} else {
-	Bootstrap::alert("warning","<b>Warning: </b>The current queue is empty","",false);
-}
-
-echo("<h3>Schedule audio:</h3>");
-
-echo("<p>You can use this tool to schedule the next audio track to be played on Sue by using its audio id.</p>");
-echo("<form action=\"\" method=\"post\">");
-echo("Track ID: <input type=\"text\" name=\"trackid\" /><input type=\"submit\" name=\"submit\" value=\"Schedule\" />");
-echo("</form>");
-
-$currentLog = Sustainer::get_log();
-$i = 0;
-
-echo("<h3>Scheduler log:</h3>");
-
-echo("<table class=\"table table-striped table-bordered\">
+?>
+<table class="table table-striped table-bordered">
 	<thead>
 	<tr>
-	<th>Date</th>
+	<th></th>
 	<th>Title</th>
 	<th>Artist</th>
-	<th>Scheduled By</th>
+	<th>Album</th>
 	</tr>
 	</thead>
-	<tbody>");
-foreach ($currentLog as $row) {
-	$i++;
-	echo("<tr>
-		<td>".date('d/m/y H:i', $row['timestamp'])."</td>
-	<td>".$row['title']."</td>
-	<td>".$row['artist']."</td>
-	<td>".$row['username']."</td>
-	</tr>");
-}
-echo("</tbody>
-	</table>");
-
+	<tbody>
+    <?foreach ($currentQueue as $row) {
+	    $i++;
+      ?>
+      <tr>
+	      <td><?$i?></td>
+        <td><?$row['title']?></td>
+        <td><?$row['artist']?></td>
+        <td><?$row['album']?></td>
+      </tr>
+    <?}?>
+  </tbody>
+</table>
+<?} else {
+	Bootstrap::alert("warning","<b>Warning: </b>The current queue is empty","",false);
+}?>
+<h3>Schedule audio:</h3>
+<p>You can use this tool to schedule the next audio track to be played on Sue by using its audio id.</p>
+<form method="post">
+  Track ID: <input type="text" name="trackid" /><input type="submit" name="submit" value="Schedule" />
+</form>
+<?
+$currentLog = Sustainer::get_log();
+$i = 0;
 ?>
+<h3>Scheduler log:</h3>
+<table class="table table-striped table-bordered">
+	<thead>
+  	<tr>
+    	<th>Date</th>
+    	<th>Title</th>
+    	<th>Artist</th>
+    	<th>Scheduled By</th>
+  	</tr>
+	</thead>
+	<tbody>
+    <?foreach ($currentLog as $row) {
+    	$i++;?>
+    	<tr>
+    		<td><?date('d/m/y H:i', $row['timestamp'])?></td>
+      	<td><?$row['title']?></td>
+      	<td><?$row['artist']?></td>
+      	<td><?$row['username']?></td>
+    	</tr>
+    <?}?>
+  </tbody>
+</table>
