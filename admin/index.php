@@ -110,5 +110,23 @@ echo("
 			</div>
 		</a>
 	</div>
+</div>
+<div class=\"row\">
+	<table class=\"table table-striped table-hover\">
+		<thead>
+			<tr>
+				<th class=\"title\">Service</th>
+				<th class=\"icon\">Status</th>
+				<th class=\"icon\">Restart</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Marceline</td>
+				<td>OK</td>
+				<td><button class=\"btn btn-danger\">Restart</button></td>
+			</tr>
+		</tbody>
+	</table>
 </div>");
 ?>
