@@ -7,6 +7,9 @@ Output::require_group("Sustainer Admin");
 
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
+if (isset($_POST["submit"])) {
+    system("sudo /etc/init.d/marceline restart");
+}
 
 if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 	$query = "SELECT * FROM audio WHERE id=:trackid";
@@ -27,7 +30,7 @@ if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 			date_default_timezone_set("Europe/London");
 			$parameters = array(':audioid' => $track['id'], ':userid' => Session::get_id(), ':timestamp' => time());
 			DigiplayDB::query($query, $parameters);
-			echo(Bootstrap::alert_message_basic("info","Track Scheduled."));      
+			echo(Bootstrap::alert_message_basic("info","Track Scheduled."));
 		} else {
 		 	echo(Bootstrap::alert_message_basic("warning","This track is already at the top of the queue."));
 		}
@@ -36,6 +39,25 @@ if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 
 $currentQueue = Sustainer::get_queue();
 $i = 0;
+
+echo("<div class=\"row\">
+	<table class=\"table table-striped table-hover\">
+		<thead>
+			<tr>
+				<th class=\"title\">Service</th>
+				<th class=\"title\">Status</th>
+				<th class=\"icon\">Restart</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Marceline</td>
+				<td>" . system("sudo /etc/init.d/marceline status") . "</td>
+				<td><form method=\"POST\"><input name=\"submit\" type=\"submit\" class=\"btn btn-danger\" value=\"Restart\" /></form></td>
+			</tr>
+		</tbody>
+	</table>
+</div>");
 
 echo("<h3>Current queue:</h3>");
 
