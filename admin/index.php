@@ -3,7 +3,9 @@ Output::set_title("Administration");
 MainTemplate::set_subtitle("Control every aspect of the Digiplay system");
 
 $trash = Files::get_by_id(3, "dir");
-
+if (isset($_POST["submit"])) {
+    system("sudo /etc/init.d/marceline restart");
+}
 echo("
 <div class=\"row\">
 	<div class=\"col-sm-4\">
@@ -110,5 +112,23 @@ echo("
 			</div>
 		</a>
 	</div>
+</div>
+<div class=\"row\">
+	<table class=\"table table-striped table-hover\">
+		<thead>
+			<tr>
+				<th class=\"title\">Service</th>
+				<th class=\"title\">Status</th>
+				<th class=\"icon\">Restart</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Marceline</td>
+				<td>" . system("sudo /etc/init.d/marceline status") . "</td>
+				<td><form method=\"POST\"><input name=\"submit\" type=\"submit\" class=\"btn btn-danger\" value=\"Restart\" /></form></td>
+			</tr>
+		</tbody>
+	</table>
 </div>");
 ?>
