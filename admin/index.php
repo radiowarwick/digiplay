@@ -3,7 +3,7 @@ Output::set_title("Administration");
 MainTemplate::set_subtitle("Control every aspect of the Digiplay system");
 
 $trash = Files::get_by_id(3, "dir");
-
+echo($_REQUEST);
 echo("
 <div class=\"row\">
 	<div class=\"col-sm-4\">
@@ -116,7 +116,7 @@ echo("
 		<thead>
 			<tr>
 				<th class=\"title\">Service</th>
-				<th class=\"icon\">Status</th>
+				<th class=\"title\">Status</th>
 				<th class=\"icon\">Restart</th>
 			</tr>
 		</thead>
@@ -124,7 +124,7 @@ echo("
 			<tr>
 				<td>Marceline</td>
 				<td>OK</td>
-				<td><button class=\"btn btn-danger\">Restart</button></td>
+				<td><form><button id=\"restart-button\" class=\"btn btn-danger\">Restart</button></form></td>
 			</tr>
 		</tbody>
 	</table>
