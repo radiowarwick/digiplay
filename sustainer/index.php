@@ -94,10 +94,10 @@ if (!is_null($currentQueue)) {
 	    $i++;
       ?>
       <tr>
-	      <td><?$i?></td>
-        <td><?$row['title']?></td>
-        <td><?$row['artist']?></td>
-        <td><?$row['album']?></td>
+	      <td><?echo($i);?></td>
+        <td><?echo($row['title']);?></td>
+        <td><?echo($row['artist']);?></td>
+        <td><?echo($row['album']);?></td>
       </tr>
     <?}?>
   </tbody>
@@ -128,10 +128,10 @@ $i = 0;
     <?foreach ($currentLog as $row) {
     	$i++;?>
     	<tr>
-    		<td><?date('d/m/y H:i', $row['timestamp'])?></td>
-      	<td><?$row['title']?></td>
-      	<td><?$row['artist']?></td>
-      	<td><?$row['username']?></td>
+    		<td><?echo(date('d/m/y H:i', $row['timestamp']));?></td>
+      	<td><?echo($row['title']);?></td>
+      	<td><?echo($row['artist']);?></td>
+      	<td><?echo($row['username']);?></td>
     	</tr>
     <?}?>
   </tbody>
