@@ -57,14 +57,14 @@ $i = 0;
 			<tr>
 				<td>Marceline</td>
 				<td>
-          <?system("sudo /etc/init.d/marceline status");?>
+          <?echo preg_replace('/\(pid\s\d+\)/', '', substr(exec("sudo /etc/init.d/marceline status"), 8));?>
         </td>
 				<td><form method="POST"><input name="restart-marceline" type="submit" class="btn btn-danger" value="Restart" /></form></td>
 			</tr>
       <tr>
         <td>JAVO</td>
         <td>
-          <?system("sudo /etc/init.d/javo status");?>
+          <?echo preg_replace('/\(pid\s\d+\)/', '', substr(exec("sudo /etc/init.d/javo status"), 8));?>
         </td>
         <td><form method="POST"><input name="restart-javo" type="submit" class="btn btn-danger" value="Restart" /></form></td>
       </tr>
