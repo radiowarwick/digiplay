@@ -147,7 +147,7 @@ echo("
 							}
 						echo("</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
-							<div class=\"tab-pane active\" id=\"info\">
+							<div class=\"tab-pane\" id=\"info\">
 								<script>
 									function reloadInfo() {
 										$('#info-content').load('functions.php?'+key+'action=info-content');
@@ -162,7 +162,7 @@ echo("
 									".Configs::get_system_param("info-content")."
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"search\">
+							<div class=\"tab-pane active\" id=\"search\">
 								<script>
 									$(function() { 
 										$('#search-form').submit(function(e) { 
