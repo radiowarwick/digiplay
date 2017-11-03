@@ -76,7 +76,7 @@ class Search {
     }
 
     public static function jingles($query, $limit=0, $offset=0) {
-        $query_str = "id, count(*) OVER() AS full_count FROM v_audio_jingles WHERE to_tsvector(title)::tsvector @@ plainto_tsquery(:query)::tsquery ORDER BY id DESC";
+        $query_str = "id, count(*) OVER() AS full_count FROM v_audio_jingles_new WHERE to_tsvector(title)::tsvector @@ plainto_tsquery(:query)::tsquery ORDER BY id DESC";
 
         if($limit > 0) $query_str .= " LIMIT ".$limit;
         if($offset > 0) $query_str .= " OFFSET ".$offset;
