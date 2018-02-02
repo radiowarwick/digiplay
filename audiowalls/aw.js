@@ -277,10 +277,10 @@ $(function () {
 	
 	// open a delete confirmation modal
 	function makeDeleteable(){
-		$('#walls-tabs .glyphicon-remove').click(function(){
-			$('#delete-modal-page').html($(this).parent().parent().text());
+		$('.badge-remove').click(function(){
+			$('#delete-modal-page').html($(this).parent().text());
 			$('#delete-modal').modal('show');
-			$('#delete-modal').data( "dps-wall-id", $(this).parent().parent().data('dps-wall-id') );
+			$('#delete-modal').data( "dps-wall-id", $(this).parent().data('dps-wall-id') );
 		});
 	}
 	makeDeleteable();
@@ -320,19 +320,6 @@ $(function () {
 		$('#delete-modal').modal('hide'); return false; 
 	});
 	
-	// Re-number walls
-	function renumberWalls(){
-		/*$('#walls-tabs li:not(#wall-new) a').each(function(i){
-			$(this).attr('href', '#page'+i);
-		});
-		$('#walls > div:not(#new)').each(function(i){
-			$(this).attr({id:'page'+i, 'data-dps-wall-page':i});
-		});*/
-		$('#walls-tabs li:not(#wall-new) a').each(function(i){
-			$(this).attr('data-dps-wall-page', i);
-			$($(this).attr('href')).attr('data-dps-wall-page', i);
-		});
-	}
 
 	// AJAX Update Test
 	function ajaxUpdateTest(oldItemLocation, newItemLocation, wallID){
@@ -347,23 +334,53 @@ $(function () {
 		$.post("../ajax/update-audiowall-item.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); });
 	}
 
-	$(".glyphicon-arrow-up").click(function(){
-		wall = $(this).parent().parent();
-		number = wall.attr("data-dps-wall-page");
-		if(number > 0) {
-			previousWall = $("a[data-dps-wall-page='" + (number - 1) + "']");
-			previousWall.before(wall);
-			renumberWalls();
-		}
-	});
+	function movePages() {
+		$(".badge-up").click(function(){
+			wall = $(this).parent();
+			number = parseInt(wall.attr("data-dps-wall-page"));
+			if(number > 0) {
+				previousWall = $("a[data-dps-wall-page='" + (number - 1) + "']");
+				previousWall.before(wall);
+				renumberWalls();
 
-	$(".glyphicon-arrow-down").click(function(){
-		wall = $(this).parent().parent();
-		number = wall.attr("data-dps-wall-page");
-		if(number < $(".list-group-item").length - 2) {
-			nextWall = $("a[data-dps-wall-page='" + (number + 1) + "']");
-			wall.before(nextWall);
-			renumberWalls();
-		}
-	});
+				preWall = $("#page" + (number - 1));
+				afterWall = $("#page" + number);
+
+				preWall.attr("id", "page" + number);
+				preWall.attr("data-dps-wall-page", number);
+
+				afterWall.attr("id", "page" + (number - 1));
+				afterWall.attr("data-dps-wall-page", (number - 1));
+			}
+		});
+
+		$(".badge-down").click(function(){
+			wall = $(this).parent();
+			number = parseInt(wall.attr("data-dps-wall-page"));
+			if(number < $(".list-group-item").length - 2) {
+				nextWall = $("a[data-dps-wall-page='" + (number + 1) + "']");
+				wall.before(nextWall);
+				renumberWalls();
+
+				preWall = $("#page" + number);
+				afterWall = $("#page" + (number + 1));
+
+				preWall.attr("id", "page" + (number + 1));
+				preWall.attr("data-dps-wall-page", (number + 1));
+
+				afterWall.attr("id", "page" + number);
+				afterWall.attr("data-dps-wall-page", number);
+			}
+		});
+	}
+	movePages();
 });
+
+// Re-number walls
+function renumberWalls(){
+	$(".list-group-item[id!='wall-new']").each(function(i){
+		$(this).attr('data-dps-wall-page', i);
+		$(this).attr('href', '#page' + i);
+		console.log(i);
+	});
+}

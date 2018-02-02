@@ -36,9 +36,9 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
           else {
             echo("Page ".$wall->get_page()+1);
           } 
-          echo("<span class=\"badge\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
-          echo("<span class=\"badge\"><span class=\"glyphicon glyphicon-arrow-down\"></span></span>");
-          echo("<span class=\"badge\"><span class=\"glyphicon glyphicon-arrow-up\"></span></span>");
+          echo("<span class=\"badge badge-remove\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
+          echo("<span class=\"badge badge-down\"><span class=\"glyphicon glyphicon-arrow-down\"></span></span>");
+          echo("<span class=\"badge badge-up\"><span class=\"glyphicon glyphicon-arrow-up\"></span></span>");
           echo("</a>");
           $w++;
         }
