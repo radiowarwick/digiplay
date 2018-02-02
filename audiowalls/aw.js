@@ -278,9 +278,9 @@ $(function () {
 	// open a delete confirmation modal
 	function makeDeleteable(){
 		$('#walls-tabs .glyphicon-remove').click(function(){
-			$('#delete-modal-page').html($(this).parent().text());
+			$('#delete-modal-page').html($(this).parent().parent().text());
 			$('#delete-modal').modal('show');
-			$('#delete-modal').data( "dps-wall-id", $(this).parent().data('dps-wall-id') );
+			$('#delete-modal').data( "dps-wall-id", $(this).parent().parent().data('dps-wall-id') );
 		});
 	}
 	makeDeleteable();
@@ -351,7 +351,7 @@ $(function () {
 		wall = $(this).parent().parent();
 		number = wall.attr("data-dps-wall-page");
 		if(number > 0) {
-			previousWall = $("a[data-dps-wall-page='" + (wall + 1) + "']");
+			previousWall = $("a[data-dps-wall-page='" + (number - 1) + "']");
 			previousWall.before(wall);
 			renumberWalls();
 		}
@@ -361,7 +361,7 @@ $(function () {
 		wall = $(this).parent().parent();
 		number = wall.attr("data-dps-wall-page");
 		if(number < $(".list-group-item").length - 2) {
-			nextWall = $("a[data-dps-wall-page='" + (wall + 1) + "']");
+			nextWall = $("a[data-dps-wall-page='" + (number + 1) + "']");
 			wall.before(nextWall);
 			renumberWalls();
 		}
