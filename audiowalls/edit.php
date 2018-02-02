@@ -41,7 +41,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
           if($w + 1 < count($aw_walls))
             echo("<span class=\"badge\"><span class=\"glyphicon glyphicons-arrow-down\"></span></span>");
           echo("<span class=\"badge\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
-          echo("</a>")
+          echo("</a>");
           $w++;
         }
         ?>
