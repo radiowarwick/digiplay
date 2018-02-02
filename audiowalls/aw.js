@@ -348,12 +348,22 @@ $(function () {
 	}
 
 	$(".glyphicon-arrow-up").click(function(){
-		s = $(this).parent().parent().text();
-		alert("clicked up on " + s);
+		wall = $(this).parent().parent();
+		number = wall.attr("data-dps-wall-page");
+		if(number > 0) {
+			previousWall = $("a[data-dps-wall-page='" + (wall + 1) + "']");
+			previousWall.before(wall);
+			renumberWalls();
+		}
 	});
 
 	$(".glyphicon-arrow-down").click(function(){
-		s = $(this).parent().parent().text();
-		alert("clicked down on " + s);
+		wall = $(this).parent().parent();
+		number = wall.attr("data-dps-wall-page");
+		if(number < $(".list-group-item").length - 2) {
+			nextWall = $("a[data-dps-wall-page='" + (wall + 1) + "']");
+			wall.before(nextWall);
+			renumberWalls();
+		}
 	});
 });
