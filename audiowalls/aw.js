@@ -345,7 +345,15 @@ $(function () {
 		};
 		console.log(data);
 		$.post("../ajax/update-audiowall-item.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); });
-	
 	}
 
+	$(".glyphicon-arrow-up").click(function(){
+		s = $(this).parent().parent().text();
+		alert("clicked up on " + s);
+	});
+
+	$(".glyphicon-arrow-down").click(function(){
+		s = $(this).parent().parent().text();
+		alert("clicked down on " + s);
+	});
 });
