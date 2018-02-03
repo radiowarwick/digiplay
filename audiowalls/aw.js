@@ -60,6 +60,8 @@ $(function () {
 				console.log(dropped.data( "dpsAwStyle" ));
 				console.log(dropped.parent().data( "dpsAwSlot" ));
 				if ($('#tray div.dps-aw-item').length > 0 ) { $('#tray-wrap p').hide(); }
+
+				$('#aw_edit_buttons .text-danger').css({'display':'inline-block'});
 			}
 		});
 	}
@@ -135,6 +137,7 @@ $(function () {
 			.find('.text').html($('#text').val())
 			$('#walls div[data-dps-wall-page="'+$('#dps-aw-page').val()+'"] li[data-dps-aw-slot="'+$('#dps-aw-item').val()+'"]').children('div').attr('style', $('#style option:selected').attr('style'));
 		$('#item-edit').modal('hide');
+		audiowallChange();		
 		return false;
 	});
 
@@ -157,11 +160,14 @@ $(function () {
 		$('#wall-description').html($('#set-edit-desc').val());
 		$('.walls-tab.active').children().html(($('#set-edit-page').val()));
 		$('#set-edit').modal('hide');
+		audiowallChange();
 		return false;
 	});
+
 	$('#set-edit .btn.btn-danger').click(function(){
 		$('#set-edit').modal('hide'); return false; 
 	});
+
 	// Save audiowall set
 	$('#aw_edit_buttons .btn-success').click(function(){
 		var walls = new Array();
@@ -189,6 +195,7 @@ $(function () {
 			'walls':walls
 		};
 		$('#aw_edit_buttons .btn-success').html('<img src="../img/ajax-loader.gif" />');
+		$('#aw_edit_buttons .text-danger').css({'display':'none'});
 		$.post("../ajax/save-audiowall.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); window.location.reload(true); });
 	});
 
@@ -334,10 +341,14 @@ $(function () {
 		$.post("../ajax/update-audiowall-item.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); });
 	}
 
+	// Functions for moving wall order
 	function movePages() {
+		// Move page up
 		$(".badge-up").click(function(){
 			wall = $(this).parent();
 			number = parseInt(wall.attr("data-dps-wall-page"));
+
+			// only move up if not the first wall
 			if(number > 0) {
 				previousWall = $("a[data-dps-wall-page='" + (number - 1) + "']");
 				previousWall.before(wall);
@@ -351,12 +362,17 @@ $(function () {
 
 				afterWall.attr("id", "page" + (number - 1));
 				afterWall.attr("data-dps-wall-page", (number - 1));
+
+				audiowallChange();
 			}
 		});
 
+		// Move page down
 		$(".badge-down").click(function(){
 			wall = $(this).parent();
 			number = parseInt(wall.attr("data-dps-wall-page"));
+
+			// only move page down if not the last page
 			if(number < $(".list-group-item").length - 2) {
 				nextWall = $("a[data-dps-wall-page='" + (number + 1) + "']");
 				wall.before(nextWall);
@@ -370,6 +386,8 @@ $(function () {
 
 				afterWall.attr("id", "page" + number);
 				afterWall.attr("data-dps-wall-page", number);
+
+				audiowallChange();
 			}
 		});
 	}
@@ -383,4 +401,9 @@ function renumberWalls(){
 		$(this).attr('href', '#page' + i);
 		console.log(i);
 	});
+}
+
+// Show the unsaved changes message
+function audiowallChange() {
+	$('#aw_edit_buttons .text-danger').css({'display':'inline-block'});
 }
