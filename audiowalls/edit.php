@@ -10,9 +10,9 @@ $aw_set = AudiowallSets::get((int)$_REQUEST['id']);
 if ($aw_set == null){
     exit();
 }
-//var_dump($aw_set);
+
 $aw_walls = $aw_set->get_walls();
-//var_dump($aw_walls);
+
 $styles = AudiowallStyles::get_all();
 Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
 MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
@@ -43,8 +43,15 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
           echo("</a>");
           $w++;
         }
+
+        if(count($aw_walls) >= 8) {
+          echo("<a class=\"list-group-item active\">You have reached the page limit</a>");
+        }
+        else {
+          echo("<a class=\"list-group-item active\" id=\"wall-new\" href=\"#new\">Add Page</a>");
+        }
+        
         ?>
-        <a class="list-group-item active" id="wall-new" href="#new">Add Page</a>
       </div>
     </div>
   <div class="col-md-7">
@@ -101,7 +108,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
   <form id="search-form" class="form-inline">
     <input type="text" class="form-control" id="search-term" placeholder="Search Tracks">
     <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
-    <span id="search-result-message" style="display: none;"><span id="search-result-count">x</span> results for <span id="search-result-term">y</span></span>
+    <span id="search-result-message" style="display: none;"><span id="search-result-count"></span> results for <span id="search-result-term"></span></span>
   </form>
 </div>
 
@@ -118,18 +125,6 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
   <tbody>
   </tbody>
 </table>
-
-<!--     <div id="search" >
-      <form id="search-form" style="width:100%">
-        <div class="input-append">
-          <input type="text" placeholder="Search Tracks" id="search-term" class="input-medium audiowall-music-query col-md-9">
-          <div class="col-md-1">&nbsp;</div>          
-          <button type="submit" class="btn btn-primary search-for-music col-md-2">Search</button>
-        </div>
-      </form>
-      <div id="search-results" class="col-md-12" style="height:auto;"></div>
-    </div>
-  </div> -->
 
 <div id="delete-modal" class="modal fade">
   <div class="modal-dialog">
