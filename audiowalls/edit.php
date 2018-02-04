@@ -14,8 +14,10 @@ if ($aw_set == null){
 $aw_walls = $aw_set->get_walls();
 
 $styles = AudiowallStyles::get_all();
-Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
-MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
+Output::set_title("Audiowall: " . $aw_set->get_name());
+MainTemplate::set_subtitle("<br><span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
+
+echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
 ?>
 <div class="alert alert-danger" role="alert">
   There are unsaved changes!
@@ -50,7 +52,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
         else {
           echo("<a class=\"list-group-item active\" id=\"wall-new\" href=\"#new\">Add Page</a>");
         }
-        
+
         ?>
       </div>
     </div>

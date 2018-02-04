@@ -34,3 +34,5 @@ ul.tabs li { float:none; display:inline-block; }
 .nav-tabs > li#wall-new > a.btn-primary:hover { border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); background-color: #04C; }
 
 table .icon { width: 16px; }
+
+#wall-name { display: none; }
