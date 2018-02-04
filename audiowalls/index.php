@@ -1,6 +1,7 @@
 <?php
 require_once('pre.php');
 
+Output::require_user();
 Output::set_title("Audiowalls");
 $sets = AudiowallSets::get_all();
 
