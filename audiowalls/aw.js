@@ -69,20 +69,75 @@ $(function () {
 	
 	// Searching for music
 	$('#search-form').submit(function(){
-		$('#search-results').empty().html('<img src=\"../img/ajax-loader.gif\" />');
-		$('#search-results').load('../ajax/audiowall-music-search.php?q='+escape($('#search-term').val()), function(){
-			$('.dps-aw-item').draggable({
-				revert: "invalid",
-				appendTo: 'body',
-				containment: 'window',
-				scroll: false,
-				helper: 'clone',
-				start: function(event, ui) { 
-					ui.helper.addClass('dps-aw-style-1');
-					console.log("FIRE");
-				}
+		$('#search-btn').empty().html('<img src=\"../img/ajax-loader.gif\" />');
+		$.ajax({
+			url: "../ajax/audiowall-music-search.php?q=" + escape($("#search-term").val()),
+			type: "GET",
+			error: function(xhr, text, error) {
+				value = $.parseJSON(xhr.responseText);
+				alert(value.error);
+			},
+			success: function(data, text, xhr) {
+				var results = JSON.parse(data);
+				console.log(results.length); 
+				console.log(results);
 
-			});
+				$("#search-btn").empty().text("Search");
+				$("#search-result-count").text(results.length);
+				$("#search-result-term").text($("#search-term").val());
+				$("#search-result-message").show();
+
+				$("#search-results").find("tbody").empty();
+
+				for(var i = 0; i < results.length; i++) {
+					track = results[i];
+					row = $("<tr></tr>").appendTo("#search-results tbody");
+
+					icon = "<a href='#' data-dps-audio-id='" + track["id"] + "'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+					row.append("<td>" + icon + "</td>");
+
+					row.append("<td id='title'>" + track["title"] + "</td>");
+					if(track["artist"] !== false)
+						row.append("<td>" + track["artist"] + "</td>");
+					else
+						row.append("<td>(none)</td>");
+					row.append("<td>" + track["album"] + "</td>");
+					row.append("<td id='length'>" + track["length"] + "</td>");
+
+					row.find("a").click(function(){
+						row = $(this).parent().parent();
+
+						id = $(this).attr("data-dps-audio-id");
+						title = row.find("#title").text();
+						length = row.find("#length").text();
+
+						track = $("<div></div>");
+						track.attr("id", "track-draggable-" + id);
+						track.attr("data-dps-aw-style", "1");
+						track.attr("data-dps-audio-id", id);
+						track.addClass("ui-draggable");
+						track.addClass("dps-aw-item");
+						track.addClass("dps-aw-style-1");
+						track.css({"background-color": "rgb(18,137,192)"});
+
+						track.append("<span class='text'>" + title + "</span>");
+						track.append("<span class='length'>" + length + "</span>");
+						
+						track.prependTo("#tray");
+						$('#tray-wrap p').hide();
+
+						$('.dps-aw-item').draggable({
+							revert: "invalid",
+							appendTo: 'body',
+							containment: 'window',
+							scroll: false,
+							helper: 'clone',
+							start: function(event, ui) { jQuery(this).hide(); },
+							stop: function(event, ui) { jQuery(this).show(); }
+				 		});
+					});
+				}
+			}
 		});
 		return false;
 	});

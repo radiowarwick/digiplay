@@ -21,8 +21,6 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
   There are unsaved changes!
 </div>
 <div class="row">
-  <div class="col-md-12">
-  </div>
   <div class="col-md-5">
     <div class="list-group" id="walls-tabs">
        <?php
@@ -47,18 +45,8 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
         }
         ?>
         <a class="list-group-item active" id="wall-new" href="#new">Add Page</a>
-       </div>
-    <div id="search" >
-      <form id="search-form" style="width:100%">
-        <div class="input-append">
-          <input type="text" placeholder="Search Tracks" id="search-term" class="input-medium audiowall-music-query col-md-9">
-          <div class="col-md-1">&nbsp;</div>          
-          <button type="submit" class="btn btn-primary search-for-music col-md-2">Search</button>
-        </div>
-      </form>
-      <div id="search-results" class="col-md-12" style="height:auto;"></div>
+      </div>
     </div>
-  </div>
   <div class="col-md-7">
     <div id="walls" class="tab-content">
       <?php $w = 0;
@@ -87,6 +75,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     </div>
   </div>
 </div>
+
 <div class="row">
   <div id="tray-wrap">
     <p>This is the tray, you can use it to temporarily store or delete Audiowall items.</p>
@@ -98,6 +87,49 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     <div class="clearfix">&nbsp;</div>
   </div>
 </div>
+
+<div class="alert alert-info">
+  <?php
+    if(!(Session::is_group_user('Audiowalls Admin')))
+      echo("Search includes all tracks which are marked as a Jingle or Advert. Please contact the <a href=\"mailto:music@radio.warwick.ac.uk\">Head of Music</a> if a track you require is marked incorrectly.");
+    else
+      echo("Search includes all tracks which are marked as a Jingle, Advert or Track.");
+  ?>
+</div>
+
+<div class="row">
+  <form id="search-form" class="form-inline">
+    <input type="text" class="form-control" id="search-term" placeholder="Search Tracks">
+    <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+    <span id="search-result-message" style="display: none;"><span id="search-result-count">x</span> results for <span id="search-result-term">y</span></span>
+  </form>
+</div>
+
+<table id="search-results" class="table table-striped">
+  <thead>
+    <tr>
+      <th class="icon"></th>
+      <th>Title</th>
+      <th>Artist</th>
+      <th>Album</th>
+      <th>Length</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<!--     <div id="search" >
+      <form id="search-form" style="width:100%">
+        <div class="input-append">
+          <input type="text" placeholder="Search Tracks" id="search-term" class="input-medium audiowall-music-query col-md-9">
+          <div class="col-md-1">&nbsp;</div>          
+          <button type="submit" class="btn btn-primary search-for-music col-md-2">Search</button>
+        </div>
+      </form>
+      <div id="search-results" class="col-md-12" style="height:auto;"></div>
+    </div>
+  </div> -->
 
 <div id="delete-modal" class="modal fade">
   <div class="modal-dialog">
@@ -227,6 +259,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     </div>
   </div>
 </div>
+
 <div id="add-page-modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content"> 
