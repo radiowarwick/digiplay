@@ -60,7 +60,7 @@ class MainTemplate{
 	$return = "<!DOCTYPE html> 
 <html> 
 	<head> 
-		<title>RaW Digiplay";
+		<title>RAW Digiplay";
 	if(Output::get_title() != 'Untitled Page') $return .= " - ".Output::get_title();
 
 	$return .= "</title> 

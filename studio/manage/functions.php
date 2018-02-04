@@ -14,11 +14,12 @@ if(isset($_REQUEST["key"])) {
 
 switch($_REQUEST["action"]) {
 	case "now-next":
-		$json = file_get_contents(Configs::get_system_param("now-next-api"));
-		$json = json_decode($json);
-		$return = "<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\">".$json[0]->name."</span></div>
-			<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\">".$json[1]->name."</span></div>";
-		echo $return;
+		//$json = file_get_contents(Configs::get_system_param("now-next-api"));
+		//$json = json_decode($json);
+		//$return = "<div class=\"col-sm-6 navbar-brand\">On now: <span id=\"on-now\">".$json[0]->name."</span></div>
+		//	<div class=\"col-sm-6 navbar-brand\">On next: <span id=\"on-next\">".$json[1]->name."</span></div>";
+		//echo $return;
+		// Need to remove comment above
 		break;
 	case "info-content":
 		echo(Configs::get_system_param("info-content"));

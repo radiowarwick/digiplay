@@ -10,9 +10,10 @@ class Time {
 		$remaining = intval($remaining - ($hours * $unit_hour));
 
 		$minutes = intval($remaining / $unit_minute);
-		$remaining = intval($remaining - ($minutes * $unit_minute));
+		$remaining = intval($remaining - ($minutes * $unit_minute));		
 
 		$return = array('days' => $days, 'hours' => $hours, 'minutes' => $minutes, 'seconds' => $remaining);
+
 		return array_filter($return);
 	}
 
