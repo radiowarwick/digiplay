@@ -15,8 +15,11 @@ $aw_walls = $aw_set->get_walls();
 //var_dump($aw_walls);
 $styles = AudiowallStyles::get_all();
 Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
-MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-danger\">There are unsaved changes!</p><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
+MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
 ?>
+<div class="alert alert-danger" role="alert">
+  There are unsaved changes!
+</div>
 <div class="row">
   <div class="col-md-12">
   </div>

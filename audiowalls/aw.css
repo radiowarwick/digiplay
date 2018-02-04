@@ -29,7 +29,7 @@ ul.tabs li { float:none; display:inline-block; }
 #new { display:none; }
 
 #aw_edit_buttons .text-success { display:none; }
-#aw_edit_buttons .text-danger { display:none; }
+.alert-danger { visibility:hidden; }
 
 #walls-tabs .icon-remove { opacity:0.3; }
 #walls-tabs .icon-remove:hover { opacity:1; cursor:pointer; }

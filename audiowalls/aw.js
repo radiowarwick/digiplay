@@ -61,7 +61,7 @@ $(function () {
 				console.log(dropped.parent().data( "dpsAwSlot" ));
 				if ($('#tray div.dps-aw-item').length > 0 ) { $('#tray-wrap p').hide(); }
 
-				$('#aw_edit_buttons .text-danger').css({'display':'inline-block'});
+				$('.alert-danger').css({'visibility':'visible'});
 			}
 		});
 	}
@@ -405,5 +405,5 @@ function renumberWalls(){
 
 // Show the unsaved changes message
 function audiowallChange() {
-	$('#aw_edit_buttons .text-danger').css({'display':'inline-block'});
+	$('.alert-danger').css({'visibility':'visible'});
 }
