@@ -91,10 +91,13 @@ $(function () {
 					track = results[i];
 
 					// Create row and fill with data
-					row = $("<tr></tr>").appendTo("#search-results tbody");
+					row = $("<tr></tr>").appendTo("#search-results tbody"); 
+					// title=\"Delete this track\" rel=\"twipsy\"
+					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='first tooltip'><span class='glyphicon glyphicon-info-sign'></span></a>";
+					row.append("<td>" + linkIcon + "</td>");
 
-					icon = "<a href='#' data-dps-audio-id='" + track["id"] + "'><span class='glyphicon glyphicon-plus-sign'></span></a>";
-					row.append("<td>" + icon + "</td>");
+					addIcon = "<a href='#' data-dps-audio-id='" + track["id"] + "' title='Add track to tray'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+					row.append("<td>" + addIcon + "</td>");
 
 					row.append("<td id='title'>" + track["title"] + "</td>");
 					if(track["artist"] !== false)
@@ -105,7 +108,7 @@ $(function () {
 					row.append("<td id='length'>" + track["length"] + "</td>");
 
 					// When plus is clicked create div and add to tray.
-					row.find("a").click(function(e){
+					row.find("a[href='#']").click(function(e){
 						e.preventDefault();
 
 						row = $(this).parent().parent();

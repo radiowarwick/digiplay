@@ -15,7 +15,6 @@ if(Session::is_user()){
 		$advertsearch = Search::adverts($query);
 		$advert = $advertsearch['results'];
 
-		$count = 1;
 		$track_results = [];
 	}
 
@@ -24,8 +23,6 @@ if(Session::is_user()){
 
 		$track = ["id" => $jingleid, "title" => $jingle->get_title(), "artist" => $jingle->get_artists_str(), "album" => $jingle->get_album()->get_name(), "length" => $jingle->get_length_formatted()];
 		$track_results[] = $track;
-
-		$count + 1;
 	}
 
 	foreach ($adverts as $advertid){
@@ -33,8 +30,6 @@ if(Session::is_user()){
 
 		$track = ["id" => $advertid, "title" => $advert->get_title(), "artist" => $advert->get_artists_str(), "album" => $advert->get_album()->get_name(), "length" => $advert->get_length_formatted()];
 		$track_results[] = $track;
-
-		$count + 1;
 	}
 
 	if(Session::is_group_user('Audiowalls Admin'))
@@ -44,8 +39,6 @@ if(Session::is_user()){
 
 			$t = ["id" => $track_id, "title" => $track->get_title(), "artist" => $track->get_artists_str(), "album" => $track->get_album()->get_name(), "length" => $track->get_length_formatted()];
 			$track_results[] = $t;
-
-			$count + 1;
 		}
 	}
 

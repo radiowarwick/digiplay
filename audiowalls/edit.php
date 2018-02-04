@@ -118,6 +118,7 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
   <thead>
     <tr>
       <th class="icon"></th>
+      <th class="icon"></th>
       <th>Title</th>
       <th>Artist</th>
       <th>Album</th>
