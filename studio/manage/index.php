@@ -134,19 +134,20 @@ echo("
 			<div class=\"container\">
 				<div class=\"row\" id=\"main-panel\">
 					<div class=\"col-md-7\" id=\"left-panel\">
-						<ul class=\"nav nav-tabs nav-justified\" id=\"tabs\">
-							<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
-							<li><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
+						<ul class=\"nav nav-tabs nav-justified\" id=\"tabs\">".
+							//	<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
+							"<li class=\"active\"><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
 							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
 							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
-							<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
-							<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>");
+							"
+							.//	<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
+							"<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>");
 							if($location->get_id() == 1 || $location->get_id() == 2){
 								echo("<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::glyphicon("refresh")." Reset</li>");
 							}
 						echo("</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
-							<div class=\"tab-pane active\" id=\"info\">
+							<div class=\"tab-pane\" id=\"info\">
 								<script>
 									function reloadInfo() {
 										$('#info-content').load('functions.php?'+key+'action=info-content');
@@ -161,7 +162,7 @@ echo("
 									".Configs::get_system_param("info-content")."
 								</div>
 							</div>
-							<div class=\"tab-pane\" id=\"search\">
+							<div class=\"tab-pane active\" id=\"search\">
 								<script>
 									$(function() { 
 										$('#search-form').submit(function(e) { 
