@@ -79,8 +79,6 @@ $(function () {
 			},
 			success: function(data, text, xhr) {
 				var results = JSON.parse(data);
-				console.log(results.length); 
-				console.log(results);
 
 				$("#search-btn").empty().text("Search");
 				$("#search-result-count").text(results.length);
@@ -91,6 +89,8 @@ $(function () {
 
 				for(var i = 0; i < results.length; i++) {
 					track = results[i];
+
+					// Create row and fill with data
 					row = $("<tr></tr>").appendTo("#search-results tbody");
 
 					icon = "<a href='#' data-dps-audio-id='" + track["id"] + "'><span class='glyphicon glyphicon-plus-sign'></span></a>";
@@ -104,7 +104,10 @@ $(function () {
 					row.append("<td>" + track["album"] + "</td>");
 					row.append("<td id='length'>" + track["length"] + "</td>");
 
-					row.find("a").click(function(){
+					// When plus is clicked create div and add to tray.
+					row.find("a").click(function(e){
+						e.preventDefault();
+
 						row = $(this).parent().parent();
 
 						id = $(this).attr("data-dps-audio-id");
