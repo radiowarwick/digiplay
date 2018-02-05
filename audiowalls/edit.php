@@ -33,15 +33,18 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
             echo(" list-group-item-info");
           }
           echo("\">");
+          echo ("<span id='page-name'>");
           if ($wall->get_name() != "") {
             echo($wall->get_name());
           } 
           else {
             echo("Page ".$wall->get_page()+1);
-          } 
+          }
+          echo("</span>"); 
           echo("<span class=\"badge badge-remove\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
           echo("<span class=\"badge badge-down\"><span class=\"glyphicon glyphicon-arrow-down\"></span></span>");
           echo("<span class=\"badge badge-up\"><span class=\"glyphicon glyphicon-arrow-up\"></span></span>");
+          echo("<span class=\"badge badge-edit\"><span class=\"glyphicon glyphicon-pencil\"></span></span>");
           echo("</a>");
           $w++;
         }
@@ -286,6 +289,34 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
       </div>
       <div class="modal-footer clearfix">
         <a href="#" class="btn btn-primary">Add</a>
+        <a href="#" class="btn btn-danger">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="edit-page-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Edit Page Name</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form role="form" class="form-horizontal">
+              <div class="form-group">
+                <label for="name" class="col-lg-2 control-label">Page Name</label>
+                <div class="col-lg-10">
+                  <input class="form-control" id="edit-page-name" name="name" type="text" value=""\>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer clearfix">
+        <a href="#" class="btn btn-primary">Update</a>
         <a href="#" class="btn btn-danger">Cancel</a>
       </div>
     </div>

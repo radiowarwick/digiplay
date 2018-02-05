@@ -453,6 +453,30 @@ $(function () {
 		});
 	}
 	movePages();
+
+	// Add event listen for renaming page names
+	function renamePages() {
+		$(".badge-edit").click(function(){
+			pageText = $(this).parent().text();
+			pageID = $(this).parent().attr("data-dps-wall-id");
+			$("#edit-page-modal").modal("show");
+			$("#edit-page-name").val(pageText);
+			$("#edit-page-name").attr("data-dps-wall-id", pageID);
+		});
+
+		$("#edit-page-modal").find(".btn-danger").click(function(){
+			$("#edit-page-modal").modal("hide");
+		});
+
+		$("#edit-page-modal").find(".btn-primary").click(function(){
+			pageText = $("#edit-page-name").val();
+			pageID = $("#edit-page-name").attr("data-dps-wall-id");
+			$("a[data-dps-wall-id='" + pageID + "'] #page-name").text(pageText);
+			$("#edit-page-modal").modal("hide");
+			audiowallChange();
+		})
+	}
+	renamePages();
 });
 
 // Re-number walls
@@ -460,7 +484,6 @@ function renumberWalls(){
 	$(".list-group-item[id!='wall-new']").each(function(i){
 		$(this).attr('data-dps-wall-page', i);
 		$(this).attr('href', '#page' + i);
-		console.log(i);
 	});
 }
 
