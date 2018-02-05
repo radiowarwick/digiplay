@@ -474,7 +474,11 @@ $(function () {
 			$("a[data-dps-wall-id='" + pageID + "'] #page-name").text(pageText);
 			$("#edit-page-modal").modal("hide");
 			audiowallChange();
-		})
+		});
+
+		$("#edit-page-modal").find("form").submit(function (){
+			return false;
+		});
 	}
 	renamePages();
 });
