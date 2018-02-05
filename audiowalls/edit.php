@@ -10,16 +10,19 @@ $aw_set = AudiowallSets::get((int)$_REQUEST['id']);
 if ($aw_set == null){
     exit();
 }
-//var_dump($aw_set);
+
 $aw_walls = $aw_set->get_walls();
-//var_dump($aw_walls);
+
 $styles = AudiowallStyles::get_all();
-Output::set_title("Audiowall:<br /><span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
-MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
+Output::set_title("Audiowall: " . $aw_set->get_name());
+MainTemplate::set_subtitle("<br><span id=\"wall-description\">".$aw_set->get_description()."</span><span id=\"aw_edit_buttons\"><p class=\"text-success\">Changes saved!</p><a href=\"#\" class=\"btn btn-primary\">Edit</a><a href=\"#\" class=\"btn btn-success\">Save</a></span>");
+
+echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set->get_name()."</span>");
 ?>
+<div class="alert alert-danger" role="alert">
+  There are unsaved changes!
+</div>
 <div class="row">
-  <div class="col-md-12">
-  </div>
   <div class="col-md-5">
     <div class="list-group" id="walls-tabs">
        <?php
@@ -30,29 +33,32 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
             echo(" list-group-item-info");
           }
           echo("\">");
+          echo ("<span id='page-name'>");
           if ($wall->get_name() != "") {
             echo($wall->get_name());
           } 
           else {
             echo("Page ".$wall->get_page()+1);
-          } 
-          echo("<span class=\"glyphicon glyphicon-remove\"></span></a>");
+          }
+          echo("</span>"); 
+          echo("<span class=\"badge badge-remove\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
+          echo("<span class=\"badge badge-down\"><span class=\"glyphicon glyphicon-arrow-down\"></span></span>");
+          echo("<span class=\"badge badge-up\"><span class=\"glyphicon glyphicon-arrow-up\"></span></span>");
+          echo("<span class=\"badge badge-edit\"><span class=\"glyphicon glyphicon-pencil\"></span></span>");
+          echo("</a>");
           $w++;
         }
+
+        if(count($aw_walls) >= 8) {
+          echo("<a class=\"list-group-item active\">You have reached the page limit</a>");
+        }
+        else {
+          echo("<a class=\"list-group-item active\" id=\"wall-new\" href=\"#new\">Add Page</a>");
+        }
+
         ?>
-        <a class="list-group-item active" id="wall-new" href="#new">Add Page</a>
-       </div>
-    <div id="search" >
-      <form id="search-form" style="width:100%">
-        <div class="input-append">
-          <input type="text" placeholder="Search Tracks" id="search-term" class="input-medium audiowall-music-query col-md-9">
-          <div class="col-md-1">&nbsp;</div>          
-          <button type="submit" class="btn btn-primary search-for-music col-md-2">Search</button>
-        </div>
-      </form>
-      <div id="search-results" class="col-md-12" style="height:auto;"></div>
+      </div>
     </div>
-  </div>
   <div class="col-md-7">
     <div id="walls" class="tab-content">
       <?php $w = 0;
@@ -81,6 +87,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     </div>
   </div>
 </div>
+
 <div class="row">
   <div id="tray-wrap">
     <p>This is the tray, you can use it to temporarily store or delete Audiowall items.</p>
@@ -92,6 +99,38 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     <div class="clearfix">&nbsp;</div>
   </div>
 </div>
+
+<div class="alert alert-info">
+  <?php
+    if(!(Session::is_group_user('Audiowalls Admin')))
+      echo("Search includes all tracks which are marked as a Jingle or Advert. Please contact the <a href=\"mailto:music@radio.warwick.ac.uk\">Head of Music</a> if a track you require is marked incorrectly.");
+    else
+      echo("Search includes all tracks which are marked as a Jingle, Advert or Track.");
+  ?>
+</div>
+
+<div class="row">
+  <form id="search-form" class="form-inline">
+    <input type="text" class="form-control" id="search-term" placeholder="Search Tracks">
+    <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+    <span id="search-result-message" style="display: none;"><span id="search-result-count"></span> results for <span id="search-result-term"></span></span>
+  </form>
+</div>
+
+<table id="search-results" class="table table-striped">
+  <thead>
+    <tr>
+      <th class="icon"></th>
+      <th class="icon"></th>
+      <th>Title</th>
+      <th>Artist</th>
+      <th>Album</th>
+      <th>Length</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
 
 <div id="delete-modal" class="modal fade">
   <div class="modal-dialog">
@@ -221,6 +260,7 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
     </div>
   </div>
 </div>
+
 <div id="add-page-modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content"> 
@@ -249,6 +289,34 @@ MainTemplate::set_subtitle("<span id=\"wall-description\">".$aw_set->get_descrip
       </div>
       <div class="modal-footer clearfix">
         <a href="#" class="btn btn-primary">Add</a>
+        <a href="#" class="btn btn-danger">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="edit-page-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Edit Page Name</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form role="form" class="form-horizontal">
+              <div class="form-group">
+                <label for="name" class="col-lg-2 control-label">Page Name</label>
+                <div class="col-lg-10">
+                  <input class="form-control" id="edit-page-name" name="name" type="text" value=""\>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer clearfix">
+        <a href="#" class="btn btn-primary">Update</a>
         <a href="#" class="btn btn-danger">Cancel</a>
       </div>
     </div>

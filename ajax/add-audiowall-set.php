@@ -13,9 +13,9 @@ if(Session::is_user()){
 	// Query number of audiowalls that the user currently has
 	// If an audiowall already exists for that user, deny creation
 	$numberOfAudiowalls = AudiowallSets::count_by_user();
-	if ($numberOfAudiowalls > 0 && !(Session::is_group_user('Audiowalls Admin'))) {
+	if ($numberOfAudiowalls > 1 && !(Session::is_group_user('Audiowalls Admin'))) {
 		http_response_code(400);
-		exit(json_encode(array("error" => "Audiowall limit exceeded", "detail" => "You are limited to a single audiowall")));
+		exit(json_encode(array("error" => "Audiowall limit exceeded", "detail" => "You are limited to two audiowalls")));
 		Errors::clear();
 	}
 

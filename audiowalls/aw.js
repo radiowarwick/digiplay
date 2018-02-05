@@ -60,6 +60,8 @@ $(function () {
 				console.log(dropped.data( "dpsAwStyle" ));
 				console.log(dropped.parent().data( "dpsAwSlot" ));
 				if ($('#tray div.dps-aw-item').length > 0 ) { $('#tray-wrap p').hide(); }
+
+				$('.alert-danger').css({'visibility':'visible'});
 			}
 		});
 	}
@@ -67,20 +69,81 @@ $(function () {
 	
 	// Searching for music
 	$('#search-form').submit(function(){
-		$('#search-results').empty().html('<img src=\"../img/ajax-loader.gif\" />');
-		$('#search-results').load('../ajax/audiowall-music-search.php?q='+escape($('#search-term').val()), function(){
-			$('.dps-aw-item').draggable({
-				revert: "invalid",
-				appendTo: 'body',
-				containment: 'window',
-				scroll: false,
-				helper: 'clone',
-				start: function(event, ui) { 
-					ui.helper.addClass('dps-aw-style-1');
-					console.log("FIRE");
-				}
+		$('#search-btn').empty().html('<img src=\"../img/ajax-loader.gif\" />');
+		$.ajax({
+			url: "../ajax/audiowall-music-search.php?q=" + escape($("#search-term").val()),
+			type: "GET",
+			error: function(xhr, text, error) {
+				value = $.parseJSON(xhr.responseText);
+				alert(value.error);
+			},
+			success: function(data, text, xhr) {
+				var results = JSON.parse(data);
 
-			});
+				$("#search-btn").empty().text("Search");
+				$("#search-result-count").text(results.length);
+				$("#search-result-term").text($("#search-term").val());
+				$("#search-result-message").show();
+
+				$("#search-results").find("tbody").empty();
+
+				for(var i = 0; i < results.length; i++) {
+					track = results[i];
+
+					// Create row and fill with data
+					row = $("<tr></tr>").appendTo("#search-results tbody"); 
+					// title=\"Delete this track\" rel=\"twipsy\"
+					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='first tooltip'><span class='glyphicon glyphicon-info-sign'></span></a>";
+					row.append("<td>" + linkIcon + "</td>");
+
+					addIcon = "<a href='#' data-dps-audio-id='" + track["id"] + "' title='Add track to tray'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+					row.append("<td>" + addIcon + "</td>");
+
+					row.append("<td id='title'>" + track["title"] + "</td>");
+					if(track["artist"] !== false)
+						row.append("<td>" + track["artist"] + "</td>");
+					else
+						row.append("<td>(none)</td>");
+					row.append("<td>" + track["album"] + "</td>");
+					row.append("<td id='length'>" + track["length"] + "</td>");
+
+					// When plus is clicked create div and add to tray.
+					row.find("a[href='#']").click(function(e){
+						e.preventDefault();
+
+						row = $(this).parent().parent();
+
+						id = $(this).attr("data-dps-audio-id");
+						title = row.find("#title").text();
+						length = row.find("#length").text();
+
+						track = $("<div></div>");
+						track.attr("id", "track-draggable-" + id);
+						track.attr("data-dps-aw-style", "1");
+						track.attr("data-dps-audio-id", id);
+						track.addClass("ui-draggable");
+						track.addClass("dps-aw-item");
+						track.addClass("dps-aw-style-1");
+						track.css({"background-color": "rgb(18,137,192)"});
+
+						track.append("<span class='text'>" + title + "</span>");
+						track.append("<span class='length'>" + length + "</span>");
+						
+						track.prependTo("#tray");
+						$('#tray-wrap p').hide();
+
+						$('.dps-aw-item').draggable({
+							revert: "invalid",
+							appendTo: 'body',
+							containment: 'window',
+							scroll: false,
+							helper: 'clone',
+							start: function(event, ui) { jQuery(this).hide(); },
+							stop: function(event, ui) { jQuery(this).show(); }
+				 		});
+					});
+				}
+			}
 		});
 		return false;
 	});
@@ -135,6 +198,7 @@ $(function () {
 			.find('.text').html($('#text').val())
 			$('#walls div[data-dps-wall-page="'+$('#dps-aw-page').val()+'"] li[data-dps-aw-slot="'+$('#dps-aw-item').val()+'"]').children('div').attr('style', $('#style option:selected').attr('style'));
 		$('#item-edit').modal('hide');
+		audiowallChange();		
 		return false;
 	});
 
@@ -157,11 +221,14 @@ $(function () {
 		$('#wall-description').html($('#set-edit-desc').val());
 		$('.walls-tab.active').children().html(($('#set-edit-page').val()));
 		$('#set-edit').modal('hide');
+		audiowallChange();
 		return false;
 	});
+
 	$('#set-edit .btn.btn-danger').click(function(){
 		$('#set-edit').modal('hide'); return false; 
 	});
+
 	// Save audiowall set
 	$('#aw_edit_buttons .btn-success').click(function(){
 		var walls = new Array();
@@ -189,6 +256,7 @@ $(function () {
 			'walls':walls
 		};
 		$('#aw_edit_buttons .btn-success').html('<img src="../img/ajax-loader.gif" />');
+		$('#aw_edit_buttons .text-danger').css({'display':'none'});
 		$.post("../ajax/save-audiowall.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); window.location.reload(true); });
 	});
 
@@ -277,7 +345,7 @@ $(function () {
 	
 	// open a delete confirmation modal
 	function makeDeleteable(){
-		$('#walls-tabs .glyphicon-remove').click(function(){
+		$('.badge-remove').click(function(){
 			$('#delete-modal-page').html($(this).parent().text());
 			$('#delete-modal').modal('show');
 			$('#delete-modal').data( "dps-wall-id", $(this).parent().data('dps-wall-id') );
@@ -320,19 +388,6 @@ $(function () {
 		$('#delete-modal').modal('hide'); return false; 
 	});
 	
-	// Re-number walls
-	function renumberWalls(){
-		/*$('#walls-tabs li:not(#wall-new) a').each(function(i){
-			$(this).attr('href', '#page'+i);
-		});
-		$('#walls > div:not(#new)').each(function(i){
-			$(this).attr({id:'page'+i, 'data-dps-wall-page':i});
-		});*/
-		$('#walls-tabs li:not(#wall-new) a').each(function(i){
-			$(this).attr('data-dps-wall-page', i);
-			$($(this).attr('href')).attr('data-dps-wall-page', i);
-		});
-	}
 
 	// AJAX Update Test
 	function ajaxUpdateTest(oldItemLocation, newItemLocation, wallID){
@@ -345,7 +400,98 @@ $(function () {
 		};
 		console.log(data);
 		$.post("../ajax/update-audiowall-item.php", data, function(data){ $('#aw_edit_buttons .btn-success').html('Save'); $('#aw_edit_buttons .text-success').css({'display':'inline-block'}); $('#browse pre').html(data); });
-	
 	}
 
+	// Functions for moving wall order
+	function movePages() {
+		// Move page up
+		$(".badge-up").click(function(){
+			wall = $(this).parent();
+			number = parseInt(wall.attr("data-dps-wall-page"));
+
+			// only move up if not the first wall
+			if(number > 0) {
+				previousWall = $("a[data-dps-wall-page='" + (number - 1) + "']");
+				previousWall.before(wall);
+				renumberWalls();
+
+				preWall = $("#page" + (number - 1));
+				afterWall = $("#page" + number);
+
+				preWall.attr("id", "page" + number);
+				preWall.attr("data-dps-wall-page", number);
+
+				afterWall.attr("id", "page" + (number - 1));
+				afterWall.attr("data-dps-wall-page", (number - 1));
+
+				audiowallChange();
+			}
+		});
+
+		// Move page down
+		$(".badge-down").click(function(){
+			wall = $(this).parent();
+			number = parseInt(wall.attr("data-dps-wall-page"));
+
+			// only move page down if not the last page
+			if(number < $(".list-group-item").length - 2) {
+				nextWall = $("a[data-dps-wall-page='" + (number + 1) + "']");
+				wall.before(nextWall);
+				renumberWalls();
+
+				preWall = $("#page" + number);
+				afterWall = $("#page" + (number + 1));
+
+				preWall.attr("id", "page" + (number + 1));
+				preWall.attr("data-dps-wall-page", (number + 1));
+
+				afterWall.attr("id", "page" + number);
+				afterWall.attr("data-dps-wall-page", number);
+
+				audiowallChange();
+			}
+		});
+	}
+	movePages();
+
+	// Add event listen for renaming page names
+	function renamePages() {
+		$(".badge-edit").click(function(){
+			pageText = $(this).parent().text();
+			pageID = $(this).parent().attr("data-dps-wall-id");
+			$("#edit-page-modal").modal("show");
+			$("#edit-page-name").val(pageText);
+			$("#edit-page-name").attr("data-dps-wall-id", pageID);
+		});
+
+		$("#edit-page-modal").find(".btn-danger").click(function(){
+			$("#edit-page-modal").modal("hide");
+		});
+
+		$("#edit-page-modal").find(".btn-primary").click(function(){
+			pageText = $("#edit-page-name").val();
+			pageID = $("#edit-page-name").attr("data-dps-wall-id");
+			$("a[data-dps-wall-id='" + pageID + "'] #page-name").text(pageText);
+			$("#edit-page-modal").modal("hide");
+			audiowallChange();
+		});
+
+		$("#edit-page-modal").find("form").submit(function (){
+			return false;
+		});
+	}
+	renamePages();
 });
+
+// Re-number walls
+function renumberWalls(){
+	$(".list-group-item[id!='wall-new']").each(function(i){
+		$(this).attr('data-dps-wall-page', i);
+		$(this).attr('href', '#page' + i);
+	});
+}
+
+// Show the unsaved changes message
+function audiowallChange() {
+	$('.alert-danger').css({'visibility':'visible'});
+}
