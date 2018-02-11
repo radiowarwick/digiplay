@@ -6,7 +6,7 @@ if(!Session::is_group_user("Importer")) {
 	if(!isset($_REQUEST["filename"])) die(json_encode(array("error" => "invalid input file")));
 	$uploaded_file = utf8_decode(FILE_ROOT."uploads/".$_REQUEST["filename"]);
 
-	if(!isset($_REQUEST["type"])) $_REQUEST["type"] = "music";
+	// if(!isset($_REQUEST["type"])) $_REQUEST["type"] = "1";
 
 	if(!isset($_REQUEST["title"]) || $_REQUEST["title"] === "") die(json_encode(array("error" => "You must specify a title")));
 
@@ -32,28 +32,11 @@ if(!Session::is_group_user("Importer")) {
 		die(json_encode(array("error" => "SoX could not convert file", "debug" => $output)));
 	}
 
-	switch($_REQUEST["type"]) {
-		case "music":
-			$audio = new Track();
-			if(isset($_REQUEST["album"]) && $_REQUEST["album"] != "") $audio->set_album($_REQUEST["album"]);
-			else $audio->set_album("(none)");
+	$audio = new Track();
+	$audio->set_type(AudioTypes::get_by_id($_REQUEST["type"]));
 
-			break;
-
-		case "jingle":
-			$audio = new Jingle();
-
-			break;
-
-		case "advert":
-			$audio = new Advert();
-
-			break;
-
-		case "prerec":
-			$audio = new Prerec();
-			break;
-	}
+	if(isset($_REQUEST["album"]) && $_REQUEST["album"] != "") $audio->set_album($_REQUEST["album"]);
+	else $audio->set_album("(none)");
 
 	if(isset($_REQUEST["origin"])) $audio->set_origin($_REQUEST["origin"]);
 	if(isset($_REQUEST["year"])) $audio->set_year($_REQUEST["year"]);
