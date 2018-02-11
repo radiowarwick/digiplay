@@ -47,6 +47,7 @@ if(!Session::is_group_user("Importer")) {
 	$audio->set_md5($md5);
 	$audio->set_archive($current_archive);
 	$audio->set_filetype("flac");
+	$audio->set_censored(isset($_REQUEST["censored"]));
 
 	if(!$audio->save()) {
 		unlink($tempfile);

@@ -172,6 +172,16 @@ foreach($files as $file) {
 										</div>
 									</div>
 									<div class=\"form-group\">
+										<div class=\"col-sm-12 col-sm-offset-3\">
+											<div class=\"checkbox\">
+												<label for=\"censored\">
+													<input type=\"checkbox\" name=\"censored\" id=\"censored\" value=\"censored\">
+													Explicit
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class=\"form-group\">
 										<label class=\"col-sm-3 control-label\" for=\"type\">Audio Type</label>
 										<div class=\"col-sm-9\">
 											<select class=\"selectpicker\" id=\"type\" name=\"type\" data-width=\"100%\">");
