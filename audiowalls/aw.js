@@ -92,8 +92,8 @@ $(function () {
 
 					// Create row and fill with data
 					row = $("<tr></tr>").appendTo("#search-results tbody"); 
-					// title=\"Delete this track\" rel=\"twipsy\"
-					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='first tooltip'><span class='glyphicon glyphicon-info-sign'></span></a>";
+
+					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='Track information'><span class='glyphicon glyphicon-info-sign'></span></a>";
 					row.append("<td>" + linkIcon + "</td>");
 
 					addIcon = "<a href='#' data-dps-audio-id='" + track["id"] + "' title='Add track to tray'><span class='glyphicon glyphicon-plus-sign'></span></a>";
