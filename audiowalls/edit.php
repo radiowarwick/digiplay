@@ -102,10 +102,10 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
 
 <div class="alert alert-info">
   <?php
-    if(!(Session::is_group_user('Audiowalls Admin')))
-      echo("Search includes all tracks which are marked as a Jingle or Advert. Please contact the <a href=\"mailto:music@radio.warwick.ac.uk\">Head of Music</a> if a track you require is marked incorrectly.");
-    else
-      echo("Search includes all tracks which are marked as a Jingle, Advert or Track.");
+    // if(!(Session::is_group_user('Audiowalls Admin')))
+    //   echo("Search includes all tracks which are marked as a Jingle or Advert. Please contact the <a href=\"mailto:music@radio.warwick.ac.uk\">Head of Music</a> if a track you require is marked incorrectly.");
+    // else
+    echo("Search includes all tracks which are marked as a Jingle, Advert or Track.");
   ?>
 </div>
 

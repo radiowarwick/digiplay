@@ -5,10 +5,10 @@ if(Session::is_user()){
 	$query = $_REQUEST['q'];
 
 	if($query) {
-		if(Session::is_group_user('Audiowalls Admin')) {
-			$search = Search::tracks($query);
-			$tracks = $search["results"];
-		}
+		// if(Session::is_group_user('Audiowalls Admin')) {
+		$search = Search::tracks($query);
+		$tracks = $search["results"];
+		// }
 
 		$jinglesearch = Search::jingles($query);
 		$jingles = $jinglesearch["results"];
@@ -32,15 +32,15 @@ if(Session::is_user()){
 		$track_results[] = $track;
 	}
 
-	if(Session::is_group_user('Audiowalls Admin'))
-	{
-		foreach($tracks as $track_id) {
-			$track = Tracks::get($track_id);
+	// if(Session::is_group_user('Audiowalls Admin'))
+	// {
+	foreach($tracks as $track_id) {
+		$track = Tracks::get($track_id);
 
-			$t = ["id" => $track_id, "title" => $track->get_title(), "artist" => $track->get_artists_str(), "album" => $track->get_album()->get_name(), "length" => $track->get_length_formatted()];
-			$track_results[] = $t;
-		}
+		$t = ["id" => $track_id, "title" => $track->get_title(), "artist" => $track->get_artists_str(), "album" => $track->get_album()->get_name(), "length" => $track->get_length_formatted()];
+		$track_results[] = $t;
 	}
+	// }
 
 	echo json_encode($track_results);
 }
