@@ -1,6 +1,8 @@
 <?php 
 Output::set_title("Import Music");
 MainTemplate::set_subtitle("Add new music to the Digiplay system");
+Output::add_stylesheet(LINK_ABS."css/bootstrap-select.css");
+Output::add_script(LINK_ABS."js/bootstrap-select.js");
 
 $basepath = FILE_ROOT."uploads/";
 $files = scandir($basepath);
@@ -146,27 +148,51 @@ foreach($files as $file) {
 									<input class=\"form-control\" type=\"hidden\" name=\"filename\" value=\"".$file."\" />
 									<input class=\"form-control\" type=\"hidden\" name=\"origin\" value=\"".$origin."\" />
 									<div class=\"form-group\">
-										<label class=\"col-sm-2 control-label\" for=\"title\">Title</label>
-										<div class=\"col-sm-10\">
+										<label class=\"col-sm-3 control-label\" for=\"title\">Title</label>
+										<div class=\"col-sm-9\">
 											<input class=\"form-control\" type=\"text\" id=\"title\" name=\"title\" value=\"".$title."\" />
 										</div>
 									</div>
 									<div class=\"form-group\">
-										<label class=\"col-sm-2 control-label\" for=\"artist\">Artist</label>
-										<div class=\"col-sm-10\">
+										<label class=\"col-sm-3 control-label\" for=\"artist\">Artist</label>
+										<div class=\"col-sm-9\">
 											<input class=\"form-control\" required type=\"text\" id=\"artist\" name=\"artist\" value=\"".$artist."\" />
 										</div>
 									</div>
 									<div class=\"form-group\">
-										<label class=\"col-sm-2 control-label\" for=\"album\">Album</label>
-										<div class=\"col-sm-10\">
+										<label class=\"col-sm-3 control-label\" for=\"album\">Album</label>
+										<div class=\"col-sm-9\">
 											<input class=\"form-control\" type=\"text\" id=\"album\" name=\"album\" value=\"".$album."\" />
 										</div>
 									</div>
 									<div class=\"form-group\">
-										<label class=\"col-sm-2 control-label\" for=\"year\">Year</label>
-										<div class=\"col-sm-10\">
+										<label class=\"col-sm-3 control-label\" for=\"year\">Year</label>
+										<div class=\"col-sm-9\">
 											<input class=\"form-control\" type=\"text\" id=\"year\" name=\"year\" value=\"".$year."\" />
+										</div>
+									</div>
+									<div class=\"form-group\">
+										<div class=\"col-sm-12 col-sm-offset-3\">
+											<div class=\"checkbox\">
+												<label for=\"censored\">
+													<input type=\"checkbox\" name=\"censored\" id=\"censored\" value=\"censored\">
+													Explicit
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class=\"form-group\">
+										<label class=\"col-sm-3 control-label\" for=\"type\">Audio Type</label>
+										<div class=\"col-sm-9\">
+											<select class=\"selectpicker\" id=\"type\" name=\"type\" data-width=\"100%\">");
+											foreach(AudioTypes::get_all() as $audiotype) {
+												// Make track selected as the default type
+												if($audiotype->get_id() === 1)
+													echo("<option value=\"" . $audiotype->get_id() . "\" selected>" . $audiotype->get_name() . "</option>");
+												else
+													echo("<option value=\"" . $audiotype->get_id() . "\">" . $audiotype->get_name() . "</option>");
+											}
+	echo("									</select>
 										</div>
 									</div>
 									<div class=\"form-group\">
@@ -193,4 +219,5 @@ foreach($files as $file) {
 			");
 }
 echo("</div>");
+
 ?>
