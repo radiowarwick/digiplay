@@ -159,11 +159,52 @@ echo("
 					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
 				}
 			});		
-" : "")."
+" : "").
+(Session::is_group_user("Music Admin") ? "
+		var trackid;
+		$('.track-delete').click(function() {
+			$('.delete-track-title').html($(this).attr('data-dps-title'));
+			trackid = $(this).attr('data-dps-id');
+		});
+
+		$('.yes-definitely-delete').click(function() {
+			$.ajax({
+				url: '".LINK_ABS."ajax/delete-track.php',
+				data: 'id='+trackid,
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+
+		$('.restore-track').click(function(){
+			trackid = $(this).attr('data-dps-id');
+			$.ajax({
+				url: '".LINK_ABS."ajax/restore-track.php',
+				data: 'id='+trackid,
+				type: 'POST',
+				error: function(xhr,text,error) {
+					value = $.parseJSON(xhr.responseText);
+					alert(value.error);
+				},
+				success: function(data,text,xhr) {
+					window.location.reload(true); 
+				}
+			});
+		});
+" : "") . "
 		});
 	</script>
 	<h3>Edit Track: ".$track->get_id()." <small>Added ".date("d/m/Y H:i",$track->get_import_date())."</small></h3>
 	".(Session::is_group_user("Music Admin")? "":Bootstrap::alert_message_basic("info","You can't edit the details of this track, because you aren't a Music Admin.","Notice:")));
+
+	if($track->get_dirid() == 3 && Session::is_group_user("Music Admin"))
+		echo("<div class=\"alert alert-danger\"><strong>Warning!</strong> This track is currently in the trash. <a href=\"#\" class=\"restore-track\" data-dps-id=\"" . $track->get_id() . "\">Restore from trash</a>.</div>");
 	
 	echo($track->player()."
 	<form class=\"track-detail-form\" action=\"\" method=\"post\">
@@ -233,8 +274,18 @@ echo("
 								Save
 							</button>
 						</div>
-					</div>
-				</div>
+					</div>");
+				if(Session::is_user("Music Admin") && $track->get_dirid() != 3) {
+					echo("<div class=\"form-group\">
+						<div class=\"col-md-10 col-md-offset-2\">
+							<a data-toggle=\"modal\" data-target=\"#delete-modal\" class=\"btn btn-danger btn-block track-delete\" data-dps-id=\"" . $track->get_id() . "\" data-dps-title=\"" . $track->get_title() . "\">
+								".Bootstrap::glyphicon("trash")."
+								Delete
+							</a>
+						</div>
+					</div>");
+				}
+				echo("</div>
 				<div class=\"col-md-5 form\">
 					<div class=\"form-group\">
 						<label for=\"notes\">Notes</label>
@@ -292,4 +343,8 @@ if(Session::is_group_user("Playlist Editor")) {
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }
+
+if(Session::is_group_user("Music Admin"))
+	echo(Bootstrap::modal("delete-modal", "<p>Are you sure you want to move <span class=\"delete-track-title\">this track</span> to the trash?</p>", "Delete track", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));
+
 ?>

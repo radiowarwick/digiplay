@@ -1,6 +1,5 @@
 <?php
 
-
 if(Session::is_group_user('Librarian')){
 	if($_REQUEST["id"]) {
 		$track = Tracks::get_by_id($_REQUEST["id"]);
@@ -16,4 +15,5 @@ if(Session::is_group_user('Librarian')){
 	http_response_code(403);
 	exit(json_encode(array('error' => 'Permission denied.')));
 }
+
 ?>

@@ -86,6 +86,14 @@ class Audio {
 	public function move_to_trash() { return DigiplayDB::update("audiodir", array("dirid" => 3), "audioid = ".$this->id); }
 	public function fetch_from_trash() { return DigiplayDB::update("audiodir", array("dirid" => 2), "audioid = ".$this->id); }
 
+	public function get_dirid() {
+		$result = DigiplayDB::select("dirid FROM audiodir WHERE audioid = " . $this->id);
+		if($result == NULL)
+			return 2;
+		else
+			return $result;
+	}
+
 	public function player($vocal_markers = true) {
 		Output::add_script(LINK_ABS."js/wavesurfer.min.js");
 		Output::add_script(LINK_ABS."js/wavesurfer.timeline.js");
