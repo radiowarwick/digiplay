@@ -7,7 +7,7 @@ if(Session::is_group_user('Librarian')){
 			Search::update_index();
 			exit(json_encode(array('response' => 'success')));
 		} else {
-			http_response_code(403);
+			http_response_code(500);
 			exit(json_encode(array('error' => 'Unknown error.')));
 		}
 	}
