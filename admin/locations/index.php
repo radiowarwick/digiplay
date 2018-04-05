@@ -35,7 +35,7 @@ foreach($locations as $location){
 							<strong>".$setting->get_val()."</strong> <br />
 						</td>
 						<td class=\"icon\">
-							<span class='glyphicon glyphicon-edit'></span>
+							".Bootstrap::fontawesome("edit")."
 						</td>
 					</tr>";
 	}

@@ -2,8 +2,34 @@
 class Bootstrap {
 	public static function icon($icon) { return self::glyphicon($icon); }
 
+	// Please use fontawesome instead
 	public static function glyphicon($icon) {
-		return "<span class=\"glyphicon glyphicon-".$icon."\"></span> ";
+		// Conversion array for legacy purposes.
+		$conversion = array(
+			// glyphicon => fontawesome
+			"music" => "music",
+			"th-list" => "th-list",
+			"th" => "th",
+			"cog" => "cog",
+			"headphones" => "headphones",
+			"list" => "list-ul",
+			"info-sign" => "info",
+			"chevron-right" => "chevron-circle-right",
+			"home" => "home",
+			"book" => "book",
+			"user" => "user",
+			"indent-left" => "users",
+			"globe" => "globe"				
+		);
+
+		if(array_key_exists($icon, $conversion))
+			return self::fontawesome($conversion[$icon]);
+		else
+			return "<span class=\"glyphicon glyphicon-".$icon."\"></span> ";
+	}
+
+	public static function fontawesome($icon, $extra='') {
+		return "<span class=\"fas fa-" . $icon . " " . $extra . "\"></span> ";
 	}
 
 	public static function badge($num, $pull_right = false) {

@@ -29,12 +29,12 @@ echo("
 				dataType: 'json'
 			}).done(function(data) {
 				$.each(data, function(id,user) {
-					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::glyphicon("remove pull-right")."</li>');
+					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::fontawesome("times-circle", "fa-pull-right")."</li>');
 				})
 			})
 		});
 
-		$(document).on('click', '.glyphicon-remove', function() {
+		$(document).on('click', '.fa-times-circle', function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/group-admin.php?action=del-user&user='+$(this).parent().attr('data-user-id')+'&group='+$(this).parents('#group-info').attr('data-group-id'),
 				dataType: 'json'
@@ -52,7 +52,7 @@ echo("
 			}).done(function(data) {
 				$('input').val('');
 				$.each(data, function(id,user) {
-					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::glyphicon("remove pull-right")."</li>');
+					$('#group-members ul').append('<li class=\"list-group-item\" data-user-id=\"'+id+'\">'+user+'".Bootstrap::fontawesome("times-circle", "fa-pull-right")."</li>');
 				})
 			});
 			return false;
