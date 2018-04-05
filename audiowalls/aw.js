@@ -93,10 +93,10 @@ $(function () {
 					// Create row and fill with data
 					row = $("<tr></tr>").appendTo("#search-results tbody"); 
 
-					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='Track information'><span class='glyphicon glyphicon-info-sign'></span></a>";
+					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='Track information'><span class='fa fa-info-circle'></span></a>";
 					row.append("<td>" + linkIcon + "</td>");
 
-					addIcon = "<a href='#' data-dps-audio-id='" + track["id"] + "' title='Add track to tray'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+					addIcon = "<a href='#' data-dps-audio-id='" + track["id"] + "' title='Add track to tray'><span class='fa fa-plus-circle'></span></a>";
 					row.append("<td>" + addIcon + "</td>");
 
 					row.append("<td id='title'>" + track["title"] + "</td>");

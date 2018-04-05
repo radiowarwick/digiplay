@@ -68,7 +68,7 @@ class MainTemplate{
 		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 		<script type=\"text/javascript\" src=\"//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js\"></script>
 		<script type=\"text/javascript\" src=\"".LINK_ABS."js/bootstrap.min.js\"></script>
-		<script defer type=\"text/javascript\" src=\"".LINK_ABS."js/fontawesome-all.min.js\"></script>
+		<script defer src=\"https://use.fontawesome.com/releases/v5.0.9/js/all.js\" integrity=\"sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl\" crossorigin=\"anonymous\"></script>
 		";
 	if(isset($_REQUEST["theme"])) $return .= "<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootswatch/3.0.0/".$_REQUEST["theme"]."/bootstrap.min.css\">\n";
 	else $return .= "<link rel=\"stylesheet\" href=\"".LINK_ABS."css/bootstrap.min.css\">\n";
