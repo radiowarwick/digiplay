@@ -26,7 +26,8 @@ class Bootstrap {
 			"search" => "search",
 			"question-sign" => "question-circle",
 			"exclamation-sign" => "exclamation-circle",
-			"upload" => "arrow-alt-circle-up"
+			"upload" => "arrow-alt-circle-up",
+			"gbp" => "pound-sign"
 		);
 
 		if(array_key_exists($icon, $conversion))
