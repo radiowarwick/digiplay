@@ -136,14 +136,14 @@ echo("
 					<div class=\"col-md-7\" id=\"left-panel\">
 						<ul class=\"nav nav-tabs nav-justified\" id=\"tabs\">".
 							//	<li class=\"active\"><a href=\"#info\" data-toggle=\"tab\">".Bootstrap::glyphicon("info-sign")." Info</a></li>
-							"<li class=\"active\"><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::glyphicon("music")." Music</a></li>
-							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::glyphicon("envelope")." Messages</a></li>
-							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("th-list")." Playlists</a></li>
+							"<li class=\"active\"><a href=\"#search\" data-toggle=\"tab\">".Bootstrap::fontawesome("music")." Music</a></li>
+							<li><a href=\"#messages\" data-toggle=\"tab\">".Bootstrap::fontawesome("envelope")." Messages</a></li>
+							<li ".(Session::is_user()? "" : "class=\"disabled\"")."><a href=\"#playlists\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::fontawesome("th-list")." Playlists</a></li>
 							"
 							.//	<li ".(Session::is_user()? "": "class=\"disabled\"")."><a href=\"#files\" ".(Session::is_user()? "data-toggle=\"tab\"" : "").">".Bootstrap::glyphicon("folder-open")." Files</a></li>
-							"<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::glyphicon("pencil")." Logging</a></li>");
+							"<li><a href=\"#logging\" data-toggle=\"tab\">".Bootstrap::fontawesome("pencil-alt")." Logging</a></li>");
 							if($location->get_id() == 1 || $location->get_id() == 2){
-								echo("<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::glyphicon("refresh")." Reset</li>");
+								echo("<li id=\"reset\" class=\"btn btn-danger".(Session::is_user()? "" : "disabled")."\">".Bootstrap::fontawesome("sync-alt")." Reset</li>");
 							}
 						echo("</ul>
 						<div class=\"tab-content\" id=\"left-panel-content\">
@@ -168,7 +168,7 @@ echo("
 										$('#search-form').submit(function(e) { 
 											e.preventDefault(); 
 											$('[name=submit-search]').addClass('disabled');
-											$('#search-results').html('<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")." Searching...</h1>')
+											$('#search-results').html('<h1 class=\"loading\">".Bootstrap::fontawesome("fas fa-sync fa-spin")." Searching...</h1>')
 												.load('functions.php?'+key+'action=search&'+$('#search-form').serialize(), function() {
 													$('[name=submit-search]').removeClass('disabled');
 												}) 
@@ -224,14 +224,14 @@ echo("
 										$(document).on('click', '#message-list tbody tr', function() { 
 											$('#message-content h4').html($(this).find('.subject').html());
 											$('#message-content iframe').attr('src', 'functions.php?'+key+'action=message&id='+$(this).attr('data-message-id')); 
-											$(this).find('span').removeClass('glyphicon-envelope');
+											$(this).find('.icon').empty();
 										});
 
 										$(document).on('click', '[href=#messages]', function() { $(this).removeClass('btn-primary new-message'); });
 									})
 								</script>
 								<div id=\"message-list\">
-									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
+									<h1 class=\"loading\">".Bootstrap::fontawesome("fas fa-sync fa-spin")."</h1>
 								</div>
 								<div id=\"message-content\">
 									<div class=\"panel panel-default\">
@@ -264,7 +264,7 @@ echo("
 									});
 								</script>
 								<div class=\"panel-group\" id=\"playlists-list\">
-									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
+									<h1 class=\"loading\">".Bootstrap::fontawesome("fas fa-sync fa-spin")."</h1>
 								</div>
 							</div>
 							<div class=\"tab-pane\" id=\"files\">
@@ -331,7 +331,7 @@ echo("
 									<button type=\"submit\" class=\"btn btn-primary\" name=\"submit-log\">Log</button>
 								</form>
 								<div id=\"log\">
-									<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
+									<h1 class=\"loading\">".Bootstrap::fontawesome("fas fa-sync fa-spin")."</h1>
 								</div>
 							</div>
 						</div>
@@ -448,7 +448,7 @@ echo("
 									$(this).find('.duration').show();
 								});
 
-								$(document).on('click', '.controls .glyphicon-remove', function() {
+								$(document).on('click', '.controls .fa-times', function() {
 									$.ajax({
 										url: 'functions.php?'+key+'action=showplan-remove&id='+$(this).parents('.panel').attr('data-item-id'),
 										dataType: 'json'
@@ -459,9 +459,9 @@ echo("
 							})
 						</script>
 
-						<h2 id=\"showplan-title\"><span>Showplan</span><div class=\"pull-right clear-showplan\" data-toggle=\"modal\" data-target=\"#clear-showplan-modal\">".Bootstrap::glyphicon("trash")."</div></h2>
+						<h2 id=\"showplan-title\"><span>Showplan</span><div class=\"pull-right clear-showplan\" data-toggle=\"modal\" data-target=\"#clear-showplan-modal\">".Bootstrap::fontawesome("trash")."</div></h2>
 						<div class=\"list-group\" id=\"showplan\">
-							<h1 class=\"loading\">".Bootstrap::glyphicon("refresh rotate")."</h1>
+							<h1 class=\"loading\">".Bootstrap::fontawesome("fas fa-sync fa-spin")."</h1>
 						</div>
 					</div>
 				</div>
@@ -488,9 +488,9 @@ echo("
 					</div>
 
 				<div class=\"col-sm-3 pull-right\" id=\"contact\">
-					".Bootstrap::glyphicon("phone")." ".Configs::get_system_param("contact_sms")."<br />
-					".Bootstrap::glyphicon("earphone")." ".Configs::get_system_param("contact_phone")."<br />
-					".Bootstrap::glyphicon("envelope")." ".Configs::get_system_param("contact_email")."
+					".Bootstrap::fontawesome("mobile-alt")." ".Configs::get_system_param("contact_sms")."<br />
+					".Bootstrap::fontawesome("phone")." ".Configs::get_system_param("contact_phone")."<br />
+					".Bootstrap::fontawesome("envelope")." ".Configs::get_system_param("contact_email")."
 				</div>
 			</nav>
 			<script>
@@ -501,14 +501,14 @@ echo("
 						$('#username').parent().removeClass('has-error');
 						$('#password').parent().removeClass('has-error');
 						$('#login-modal').find('small').remove();
-						$('#login-modal').find('h1').find('span').removeClass('glyphicon-play-circle').addClass('glyphicon-refresh rotate');
+						$('#login-modal').find('h1').find('svg').attr('class', 'fas fa-sync fa-spin');
 						$.ajax({
 							url: 'functions.php?'+key+'action=login',
 							data: 'username='+$('#username').val()+'&password='+$('#password').val(),
 							type: 'POST',
 							dataType: 'json'
 						}).done(function(data) {
-							$('#login-modal').find('h1').find('span').removeClass('glyphicon-refresh rotate').addClass('glyphicon-play-circle');
+							$('#login-modal').find('h1').find('svg').attr('fa-sign-in-alt');
 							if(data.response == 'success') {
 								$('li.disabled').removeClass('disabled').find('a').attr('data-toggle','tab');
 								createFileBrowser();
@@ -563,27 +563,27 @@ echo("
 					});
 				});
 			</script>
-			".Bootstrap::modal("clear-showplan-modal","<h1>".Bootstrap::glyphicon("trash")."Clear showplan?</h1>",NULL,"
+			".Bootstrap::modal("clear-showplan-modal","<h1>".Bootstrap::fontawesome("trash")."Clear showplan?</h1>",NULL,"
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-clear-showplan\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-clear-showplan\" data-dismiss=\"modal\">No</a>")."
-			".Bootstrap::modal("logout-modal","<h1>".Bootstrap::glyphicon("remove-circle")." Log out?</h1>",NULL,"
+			".Bootstrap::modal("logout-modal","<h1>".Bootstrap::fontawesome("sign-out-alt")." Log out?</h1>",NULL,"
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-logout\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-logout\" data-dismiss=\"modal\">No</a>")."
 			".Bootstrap::modal("reset-modal","
 				This will turn the touchscreen off and on again, stopping any currently playing audio! Only use as a last resort whilst talking!"
-				,"<span id=\"reset-icon\">".Bootstrap::glyphicon("refresh")."</span> Reset Playout ".$location->get_id()."?","
+				,"<span id=\"reset-icon\">".Bootstrap::fontawesome("sync-alt")."</span> Reset Playout ".$location->get_id()."?","
 				<a href=\"#\" class=\"btn btn-primary btn-lg\" id=\"yes-reset\">Yes</a>
 				<a href=\"#\" class=\"btn btn-default btn-lg\" id=\"no-reset\" data-dismiss=\"modal\">No</a>")."
-			".Bootstrap::modal("login-modal","<h1>".Bootstrap::glyphicon("play-circle")." Log In</h1>",NULL,"
+			".Bootstrap::modal("login-modal","<h1>".Bootstrap::fontawesome("sign-in-alt")." Log In</h1>",NULL,"
 				<div class=\"form-group\">
 					<div class=\"input-group\">
-						<span class=\"input-group-addon\">".Bootstrap::glyphicon("user")."</span>
+						<span class=\"input-group-addon\">".Bootstrap::fontawesome("user")."</span>
 						<input type=\"text\" class=\"form-control input-lg\" placeholder=\"Username\" id=\"username\" autocomplete=\"off\">
 					</div>
 				</div>
 				<div class=\"form-group\">
 					<div class=\"input-group\">
-						<span class=\"input-group-addon\">".Bootstrap::glyphicon("lock")."</span>
+						<span class=\"input-group-addon\">".Bootstrap::fontawesome("key")."</span>
 						<input type=\"password\" class=\"form-control input-lg\" placeholder=\"Password\" id=\"password\" autocomplete=\"off\">
 					</div>
 				</div>
