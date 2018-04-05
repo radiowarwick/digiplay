@@ -21,7 +21,8 @@ class Bootstrap {
 			"indent-left" => "users",
 			"globe" => "globe",
 			"edit" => "edit",
-			"eye-open" => "eye"
+			"eye-open" => "eye",
+			"plus-sign" => "plus-circle"
 		);
 
 		if(array_key_exists($icon, $conversion))
