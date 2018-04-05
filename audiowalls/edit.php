@@ -41,10 +41,10 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
             echo("Page ".$wall->get_page()+1);
           }
           echo("</span>"); 
-          echo("<span class=\"badge badge-remove\"><span class=\"glyphicon glyphicon-remove\"></span></span>");
-          echo("<span class=\"badge badge-down\"><span class=\"glyphicon glyphicon-arrow-down\"></span></span>");
-          echo("<span class=\"badge badge-up\"><span class=\"glyphicon glyphicon-arrow-up\"></span></span>");
-          echo("<span class=\"badge badge-edit\"><span class=\"glyphicon glyphicon-pencil\"></span></span>");
+          echo("<span class=\"badge badge-remove\">".Bootstrap::fontawesome("times")."</span>");
+          echo("<span class=\"badge badge-down\">".Bootstrap::fontawesome("chevron-down")."</span>");
+          echo("<span class=\"badge badge-up\">".Bootstrap::fontawesome("chevron-up")."</span>");
+          echo("<span class=\"badge badge-edit\">".Bootstrap::fontawesome("pencil-alt")."</span>");
           echo("</a>");
           $w++;
         }

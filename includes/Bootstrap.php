@@ -19,7 +19,9 @@ class Bootstrap {
 			"book" => "book",
 			"user" => "user",
 			"indent-left" => "users",
-			"globe" => "globe"				
+			"globe" => "globe",
+			"edit" => "edit",
+			"eye-open" => "eye"
 		);
 
 		if(array_key_exists($icon, $conversion))
