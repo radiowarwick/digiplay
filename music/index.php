@@ -134,7 +134,7 @@ echo("
 			<tr id=\"".$request->get_id()."\">
 				<td class=\"icon\">
 					<a href=\"#\" class=\"track-info\">
-						".Bootstrap::glyphicon("info-sign")."
+						".Bootstrap::fontawesome("info-circle")."
 					</a>
 					<div class=\"hover-info\">
 						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
@@ -189,7 +189,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-					".Bootstrap::glyphicon("info-sign")."
+					".Bootstrap::fontawesome("info-circle")."
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$track->get_artists_str()."<br />
@@ -209,9 +209,9 @@ if($tracks) {
 			if(Session::is_group_user("Playlist Editor")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
-				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</i></a></td>"); 
+				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::fontawesome("plus-circle")."</i></a></td>"); 
 			}
-			echo((Session::is_group_user("Librarian")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</i></a></td>" : "")."
+			echo((Session::is_group_user("Librarian")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::fontawesome("times-circle")."</i></a></td>" : "")."
 		</tr>");
 	}
 	echo("</table></div>");
@@ -220,7 +220,7 @@ if($tracks) {
 }
 if(Session::is_group_user("Playlist Editor")) {
 	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
-	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::fontawesome("plus-circle").$playlist->get_name()."</a></li>";
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }

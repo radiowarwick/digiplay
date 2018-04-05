@@ -22,7 +22,11 @@ class Bootstrap {
 			"globe" => "globe",
 			"edit" => "edit",
 			"eye-open" => "eye",
-			"plus-sign" => "plus-circle"
+			"plus-sign" => "plus-circle",
+			"search" => "search",
+			"question-sign" => "question-circle",
+			"exclamation-sign" => "exclamation-circle",
+			"upload" => "arrow-alt-circle-up"
 		);
 
 		if(array_key_exists($icon, $conversion))

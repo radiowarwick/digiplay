@@ -22,7 +22,7 @@ function wv_create(id) {
 	wavesurfer[id].on('pause', function() { });
 	wavesurfer[id].on('finish', function() { wavesurfer[id].stop(); })
 	wavesurfer[id].on('stop', function() { 
-		$(wavesurfer[id].container).find('.glyphicon-pause').removeClass('glyphicon-pause').addClass('glyphicon-play');
+		$(wavesurfer[id].container).find('.play-pause').attr('class', 'fa-play play-pause');
 		wv_progress(wavesurfer[id]); 
 	});
 
@@ -57,9 +57,9 @@ function wv_ready(wv) {
 	$(wv.container).find('button').removeAttr('disabled');
 	$(wv.container).find('.playpause').on('click', function() { 
 		if(wv.backend.isPaused()) {
-			$(wv.container).find('.glyphicon-play').removeClass('glyphicon-play').addClass('glyphicon-pause');
+			$(wv.container).find('.play-pause').attr('class', 'fa-pause play-pause');
 		} else {
-			$(wv.container).find('.glyphicon-pause').removeClass('glyphicon-pause').addClass('glyphicon-play');	
+			$(wv.container).find('.play-pause').attr('class', 'fa-play play-pause');	
 		}
 		wv.playPause();
 	});

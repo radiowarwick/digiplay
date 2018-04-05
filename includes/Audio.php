@@ -108,13 +108,13 @@ class Audio {
 					<div>
 						<div>
 							<button class=\"btn btn-primary playpause\" id=\"playpause\" disabled>
-								".Bootstrap::glyphicon("play")."
+								".Bootstrap::fontawesome("play", "play-pause")."
 							</button>
 							<h6><small><span class=\"elapsed\">00:00</span> / <span class=\"duration\">00:00</span></small></h6>
 							<div class=\"row\">
 								<div class=\"col-xs-6\">
 									<button class=\"btn btn-sm btn-info zoom\">
-										".Bootstrap::glyphicon("search")."
+										".Bootstrap::fontawesome("search")."
 									</button>
 								</div>
 							</div>

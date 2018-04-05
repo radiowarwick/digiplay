@@ -16,21 +16,21 @@ echo("
 			$('.track-detail-form').submit(function(event) {
 				event.preventDefault();
 				submit = $(this).find('button[type=\"submit\"]');
-				submit.find('span').removeClass('glyphicon-save').addClass('glyphicon-refresh');
+				submit.find('svg').attr('class', 'fas fa-sync fa-spin');
 				$.ajax({
 					url: '".LINK_ABS."ajax/track-detail-update.php',
 					data: $(this).serialize(),
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						submit.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-save');
+						submit.find('svg').attr('class', 'fa-save');
 						$('h3').after('".Bootstrap::alert_message_basic("danger","'+value.error+'","Error!")."');
 						console.error(value.detail);
 						$('.alert-message').alert();
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						submit.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-save');
+						submit.find('svg').attr('class', 'fa-save');
 						$('h3').after('".Bootstrap::alert_message_basic("success","Track details altered.","Success!",false)."');
 						$('[id=new_artist]').val('');
 						$('[id=artist\\\\[\\\\]]').parent('.col-md-10').remove();
@@ -73,7 +73,7 @@ echo("
 			$('[id=flag]').click(function() {
 				event.preventDefault();
 				t = $(this);
-				t.find('.censor-flag').removeClass('glyphicon-warning-sign').addClass('glyphicon-refresh');
+				t.find('.censor-flag').attr('class', 'censor-flag fas fa-sync fa-spin');
 				$.ajax({
 					url: '".LINK_ABS."ajax/flag.php',
 					data: 'id=".$track->get_id()."&flag=toggle',
@@ -82,11 +82,11 @@ echo("
 						value = $.parseJSON(xhr.responseText);
 						$('h3').after('".Bootstrap::alert_message_basic("danger","'+value.error+'","Error!")."');
 						$('.alert-message').alert();
-						t.find('.censor-flag').removeClass('glyphicon-refresh').addClass('glyphicon-warning-sign');
+						t.find('.censor-flag').attr('class', 'censor-flag fa-exclamation-triangle');
 					},
 					success: function(data,text,xhr) {
 							value = $.parseJSON(xhr.responseText);
-							t.find('.censor-flag').removeClass('glyphicon-refresh').addClass('glyphicon-warning-sign');
+							t.find('.censor-flag').attr('class', 'censor-flag fa-exclamation-triangle');
 							if(value.response == 'flagged') {
 								t.addClass('active');
 								response = 'This track has been flagged for censorship and will be reviewed in due course.';
@@ -108,10 +108,10 @@ echo("
 				item = $(this);
 				playlists = $(this).attr('data-playlists-in').split(',');
 				$('.playlist-select').parent().removeClass('active');
-				$('.playlist-select').find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+				$('.playlist-select').find('svg').attr('class', 'fa-plus-circle');
 				$('.playlist-select').each(function() {
 					if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
-						$(this).find('span').removeClass('icon-plus').addClass('glyphicon-minus');
+						$(this).find('svg').attr('class fa-minus-circle');
 						$(this).parent().addClass('active');
 					}
 				})
@@ -120,43 +120,43 @@ echo("
 			$('.playlist-select').click(function() {
 				obj = $(this);
 				if($(this).parent().hasClass('active')) {
-					$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-refresh');
+					$(this).find('svg').attr('class', 'fas fa-sync fa-spin');
 					$.ajax({
 						url: '".LINK_ABS."ajax/track-playlist-update.php',
 						data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 						type: 'POST',
 						error: function(xhr,text,error) {
 							value = $.parseJSON(xhr.responseText);
-							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+							obj.find('svg').attr('class', 'fa-minus-circle');
 							alert(value.error);
 						},
 						success: function(data,text,xhr) {
 							values = $.parseJSON(data);
-							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+							obj.find('svg').attr('class', 'fa-plus-circle');
 							obj.parent().removeClass('active');
 							item.attr('data-playlists-in',values.playlists.join(','));
 						}
 					});
 				} else {
-					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-refresh');
+					$(this).find('svg').attr('class', 'fas fa-sync fa-spin');
 					$.ajax({
 						url: '".LINK_ABS."ajax/track-playlist-update.php',
 						data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 						type: 'POST',
 						error: function(xhr,text,error) {
 							value = $.parseJSON(xhr.responseText);
-							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+							obj.find('svg').attr('class', 'fa-plus-circle');
 							alert(value.error);
 						},
 						success: function(data,text,xhr) {
 							values = $.parseJSON(data);
-							obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+							obj.find('svg').attr('class', 'fa-minus-circle');
 							obj.parent().addClass('active');
 							item.attr('data-playlists-in',values.playlists.join(','));
 						}
 					});
 					$(this).parent().addClass('active');
-					$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+					$(this).find('svg').attr('class', 'fa-minus-circle');
 				}
 			});		
 " : "").
@@ -270,7 +270,7 @@ echo("
 					<div class=\"form-group\">
 						<div class=\"col-md-10 col-md-offset-2\">
 							<button type=\"submit\" class=\"btn btn-primary btn-block\">
-								".Bootstrap::glyphicon("save save")."
+								".Bootstrap::fontawesome("save", "save")."
 								Save
 							</button>
 						</div>
@@ -279,7 +279,7 @@ echo("
 					echo("<div class=\"form-group\">
 						<div class=\"col-md-10 col-md-offset-2\">
 							<a data-toggle=\"modal\" data-target=\"#delete-modal\" class=\"btn btn-danger btn-block track-delete\" data-dps-id=\"" . $track->get_id() . "\" data-dps-title=\"" . $track->get_title() . "\">
-								".Bootstrap::glyphicon("trash")."
+								".Bootstrap::fontawesome("trash")."
 								Delete
 							</a>
 						</div>
@@ -305,7 +305,7 @@ echo("
 					echo("
 						</div>
 						<div class=\"input-group\">
-							<span class=\"input-group-addon\">".Bootstrap::glyphicon("tag")."</span>
+							<span class=\"input-group-addon\">".Bootstrap::fontawesome("tag")."</span>
 							<input type=\"text\" id=\"new_keyword\" name=\"new_keyword\" class=\"form-control\" ".$disabled." placeholder=\"Add new keyword...\">
 						</div>
 					</div>
@@ -330,8 +330,8 @@ echo("
 						echo("<a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" id=\"playlists\" class=\"playlist-add btn btn-primary btn-block\">".Bootstrap::glyphicon("th-list")." Playlists</a>");
 					}
 					echo("
-					<a href=\"#\" id=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\">".Bootstrap::glyphicon("warning-sign censor-flag")." Flag for censorship</a>
-					".(Session::is_group_user("Music Admin")? "<hr /><a href=\"".LINK_ABS."audio/get/".$track->get_id().".flac\" class=\"btn btn-primary btn-block\">".Bootstrap::glyphicon("download-alt")." Download FLAC</a>" : "")."
+					<a href=\"#\" id=\"flag\" class=\"btn btn-danger btn-block".($track->is_flagged()? " active" : "")."\">".Bootstrap::fontawesome("exclamation-triangle", "censor-flag")." Flag for censorship</a>
+					".(Session::is_group_user("Music Admin")? "<hr /><a href=\"".LINK_ABS."audio/get/".$track->get_id().".flac\" class=\"btn btn-primary btn-block\">".Bootstrap::fontawesome("download")." Download FLAC</a>" : "")."
 				</div>
 			</div>
 		</fieldset>
@@ -339,7 +339,7 @@ echo("
 ");
 if(Session::is_group_user("Playlist Editor")) {
 	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
-	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::fontawesome("plus-circle").$playlist->get_name()."</a></li>";
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }
