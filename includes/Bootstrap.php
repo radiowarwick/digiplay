@@ -3,7 +3,7 @@ class Bootstrap {
 	public static function icon($icon) { return self::glyphicon($icon); }
 
 	// Please use fontawesome instead
-	public static function glyphicon($icon) {
+	public static function glyphicon($icon, $extra='') {
 		// Conversion array for legacy purposes.
 		$conversion = array(
 			// glyphicon => fontawesome
@@ -27,11 +27,15 @@ class Bootstrap {
 			"question-sign" => "question-circle",
 			"exclamation-sign" => "exclamation-circle",
 			"upload" => "arrow-alt-circle-up",
-			"gbp" => "pound-sign"
+			"gbp" => "pound-sign",
+			"inbox" => "inbox",
+			"flash" => "bolt",
+			"list-alt" => "list-alt",
+			"plus" => "plus-circle"
 		);
 
 		if(array_key_exists($icon, $conversion))
-			return self::fontawesome($conversion[$icon]);
+			return self::fontawesome($conversion[$icon], $extra);
 		else
 			return "<span class=\"glyphicon glyphicon-".$icon."\"></span> ";
 	}
@@ -64,7 +68,7 @@ class Bootstrap {
 		foreach($items as $item) {
 			$e = array_key_exists("url", $item)? "a" : ($div? "span" : "li");
 			$h = array_key_exists("url", $item)? " href=\"".$item["url"]."\"" : "";
-			$i = array_key_exists("icon", $item)? self::glyphicon($item["icon"]) : "";
+			$i = array_key_exists("icon", $item)? self::glyphicon($item["icon"], "fa-lg fa-fw fa-pull-left") : "";
 			$b = array_key_exists("badge", $item)? self::badge($item["badge"]) : "";
 			$a = array_key_exists("active", $item)? " active" : "";
 			$return .= "<".$e.$h." class=\"list-group-item".$a."\">".$i.$b.$item["text"]."</".$e.">";
