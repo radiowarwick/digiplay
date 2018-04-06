@@ -229,11 +229,12 @@ switch($_REQUEST["action"]) {
 						$current = true;
 				$return .= "<div class=\"showplan-audio panel ".($current? "panel-primary" : "panel-default")."\" data-item-id=\"".$item->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\">
+						".Bootstrap::fontawesome($type, "fa-fw fa-lg fa-pull-left")."
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">
 								<div class=\"controls\">".Bootstrap::fontawesome("times")."</div>
 								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
-							".Bootstrap::fontawesome($type).($audio->get_artists()? $audio->get_artists_str()." - " : "").$audio->get_title()."
+							".($audio->get_artists()? $audio->get_artists_str()." - " : "").$audio->get_title()."
 						</h4>
 					</div>
 				</div>";
