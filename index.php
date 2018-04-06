@@ -35,11 +35,11 @@ $feature = "
 				<div class=\"col-sm-4\">
 				".((Session::is_user())? "
 					<h2>Common Tasks</h2>
-					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">Upload Audio &raquo;</a>
-					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists &raquo;</a>
-					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content &raquo;</a>
-					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">Report a Fault &raquo;</a>
-					".((Session::is_group_user("Studio Admin"))? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">Reset Playout Systems &raquo;</a>" : "")."
+					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">Upload Audio".Bootstrap::fontawesome("upload", "fa-lg fa-fw fa-pull-left")."</a>
+					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists".Bootstrap::fontawesome("edit", "fa-lg fa-fw fa-pull-left")."</a>
+					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content".Bootstrap::fontawesome("clock", "fa-lg fa-fw fa-pull-left")."</a>
+					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">Report a Fault".Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left")."</a>
+					".((Session::is_group_user("Studio Admin"))? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">Reset Playout Systems".Bootstrap::fontawesome("power-off", "fa-lg fa-fw fa-pull-left")."</a>" : "")."
 				":"
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
 						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">
@@ -77,8 +77,8 @@ MainTemplate::set_feature_html($feature);
 					<dt>Length of Sustainer Playlist</dt>
 					<dd>".Sustainer::get_total_length_formatted()."</dd>
 				</dl>
-				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."sustainer/\">".Bootstrap::glyphicon("headphones")."Now playing</a>
-				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."playlists/detail/0\">".Bootstrap::glyphicon("list")."View playlist</a>
+				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."sustainer/\">".Bootstrap::fontawesome("headphones", "fa-lg fa-fw fa-pull-left")."Now playing</a>
+				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."playlists/detail/0\">".Bootstrap::fontawesome("list-ul", "fa-lg fa-fw fa-pull-left")."View playlist</a>
 			</div>
 			<div class=\"col-sm-4\">
 				<h2>Newest Tracks</h2>");
@@ -89,7 +89,7 @@ MainTemplate::set_feature_html($feature);
 					<tr>
 						<td class=\"icon\">
 							<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-								".Bootstrap::glyphicon("info-sign")."
+								".Bootstrap::fontawesome("info-circle")."
 							</a>
 						</td>
 						<td class=\"title\">".$track->get_title()." by ".$track->get_artists_str()."</td>
@@ -97,7 +97,7 @@ MainTemplate::set_feature_html($feature);
 				}
 				echo("
 				</table>
-				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."music/\">".Bootstrap::glyphicon("chevron-right")."More</a>
+				<a class=\"btn btn-primary btn-block\" href=\"".LINK_ABS."music/\">".Bootstrap::fontawesome("chevron-circle-right", "fa-lg fa-fw fa-pull-left")."More</a>
 			</div>
 		</div>");
 

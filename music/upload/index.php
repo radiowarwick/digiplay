@@ -36,16 +36,16 @@ $(function () {
 		<div class=\"row fileupload-buttonbar\">
 			<div class=\"col-md-6\">
 				<span class=\"btn btn-success fileinput-button\">
-					".Bootstrap::glyphicon("plus icon-white")."
+					".Bootstrap::fontawesome("plus")."
 					<span>Add files</span>
 					<input type=\"file\" name=\"files[]\" multiple>
 				</span>
 				<button type=\"submit\" class=\"btn btn-primary start\">
-					".Bootstrap::glyphicon("upload icon-white")."
+					".Bootstrap::fontawesome("arrow-alt-circle-up")."
 					<span>Start upload</span>
 				</button>
 				<button type=\"reset\" class=\"btn btn-warning cancel\">
-					".Bootstrap::glyphicon("ban-circle icon-white")."
+					".Bootstrap::fontawesome("ban")."
 					<span>Cancel upload</span>
 				</button>
 			</div>

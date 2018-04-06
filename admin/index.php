@@ -11,7 +11,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("volume-up icon-huge")."
+							".Bootstrap::fontawesome("volume-up", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".Tracks::get_total_tracks()."</h2>
@@ -28,7 +28,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("user icon-huge")."
+							".Bootstrap::fontawesome("user", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".Users::count()."</h2>
@@ -45,7 +45,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("tasks icon-huge")."
+							".Bootstrap::fontawesome("clipboard-list", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".Showplans::count()."</h2>
@@ -64,7 +64,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("th icon-huge\" style=\"margin-top: -4px;")."
+							".Bootstrap::fontawesome("th", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".AudiowallSets::count()."</h2>
@@ -81,7 +81,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("envelope icon-huge")."
+							".Bootstrap::fontawesome("envelope", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".Emails::count_unread()."</h2>
@@ -98,7 +98,7 @@ echo("
 				<div class=\"panel-heading\">
 					<div class=\"row dashboard-stamp\">
 						<div class=\"col-xs-5\">
-							".Bootstrap::glyphicon("trash icon-huge")."
+							".Bootstrap::fontawesome("trash-alt", "fa-5x")."
 						</div>
 						<div class=\"col-xs-7\">
 							<h2>".$trash->count()."</h2>

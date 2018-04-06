@@ -22,7 +22,7 @@ class MenuNode{
 		$out = "\n".str_repeat("\t",$tabs);
 		$out .= "<li class=\"".($this->active? "active ":"").($li_class? $li_class : "")."\">";
 		$out .= "<a href=\"".$this->url($path)."\">";
-		if(strlen($this->icon) > 0)  $out .= Bootstrap::glyphicon($this->icon);
+		if(strlen($this->icon) > 0)  $out .= Bootstrap::fontawesome($this->icon, "fa-lg fa-fw fa-pull-left");
 		$out .= $this->label."</a>";
 		if(isset($this->menu))	$out .= $this->menu->output($path.$this->url."/",$tabs+1);
 		$out  .= "</li>";

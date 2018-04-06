@@ -149,7 +149,7 @@ foreach (Playlists::get_all(false) as $playlist) {
 		<tr>
 			<td>
 				<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" class=\"info\">
-					".Bootstrap::glyphicon("info-sign")."
+					".Bootstrap::fontawesome("info-circle")."
 					<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 				</a>
 				<div class=\"hover-info\">
@@ -169,17 +169,17 @@ foreach (Playlists::get_all(false) as $playlist) {
 		echo("
 			<td>
 				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
-					".Bootstrap::glyphicon("pencil")."
+					".Bootstrap::fontawesome("pencil-alt")."
 				</a>
 			</td>
 			<td>
 				<a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"delete-playlist\" title=\"Delete this playlist\" rel=\"twipsy\">
-					".Bootstrap::glyphicon("remove-sign")."
+					".Bootstrap::fontawesome("times-circle")."
 				</a>
 			</td>
 			<td>
 				<a href=\"#\" class=\"move\">
-					".Bootstrap::glyphicon("move move")."
+					".Bootstrap::fontawesome("arrows-alt-v", "move")."
 				</a>
 			</td>
 		");
@@ -219,7 +219,7 @@ if(Session::is_group_user("Playlist Admin")) {
 			<tr>
 				<td>
 					<a href=\"".LINK_ABS."playlists/detail/".$playlist->get_id()."\" class=\"info\">
-						".Bootstrap::glyphicon("info-sign")."
+						".Bootstrap::fontawesome("info-circle")."
 						<input type=\"hidden\" name=\"id[]\" value=\"".$playlist->get_id()."\">
 					</a>
 					<div class=\"hover-info\">
@@ -236,17 +236,17 @@ if(Session::is_group_user("Playlist Admin")) {
 				<td>".count($playlist->get_tracks())."</td>
 				<td>
 					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
-						".Bootstrap::glyphicon("pencil")."
+						".Bootstrap::fontawesome("pencil-alt")."
 					</a>
 				</td>
 				<td>
 					<a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"delete-playlist\" title=\"Delete this playlist\" rel=\"twipsy\">
-						".Bootstrap::glyphicon("remove-sign")."
+						".Bootstrap::fontawesome("times-circle")."
 					</a>
 				</td>
 				<td>
 					<a href=\"#\" class=\"move\">
-						".Bootstrap::glyphicon("move move")."
+						".Bootstrap::fontawesome("arrows-alt-v", "move")."
 					</a>
 				</td>
 			</tr>");

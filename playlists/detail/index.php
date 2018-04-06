@@ -71,7 +71,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-					".Bootstrap::glyphicon("info-sign")."
+					".Bootstrap::fontawesome("info-circle")."
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$track->get_artists_str()."<br />
@@ -87,7 +87,7 @@ if($tracks) {
 			<td class=\"title\">".$track->get_title()."</td>
 			<td class=\"album\">".$track->get_album()->get_name()."</td>
 			<td class=\"length nowrap\">".Time::format_succinct($track->get_length())."</td>");
-			echo((Session::is_group_user("Playlist Editor")? "<td class=\"icon\"><a href=\"#\" data-dps-track-id=\"".$track->get_id()."\" data-dps-playlist-id=\"".$playlist->get_id()."\" class=\"track-remove\" title=\"Remove this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</a></td>" : "")."
+			echo((Session::is_group_user("Playlist Editor")? "<td class=\"icon\"><a href=\"#\" data-dps-track-id=\"".$track->get_id()."\" data-dps-playlist-id=\"".$playlist->get_id()."\" class=\"track-remove\" title=\"Remove this track\" rel=\"twipsy\">".Bootstrap::fontawesome("times-circle")."</a></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
@@ -96,7 +96,7 @@ if($tracks) {
 } else {
 	if($playlist) {
 		echo("<h3>Sorry, no tracks are on the playlist '".$playlist->get_name()."'</h3>");
-		if(Session::is_group_user("Playlist Editor")) echo("<h4>You can add tracks by finding them in the music library and clicking the ".Bootstrap::glyphicon("plus-sign").".</h4>");
+		if(Session::is_group_user("Playlist Editor")) echo("<h4>You can add tracks by finding them in the music library and clicking the ".Bootstrap::fontawesome("plus-circle").".</h4>");
 	} else {
 		echo("Invalid playlist.");
 	}

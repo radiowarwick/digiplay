@@ -38,13 +38,13 @@ if($tracks) {
 ".(Session::is_group_user("Playlist Admin") ? "
 		var item;
 		$('.playlist-add').click(function() {
-			item = $(this).parent().parent();
+			item = $(this);
 			playlists = $(this).attr('data-playlists-in').split(',');
 			$('.playlist-select').parent().removeClass('active');
-			$('.playlist-select').find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+			$('.playlist-select').find('svg').attr('class', 'fa-plus-circle');
 			$('.playlist-select').each(function() {
 				if($.inArray($(this).attr('data-playlist-id'),playlists) > -1) {
-					$(this).find('span').removeClass('icon-plus').addClass('glyphicon-minus');
+					$(this).find('svg').attr('class fa-minus-circle');
 					$(this).parent().addClass('active');
 				}
 			})
@@ -53,45 +53,45 @@ if($tracks) {
 		$('.playlist-select').click(function() {
 			obj = $(this);
 			if($(this).parent().hasClass('active')) {
-				$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-refresh');
+				$(this).find('svg').attr('class', 'fas fa-sync fa-spin');
 				$.ajax({
 					url: '".LINK_ABS."ajax/track-playlist-update.php',
-					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
+					data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=del',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+						obj.find('svg').attr('class', 'fa-minus-circle');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+						obj.find('svg').attr('class', 'fa-plus-circle');
 						obj.parent().removeClass('active');
-						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
+						item.attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 			} else {
-				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-refresh');
+				$(this).find('svg').attr('class', 'fas fa-sync fa-spin');
 				$.ajax({
 					url: '".LINK_ABS."ajax/track-playlist-update.php',
-					data: 'trackid='+item.attr('id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
+					data: 'trackid='+item.attr('data-dps-id')+'&playlistid='+obj.attr('data-playlist-id')+'&action=add',
 					type: 'POST',
 					error: function(xhr,text,error) {
 						value = $.parseJSON(xhr.responseText);
-						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-plus');
+						obj.find('svg').attr('class', 'fa-plus-circle');
 						alert(value.error);
 					},
 					success: function(data,text,xhr) {
 						values = $.parseJSON(data);
-						obj.find('span').removeClass('glyphicon-refresh').addClass('glyphicon-minus');
+						obj.find('svg').attr('class', 'fa-minus-circle');
 						obj.parent().addClass('active');
-						item.find('.playlist-add').attr('data-playlists-in',values.playlists.join(','));
+						item.attr('data-playlists-in',values.playlists.join(','));
 					}
 				});
 				$(this).parent().addClass('active');
-				$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+				$(this).find('svg').attr('class', 'fa-minus-circle');
 			}
-		});		
+		});	
 " : "").
 (Session::is_group_user("Music Admin") ? "
 		var trackid;
@@ -139,7 +139,7 @@ if($tracks) {
 		<tr id=\"".$track->get_id()."\">
 			<td class=\"icon\">
 				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
-					".Bootstrap::glyphicon("info-sign")."
+					".Bootstrap::fontawesome("info-circle")."
 				</a>
 				<div class=\"hover-info\">
 					<strong>Artist:</strong> ".$track->get_artists_str()."<br />
@@ -158,9 +158,9 @@ if($tracks) {
 			if(Session::is_group_user("Playlist Admin")) {
 				$playlists = array();
 				foreach($track->get_playlists_in() as $playlist) $playlists[] = $playlist->get_id();
-				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::glyphicon("plus-sign")."</a></td>"); 
+				echo("<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#playlist-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" data-playlists-in=\"".implode(",",$playlists)."\" class=\"playlist-add\" title=\"Add to playlist\" rel=\"twipsy\">".Bootstrap::fontawesome("plus-circle")."</a></td>"); 
 			}
-			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</a></td>" : "")."
+			echo((Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"#\" data-toggle=\"modal\" data-target=\"#delete-modal\" data-backdrop=\"true\" data-keyboard=\"true\" data-dps-id=\"".$track->get_id()."\" class=\"track-delete\" title=\"Delete this track\" rel=\"twipsy\">".Bootstrap::fontawesome("times-circle")."</a></td>" : "")."
 		</tr>");
 	}
 	echo("</table>");
@@ -180,7 +180,7 @@ if($tracks) {
 
 if(Session::is_group_user("Playlist Admin")) {
 	$playlist_modal_content = "<p>Select a playlist to add/remove <span class=\"playlist-track-title\">this track</span> to/from:</p><ul class=\"nav nav-pills nav-stacked\">";
-	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::glyphicon("plus").$playlist->get_name()."</a></li>";
+	foreach(Playlists::get_all() as $playlist) $playlist_modal_content .= "<li><a href=\"#\" class=\"playlist-select\" data-playlist-id=\"".$playlist->get_id()."\">".Bootstrap::fontawesome("plus-circle").$playlist->get_name()."</a></li>";
 	$playlist_modal_content .= "</ul>";
 	echo(Bootstrap::modal("playlist-modal", $playlist_modal_content, "Add to playlist", "<a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">Done</a> <a href=\"".LINK_ABS."playlists\" class=\"btn btn-default\">Manage playlists</a>"));
 }

@@ -131,7 +131,7 @@ foreach ($slots as $slot) {
 	$thisPlaylist = Playlists::get_by_id($slot->get_playlist_id());
 	$thisPlaylistColour = ($thisPlaylist->get_colour() == "" ? 'FFFFFF' : $thisPlaylist->get_colour());
 	echo("<td class='timeslot' id='slot-".$slot->get_day()."-".$slot->get_time()."' style='background-color: #".$thisPlaylistColour.";'>");
-	echo($slot->get_audio_id() == NULL ? '' : "<span class=\"glyphicon glyphicon-time\" aria-hidden=\"true\"></span>");
+	echo($slot->get_audio_id() == NULL ? '' : Bootstrap::fontawesome("clock"));
 	echo("</td>");
 	$i++;
 	if ($i > 6) {

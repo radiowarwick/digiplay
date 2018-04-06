@@ -24,7 +24,7 @@ foreach($settings as $setting){
 				<td class=\"icon\">
 					
 					  <!-- Button trigger modal -->
-					  <a data-toggle=\"modal\" href=\"#".$setting->get_parameter()."\"><span class='glyphicon glyphicon-edit'></span></a>
+					  <a data-toggle=\"modal\" href=\"#".$setting->get_parameter()."\">".Bootstrap::fontawesome("edit")."</a>
 
 					  <!-- Modal -->
 					  <div class=\"modal fade\" id=\"".$setting->get_parameter()."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">

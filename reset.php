@@ -5,8 +5,8 @@ Output::set_title("Playout Reset");
 if (Session::is_group_user("Studio Admin")){
 echo("<div class=\"row\">
 	<div class=\"col-md-3 list-group\">
-		<a href=\"./studio/manage?location=1\" class=\"list-group-item\"><span class=\"glyphicon glyphicon-check\"></span> Manage Studio 1</a>
-		<a href=\"./studio/manage?location=2\" class=\"list-group-item\"><span class=\"glyphicon glyphicon-check\"></span> Manage Studio 2</a>
+		<a href=\"./studio/manage?location=1\" class=\"list-group-item\">".Bootstrap::fontawesome("sign-in-alt")."Manage Studio 1</a>
+		<a href=\"./studio/manage?location=2\" class=\"list-group-item\">".Bootstrap::fontawesome("sign-in-alt")."Manage Studio 2</a>
 	</div>
 	<div class=\"col-md-4 jumbotron\">
 		<h1>Reset Playout 1</h1>

@@ -57,7 +57,7 @@ if($requested = Requests::get_all()) {
 		<td class=\"title\">".$request->get_name()."</td>
 		<td class=\"date nowrap\">".date("d/m/Y H:i",$request->get_date())."</td>
 		<td class=\"requester nowrap\">".$request->get_user()->get_username()."</td>
-		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("remove-sign")."</td>" : "")."
+		".(Session::is_group_user("Music Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/?delete=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::fontawesome("times-circle")."</td>" : "")."
 	</tr>");
 	}
 	echo("

@@ -72,7 +72,7 @@ switch($_REQUEST["action"]) {
 
 				if($censor_time && $track->is_censored() && ($location->get_id() != $prerecord_location)) continue;
 				$return .= "<tr data-track-id=\"".$track->get_id()."\" class=\"track ".$trackHotness."\">
-					<td class=\"icon\">".($track->is_censored() ? "<span style=\"color: rgb(219, 53, 53);\">".Bootstrap::glyphicon("exclamation-sign")."</span>" : Bootstrap::glyphicon("music"))."</td>
+					<td class=\"icon\">".($track->is_censored() ? "<span style=\"color: rgb(219, 53, 53);\">".Bootstrap::fontawesome("exclamation-circle")."</span>" : Bootstrap::fontawesome("music"))."</td>
 					<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 					<td class=\"title nowrap\">".$track->get_title()."</td>
 					<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
@@ -100,7 +100,7 @@ switch($_REQUEST["action"]) {
 			<tbody>";
 		foreach($emails as $email) {
 			$return .= "<tr data-message-id=\"".$email->get_id()."\">
-				<td class=\"icon\">".($email->get_new_flag()? Bootstrap::glyphicon("envelope") : "")."</td>
+				<td class=\"icon\">".($email->get_new_flag()? Bootstrap::fontawesome("envelope") : "")."</td>
 				<td class=\"from nowrap\">".$email->get_sender()."</td>
 				<td class=\"subject nowrap\">".$email->get_subject()."</td>
 				<td class=\"datetime nowrap\">".date("d/m/y H:i", $email->get_datetime())."</td>
@@ -121,7 +121,7 @@ switch($_REQUEST["action"]) {
 			$return .= "
 				<div class=\"panel panel-default\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#playlist-".$playlist->get_id()."\">
-						<h4 class=\"panel-title\">".Bootstrap::glyphicon("play-circle").$playlist->get_name()."</h4>
+						<h4 class=\"panel-title\">".Bootstrap::fontawesome("chevron-circle-right").$playlist->get_name()."</h4>
 					</div>
 					<div id=\"playlist-".$playlist->get_id()."\" class=\"panel-collapse collapse\">
 						<table class=\"table table-striped table-hover\">
@@ -153,7 +153,7 @@ switch($_REQUEST["action"]) {
 
 				$return .= "
 								<tr data-track-id=\"".$track->get_id()."\" class=\"track ".$trackHotness."\">
-									<td class=\"icon\">".Bootstrap::glyphicon("music")."</td>
+									<td class=\"icon\">".Bootstrap::fontawesome("music")."</td>
 									<td class=\"artist nowrap\">".$track->get_artists_str()."</td>
 									<td class=\"title nowrap\">".$track->get_title()."</td>
 									<td class=\"album nowrap\">".$track->get_album()->get_name()."</td>
@@ -193,7 +193,7 @@ switch($_REQUEST["action"]) {
 			<tbody>";
 		foreach($logitems as $logitem) {
 			$return .= "<tr data-log-id=\"logitem-".$logitem->get_id()."\">
-				<td class=\"icon\">".Bootstrap::glyphicon("headphones")."</td>
+				<td class=\"icon\">".Bootstrap::fontawesome("headphones")."</td>
 				<td class=\"artist nowrap\">".$logitem->get_track_artist()."</td>
 				<td class=\"title nowrap\">".$logitem->get_track_title()."</td>
 				<td class=\"datetime nowrap\">".date("d/m/y H:i", $logitem->get_datetime())."</td>
@@ -229,11 +229,12 @@ switch($_REQUEST["action"]) {
 						$current = true;
 				$return .= "<div class=\"showplan-audio panel ".($current? "panel-primary" : "panel-default")."\" data-item-id=\"".$item->get_id()."\">
 					<div class=\"panel-heading\" data-toggle=\"collapse\">
+						".Bootstrap::fontawesome($type, "fa-fw fa-lg fa-pull-left")."
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">
-								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
+								<div class=\"controls\">".Bootstrap::fontawesome("times")."</div>
 								<div class=\"duration\">".Time::format_succinct($audio->get_length())."</div></div>
-							".Bootstrap::glyphicon($type).($audio->get_artists()? $audio->get_artists_str()." - " : "").$audio->get_title()."
+							".($audio->get_artists()? $audio->get_artists_str()." - " : "").$audio->get_title()."
 						</h4>
 					</div>
 				</div>";
@@ -244,10 +245,10 @@ switch($_REQUEST["action"]) {
 					<div class=\"panel-heading\" data-toggle=\"collapse\" href=\"#item-".$item->get_id()."-toggle\">
 						<h4 class=\"panel-title\">
 							<div class=\"pull-right\">
-								<div class=\"controls\">".Bootstrap::glyphicon("remove")."</div>
+								<div class=\"controls\">".Bootstrap::fontawesome("times")."</div>
 								<div class=\"duration\">".($script->get_length() > 0? Time::format_succinct($script->get_length()) : "")."</div>
 							</div>
-							".Bootstrap::glyphicon("file").$script->get_name()."
+							".Bootstrap::fontawesome("file").$script->get_name()."
 						</h4>
 					</div>
 					<div id=\"item-".$item->get_id()."-toggle\" class=\"panel-collapse collapse\">
