@@ -4,7 +4,10 @@
     user-select: none; overflow:none; }
     li.spacer { padding:0px; margin:5px; width:175px; height:110px; }
 	.dps-aw-item .length { display:block; margin-top:10px; }
-	.dps-aw-item { overflow:hidden; }
+	.dps-aw-item {
+		overflow:hidden;
+		position: relative;
+	}
 	.dps-aw-item:hover { cursor:pointer; }
 	#tray-wrap { background-color:#eee; -moz-border-radius: 10px; border-radius: 10px; padding:5px; margin:20px 0px; position:relative; min-height:125px; -moz-user-select: -moz-none;
     -webkit-user-select: none;
@@ -36,3 +39,9 @@ ul.tabs li { float:none; display:inline-block; }
 table .icon { width: 16px; }
 
 #wall-name { display: none; }
+
+.play-audio {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+}

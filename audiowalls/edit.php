@@ -69,8 +69,16 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
           $styleid = $item->get_style();
           $rgb = $styleid->get_background_rgb();
           while ($i < $item->get_item()) { echo("<li data-dps-aw-slot=\"".$i."\" class=\"spacer\"></li>"); $i++; }
-          $audio = $item->get_audio();
-            echo("<li data-dps-aw-slot=\"".$i."\" class=\"spacer\"><div data-dps-audio-id=\"".$item->get_audio_id()."\" data-dps-aw-style=\"".$item->get_style_id()."\" style=\"background-color: ".$rgb.";\" data-dps-item-id=\"".$item->get_id()."\" class=\"dps-aw-item dps-aw-style-".$item->get_style_id()."\"><span class=\"text\">".$item->get_text()."</span><span class=\"length\" data-dps-audio-length=\"".$audio->get_length()."\">".$audio->get_length_formatted()."</span></div></li>");
+            $audio = $item->get_audio();
+            echo("<li data-dps-aw-slot=\"".$i."\" class=\"spacer\">
+              <div data-dps-audio-id=\"".$item->get_audio_id()."\" data-dps-aw-style=\"".$item->get_style_id()."\" style=\"background-color: ".$rgb.";\" data-dps-item-id=\"".$item->get_id()."\" class=\"dps-aw-item dps-aw-style-".$item->get_style_id()."\">
+                <span class=\"text\">".$item->get_text()."</span>
+                <span class=\"length\" data-dps-audio-length=\"".$audio->get_length()."\">".$audio->get_length_formatted()."</span>
+                <span class=\"play-audio\" data-dps-audio-id=\"".$item->get_audio_id()."\" data-dps-action=\"play\">
+                  ".Bootstrap::fontawesome("play-circle", "fa-lg")."
+                </span>
+              </div>
+            </li>");
             $i++;
         }
         while ($i < 12) { echo("<li data-dps-aw-slot=\"".$i."\" class=\"spacer\"></li>"); $i++; }
@@ -321,4 +329,7 @@ echo("<span id=\"wall-name\" data-dps-set-id=\"".$aw_set->get_id()."\">".$aw_set
       </div>
     </div>
   </div>
+</div>
+
+<div id="audio-container">
 </div>
