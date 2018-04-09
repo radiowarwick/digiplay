@@ -91,7 +91,7 @@ $(function () {
 					track = results[i];
 
 					// Create row and fill with data
-					row = $("<tr></tr>").appendTo("#search-results tbody"); 
+					row = $("<tr></tr>").appendTo("#search-results tbody");
 
 					linkIcon = "<a href='../music/detail/" + track["id"] + "' target='_blank' title='Track information'><span class='fa fa-info-circle'></span></a>";
 					row.append("<td>" + linkIcon + "</td>");
@@ -105,7 +105,13 @@ $(function () {
 					else
 						row.append("<td>(none)</td>");
 					row.append("<td>" + track["album"] + "</td>");
-					row.append("<td id='length' data-dps-audio-length='" + track["length2"] + "'>" + track["length"] + "</td>");
+
+					playIcon = "<span class='play-audio' data-dps-audio-id='" + track["id"] + "' data-dps-action='play'><i class='fa fa-play-circle fa-lg'></i></span>";
+					row.append("<td>" + playIcon + "</td>");
+
+					row.append("<td id='length' class='length' data-dps-audio-length='" + track["length2"] + "'>" + track["length"] + "</td>");
+
+					row.find(".play-audio").click(audioPreviewClick);
 
 					// When plus is clicked create div and add to tray.
 					row.find("a[href='#']").click(function(e){
@@ -502,7 +508,10 @@ $(function () {
 function audioPreviewClick() {
 	audioID = $(this).attr("data-dps-audio-id");
 	action = $(this).attr("data-dps-action");
+	parent = audioPreviewParent($(this));
 	console.log(audioID + ", " + action);
+
+
 	if(action == "play") {
 		if($(this).parent().find("audio").length > 0) {
 			audio = $(this).next().get(0);
@@ -511,10 +520,10 @@ function audioPreviewClick() {
 
 			$(this).find("svg").attr("class", "fa-stop-circle fa-lg");
 			$(this).attr("data-dps-action", "stop");
-			$(this).parent().find(".length").css("font-weight", "bold");
+			parent.find(".length").css("font-weight", "bold");
 		}
 		else {
-			audioElement = $("<audio src='../audio/preview/" + audioID + ".mp3' id='audio-" + audioID + "' style='display:none;'>");
+			audioElement = $("<audio src='../audio/preview/" + audioID + ".mp3' style='display:none;'>");
 			
 			$(this).after(audioElement);
 			$(this).attr("data-dps-action", "loading");
@@ -522,33 +531,39 @@ function audioPreviewClick() {
 
 			// when audio is loaded
 			audioElement.on("canplaythrough", function(){
-				$(this).parent().find(".length").css("font-weight", "bold");
+				parent = audioPreviewParent($(this));
+
+				parent.find(".length").css("font-weight", "bold");
 				$(this).get(0).play();
-				$(this).parent().find(".play-audio").attr("data-dps-action", "stop");
-				$(this).parent().find(".play-audio").find("svg").attr("class", "fa-stop-circle fa-lg");
+				parent.find(".play-audio").attr("data-dps-action", "stop");
+				parent.find(".play-audio").find("svg").attr("class", "fa-stop-circle fa-lg");
 			});
 
 			// when audio has stopped playing
 			audioElement.on("ended", function(){
-				$(this).get(0).pause();
-				$(this).parent().find(".play-audio").attr("data-dps-action", "play");
-				$(this).parent().find(".play-audio").find("svg").attr("class", "fa-play-circle fa-lg");
+				parent = audioPreviewParent($(this));
 
-				$(this).parent().find(".length").css("font-weight", "initial");
+				$(this).get(0).pause();
+				parent.find(".play-audio").attr("data-dps-action", "play");
+				parent.find(".play-audio").find("svg").attr("class", "fa-play-circle fa-lg");
+
+				parent.find(".length").css("font-weight", "initial");
 				$(this).trigger("timeupdate");
 			});
 
 			// periodic updates when audio is playing
 			audioElement.on("timeupdate", function(){
+				parent = audioPreviewParent($(this));
+
 				if($(this).get(0).paused)
 					time = 0;
 				else
 					time = $(this).get(0).currentTime;
 
-				length = $(this).parent().find(".length").attr("data-dps-audio-length");
+				length = parent.find(".length").attr("data-dps-audio-length");
 				timeString = formatTimeLeft(length, time);
 
-				$(this).parent().find(".length").text(timeString);
+				parent.find(".length").text(timeString);
 			});
 		}
 	}
@@ -558,7 +573,7 @@ function audioPreviewClick() {
 		$(this).attr("data-dps-action", "play");
 		$(this).find("svg").attr("class", "fa-play-circle fa-lg");
 
-		$(this).parent().find(".length").css("font-weight", "initial");
+		parent.find(".length").css("font-weight", "initial");
 	}
 }
 
@@ -576,6 +591,27 @@ function formatTimeLeft(length, played) {
 		seconds = "0" + seconds;
 
 	return minutes + "m " + seconds + "s";
+}
+
+// returns correct element if a search result or block
+// if in block
+// <li> <- return this
+// 	...
+//  <span class='play-audio'></span>
+//	<audio></audio>
+// </li>
+// if in table
+// <tr> <- return this
+//	<td>
+//		<span class='play-audio'>
+//		<audio></audio>
+//	</td>
+// </td>
+function audioPreviewParent(element) {
+	if(element.parent().is("td"))
+		return element.parent().parent();
+	else
+		return element.parent();
 }
 
 // Re-number walls

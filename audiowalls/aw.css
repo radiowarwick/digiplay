@@ -40,8 +40,16 @@ table .icon { width: 16px; }
 
 #wall-name { display: none; }
 
-.play-audio {
+li span.play-audio {
 	position: absolute;
 	bottom: 10px;
 	left: 10px;
+}
+
+td span.play-audio {
+	color: #428bca;
+}
+
+td.length {
+	width: 80px;
 }
