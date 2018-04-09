@@ -40,13 +40,13 @@ table .icon { width: 16px; }
 
 #wall-name { display: none; }
 
-li span.play-audio {
+div>span.play-audio {
 	position: absolute;
 	bottom: 10px;
 	left: 10px;
 }
 
-td span.play-audio {
+td>span.play-audio {
 	color: #428bca;
 }
 
