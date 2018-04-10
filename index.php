@@ -35,11 +35,11 @@ $feature = "
 				<div class=\"col-sm-4\">
 				".((Session::is_user())? "
 					<h2>Common Tasks</h2>
-					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">Upload Audio".Bootstrap::fontawesome("upload", "fa-lg fa-fw fa-pull-left")."</a>
-					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">Edit Playlists".Bootstrap::fontawesome("edit", "fa-lg fa-fw fa-pull-left")."</a>
-					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">Schedule Prerecorded Content".Bootstrap::fontawesome("clock", "fa-lg fa-fw fa-pull-left")."</a>
-					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">Report a Fault".Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left")."</a>
-					".((Session::is_group_user("Studio Admin"))? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">Reset Playout Systems".Bootstrap::fontawesome("power-off", "fa-lg fa-fw fa-pull-left")."</a>" : "")."
+					<a href=\"music/upload/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("upload", "fa-lg fa-fw fa-pull-left")."Upload Audio</a>
+					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("edit", "fa-lg fa-fw fa-pull-left")."Edit Playlists</a>
+					<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("clock", "fa-lg fa-fw fa-pull-left")."Schedule Prerecorded Content</a>
+					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left")."Report a Fault</a>
+					".((Session::is_group_user("Studio Admin"))? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("power-off", "fa-lg fa-fw fa-pull-left")."Reset Playout Systems</a>" : "")."
 				":"
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
 						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">

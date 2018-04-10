@@ -526,11 +526,13 @@ function audioPreviewClick() {
 			audioElement = $("<audio src='../audio/preview/" + audioID + ".mp3' style='display:none;'>");
 			
 			$(this).after(audioElement);
+			audioElement.load();
+
 			$(this).attr("data-dps-action", "loading");
 			$(this).find("svg").attr("class", "fa-sync fa-spin fa-lg");
 
 			// when audio is loaded
-			audioElement.on("canplaythrough", function(){
+			audioElement.on("canplay", function(){
 				parent = audioPreviewParent($(this));
 
 				parent.find(".length").css("font-weight", "bold");
