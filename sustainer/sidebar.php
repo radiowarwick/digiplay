@@ -12,15 +12,6 @@ function menu() {
 	return Bootstrap::list_group($menu);
 }
 function sidebar() {
-
-	foreach(Playlists::get_all(false) as $playlist) {
-		foreach ($playlist->get_tracks() as $track) {
-			$tracks++;
-			$total_length += $track->get_length();
-		}
-	}
-	
-
 	$return .= "
 	<h4>Sustainer Service</h4>
 	<dl>
@@ -28,7 +19,33 @@ function sidebar() {
 		<dd>".Sustainer::get_total_tracks()."</dd>
 		<dt>Length of Sustainer Playlist</dt>
 		<dd>".Sustainer::get_total_length_formatted()."</dd>
-	</dl>";
+	</dl>
+	<h4>Sustainer Playlists</h4>
+	<div class=\"list-group\">
+	";
+
+	foreach(Playlists::get_sustainer() as $playlist) {
+		$color = $playlist->get_colour();
+		if($color == "") {
+			$color = "initial";
+			$text = "#000";
+		}
+		else {
+			$red = hexdec(substr($color, 0, 2));
+			$green = hexdec(substr($color, 2, 2));
+			$blue = hexdec(substr($color, 4, 2));
+
+			if(($red*0.299 + $green*0.587 + $blue*0.114) > 186)
+				$text = "#000";
+			else
+				$text = "#fff";
+			$color = "#" . $color;
+		}
+
+		$return .= "<a href=\"../playlists/detail/".$playlist->get_id()."\" class=\"list-group-item\" style=\"background-color:".$color.";color:".$text."\">".$playlist->get_name()."</a>";
+	}
+
+	$return .= "</div>";
 
 	return $return;
 }
