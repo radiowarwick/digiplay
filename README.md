@@ -1,4 +1,4 @@
-# Digiplay
+# Digiplay ![](https://api.travis-ci.org/radiowarwick/digiplay.svg?branch=master)
 
 This is a new implementation of the Digiplay Management Website.
 
