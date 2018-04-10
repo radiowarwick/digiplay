@@ -1,11 +1,13 @@
 <?php
 
-require "../includes/Fault.php";
+require "includes/Fault.php";
+
+use PHPUnit\Framework\TestCase;
  
-class FaultTests extends PHPUnit_Framework_TestCase
+class FaultTests extends TestCase
 {
     private $fault;
- 
+
     protected function setUp()
     {
         $this->fault = new Fault();
@@ -18,8 +20,14 @@ class FaultTests extends PHPUnit_Framework_TestCase
  
     public function testStatus()
     {
-        $result = $this->fault->setStatus(2);
-        $this->assertEquals("On hold", $result);
+        $this->fault->set_status(1);
+        $this->assertEquals("Not yet read", $this->fault->get_real_status());
+        $this->fault->set_status(2);
+        $this->assertEquals("On hold", $this->fault->get_real_status());
+        $this->fault->set_status(3);
+        $this->assertEquals("Work in progress", $this->fault->get_real_status());
+        $this->fault->set_status(4);
+        $this->assertEquals("Fault complete", $this->fault->get_real_status());
     }
  
 }
