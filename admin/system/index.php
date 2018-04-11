@@ -1,4 +1,6 @@
 <?php
+
+Output::require_group("Administrators");
 Output::set_title("System Configuration");
 MainTemplate::set_subtitle("View and edit system configuration settings");
 

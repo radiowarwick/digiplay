@@ -1,4 +1,6 @@
 <?php
+
+Output::require_group("Administrators");
 Output::set_title("User Administration");
 MainTemplate::set_subtitle("View and edit user configuration settings");
 

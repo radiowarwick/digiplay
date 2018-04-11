@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Administrators");
 Output::set_title("Location Configuration");
 
 MainTemplate::set_subtitle("View and edit configuration settings for each location");

@@ -1,4 +1,6 @@
 <?php
+
+Output::require_group("Administrators");
 Output::set_title("Administration");
 MainTemplate::set_subtitle("Control every aspect of the Digiplay system");
 
