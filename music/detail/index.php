@@ -266,17 +266,17 @@ echo("
 								</label>
 							</div>
 						</div>
-					</div>
-					<div class=\"form-group\">
+					</div>");
+				if(Session::is_group_user("Music Admin")) {
+					echo("<div class=\"form-group\">
 						<div class=\"col-md-10 col-md-offset-2\">
 							<button type=\"submit\" class=\"btn btn-primary btn-block\">
 								".Bootstrap::fontawesome("save", "save")."
 								Save
 							</button>
 						</div>
-					</div>");
-				if(Session::is_user("Music Admin") && $track->get_dirid() != 3) {
-					echo("<div class=\"form-group\">
+					</div>
+					<div class=\"form-group\">
 						<div class=\"col-md-10 col-md-offset-2\">
 							<a data-toggle=\"modal\" data-target=\"#delete-modal\" class=\"btn btn-danger btn-block track-delete\" data-dps-id=\"" . $track->get_id() . "\" data-dps-title=\"" . $track->get_title() . "\">
 								".Bootstrap::fontawesome("trash")."
