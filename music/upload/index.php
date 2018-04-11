@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Uploader");
 Output::set_title("Music Upload");
 Output::add_script(LINK_ABS."js/jquery.ui.widget.js");
 Output::add_script(LINK_ABS."js/tmpl.min.js");

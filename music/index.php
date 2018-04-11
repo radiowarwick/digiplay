@@ -116,54 +116,69 @@ echo("
 		</dl>
 	</div>
 	<div class=\"col-sm-7\">
-		<h3>Requested Tracks</h3>
-		");
-		if($requested = Requests::get_latest(3)) {
-			echo("
-		<table class=\"table table-striped table-condensed\" cellspacing=\"0\">
-			<thead>
-				<tr>
-					<th class=\"icon\"></th>
-					<th class=\"artist\">Artist</th>
-					<th class=\"title\">Title</th>".(Session::is_group_user("Requests Admin")? "
-					<th class=\"icon\"></th>" : "")."
-				</tr>
-			</thead>");
-			foreach($requested as $request) {
-				echo("
-			<tr id=\"".$request->get_id()."\">
-				<td class=\"icon\">
-					<a href=\"#\" class=\"track-info\">
-						".Bootstrap::fontawesome("info-circle")."
-					</a>
-					<div class=\"hover-info\">
-						<strong>Artist:</strong> ".$request->get_artist_name()."<br />
-						<strong>Title:</strong> ".$request->get_name()."<br />
-						<strong>Date Requested:</strong> ".date("d/m/Y H:i",$request->get_date())."<br />
-						<strong>Requester:</strong> ".$request->get_user()->get_username()."<br />
-					</div>
-				</td>
-				<td class=\"artist\">".$request->get_artist_name()."</td>
-				<td class=\"title\">".$request->get_name()."</td>
-				".(Session::is_group_user("Requests Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("minus-sign")."</td>" : "")."
-			</tr>");
-			}
-			echo("
-		</table>");
-			$total_requests = Requests::count();
-			if($total_requests <= count($requested)) {
-				echo("<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
-			} else {
-				echo("<a href=\"".LINK_ABS."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
-			}
-		} else {
-			echo("
-		<strong>No new requested tracks.</strong><br />
-		<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
-		}
-		echo("
+		<h3>New Music</h3>
+		<p>
+			Have some music that you want added to Digiplay?<br>
+			Send an email to <a href='mailto:music@radio.warwick.ac.uk'>music@radio.warwick.ac.uk</a> with your music attached at least 48 hours before your show. <b>Make sure the music is high quality!</b><br>
+			Be sure to include the following in the email
+			<ul>
+				<li>Track Name</li>
+				<li>Artist Name</li>
+				<li>Album Name</li>
+				<li>Does the track contain explcit content?</li>
+			</ul>
+		</p>
 	</div>
-</div>
+	");
+	// <div class=\"col-sm-7\">
+	// 	<h3>Requested Tracks</h3>
+	// 	");
+	// 	if($requested = Requests::get_latest(3)) {
+	// 		echo("
+	// 	<table class=\"table table-striped table-condensed\" cellspacing=\"0\">
+	// 		<thead>
+	// 			<tr>
+	// 				<th class=\"icon\"></th>
+	// 				<th class=\"artist\">Artist</th>
+	// 				<th class=\"title\">Title</th>".(Session::is_group_user("Requests Admin")? "
+	// 				<th class=\"icon\"></th>" : "")."
+	// 			</tr>
+	// 		</thead>");
+	// 		foreach($requested as $request) {
+	// 			echo("
+	// 		<tr id=\"".$request->get_id()."\">
+	// 			<td class=\"icon\">
+	// 				<a href=\"#\" class=\"track-info\">
+	// 					".Bootstrap::fontawesome("info-circle")."
+	// 				</a>
+	// 				<div class=\"hover-info\">
+	// 					<strong>Artist:</strong> ".$request->get_artist_name()."<br />
+	// 					<strong>Title:</strong> ".$request->get_name()."<br />
+	// 					<strong>Date Requested:</strong> ".date("d/m/Y H:i",$request->get_date())."<br />
+	// 					<strong>Requester:</strong> ".$request->get_user()->get_username()."<br />
+	// 				</div>
+	// 			</td>
+	// 			<td class=\"artist\">".$request->get_artist_name()."</td>
+	// 			<td class=\"title\">".$request->get_name()."</td>
+	// 			".(Session::is_group_user("Requests Admin")? "<td class=\"icon\"><a href=\"".LINK_ABS."music/request/delete?id=".$request->get_id()."\" class=\"request-delete\" title=\"Delete this request\" rel=\"twipsy\">".Bootstrap::glyphicon("minus-sign")."</td>" : "")."
+	// 		</tr>");
+	// 		}
+	// 		echo("
+	// 	</table>");
+	// 		$total_requests = Requests::count();
+	// 		if($total_requests <= count($requested)) {
+	// 			echo("<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
+	// 		} else {
+	// 			echo("<a href=\"".LINK_ABS."music/request\">&raquo; See ".($total_requests - count($requested))." more requests</a>");
+	// 		}
+	// 	} else {
+	// 		echo("
+	// 	<strong>No new requested tracks.</strong><br />
+	// 	<a href=\"".LINK_ABS."music/request\">&raquo; Go to requests</a>");
+	// 	}
+	// 	echo("
+	// </div>
+echo("</div>
 <hr />
 ");
 

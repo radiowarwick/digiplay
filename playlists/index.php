@@ -118,7 +118,7 @@ $(function() {
 "});
 </script>");
 
-echo("<h3>Current playlists:</h3>");
+echo("<h3>Current playlists</h3>");
 
 echo("
 <form class=\"sortorder\">
@@ -196,7 +196,7 @@ echo("
 
 if(Session::is_group_user("Playlist Admin")) {
 
-	echo("<h3>Sustainer playlists:</h3>");
+	echo("<h3>Sustainer playlists</h3>");
 
 	echo("
 	<div class=\"table-responsive\">

@@ -50,7 +50,7 @@ if(substr(LINK_FILE,0,6) == "studio") {
 	} else Output::require_user();
 }
 
-if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php") && (substr(LINK_FILE,0,6) != "studio") && (substr(LINK_FILE,0,5) != "audio")) Output::require_user();
+if((LINK_FILE != "index.php") && (LINK_FILE != "ajax/login.php") && (substr(LINK_FILE,0,6) != "studio") && (substr(LINK_FILE,0,5) != "audio") && (substr(LINK_FILE,0,6) != "errors")) Output::require_user();
 
 if (Session::is_developer()) {
 	ini_set ( "display_errors", "1");

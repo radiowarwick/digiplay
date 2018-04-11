@@ -1,5 +1,7 @@
 <?php
 
+Output::http_error(410);
+
 Output::set_title("Requested Tracks");
 Output::add_stylesheet(LINK_ABS."css/music.css");
 Output::add_script(LINK_ABS."js/bootstrap-popover.js");

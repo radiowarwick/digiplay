@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Censor");
 Output::set_title("Censored Tracks");
 
 echo("<script>
