@@ -8,9 +8,13 @@ function menu() {
 		array("url" => LINK_ABS.$site_path_array[0]."/adverts.php", "text" => "Advert Manager", "icon" => "gbp")
 	);
 
+	if(Session::is_group_user("Administrators"))
+		$menu[] = array("url" => LINK_ABS.$site_path_array[0]."/services.php", "text" => "Service Manager", "icon" => "cog");
+
 	foreach($menu as &$item) if($site_path_array[1] == array_pop(explode("/",$item["url"]))) $item["active"] = true;
 	return Bootstrap::list_group($menu);
 }
+
 function sidebar() {
 	$return .= "
 	<h4>Sustainer Service</h4>
@@ -42,7 +46,27 @@ function sidebar() {
 			$color = "#" . $color;
 		}
 
-		$return .= "<a href=\"../playlists/detail/".$playlist->get_id()."\" class=\"list-group-item\" style=\"background-color:".$color.";color:".$text."\">".$playlist->get_name()."</a>";
+		if($playlist->count_tracks() < 40) {
+			$error = "Less than 40 tracks on playlist";
+		}
+		else {
+			$length = 0;
+			foreach($playlist->get_tracks() as $track) {
+				$length += $track->get_length();
+			}
+
+			if($length < (2 * 60 * 60))
+				$error = "Length of playlist less than 2 hours";
+		}
+
+		$icon = "";
+		$hoverInformation = "";
+		if(isset($error)) {
+			$hoverInformation = " title=\"".$error."\" rel=\"twipsy\"";
+			$icon = Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left");
+		}
+
+		$return .= "<a href=\"../playlists/detail/".$playlist->get_id()."\" class=\"list-group-item\" style=\"background-color:".$color.";color:".$text."\"".$hoverInformation.">".$icon.$playlist->get_name()."</a>";
 	}
 
 	$return .= "</div>";
