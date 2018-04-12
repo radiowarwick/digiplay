@@ -4,13 +4,20 @@ if(isset($_REQUEST["key"])) {
 	$location = Locations::get_by_key($_REQUEST["key"]);
 	$key = $_REQUEST["key"];
 } else {
-	if(isset($_REQUEST["location"])) {
+	if(isset($_REQUEST["location"]) && Session::is_group_user("Studio Admin")) {
 		$location = Locations::get_by_id($_REQUEST["location"]);
 		$key = $location->get_key();
-	} else {
+	}
+	else if(!Session::is_group_user("Studio Admin")) {
+		Output::http_error(401);
+	}
+	else {
 		exit("No location specified!");
 	}
 }
+
+if($location == NULL || $location == false)
+	Output::http_error(404);
 
 switch($_REQUEST["action"]) {
 	case "now-next":

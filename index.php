@@ -39,7 +39,7 @@ $feature = "
 					<a href=\"playlists/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("list-ul", "fa-lg fa-fw fa-pull-left")."View Playlists</a>
 					".((Session::is_group_user("Sustainer Admin")) ? "<a href=\"sustainer/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("clock", "fa-lg fa-fw fa-pull-left")."Schedule Prerecorded Content</a>" : "")."
 					<a href=\"faults/\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left")."Report a Fault</a>
-					".((Session::is_group_user("Studio Admin")) ? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("power-off", "fa-lg fa-fw fa-pull-left")."Reset Playout Systems</a>" : "")."
+					".((Session::is_group_user("Studio Admin")) ? "<a href=\"reset.php\" class=\"btn btn-primary btn-large btn-block\">".Bootstrap::fontawesome("power-off", "fa-lg fa-fw fa-pull-left")."Manage Playout Systems</a>" : "")."
 				":"
 					<form class=\"form-signin\" action=\"ajax/login.php\" method=\"post\">
 						<div class=\"form-group".(isset($_REQUEST['refer'])? " has-error" : "")."\">
