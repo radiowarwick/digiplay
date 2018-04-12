@@ -1,6 +1,6 @@
 <?php 
 
-Output::require_group("Importer")
+Output::require_group("Importer");
 Output::set_title("Import Music");
 MainTemplate::set_subtitle("Add new music to the Digiplay system");
 Output::add_stylesheet(LINK_ABS."css/bootstrap-select.css");
