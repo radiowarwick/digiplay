@@ -1,5 +1,9 @@
 <?php
 
+if(!Session::is_group_user("Administrators")) {
+	http_response_code(401);
+	exit(json_encode(array("error" => "You must be an adminitrator to do this.")));
+}
 if(!isset($_REQUEST["id"]) || !($file = Files::get_by_id($_REQUEST["id"]))) {
 	http_response_code(400);
 	exit(json_encode(array("error" => "Invalid directory specified, or no permission to read it.")));

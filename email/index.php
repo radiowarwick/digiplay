@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Administrator");
 Output::set_title("Emails to the Studio");
 
 $limit = (isset($_GET['n']))? $_GET['n'] : 10;

@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Administrators");
 Output::set_title("System Files");
 MainTemplate::set_subtitle("Browse and manage files in the database");
 

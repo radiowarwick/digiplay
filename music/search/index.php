@@ -171,9 +171,9 @@ if($tracks) {
 		echo("<h3>Sorry, no results for ".$query."</h3>");
 		echo("<h4>Try a more generic search term.</h4>");
 	} 
-	echo("<h4>Enter keywords below to search for tracks:</h4>
+	echo("<h4>Enter keywords below to search for tracks</h4>
 	<form action=\"".LINK_ABS."music/search\" method=\"GET\" class=\"form-inline\">
-		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\" class=\"col-9\">
+		<input type=\"text\" placeholder=\"Search Tracks\" name=\"q\" class=\"col-9 form-control\">
        	<input type=\"submit\" class=\"btn btn-primary\" value=\"Search\" class=\"col-2 col-offset-1\">
     </form>");
 }

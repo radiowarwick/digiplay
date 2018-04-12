@@ -1,6 +1,6 @@
 <?php
 require_once('pre.php');
-Output::set_title("Audiowall:");
+
 MainTemplate::set_sidebar(NULL);
 Output::add_script("../js/jquery-ui-1.10.3.custom.min.js");
 Output::add_script("aw.js");
@@ -8,7 +8,10 @@ Output::add_less_stylesheet("aw.less");
 Output::add_stylesheet("aw.css");
 $aw_set = AudiowallSets::get((int)$_REQUEST['id']);
 if ($aw_set == null){
-    exit();
+  Output::http_error(404);
+}
+else if(!$aw_set->user_can_view()) {
+  Output::http_error(401);
 }
 
 $aw_walls = $aw_set->get_walls();

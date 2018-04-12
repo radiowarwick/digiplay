@@ -199,15 +199,6 @@ class MainTemplate{
 </html>";
 	return $return;
 	}
-
-	public static function print_http_error($error){
-		switch($error){
-			case 401: return "<h2>Unauthorized</h2>\n<p>This page requires special permissions</p>"; break;
-			case 404: return "<h2>Page not found</h2>\n<p>This page does not exist</p>"; break;
-			case 410: return "<h2>This page has left us</h2>\n<p>We are sad.</p>"; break;
-		}
-	}
-
 }
 
 ?>

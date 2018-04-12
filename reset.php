@@ -1,8 +1,9 @@
 <?php
 require_once('pre.php');
+
+Output::require_group("Studio Admin");
 Output::set_title("Playout Reset");
 
-if (Session::is_group_user("Studio Admin")){
 echo("<div class=\"row\">
 	<div class=\"col-md-3 list-group\">
 		<a href=\"./studio/manage?location=1\" class=\"list-group-item\">".Bootstrap::fontawesome("sign-in-alt")."Manage Studio 1</a>
@@ -48,5 +49,5 @@ $('#playout2').click(function(){
 	return(false);
 });
 </script>");
-}
+
 ?>

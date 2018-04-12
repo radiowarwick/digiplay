@@ -1,4 +1,5 @@
 <?php
+
 Output::set_title("Group Administration");
 MainTemplate::set_subtitle("View and edit groups");
 

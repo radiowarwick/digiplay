@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Administrators");
 Output::set_title("Music Uploads");
 
 $index = (isset($_REQUEST["i"])? explode(",",$_REQUEST["i"]) : array("title","artist","album"));

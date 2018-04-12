@@ -60,12 +60,7 @@ class Output{
 	}
 	public static function http_error($error_code){
 		self::reset_all();
-		switch($error_code){
-			case 401:	header("HTTP/1.0 401 Unauthorized");	self::$title = "Permission Error.";	break;
-			case 404:	header("HTTP/1.0 404 Not Found");	self::$title = "File not found.";	break;
-			case 410:       header("HTTP/1.0 410 Gone");		self::$title = "Gone";        break;
-		}
-		echo call_user_func(array(self::$template, 'print_http_error'),$error_code);
+		header("Location: " . LINK_ABS . "errors/" . $error_code);
 		exit();
 	}
 	public static function fatal_error(){

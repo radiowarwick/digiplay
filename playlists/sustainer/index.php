@@ -1,5 +1,6 @@
 <?php
 
+Output::require_group("Playlist Admin");
 Output::set_title("Sustainer Playlists");
 Output::add_script(LINK_ABS."js/jquery-ui-1.10.3.custom.min.js");
 
@@ -118,7 +119,7 @@ $(function() {
 "});
 </script>");
 
-echo("<h3>Current playlists:</h3>");
+echo("<h3>Current playlists</h3>");
 
 echo("
 <form class=\"sortorder\">
