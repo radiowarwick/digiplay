@@ -3,4 +3,4 @@ language: php
 php:
   - nightly
 
-script: phpunit --configuration tests/phpunit.xml
+script: find . -type f -iname "*.php" -print0 | xargs -0 -n1 php -l && phpunit --configuration tests/phpunit.xml
