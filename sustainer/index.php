@@ -37,7 +37,7 @@ $currentQueue = Sustainer::get_queue();
 $i = 0;
 ?>
 <h3>Current Queue</h3>
-<?
+<?php
 if (!is_null($currentQueue)) {
 
 	if (array_key_exists('id', $currentQueue)) {
@@ -55,20 +55,21 @@ if (!is_null($currentQueue)) {
 	</tr>
 	</thead>
 	<tbody>
-    <?foreach ($currentQueue as $row) {
+    <?php
+    	foreach ($currentQueue as $row) {
 	    $i++;
-      ?>
+	?>
       <tr>
-	      <td><?echo($i);?></td>
-        <td><?echo($row['title']);?></td>
-        <td><?echo($row['artist']);?></td>
-        <td><?echo($row['album']);?></td>
+	      <td><?phpecho($i);?></td>
+        <td><?phpecho($row['title']);?></td>
+        <td><?phpecho($row['artist']);?></td>
+        <td><?phpecho($row['album']);?></td>
       </tr>
-    <?}?>
+    <?php } ?>
   </tbody>
 </table>
 
-<?
+<?php
 }
 else {
 	Bootstrap::alert("warning","<b>Warning: </b>The current queue is empty","",false);
@@ -87,7 +88,7 @@ if(Session::is_group_user("Administrators")) {
 	<button class="btn btn-primary" type="submit" name="submit">Schedule</button>
 </form>
 
-<?
+<?php
 $currentLog = Sustainer::get_log();
 $i = 0;
 ?>
@@ -103,15 +104,17 @@ $i = 0;
   	</tr>
 	</thead>
 	<tbody>
-    <?foreach ($currentLog as $row) {
-    	$i++;?>
+    <?php 
+    	foreach ($currentLog as $row) {
+    	$i++;
+    ?>
     	<tr>
-    		<td><?echo(date('d/m/y H:i', $row['timestamp']));?></td>
-      	<td><?echo($row['title']);?></td>
-      	<td><?echo($row['artist']);?></td>
-      	<td><?echo($row['username']);?></td>
+    		<td><?php echo(date('d/m/y H:i', $row['timestamp']));?></td>
+      	<td><?php echo($row['title']);?></td>
+      	<td><?php echo($row['artist']);?></td>
+      	<td><?php echo($row['username']);?></td>
     	</tr>
-    <?}?>
+    <?php } ?>
   </tbody>
 </table>
 
