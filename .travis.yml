@@ -1,6 +1,6 @@
 language: php
 
 php:
-  - nightly
+  - 5.4
 
 script: find . -type f -iname "*.php" -print0 | xargs -0 -n1 php -l && phpunit --configuration tests/phpunit.xml
