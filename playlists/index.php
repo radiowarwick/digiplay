@@ -60,8 +60,18 @@ $(function() {
 		});
 
 		$('.edit-playlist').click(function() {
-			$('#edit-name').val($(this).parent().parent().find('.title').html());
+			$('#edit-playlist-name').val($(this).parent().parent().find('.title').html());
 			$('#edit-update-id').val($(this).attr('data-dps-id'));
+			if($(this).attr('data-dps-sue') == 't') {
+				$('#edit-playlist-color-container').show();
+				$('#edit-playlist-color').val($(this).attr('data-dps-color'));
+				$('#edit-playlist-sue').prop('checked', true);
+			}
+			else {
+				$('#edit-playlist-color-container').hide();
+				$('#edit-playlist-color').val('#ffffff');
+				$('#edit-playlist-sue').prop('checked', false);
+			}
 		});
 
 		$('.yes-definitely-delete').click(function() {
@@ -101,7 +111,7 @@ $(function() {
 		$('.update-playlist').click(function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/add-update-playlist.php',
-				data: 'id='+$('.update-id').val()+'&name='+$('.playlist-edit-name').val(),
+				data: 'id='+$('#edit-update-id').val()+'&name='+$('#edit-playlist-name').val()+'&color='+$('#edit-playlist-color').val()+'&sue='+$('#edit-playlist-sue').is(':checked'),
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -122,6 +132,16 @@ $(function() {
 			else {
 				$('#new-playlist-color-container').hide();
 				$('#new-playlist-color').val('#ffffff');
+			}
+		});
+
+		$('#edit-playlist-sue').change(function(){
+			if($(this).is(':checked')) {
+				$('#edit-playlist-color-container').show();
+			}
+			else {
+				$('#edit-playlist-color-container').hide();
+				$('#edit-playlist-color').val('#ffffff');
 			}
 		});
 " : "").
@@ -178,7 +198,7 @@ foreach (Playlists::get_all(false) as $playlist) {
 	if(Session::is_group_user("Playlist Admin")) {
 		echo("
 			<td>
-				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" data-dps-color=\"#".$playlist->get_colour()."\" data-dps-sue=\"".$playlist->get_sustainer()."\" class=\"edit-playlist\" title=\"Edit playlist details\" rel=\"twipsy\">
 					".Bootstrap::fontawesome("pencil-alt")."
 				</a>
 			</td>
@@ -245,7 +265,7 @@ if(Session::is_group_user("Playlist Admin")) {
 				<td class=\"title\">".$playlist->get_name()."</td>
 				<td>".count($playlist->get_tracks())."</td>
 				<td>
-					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
+					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" data-dps-color=\"#".$playlist->get_colour()."\" data-dps-sue=\"".$playlist->get_sustainer()."\" class=\"edit-playlist\" title=\"Edit playlist details\" rel=\"twipsy\">
 						".Bootstrap::fontawesome("pencil-alt")."
 					</a>
 				</td>
@@ -296,15 +316,15 @@ Bootstrap::modal("update-modal", "
 			<fieldset>
 				<div class=\"control-group\">
 					<label class=\"control-label\" for=\"edit-name\">Name</label>
-					<input type=\"text\" class=\"form-control playlist-name\" id=\"edit-name\">
+					<input type=\"text\" class=\"form-control playlist-name\" id=\"edit-playlist-name\">
 				</div>
 				<div class=\"checkbox\">
 					<label>
 						<input type=\"checkbox\" id=\"edit-playlist-sue\" name=\"on-sue\"> Sustainer Playlist
 					</label>
 				</div>
-				<div class=\"control-group\" id=\"new-playlist-color-container\" style=\"display:none;\">
-					<label class=\"control-label\" for=\"new-playlist-color\">Color</label>
+				<div class=\"control-group\" id=\"edit-playlist-color-container\" style=\"display:none;\">
+					<label class=\"control-label\" for=\"edit-playlist-color\">Color</label>
 					<input class=\"form-control\" type=\"color\" name=\"playlist-color\" id=\"edit-playlist-color\" value=\"#ffffff\">
 				</div>
 				<input type=\"hidden\" id=\"edit-update-id\">

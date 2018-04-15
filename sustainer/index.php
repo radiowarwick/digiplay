@@ -60,10 +60,10 @@ if (!is_null($currentQueue)) {
 	    $i++;
 	?>
       <tr>
-	      <td><?phpecho($i);?></td>
-        <td><?phpecho($row['title']);?></td>
-        <td><?phpecho($row['artist']);?></td>
-        <td><?phpecho($row['album']);?></td>
+	      <td><?php echo($i); ?></td>
+        <td><?php echo($row['title']); ?></td>
+        <td><?php echo($row['artist']); ?></td>
+        <td><?php echo($row['album']); ?></td>
       </tr>
     <?php } ?>
   </tbody>
@@ -109,10 +109,10 @@ $i = 0;
     	$i++;
     ?>
     	<tr>
-    		<td><?php echo(date('d/m/y H:i', $row['timestamp']));?></td>
-      	<td><?php echo($row['title']);?></td>
-      	<td><?php echo($row['artist']);?></td>
-      	<td><?php echo($row['username']);?></td>
+    		<td><?php echo(date('d/m/y H:i', $row['timestamp'])); ?></td>
+      	<td><?php echo($row['title']); ?></td>
+      	<td><?php echo($row['artist']); ?></td>
+      	<td><?php echo($row['username']); ?></td>
     	</tr>
     <?php } ?>
   </tbody>

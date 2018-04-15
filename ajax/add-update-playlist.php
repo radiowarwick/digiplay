@@ -21,7 +21,6 @@ if(Session::is_group_user('Playlist Admin')){
 			$playlist->save();
 
 			$colorData = array("playlistid" => $playlist->get_id(), "colour" => substr($color, 1));
-
 			DigiplayDB::insert("playlistcolours", $colorData);
 
 			if(Errors::occured()) { 
@@ -37,7 +36,24 @@ if(Session::is_group_user('Playlist Admin')){
 	} else {
 		if(!($playlist = Playlists::get_by_id($_REQUEST['id']))) exit(json_encode(array('error' => 'Invalid playlist ID.')));
 		$playlist->set_name($_REQUEST['name']);
+
+		if(isset($_REQUEST["sue"]) && $_REQUEST["sue"] == "true") {
+			$playlist->set_sustainer("t");
+			$color = $_REQUEST["color"];
+		}
+		else {
+			$playlist->set_sustainer("f");
+			$color = "#ffffff";
+		}
+
 		$playlist->save();
+
+		if(is_null(DigiplayDB::select("colour FROM playlistcolours WHERE playlistid = " . $playlist->get_id()))) {
+			$colorData = array("playlistid" => $playlist->get_id(), "colour" => substr($color, 1));
+			DigiplayDB::insert("playlistcolours", $colorData);
+		}
+		else
+			DigiplayDB::update("playlistcolours", array("colour" => substr($color, 1)), "playlistid=" . $playlist->get_id());
 
 		if(Errors::occured()) { 
 			http_response_code(400);

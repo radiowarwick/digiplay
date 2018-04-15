@@ -33,7 +33,11 @@ class Playlist {
 	public function del_track($track) { return DigiplayDB::delete("audioplaylists", "audioid = ".$track->get_id()." AND playlistid = ".$this->id); }
 
 	public function get_colour() {
-		return DigiplayDB::select("colour FROM playlistcolours WHERE playlistid = ".$this->id);
+		$color = DigiplayDB::select("colour FROM playlistcolours WHERE playlistid = ".$this->id);
+		if(is_null($color))
+			return "ffffff";
+		else
+			return $color;
 	}
 
 	// Return boolean true or false if the playlist contains at least one explcit track
