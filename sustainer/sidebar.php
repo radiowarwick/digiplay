@@ -46,23 +46,22 @@ function sidebar() {
 			$color = "#" . $color;
 		}
 
-		if($playlist->count_tracks() < 40) {
-			$error = "Less than 40 tracks on playlist";
-		}
-		else {
-			$length = 0;
-			foreach($playlist->get_tracks() as $track) {
-				$length += $track->get_length();
-			}
-
-			if($length < (2 * 60 * 60))
-				$error = "Length of playlist less than 2 hours";
-		}
+		$errors = array();
+		if($playlist->count_tracks() < 40)
+			$errors[] = "Less than 40 tracks on playlist";
+		if($playlist->get_length() < (2 * 60 * 60))
+			$errors[] = "Length of playlist less than 2 hours";
+		if($playlist->contains_censored_tracks())
+			$errors[] = "Contains explicit tracks";	
 
 		$icon = "";
 		$hoverInformation = "";
-		if(isset($error)) {
-			$hoverInformation = " title=\"".$error."\" rel=\"twipsy\"";
+		if(count($errors) > 0) {
+			$errorMessage = "";
+			foreach($errors as $error) {
+				$errorMessage .= $error . "\n";
+			}
+			$hoverInformation = " title=\"".$errorMessage."\" rel=\"twipsy\"";
 			$icon = Bootstrap::fontawesome("exclamation-triangle", "fa-lg fa-fw fa-pull-left");
 		}
 

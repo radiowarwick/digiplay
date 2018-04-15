@@ -35,4 +35,23 @@ class Playlist {
 	public function get_colour() {
 		return DigiplayDB::select("colour FROM playlistcolours WHERE playlistid = ".$this->id);
 	}
+
+	// Return boolean true or false if the playlist contains at least one explcit track
+	public function contains_censored_tracks() {
+		$tracks = self::get_tracks();
+		foreach($tracks as $track) {
+			if($track->is_censored())
+				return true;
+		}
+		return false;
+	}
+
+	// Return the cumulative time of all the tracks in seconds
+	public function get_length() {
+		$length = 0;
+		foreach(self::get_tracks() as $track) {
+			$length += $track->get_length();
+		}
+		return $length;
+	}
 }
