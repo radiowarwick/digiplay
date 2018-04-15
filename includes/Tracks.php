@@ -9,12 +9,13 @@ class Tracks{
 	public static function get_total_tracks() { return DigiplayDB::select("COUNT(id) FROM audio WHERE type = ".AudioTypes::get("Track")->get_id()); }
 	public static function get_total_length() { return DigiplayDB::select("SUM(length_smpl) FROM audio WHERE type = ".AudioTypes::get("Track")->get_id()) / 44100; }
 
-	public static function get_playlisted($playlist = NULL,$limit = 0,$offset = 0) {
+	public static function get_playlisted($playlist = NULL,$limit = 0,$offset = 0,$censoredFirst = false) {
 		$limit = ($limit > 0)? " LIMIT ".$limit : "";
 		$offset = ($offset > 0)? " OFFSET ".$offset : "";
+		$censored = ($censoredFirst) ? " ORDER BY audio.censor DESC" : "";
 		$tracks = array();
-		if($playlist) return DigiplayDB::select("audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = ".$playlist->get_id().$limit.$offset, "Track", true);
-		else return DigiplayDB::select("audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid)".$limit.$offset, "Track", true);
+		if($playlist) return DigiplayDB::select("audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid) WHERE audioplaylists.playlistid = ".$playlist->get_id().$censored.$limit.$offset, "Track", true);
+		else return DigiplayDB::select("audio.* FROM audio INNER JOIN audioplaylists ON (audio.id = audioplaylists.audioid)".$censored.$limit.$offset, "Track", true);
 	}
 
 	public static function get_newest($num=10) { return DigiplayDB::select("audio.* FROM audio INNER JOIN audiodir ON audio.id=audiodir.audioid WHERE audio.type = ".AudioTypes::get("Track")->get_id()." AND audiodir.dirid = 2 ORDER BY audio.id DESC LIMIT ".$num.";", "Track", true); }

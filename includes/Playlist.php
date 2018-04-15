@@ -26,7 +26,7 @@ class Playlist {
 		return DigiplayDB::delete("playlists", "id = ".$this->id);
 	}
 	
-	public function get_tracks($limit = 0, $offset = 0) { return Tracks::get_playlisted($this,$limit,$offset); }
+	public function get_tracks($limit = 0, $offset = 0, $censoredFirst = false) { return Tracks::get_playlisted($this,$limit,$offset,$censoredFirst); }
 	public function count_tracks() { return DigiplayDB::select("count(audioid) FROM audioplaylists WHERE playlistid = ".$this->id); }
 
 	public function add_track($track) {	return DigiplayDB::insert("audioplaylists", array("audioid" => $track->get_id(), "playlistid" => $this->id)); }

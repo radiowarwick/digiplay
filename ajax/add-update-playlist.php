@@ -4,7 +4,25 @@ if(Session::is_group_user('Playlist Admin')){
 		if(!is_null($_REQUEST['name'])) {
 			$playlist = new Playlist();
 			$playlist->set_name($_REQUEST['name']);
+
+			if(isset($_REQUEST["sue"]) && $_REQUEST["sue"] == "true") {
+				if(isset($_REQUEST["color"]))
+					$color = $_REQUEST["color"];
+				else
+					$color = "#ffffff";
+				$sue = "t";
+			}
+			else {
+				$sue = "f";
+				$color = "#ffffff";
+			}
+			$playlist->set_sustainer($sue);
+
 			$playlist->save();
+
+			$colorData = array("playlistid" => $playlist->get_id(), "colour" => substr($color, 1));
+
+			DigiplayDB::insert("playlistcolours", $colorData);
 
 			if(Errors::occured()) { 
 				http_response_code(400);
