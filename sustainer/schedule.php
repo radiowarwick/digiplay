@@ -190,7 +190,7 @@ echo(Bootstrap::modal("update-modal", "
 			$('#update-modal').modal('show');
 			$('.update-id').val($(this).attr('id'));
 			splitTimeslot = $(this).attr('id').split('-');
-			days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+			days = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 			day = (days[splitTimeslot[1]]);
 			time = splitTimeslot[2] + ':00';
 			$('.schedule-time').text(day + ' ' + time);
