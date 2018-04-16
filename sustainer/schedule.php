@@ -102,7 +102,6 @@ $(function() {
 });
 </script>");
 
-$colours = array('2ecc71', 'e67e22', '3498db', 'e74c3c', '9b59b6', '34495e', '1abc9c', 'f1c40f');
 $timeslots = array('00', '01', '02','03','04','05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
 
 $slots = SustainerSlots::get_all();
@@ -167,7 +166,7 @@ echo(Bootstrap::modal("update-modal", "
 						<select id=\"playlist-id\" name=\"playlist-id\" data-width=\"100%\">
 							".$playlistOptions."
 						</select>
-						<p class=\"help-block\">Select the playlist to be scheduled for <hh>.</p>
+						<p class=\"help-block\">Select the playlist to be scheduled for <span class='schedule-time'></span>.</p>
 					</div>
 				</div>
 			</fieldset>
@@ -177,7 +176,7 @@ echo(Bootstrap::modal("update-modal", "
 					<div class=\"controls\">
 						<select id=\"prerecord-id\" name=\"prerecord-id\" data-width=\"100%\">
 						</select>
-						<p class=\"help-block\">Select the prerecorded content to be played out at <hh>.</p>
+						<p class=\"help-block\">Select the prerecorded content to be played out at <span class='schedule-time'></span>.</p>
 					</div>
 				</div>
 			</fieldset>
@@ -190,6 +189,11 @@ echo(Bootstrap::modal("update-modal", "
 		boxes.dblclick(function(){
 			$('#update-modal').modal('show');
 			$('.update-id').val($(this).attr('id'));
+			splitTimeslot = $(this).attr('id').split('-');
+			days = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+			day = (days[splitTimeslot[1]]);
+			time = splitTimeslot[2] + ':00';
+			$('.schedule-time').text(day + ' ' + time);
 			$.ajax({
 				url: '".LINK_ABS."ajax/get-slot-status.php',
 				data: { updateid: $('.update-id').val() },

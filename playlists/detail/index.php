@@ -8,7 +8,7 @@ $page = (isset($_REQUEST['p'])? $_REQUEST['p'] : 1);
 
 MainTemplate::set_subtitle("List tracks on a playlist, remove tracks");
 
-$tracks = $playlist->get_tracks($limit, (($page-1)*$limit));
+$tracks = $playlist->get_tracks($limit, (($page-1)*$limit), true);
 if($tracks) {
 	$pages = new Paginator;
 	$pages->items_per_page = $limit;
@@ -67,8 +67,9 @@ if($tracks) {
 		</tr>
 	</thead>");
 	foreach($tracks as $track) {
+		$background = ($track->is_censored()) ? " class=\"danger\"" : "";
 		echo("
-		<tr id=\"".$track->get_id()."\">
+		<tr id=\"".$track->get_id()."\" ".$background.">
 			<td class=\"icon\">
 				<a href=\"".LINK_ABS."music/detail/".$track->get_id()."\" class=\"track-info\">
 					".Bootstrap::fontawesome("info-circle")."

@@ -7,7 +7,7 @@ function menu() {
 	);
 
 	if(Session::is_group_user("Playlist Admin")) {
-		$muisic[] = array("url" => LINK_ABS.$site_path_array[0]."/index.php#add", "text" => "Add a new playlist", "icon" => "plus-sign");
+		$menu[] = array("url" => LINK_ABS.$site_path_array[0]."/index.php#add\" data-toggle=\"modal\" data-target=\"#addnew-modal", "text" => "Add a new playlist", "icon" => "plus-sign");
 	}
 
 	foreach($menu as &$item) if($site_path_array[1] == array_pop(explode("/",$item["url"]))) $item["active"] = true;

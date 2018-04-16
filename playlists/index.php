@@ -60,8 +60,18 @@ $(function() {
 		});
 
 		$('.edit-playlist').click(function() {
-			$('.playlist-edit-name').val($(this).parent().parent().find('.title').html());
-			$('.update-id').val($(this).attr('data-dps-id'));
+			$('#edit-playlist-name').val($(this).parent().parent().find('.title').html());
+			$('#edit-update-id').val($(this).attr('data-dps-id'));
+			if($(this).attr('data-dps-sue') == 't') {
+				$('#edit-playlist-color-container').show();
+				$('#edit-playlist-color').val($(this).attr('data-dps-color'));
+				$('#edit-playlist-sue').prop('checked', true);
+			}
+			else {
+				$('#edit-playlist-color-container').hide();
+				$('#edit-playlist-color').val('#ffffff');
+				$('#edit-playlist-sue').prop('checked', false);
+			}
 		});
 
 		$('.yes-definitely-delete').click(function() {
@@ -82,7 +92,7 @@ $(function() {
 		$('.add-playlist').click(function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/add-update-playlist.php',
-				data: 'name='+$('.playlist-name').val(),
+				data: 'name='+$('.playlist-name').val()+'&color='+$('#new-playlist-color').val()+'&sue='+$('#new-playlist-sue').is(':checked'),
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -101,7 +111,7 @@ $(function() {
 		$('.update-playlist').click(function() {
 			$.ajax({
 				url: '".LINK_ABS."ajax/add-update-playlist.php',
-				data: 'id='+$('.update-id').val()+'&name='+$('.playlist-edit-name').val(),
+				data: 'id='+$('#edit-update-id').val()+'&name='+$('#edit-playlist-name').val()+'&color='+$('#edit-playlist-color').val()+'&sue='+$('#edit-playlist-sue').is(':checked'),
 				type: 'POST',
 				error: function(xhr,text,error) {
 					value = $.parseJSON(xhr.responseText);
@@ -114,6 +124,26 @@ $(function() {
 		});
 
 		$('.playlist-edit-name').keypress(function(e) { if(e.keyCode == 13) { e.preventDefault(); $('.update-playlist').click(); }});
+
+		$('#new-playlist-sue').change(function(){
+			if($(this).is(':checked')) {
+				$('#new-playlist-color-container').show();
+			}
+			else {
+				$('#new-playlist-color-container').hide();
+				$('#new-playlist-color').val('#ffffff');
+			}
+		});
+
+		$('#edit-playlist-sue').change(function(){
+			if($(this).is(':checked')) {
+				$('#edit-playlist-color-container').show();
+			}
+			else {
+				$('#edit-playlist-color-container').hide();
+				$('#edit-playlist-color').val('#ffffff');
+			}
+		});
 " : "").
 "});
 </script>");
@@ -168,7 +198,7 @@ foreach (Playlists::get_all(false) as $playlist) {
 	if(Session::is_group_user("Playlist Admin")) {
 		echo("
 			<td>
-				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
+				<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" data-dps-color=\"#".$playlist->get_colour()."\" data-dps-sue=\"".$playlist->get_sustainer()."\" class=\"edit-playlist\" title=\"Edit playlist details\" rel=\"twipsy\">
 					".Bootstrap::fontawesome("pencil-alt")."
 				</a>
 			</td>
@@ -235,7 +265,7 @@ if(Session::is_group_user("Playlist Admin")) {
 				<td class=\"title\">".$playlist->get_name()."</td>
 				<td>".count($playlist->get_tracks())."</td>
 				<td>
-					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" class=\"edit-playlist\" title=\"Edit playlist name\" rel=\"twipsy\">
+					<a href=\"#\" data-toggle=\"modal\" data-target=\"#update-modal\" data-dps-id=\"".$playlist->get_id()."\" data-dps-color=\"#".$playlist->get_colour()."\" data-dps-sue=\"".$playlist->get_sustainer()."\" class=\"edit-playlist\" title=\"Edit playlist details\" rel=\"twipsy\">
 						".Bootstrap::fontawesome("pencil-alt")."
 					</a>
 				</td>
@@ -260,16 +290,21 @@ if(Session::is_group_user("Playlist Admin")) {
 }
 
 if(Session::is_group_user("Playlist Admin")) {
-	echo("<a href=\"#\" data-toggle=\"modal\" data-target=\"#addnew-modal\" id=\"add\">Add a new playlist &raquo;</a>".
-	Bootstrap::modal("addnew-modal", "
+	echo(Bootstrap::modal("addnew-modal", "
 		<form class=\"form-horizontal\" action=\"".LINK_ABS."/ajax/add-update-playlist.php\" method=\"POST\">
 			<fieldset>
 				<div class=\"control-group\">
 					<label class=\"control-label\" for=\"name\">Name</label>
-					<div class=\"controls\">
-						<input type=\"text\" class=\"form-control playlist-name\" id=\"name\">
-						<p class=\"help-block\">Enter a name for the new playlist.</p>
-					</div>
+					<input type=\"text\" class=\"form-control playlist-name\" id=\"name\">
+				</div>
+				<div class=\"checkbox\">
+					<label>
+						<input type=\"checkbox\" id=\"new-playlist-sue\" name=\"on-sue\"> Sustainer Playlist
+					</label>
+				</div>
+				<div class=\"control-group\" id=\"new-playlist-color-container\" style=\"display:none;\">
+					<label class=\"control-label\" for=\"new-playlist-color\">Colour</label>
+					<input class=\"form-control\" type=\"color\" name=\"playlist-color\" id=\"new-playlist-color\" value=\"#ffffff\">
 				</div>
 			</fieldset>
 		</form>
@@ -280,16 +315,22 @@ Bootstrap::modal("update-modal", "
 		<form class=\"form-horizontal\" action=\"".LINK_ABS."/ajax/add-update-playlist.php\" method=\"POST\">
 			<fieldset>
 				<div class=\"control-group\">
-					<label class=\"control-label\" for=\"name\">Name</label>
-					<div class=\"controls\">
-						<input type=\"hidden\"class=\"update-id\">
-						<input type=\"text\" class=\"form-control playlist-edit-name\">
-						<p class=\"help-block\">Enter a name for the playlist.</p>
-					</div>
+					<label class=\"control-label\" for=\"edit-name\">Name</label>
+					<input type=\"text\" class=\"form-control playlist-name\" id=\"edit-playlist-name\">
 				</div>
+				<div class=\"checkbox\">
+					<label>
+						<input type=\"checkbox\" id=\"edit-playlist-sue\" name=\"on-sue\"> Sustainer Playlist
+					</label>
+				</div>
+				<div class=\"control-group\" id=\"edit-playlist-color-container\" style=\"display:none;\">
+					<label class=\"control-label\" for=\"edit-playlist-color\">Colour</label>
+					<input class=\"form-control\" type=\"color\" name=\"playlist-color\" id=\"edit-playlist-color\" value=\"#ffffff\">
+				</div>
+				<input type=\"hidden\" id=\"edit-update-id\">
 			</fieldset>
 		</form>
-	", "Edit playlist name", "<a class=\"btn btn-primary update-playlist\" href=\"#\">Save</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
+	", "Edit playlist details", "<a class=\"btn btn-primary update-playlist\" href=\"#\">Save</a><a class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</a>").
 	"</div>
 </div>".
 	Bootstrap::modal("delete-modal", "<p>Are you sure you want to permanently delete <span class=\"delete-playlist-title\">this playlist</span>? </p><p>(this does not delete any of the tracks on it)</p>", "Delete playlist", "<a href=\"#\" class=\"btn btn-primary yes-definitely-delete\">Yes</a> <a href=\"#\" class=\"btn btn-default\" data-dismiss=\"modal\">No</a>"));

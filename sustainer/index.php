@@ -7,15 +7,7 @@ Output::require_group("Sustainer Admin");
 
 MainTemplate::set_subtitle("Perform common sustainer tasks");
 
-if (isset($_POST["restart-marceline"])) {
-    system("sudo /etc/init.d/marceline restart");
-}
-
-if (isset($_POST["restart-javo"])) {
-    system("sudo /etc/init.d/javo restart");
-}
-
-if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
+if ((isset($_POST['trackid']) || isset($_GET['trackid'])) && Session::is_group_user("Administrators")) {
 	$query = "SELECT * FROM audio WHERE id=:trackid";
 	$parameters = array(':trackid' => $_REQUEST['trackid']);
 	$result = DigiplayDB::query($query, $parameters);
@@ -44,35 +36,8 @@ if (isset($_POST['trackid']) || isset($_GET['trackid'])) {
 $currentQueue = Sustainer::get_queue();
 $i = 0;
 ?>
-<div class="row">
-	<table class="table table-striped table-hover">
-		<thead>
-			<tr>
-				<th class="title">Service</th>
-				<th class="title">Status</th>
-				<th class="icon">Restart</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Marceline</td>
-				<td>
-          <?echo preg_replace('/\(pid\s\d+\)/', '', substr(exec("sudo /etc/init.d/marceline status"), 8));?>
-        </td>
-				<td><form method="POST"><input name="restart-marceline" type="submit" class="btn btn-danger" value="Restart" /></form></td>
-			</tr>
-      <tr>
-        <td>JAVO</td>
-        <td>
-          <?echo preg_replace('/\(pid\s\d+\)/', '', substr(exec("sudo /etc/init.d/javo status"), 8));?>
-        </td>
-        <td><form method="POST"><input name="restart-javo" type="submit" class="btn btn-danger" value="Restart" /></form></td>
-      </tr>
-		</tbody>
-	</table>
-</div>
-<h3>Current queue:</h3>
-<?
+<h3>Current Queue</h3>
+<?php
 if (!is_null($currentQueue)) {
 
 	if (array_key_exists('id', $currentQueue)) {
@@ -90,31 +55,45 @@ if (!is_null($currentQueue)) {
 	</tr>
 	</thead>
 	<tbody>
-    <?foreach ($currentQueue as $row) {
+    <?php
+    	foreach ($currentQueue as $row) {
 	    $i++;
-      ?>
+	?>
       <tr>
-	      <td><?echo($i);?></td>
-        <td><?echo($row['title']);?></td>
-        <td><?echo($row['artist']);?></td>
-        <td><?echo($row['album']);?></td>
+	      <td><?php echo($i); ?></td>
+        <td><?php echo($row['title']); ?></td>
+        <td><?php echo($row['artist']); ?></td>
+        <td><?php echo($row['album']); ?></td>
       </tr>
-    <?}?>
+    <?php } ?>
   </tbody>
 </table>
-<?} else {
+
+<?php
+}
+else {
 	Bootstrap::alert("warning","<b>Warning: </b>The current queue is empty","",false);
-}?>
-<h3>Schedule audio:</h3>
-<p>You can use this tool to schedule the next audio track to be played on Sue by using its audio id.</p>
+}
+
+if(Session::is_group_user("Administrators")) {
+?>
+
+<h3>Schedule Audio</h3>
+<p>You can use this tool to schedule the next audio track to be played on Sue by using its Audio ID.</p>
 <form method="post">
-  Track ID: <input type="text" name="trackid" /><input type="submit" name="submit" value="Schedule" />
+	<div class="form-group">
+		<label for="trackid">Track ID</label>
+		<input type="text" class="form-control" name="trackid" id="trackid">
+	</div>
+	<button class="btn btn-primary" type="submit" name="submit">Schedule</button>
 </form>
-<?
+
+<?php
 $currentLog = Sustainer::get_log();
 $i = 0;
 ?>
-<h3>Scheduler log:</h3>
+
+<h3>Scheduler Log</h3>
 <table class="table table-striped table-bordered">
 	<thead>
   	<tr>
@@ -125,14 +104,20 @@ $i = 0;
   	</tr>
 	</thead>
 	<tbody>
-    <?foreach ($currentLog as $row) {
-    	$i++;?>
+    <?php 
+    	foreach ($currentLog as $row) {
+    	$i++;
+    ?>
     	<tr>
-    		<td><?echo(date('d/m/y H:i', $row['timestamp']));?></td>
-      	<td><?echo($row['title']);?></td>
-      	<td><?echo($row['artist']);?></td>
-      	<td><?echo($row['username']);?></td>
+    		<td><?php echo(date('d/m/y H:i', $row['timestamp'])); ?></td>
+      	<td><?php echo($row['title']); ?></td>
+      	<td><?php echo($row['artist']); ?></td>
+      	<td><?php echo($row['username']); ?></td>
     	</tr>
-    <?}?>
+    <?php } ?>
   </tbody>
 </table>
+
+<?php
+}
+?>

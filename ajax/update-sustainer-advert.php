@@ -4,8 +4,7 @@ if(Session::is_group_user('Sustainer Admin')){
 
 	if(!($advert = Adverts::get_by_id((int) $_REQUEST["advertid"]))) exit(json_encode(array('error' => 'Invalid advert ID.')));
 
-	if ($advert->get_sustainer() == 't') $advert->set_sustainer('f');
-	else $advert->set_sustainer('t');
+	$advert->set_sustainer($_REQUEST['sue']);
 
 	$advert->save();
 
