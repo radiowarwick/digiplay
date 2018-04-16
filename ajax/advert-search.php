@@ -4,7 +4,7 @@ Output::set_template();
 
 $query = $_REQUEST['q'];
 
-if($query) $search = Search::prerecords(str_replace(" ", " | ", $query),10);
+if($query) $search = Search::adverts(str_replace(" ", " | ", $query),10);
 $tracks = $search["results"];
 $tracks_array = array();
 
@@ -22,7 +22,7 @@ if($tracks) {
 }
 
 $array = array( 
-		"title" => "Prerecords",
+		"title" => "Adverts",
 		"href" => LINK_ABS."music/search/?i=title&q=".$query,
 		"data" => $tracks_array
 	);

@@ -303,7 +303,7 @@ if(Session::is_group_user("Playlist Admin")) {
 					</label>
 				</div>
 				<div class=\"control-group\" id=\"new-playlist-color-container\" style=\"display:none;\">
-					<label class=\"control-label\" for=\"new-playlist-color\">Color</label>
+					<label class=\"control-label\" for=\"new-playlist-color\">Colour</label>
 					<input class=\"form-control\" type=\"color\" name=\"playlist-color\" id=\"new-playlist-color\" value=\"#ffffff\">
 				</div>
 			</fieldset>
@@ -324,7 +324,7 @@ Bootstrap::modal("update-modal", "
 					</label>
 				</div>
 				<div class=\"control-group\" id=\"edit-playlist-color-container\" style=\"display:none;\">
-					<label class=\"control-label\" for=\"edit-playlist-color\">Color</label>
+					<label class=\"control-label\" for=\"edit-playlist-color\">Colour</label>
 					<input class=\"form-control\" type=\"color\" name=\"playlist-color\" id=\"edit-playlist-color\" value=\"#ffffff\">
 				</div>
 				<input type=\"hidden\" id=\"edit-update-id\">
