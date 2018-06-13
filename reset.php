@@ -1,5 +1,4 @@
 <?php
-require_once('pre.php');
 
 Output::require_group("Studio Admin");
 Output::set_title("Playout Reset");
