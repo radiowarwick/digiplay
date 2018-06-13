@@ -10,7 +10,7 @@ if($sessionpermissions[2] == '1' || Session::is_group_user('Audiowalls Admin')){
 	} else {
 		$username = "";
 	}
-	require_once('pre.php');
+
 	Output::add_script("../aw.js");
 	Output::set_title("Audiowall Users");
 	MainTemplate::set_subtitle("<span style=\"margin-right:20px;\">Set: ".$aw->get_name()."</span><span style=\"margin-right:20px;\">Owner: ".$username."</span><span id=\"editor_edit_buttons\"><a href=\"#\" class=\"btn btn-success\">Add Viewer</a></span>");

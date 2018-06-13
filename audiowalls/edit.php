@@ -1,5 +1,4 @@
 <?php
-require_once('pre.php');
 
 MainTemplate::set_sidebar(NULL);
 Output::add_script("../js/jquery-ui-1.10.3.custom.min.js");
