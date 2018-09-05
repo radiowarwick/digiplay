@@ -497,7 +497,7 @@ echo("
 				<div class=\"col-sm-3 pull-right\" id=\"contact\">
 					".Bootstrap::fontawesome("mobile-alt")." ".Configs::get_system_param("contact_sms")."<br />
 					".Bootstrap::fontawesome("phone")." ".Configs::get_system_param("contact_phone")."<br />
-					".Bootstrap::fontawesome("envelope")." ".Configs::get_system_param("contact_email")."
+					".Bootstrap::fontawesome("twitter")."@RAW1251AM
 				</div>
 			</nav>
 			<script>
