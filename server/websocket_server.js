@@ -1,4 +1,4 @@
-var WebSocketServer = require('ws').Server, wss = new WebSocketServer({port: 443});
+var WebSocketServer = require('ws').Server, wss = new WebSocketServer({port: 10000});
 var pg = require('pg'), listener, client, connString = 'postgres://digiplay_user@localhost/digiplay';
 var in_use_keys = [];
 
